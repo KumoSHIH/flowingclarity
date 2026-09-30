@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Noto Sans TC", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+  --font-editorial: Georgia, "Times New Roman", serif;
+  --color-paper: #f8f5ef;
+  --color-ink: #38342e;
+  --color-muted: #81776a;
+  --color-clay: #a46b54;
+}
+
+html {
+  color-scheme: light;
+  background: var(--color-paper);
+}
+
+body {
+  margin: 0;
+  color: var(--color-ink);
+}
+
+.home-page ::selection {
+  background: var(--color-clay);
+  color: var(--color-paper);
+}
+
+.home-page :focus-visible {
+  outline: 2px solid var(--color-clay);
+  outline-offset: 6px;
+}
+
+.home-page section[id] {
+  scroll-margin-top: 32px;
+}
+
+.home-page .text-muted {
+  color: #71685e;
+}

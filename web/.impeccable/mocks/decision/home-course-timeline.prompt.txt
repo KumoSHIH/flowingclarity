@@ -1,0 +1,9 @@
+Use case: ui-mockup
+Asset type: high-fidelity desktop website homepage concept, 16:10 landscape, browser-free page canvas
+Primary request: Create a new homepage variation called “開課時序” for a Taiwanese body-mind course learning platform.
+Reference image role and strict invariants: preserve the reference’s warm ivory and clay palette, charcoal Traditional Chinese editorial typography, extremely generous whitespace, restrained hairlines, calm hierarchy, warm natural photography, and low information density. Keep the same level of polish and breathing room. Do not copy its shared-table layout or literal tabletop.
+Structure: slim header with “品牌名稱待定” and “全部課程 / 關於我們”. First viewport has a spacious welcome statement on the left: “沿著開課的節奏，找到適合自己的學習。” with a quiet “查看全部課程” action. The right and lower field is a horizontal course timeline with only three widely separated date nodes. Each node contains one synthetic upcoming course: title, one-line summary, “日期待定”, category label, and clear link affordance. One node is larger as the nearest course; the other two are quieter. At the fold edge, hint at an uncluttered complete-course section and a human community section.
+Synthetic content, clearly marked “示意內容”: “頭薦骨入門”, “再平衡按摩”, “身體經驗與創傷療癒”. No prices or claims.
+Focal moment: the date rhythm itself guides the eye across a calm field without turning into a dense calendar.
+Style/medium: production-grade responsive website UI mockup in Traditional Chinese, not a poster, not an infographic, no browser chrome.
+Constraints: fewer elements than the reference or equal density, substantial empty space between every information group, no overlapping content, no testimonials, statistics, fake logo, gradients, glassmorphism, generic SaaS cards, mystical imagery, or commercial claims.

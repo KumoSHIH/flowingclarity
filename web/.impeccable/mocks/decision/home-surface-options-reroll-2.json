@@ -1,0 +1,44 @@
+{
+  "title": "更簡約、大方的首頁",
+  "question": "這一輪拿掉設計隱喻與卡片感，只比較照片、文字與課程索引的配置。",
+  "options": [
+    {
+      "id": "type-first",
+      "label": "純文字留白",
+      "kicker": "THE ROLL",
+      "thesis": "以一句清楚的品牌主張與三列課程索引完成首屏，照片只在下一段安靜出現。",
+      "palette": ["#faf8f3", "#35322d", "#a46b54"],
+      "materials": ["大面積留白", "中文排版", "單像素分隔線"],
+      "viewport": "首屏上半部只有品牌主張與一句說明，下半部是三列文字型近期課程；沒有卡片、圖示與裝飾照片。",
+      "risk": "若正式品牌文案不夠精準，純文字首屏會缺少記憶點。",
+      "comp": ".impeccable/mocks/decision/home-type-first.webp"
+    },
+    {
+      "id": "one-image",
+      "label": "一張照片",
+      "thesis": "用一張真實而有溫度的學習照片建立信任，其餘資訊全部退回乾淨的文字索引。",
+      "palette": ["#faf8f3", "#35322d", "#a46b54"],
+      "materials": ["單張紀實攝影", "寬邊界", "文字索引"],
+      "viewport": "首屏由一句短標題與一張大幅橫向照片構成，照片下方只放三個等寬的課程文字項目與查看全部課程。",
+      "risk": "需要一張足夠真實且高品質的正式照片才能成立。",
+      "comp": ".impeccable/mocks/decision/home-one-image.webp"
+    },
+    {
+      "id": "quiet-columns",
+      "label": "安靜雙欄",
+      "thesis": "左欄只說明這裡是什麼，右欄只列近期課程，讓理解與行動各自擁有完整空間。",
+      "palette": ["#faf8f3", "#35322d", "#a46b54"],
+      "materials": ["不對稱雙欄", "文字清單", "窄幅照片"],
+      "viewport": "首屏左側是品牌主張與查看全部課程，右側是三列無圖片課程資訊；頁面底部只露出一條窄幅人物照片。",
+      "risk": "結構非常克制，需要靠精準字級與比例維持質感。",
+      "comp": ".impeccable/mocks/decision/home-quiet-columns.webp"
+    }
+  ],
+  "reroll": true,
+  "buildPath": {
+    "value": "comp",
+    "toggle": true
+  },
+  "canon": false,
+  "steer": true
+}

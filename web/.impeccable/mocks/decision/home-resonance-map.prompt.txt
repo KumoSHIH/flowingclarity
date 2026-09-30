@@ -1,0 +1,10 @@
+Use case: ui-mockup
+Asset type: high-fidelity desktop website homepage concept, 16:10 landscape, visible browser-free page canvas
+Primary request: Design the “課程共鳴地圖” homepage structure for a Taiwanese body-mind course learning platform. It must clearly read as a real website UI, not a poster, infographic-only artwork, or interior photograph.
+Reference image role: preserve only its warm ivory ground, charcoal Traditional Chinese editorial typography, muted clay accent, restrained hairlines, calm generous spacing, and natural warm photography. Do not reuse the massage copy, existing layout, massage-bed imagery, or current brand name.
+Page structure: slim header with “品牌名稱待定” and links “全部課程 / 關於我們”. First viewport opens with exact question “你想從哪裡開始？” and a short sentence about learning an additional body-mind skill. Beneath and beside it, create a navigable map of three learning paths, expressed through elegant editorial lines and grouped panels rather than decorative illustration. Each path contains a clearly readable upcoming-course item with course title, one-line summary, “日期待定”, and a category label. Include a clear “查看全部課程” action. At the fold edge, show the map continuing into the complete course catalog and a quiet community introduction.
+Synthetic sample course text, visibly marked “示意內容”: “頭薦骨入門”, “再平衡按摩”, “身體經驗與創傷療癒”. No prices or claims.
+Focal moment: the visitor can visually recognize a path that matches their current learning intention while course facts remain easy to scan.
+Style/medium: polished production-grade website UI mockup; Traditional Chinese; restrained editorial map topology; photography appears only as small human-scale anchors; no browser chrome.
+Color palette: #f8f5ef, #38342e, #a46b54, #d8cbbc.
+Constraints: accessible hierarchy, obvious clickable course regions, generous whitespace, exact course fields, no testimonials, statistics, fake logos, gradients, glassmorphism, generic SaaS cards, mystical symbols, or invented commercial claims.

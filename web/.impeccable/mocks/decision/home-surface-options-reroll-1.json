@@ -1,0 +1,44 @@
+{
+  "title": "延伸第一案的留白與節奏",
+  "question": "三個新方案保留共學長桌的暖色編輯感、寬鬆留白與低資訊密度，只改變課程如何被組織。",
+  "options": [
+    {
+      "id": "course-timeline",
+      "label": "開課時序",
+      "kicker": "THE ROLL",
+      "thesis": "以時間作為首頁骨架，讓訪客沿著近期開課節奏從一堂課走向下一堂課。",
+      "palette": ["#f8f5ef", "#38342e", "#a46b54", "#e8dfd2"],
+      "materials": ["暖光學習攝影", "日期刻度", "寬幅紙張欄位"],
+      "viewport": "首屏保留大面積留白，左側是邀請文字，右側只有三個日期節點；每個節點展開一堂近期課程的名稱、摘要與分類。",
+      "risk": "如果近期只有一堂課，時間軸需要能自然退化成單一焦點。",
+      "comp": ".impeccable/mocks/decision/home-course-timeline.webp"
+    },
+    {
+      "id": "course-chapters",
+      "label": "一課一章",
+      "thesis": "讓每堂課像一本書的一章，各自擁有完整呼吸空間，依序邀請訪客深入閱讀。",
+      "palette": ["#f8f5ef", "#38342e", "#a46b54", "#d8cbbc"],
+      "materials": ["章節編號", "寬幅人物攝影", "細線頁碼"],
+      "viewport": "首屏呈現一堂主課程的大標題與橫幅照片，畫面邊緣露出下一章；下滑後每堂課以交錯章節展開，不使用密集卡片牆。",
+      "risk": "瀏覽全部課程需要較長捲動，必須保留清楚的快速索引。",
+      "comp": ".impeccable/mocks/decision/home-course-chapters.webp"
+    },
+    {
+      "id": "learning-doors",
+      "label": "三扇學習入口",
+      "thesis": "將課程分類化成三個安靜而清楚的入口，每個入口只帶出最接近開課的一堂課。",
+      "palette": ["#f8f5ef", "#38342e", "#a46b54", "#766254"],
+      "materials": ["垂直門幅", "柔和空間攝影", "低密度分類標籤"],
+      "viewport": "首屏先用一句話建立歸屬感，再排列三個寬而不擁擠的分類入口；展開時顯示近期課程摘要與日期，另有查看全部課程。",
+      "risk": "正式分類尚未確定，入口名稱需要能由後台內容彈性替換。",
+      "comp": ".impeccable/mocks/decision/home-learning-doors.webp"
+    }
+  ],
+  "reroll": true,
+  "buildPath": {
+    "value": "comp",
+    "toggle": true
+  },
+  "canon": false,
+  "steer": true
+}

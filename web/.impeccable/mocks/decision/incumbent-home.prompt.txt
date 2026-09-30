@@ -1,0 +1,1 @@
+Provenance: screenshot captured from the local Nuxt homepage at http://[::1]:3000 on 2026-09-29. This is a pre-existing implementation reference, not an AI-generated asset.

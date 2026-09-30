@@ -1,0 +1,19 @@
+<script setup lang="ts">
+useHead({
+  htmlAttrs: { lang: 'zh-Hant' },
+  title: 'Flowing Clarity',
+  meta: [
+    {
+      name: 'description',
+      content: 'Flowing Clarity 身心療癒與按摩，在溫柔的觸碰中找回自己的節奏。',
+    },
+  ],
+})
+</script>
+
+<template>
+  <div>
+    <NuxtRouteAnnouncer />
+    <NuxtPage />
+  </div>
+</template>

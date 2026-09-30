@@ -1,0 +1,8 @@
+Use case: ui-mockup
+Asset type: high-fidelity minimalist desktop website homepage concept, 16:10 landscape, browser-free page canvas
+Primary request: Create a much simpler, more refined variation called “純文字留白” for a Taiwanese body-mind course learning platform.
+Reference image role: keep only the warm ivory background, charcoal Traditional Chinese typography, muted clay accent, quiet confidence, and premium editorial finish. Reduce the reference’s visual content and information by at least half. Do not use a table metaphor, cards, timelines, chapter numbers, category portals, large decorative photos, or ornamental labels.
+Structure: slim header with placeholder “品牌名稱待定” and two links “全部課程 / 關於我們”. The upper half of the first viewport is mostly empty space with one concise large headline: “在學習裡，慢慢靠近自己。” one short supporting sentence, and a plain text link “查看全部課程 →”. The lower half contains exactly three full-width text-only course rows separated by thin rules. Each row shows only synthetic course title, one-line summary, “日期待定”, category, and a small arrow. Use “頭薦骨入門”, “再平衡按摩”, “身體經驗與創傷療癒”, clearly labeled “示意內容”. At the very bottom edge, reveal only a narrow crop of one warm documentary learning photograph to signal the next section.
+Focal moment: the empty space and precise typography carry the page; course information feels like a calm index, not cards.
+Style/medium: production-grade responsive website UI mockup in Traditional Chinese; minimal, elegant, spacious, mature; no browser chrome.
+Constraints: at least 55% negative space in the first viewport; only one accent color; no filled buttons, icons, cards, shadows, gradients, glass, testimonials, statistics, prices, mystical symbols, or invented claims.

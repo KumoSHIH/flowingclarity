@@ -1,0 +1,10 @@
+Use case: ui-mockup
+Asset type: high-fidelity desktop website homepage concept, 16:10 landscape, visible browser-free page canvas
+Primary request: Design the “共學長桌” homepage structure for a Taiwanese body-mind course learning platform. This must read as a real responsive website UI, not a poster or an interior photograph.
+Reference image role: preserve only its warm ivory paper ground, charcoal Traditional Chinese editorial typography, muted clay accent, restrained hairlines, calm generous spacing, and natural warm photography. Do not reuse its massage copy, layout, massage-bed imagery, or current brand name.
+Page structure: a slim header with placeholder brand text “品牌名稱待定” and links “全部課程 / 關於我們”; first viewport split asymmetrically. Left: exact headline “在一張長桌上，找到一起學習的人。” with short supporting copy and a clear link “查看全部課程”. Right: a distinctive horizontal shared-table composition, like an editorial tabletop rather than a literal furniture photo. One large upcoming-course place setting and two smaller adjacent seats, each showing course title, one-line summary, date, and category tag. Below the fold edge, hint at more course rows and a human community section.
+Synthetic sample course text, clearly marked “示意內容”: “頭薦骨入門”, “再平衡按摩”, “身體經驗與創傷療癒”; dates should be generic placeholders such as “日期待定”, never real claims or prices.
+Focal moment: the course seats around the shared table make belonging tangible while every course title and date remains instantly scannable.
+Style/medium: polished production-grade website UI mockup, traditional Chinese, editorial photography used sparingly, no browser chrome.
+Color palette: #f8f5ef, #38342e, #a46b54, #e8dfd2.
+Constraints: preserve clear hierarchy and web affordances; generous whitespace; exact course information fields; no testimonials, statistics, prices, fake logos, gradients, glassmorphism, generic SaaS cards, or invented commercial claims.

@@ -1,0 +1,44 @@
+{
+  "title": "選擇首頁的內容結構",
+  "question": "三個方案沿用現有暖色、安靜且人本的視覺語言；請選擇最能讓訪客找到課程與歸屬感的首頁結構。",
+  "options": [
+    {
+      "id": "shared-table",
+      "label": "共學長桌",
+      "kicker": "THE ROLL",
+      "thesis": "把近期課程編排成一張有人等你入座的共學長桌，讓探索先像加入一群人，再像挑選商品。",
+      "palette": ["#f8f5ef", "#38342e", "#a46b54", "#e8dfd2"],
+      "materials": ["暖光人物攝影", "紙張感標籤", "細線編輯式分隔"],
+      "viewport": "首屏左側是一句清楚的邀請與查看全部課程入口，右側是一張橫向共學長桌；近期開課為主要席位，其他課程分類像相鄰座位延伸。",
+      "risk": "若座位隱喻壓過課程名稱與日期，會降低快速掃描效率。",
+      "comp": ".impeccable/mocks/decision/home-shared-table.webp"
+    },
+    {
+      "id": "resonance-map",
+      "label": "課程共鳴地圖",
+      "thesis": "先從訪客想增進的能力與當下需要出發，再把近期課程放在對應的學習路徑上。",
+      "palette": ["#f8f5ef", "#38342e", "#a46b54", "#d8cbbc"],
+      "materials": ["柔和空間攝影", "路徑式細線", "手寫註記感分類"],
+      "viewport": "首屏以『你想從哪裡開始？』為焦點，下方展開數條學習路徑；每條路徑直接顯示近期課程名稱、摘要、日期與分類。",
+      "risk": "課程分類尚未穩定時，路徑命名可能讓部分課程難以歸類。",
+      "comp": ".impeccable/mocks/decision/home-resonance-map.webp"
+    },
+    {
+      "id": "opening-soon",
+      "label": "近期開課選刊",
+      "thesis": "把首頁做成每期更新的課程選刊，以最近開課的一堂為封面，其餘課程維持清楚可掃描的次序。",
+      "palette": ["#f8f5ef", "#38342e", "#a46b54", "#766254"],
+      "materials": ["大幅課程攝影", "編輯式版面", "日期索引"],
+      "viewport": "首屏是一堂近期課程的完整摘要與日期，旁邊排列下一批課程索引；往下接全部課程與認識教學社群的內容。",
+      "risk": "資訊最清楚，但若缺少真實人物與社群內容，歸屬感可能弱於另外兩案。",
+      "comp": ".impeccable/mocks/decision/home-opening-soon.webp"
+    }
+  ],
+  "reroll": true,
+  "buildPath": {
+    "value": "comp",
+    "toggle": true
+  },
+  "canon": false,
+  "steer": true
+}
