@@ -1,0 +1,9 @@
+Use case: precise-object-edit
+Asset type: full-fidelity desktop homepage concept comp
+Input images: Image 1 is the edit target. Preserve its 16:10 canvas, header, warm paper/clay palette, typography, natural-light room photograph, central vertical pathway concept, spacing quality, and overall premium Taiwanese/Japanese editorial art direction.
+Primary request: Refine only the hero composition. Keep the left-side text-area design and the clay vertical pathway, but create a clean hard spatial boundary so all left-side text remains entirely on the warm paper ground and never overlaps or covers the right-side photograph. The photograph begins clearly to the right of the text area.
+Add directly below the large headline this exact short Traditional Chinese description: 「在溫柔的觸碰與安靜的片刻裡，重新感受身體，也重新聽見內心。」 Set it smaller, quiet, readable, and limited to a short paragraph on the paper ground.
+Remove the existing Chinese course CTA from the left side. Place the new CTA at the horizontal center of the bottom edge of the right-side photograph. It must read exactly 「Learn More」 with a simple thin downward arrow icon immediately to its right. Show the arrow in its neutral starting position; the implemented interaction will gently move it up and down.
+Text (verbatim): preserve 「普那生活空間」「關於我們」「近期活動」「近期課程」「聯絡我們」「讓身心，慢慢回到自己的節奏。」; add 「在溫柔的觸碰與安靜的片刻裡，重新感受身體，也重新聽見內心。」 and 「Learn More」 exactly once.
+Constraints: change only the requested layout and CTA; keep the existing photograph, palette, serif identity, central path, navigation, and next-section glimpse; no text may overlap the photograph except the Learn More CTA; keep strong contrast and generous whitespace; no fabricated claims; no watermark.
+Avoid: redesigning the page, moving the brand or navigation, adding cards, gradients, glass, decorative circles, generic icons, extra text, or additional buttons.

@@ -1,0 +1,46 @@
+{
+  "title": "選擇普那首頁的構圖方向",
+  "question": "三款設計沿用相同品牌氣質與內容，差別在首頁如何帶人進入課程與空間。",
+  "options": [
+    {
+      "id": "folded-field-guide",
+      "label": "展開的身體手冊",
+      "kicker": "THE ROLL",
+      "thesis": "首頁像一本攤開的身體學習手冊，照片、課程與活動以不同紙幅交錯展開。",
+      "palette": ["#f8f5ef", "#a46b54", "#766254", "#38342e"],
+      "materials": ["暖白紙張", "亞麻攝影", "細鉛線註記"],
+      "viewport": "首屏以一張偏右的大照片與跨頁標題開場，往下依序展開品牌理念、活動索引、課程跨頁與深棕聯絡頁。",
+      "risk": "若紙張層次太多，會讓簡約感變成拼貼感。",
+      "comp": ".impeccable/mocks/decision/folded-field-guide.png"
+    },
+    {
+      "id": "body-pathways",
+      "label": "身體路徑",
+      "thesis": "一條安靜的縱向路徑串起呼吸、相遇、學習與聯絡，讓首頁像一次緩慢的身體探索。",
+      "palette": ["#f8f5ef", "#a46b54", "#e8dfd2", "#38342e"],
+      "materials": ["暖白空間", "陶土路徑", "自然光攝影"],
+      "viewport": "首屏以中央路徑清楚分隔左側文字與右側照片；Learn More 位於照片底部中央，向下箭頭輕緩上下往返。",
+      "risk": "路徑若過度裝飾，會削弱課程資訊的直接性。",
+      "comp": ".impeccable/mocks/decision/body-pathways-v2.png"
+    },
+    {
+      "id": "editorial-threshold",
+      "label": "留白的門檻",
+      "thesis": "把現有的編輯式 Banner 擴展成完整首頁，讓每個段落都像跨入下一個安靜房間。",
+      "palette": ["#f8f5ef", "#b57960", "#e8dfd2", "#5f4f45"],
+      "materials": ["大幅攝影", "襯線標題", "細線索引"],
+      "viewport": "首屏由巨大標題跨入照片，下方以寬闊留白、錯位照片和大型日期建立一套連續的編輯節奏。",
+      "risk": "最接近現有語言，辨識度提升較穩健而非劇烈。",
+      "comp": ".impeccable/mocks/decision/editorial-threshold.png"
+    }
+  ],
+  "reroll": {
+    "registers": ["safer", "bolder"]
+  },
+  "buildPath": {
+    "value": "comp",
+    "toggle": true
+  },
+  "steer": true,
+  "canon": false
+}
