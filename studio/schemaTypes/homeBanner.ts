@@ -1,4 +1,4 @@
-import { defineArrayMember, defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity'
 
 export const homeBanner = defineType({
   name: 'homeBanner',
@@ -8,65 +8,38 @@ export const homeBanner = defineType({
     defineField({
       name: 'title',
       title: '大標題',
-      type: 'string',
+      type: 'text',
+      rows: 3,
+      description: '可按 Enter 換行，前台會保留換行位置。',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'summary',
-      title: '摘要',
+      title: '敘述',
       type: 'text',
       rows: 4,
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'slides',
-      title: '輪播內容',
-      description: '拖曳項目可調整播放順序。',
-      type: 'array',
-      of: [
-        defineArrayMember({
-          name: 'bannerSlide',
-          title: '圖片與敘述',
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'image',
-              title: '圖片',
-              type: 'image',
-              options: { hotspot: true },
-              fields: [
-                defineField({
-                  name: 'alt',
-                  title: '圖片替代文字',
-                  type: 'string',
-                  description: '簡短描述圖片內容，供無法觀看圖片的訪客理解。',
-                  validation: (Rule) => Rule.required(),
-                }),
-              ],
-              validation: (Rule) => Rule.required().assetRequired(),
-            }),
-            defineField({
-              name: 'description',
-              title: '敘述文字',
-              type: 'text',
-              rows: 3,
-              validation: (Rule) => Rule.required(),
-            }),
-          ],
-          preview: {
-            select: {
-              title: 'description',
-              media: 'image',
-            },
-          },
-        }),
-      ],
-      validation: (Rule) => Rule.required().min(1),
+      name: 'buttonText',
+      title: '按鈕文字',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'buttonLink',
+      title: '按鈕連結',
+      type: 'url',
+      description: '使用 https:// 或 http:// 網址、以 / 開頭的站內路徑，或 #courses 形式的頁面錨點。',
+      validation: (Rule) => Rule.required().uri({ scheme: ['http', 'https'], allowRelative: true }).custom((value) => {
+        if (!value) return true
+        return /^(https?:\/\/|\/(?!\/)|#.)/i.test(value) && !/[\s\\\u0000-\u001f\u007f]/u.test(value)
+          ? true
+          : '請使用 HTTP(S) 網址、以 / 開頭的站內路徑或有效的 #錨點。'
+      }),
     }),
   ],
   preview: {
-    select: {
-      title: 'title',
-    },
+    select: { title: 'title' },
   },
 })

@@ -1,46 +1,41 @@
 import { mount } from '@vue/test-utils'
-import { nextTick } from 'vue'
+import { nextTick, ref } from 'vue'
 import { afterEach, expect, it, vi } from 'vitest'
-import type Swiper from 'swiper'
 import HomeBanner from '../../app/components/HomeBanner.vue'
+import IndexPage from '../../app/pages/index.vue'
+import type { HomeBannerContent } from '../../shared/utils/homeBanner'
 
-afterEach(() => {
-  vi.restoreAllMocks()
-  vi.useRealTimers()
-})
+afterEach(() => vi.unstubAllGlobals())
 
-it('keeps the counter in sync with real Swiper autoplay', async () => {
-  vi.useFakeTimers()
-  vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(800)
-  vi.spyOn(HTMLElement.prototype, 'clientHeight', 'get').mockReturnValue(600)
-  const wrapper = mount(HomeBanner, {
-    attachTo: document.body,
-    props: {
-      banner: {
-        title: '測試標題',
-        summary: '測試摘要',
-        slides: ['first', 'second'].map((id) => ({
-          id, image: `/${id}.jpg`, imageAlt: id, description: id,
-        })),
-      },
+it('connects the homepage API content to the Banner and retains fallback during loading or failure', async () => {
+  const data = ref<HomeBannerContent | null>(null)
+  const useFetch = vi.fn(() => ({ data }))
+  vi.stubGlobal('useFetch', useFetch)
+  vi.stubGlobal('IntersectionObserver', class {
+    observe = vi.fn()
+    disconnect = vi.fn()
+  })
+  vi.stubGlobal('matchMedia', () => ({
+    matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn(),
+  }))
+  const wrapper = mount(IndexPage, {
+    global: {
+      components: { HomeBanner },
+      stubs: { HomeIntroduction: true, HomeEvents: true, HomeCourses: true, HomeContact: true },
     },
   })
   try {
+    expect(useFetch).toHaveBeenCalledWith('/api/home-banner')
+    expect(wrapper.get('.hero-cta').attributes('href')).toBe('#courses')
+    data.value = { title: 'CMS 標題', summary: 'CMS 敘述', buttonText: '立即探索', buttonLink: '/courses' }
     await nextTick()
-    const swiper = (wrapper.get('.swiper').element as HTMLElement & { swiper: Swiper }).swiper
-    expect(swiper.autoplay.running).toBe(true)
-    expect(wrapper.get('[aria-live="polite"]').text()).toBe('01 / 02')
-    await vi.advanceTimersByTimeAsync(2600)
+    expect(wrapper.get('h1').text()).toBe('CMS 標題')
+    expect(wrapper.get('.hero-story-copy p').text()).toBe('CMS 敘述')
+    expect(wrapper.get('.hero-cta').text()).toBe('立即探索')
+    expect(wrapper.get('.hero-cta').attributes('href')).toBe('/courses')
+    data.value = null
     await nextTick()
-    expect(swiper.realIndex).toBe(1)
-    expect(wrapper.get('[aria-live="polite"]').text()).toBe('02 / 02')
-    await vi.advanceTimersByTimeAsync(800)
-    // Happy DOM does not run CSS transitions; signal the fade completion.
-    swiper.slides.forEach((slide) => slide.dispatchEvent(new Event('transitionend', { bubbles: true })))
-    await vi.advanceTimersByTimeAsync(2600)
-    await nextTick()
-    expect(swiper.realIndex).toBe(0)
-    expect(wrapper.get('[aria-live="polite"]').text()).toBe('01 / 02')
+    expect(wrapper.get('.hero-cta').attributes('href')).toBe('#courses')
   } finally {
     wrapper.unmount()
   }

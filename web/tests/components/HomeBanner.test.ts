@@ -1,77 +1,47 @@
 import { mount } from '@vue/test-utils'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import HomeBanner from '../../app/components/HomeBanner.vue'
-
-vi.mock('swiper/vue', () => ({
-  Swiper: {
-    name: 'Swiper',
-    props: ['modules', 'effect', 'fadeEffect', 'speed', 'autoplay', 'loop', 'pagination'],
-    template: '<div><slot /><slot name="container-end" /></div>',
-  },
-  SwiperSlide: { name: 'SwiperSlide', template: '<div><slot /></div>' },
-}))
+import { fallbackHomeBanner } from '../../shared/utils/homeBanner'
 
 const banner = {
-  title: '測試大標題',
-  summary: '測試摘要',
-  slides: [
-    {
-      id: 'first',
-      image: '/first.jpg',
-      imageAlt: '第一張圖片',
-      description: '第一段敘述',
-    },
-    {
-      id: 'second',
-      image: '/second.jpg',
-      imageAlt: '第二張圖片',
-      description: '第二段敘述',
-    },
-  ],
+  title: '測試大標題\n第二行標題',
+  summary: '測試敘述',
+  buttonText: '查看課程',
+  buttonLink: 'https://example.com/courses',
 }
 
-describe('home banner', () => {
-  it('keeps each image with its own description', () => {
-    const wrapper = mount(HomeBanner, {
-      props: { banner },
-    })
-
-    expect(wrapper.get('h1').text()).toBe('測試大標題')
-    expect(wrapper.get('p').text()).toBe('測試摘要')
-    expect(wrapper.findAll('img').map((image) => [image.attributes('src'), image.attributes('alt')]))
-      .toEqual([['/first.jpg', '第一張圖片'], ['/second.jpg', '第二張圖片']])
-    expect(wrapper.text()).toContain('第一段敘述')
-    expect(wrapper.text()).toContain('第二段敘述')
-    expect(wrapper.findAll('p').slice(1).every((caption) => caption.classes().includes('text-right'))).toBe(true)
-    expect(wrapper.find('[data-signal-wave]').exists()).toBe(false)
-    expect(wrapper.get('[data-home-banner]').classes()).toContain('home-banner')
-    expect(wrapper.get('[data-banner-media]').classes()).toContain('lg:top-0')
+describe('home banner content', () => {
+  it('renders the four CMS fields and preserves title line breaks', () => {
+    const wrapper = mount(HomeBanner, { props: { banner } })
+    expect(wrapper.findAll('h1 span').map((line) => line.text())).toEqual(['測試大標題', '第二行標題'])
+    expect(wrapper.get('.hero-story-copy p').text()).toBe(banner.summary)
+    expect(wrapper.get('.hero-cta').text()).toBe(banner.buttonText)
+    expect(wrapper.get('.hero-cta').attributes('href')).toBe(banner.buttonLink)
+    expect(wrapper.findAll('.home-banner__plate')).toHaveLength(1)
+    expect(wrapper.get('.home-banner__plate').attributes('alt')).toContain('玫瑰')
+    wrapper.unmount()
   })
 
-  it('automatically crossfades between slides without navigation buttons', () => {
-    const wrapper = mount(HomeBanner, {
-      props: { banner },
-    })
-    const swiper = wrapper.findComponent({ name: 'Swiper' })
-
-    expect(swiper.props('effect')).toBe('fade')
-    expect(swiper.props('fadeEffect')).toEqual({ mode: 'cross-fade' })
-    expect(swiper.props('speed')).toBe(800)
-    expect(swiper.props('autoplay')).toEqual({ delay: 2500, disableOnInteraction: false })
-    expect(swiper.props('loop')).toBe(true)
-    expect(wrapper.findAll('button')).toHaveLength(0)
-
+  it('shows fallback content without published CMS content', () => {
+    const wrapper = mount(HomeBanner, { props: { banner: null } })
+    expect(wrapper.get('.hero-story-copy p').text()).toBe(fallbackHomeBanner.summary)
+    expect(wrapper.get('.hero-cta').text()).toBe(fallbackHomeBanner.buttonText)
+    expect(wrapper.get('.hero-cta').attributes('href')).toBe('#courses')
+    wrapper.unmount()
   })
 
-  it('does not autoplay but keeps the slide count when there is only one image', () => {
-    const wrapper = mount(HomeBanner, {
-      props: { banner: { ...banner, slides: [banner.slides[0]!] } },
-    })
+  it('keeps category selection independent of CMS content', async () => {
+    const wrapper = mount(HomeBanner, { props: { banner } })
+    await wrapper.get('.atlas-category--heart').trigger('click')
+    expect(wrapper.get('.atlas-category--heart').attributes('aria-pressed')).toBe('true')
+    expect(wrapper.get('.atlas-category--body').attributes('aria-pressed')).toBe('false')
+    expect(wrapper.get('.hero-cta').attributes('href')).toBe(banner.buttonLink)
+    wrapper.unmount()
+  })
 
-    const swiper = wrapper.findComponent({ name: 'Swiper' })
-    expect(swiper.props('autoplay')).toBe(false)
-    expect(swiper.props('loop')).toBe(false)
-    expect(swiper.props('pagination')).toEqual(expect.objectContaining({ type: 'fraction' }))
-    expect(wrapper.find('[aria-live="polite"]').exists()).toBe(true)
+  it('falls back instead of rendering an unsafe CMS link', () => {
+    const wrapper = mount(HomeBanner, { props: { banner: { ...banner, buttonLink: 'javascript:alert(1)' } } })
+    expect(wrapper.get('.hero-cta').attributes('href')).toBe('#courses')
+    wrapper.unmount()
   })
 })

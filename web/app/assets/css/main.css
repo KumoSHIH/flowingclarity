@@ -1,13 +1,110 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Noto Sans TC", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "BIZ UDPGothic", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
   --font-editorial: Georgia, "Times New Roman", serif;
   --color-paper: #f8f5ef;
   --color-ink: #38342e;
   --color-muted: #81776a;
   --color-clay: #a46b54;
+  --color-saffron: #f8bf4c;
+  --color-oxblood: #392618;
+  --color-persimmon: #df5b35;
+  --color-warm-white: #f7f6f4;
+}
+
+/* Shared typography and large primary action. Layout margins belong to consumers. */
+:root {
+  --display-title-size: clamp(52px, 5vw, 60px);
+  --display-title-weight: 400;
+  --display-title-leading: 1.2;
+  --lead-text-size: clamp(14px, 1.05vw, 17px);
+  --lead-text-weight: 500;
+  --lead-text-leading: 1.95;
+  --text-tracking: 0.06em;
+  --lead-text-inverse: #e9ded7;
+  --button-primary-size: clamp(17px, 1.4vw, 22px);
+  --button-primary-height: clamp(72px, 8.4vh, 92px);
+  --button-primary-padding: clamp(28px, 3vw, 48px);
+  --button-primary-text: #fff7f1;
+  --button-primary-hover: #c94f34;
+  --button-primary-gap: 24px;
+  --button-primary-icon-size: 22px;
+  --button-primary-tracking: 0.1em;
+  --button-primary-transition: 220ms ease;
+  --control-focus-width: 2px;
+  --control-focus-offset: 6px;
+}
+
+@layer components {
+  .display-title {
+    font-family: var(--font-sans);
+    font-size: var(--display-title-size);
+    font-weight: var(--display-title-weight);
+    line-height: var(--display-title-leading);
+    letter-spacing: var(--text-tracking);
+    overflow-wrap: anywhere;
+  }
+
+  .lead-text {
+    font-size: var(--lead-text-size);
+    font-weight: var(--lead-text-weight);
+    line-height: var(--lead-text-leading);
+    letter-spacing: var(--text-tracking);
+  }
+
+  .lead-text--inverse {
+    color: var(--lead-text-inverse);
+  }
+
+  .button-primary {
+    display: flex;
+    min-height: var(--button-primary-height);
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--button-primary-gap);
+    padding: 0 var(--button-primary-padding);
+    border: 0;
+    border-radius: 0;
+    color: var(--button-primary-text);
+    background: var(--color-persimmon);
+    font-size: var(--button-primary-size);
+    letter-spacing: var(--button-primary-tracking);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background var(--button-primary-transition);
+  }
+
+  .button-primary:hover {
+    background: var(--button-primary-hover);
+  }
+
+  .button-primary:focus-visible {
+    outline: var(--control-focus-width) solid var(--color-clay);
+    outline-offset: var(--control-focus-offset);
+  }
+
+  .button-primary__icon {
+    width: var(--button-primary-icon-size);
+    height: var(--button-primary-icon-size);
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --display-title-size: 42px;
+    --lead-text-size: 14px;
+    --button-primary-size: 16px;
+    --button-primary-padding: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button-primary {
+    transition: none;
+  }
 }
 
 html {
@@ -20,14 +117,18 @@ body {
   color: var(--color-ink);
 }
 
+.home-page {
+  --home-header-height: 76px;
+}
+
 .home-page ::selection {
   background: var(--color-clay);
   color: var(--color-paper);
 }
 
 .home-page :focus-visible {
-  outline: 2px solid var(--color-clay);
-  outline-offset: 6px;
+  outline: var(--control-focus-width) solid var(--color-clay);
+  outline-offset: var(--control-focus-offset);
 }
 
 .home-page section[id] {
@@ -36,4 +137,212 @@ body {
 
 .home-page .text-muted {
   color: #71685e;
+}
+
+.home-sticky-header {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 50;
+  display: flex;
+  width: min(100%, 1920px);
+  min-height: var(--home-header-height);
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 14px clamp(24px, 4vw, 72px);
+  color: var(--color-oxblood);
+  background: rgb(255 255 255 / 72%);
+  border-bottom: 1px solid rgb(255 255 255 / 68%);
+  -webkit-backdrop-filter: blur(20px) saturate(125%);
+  backdrop-filter: blur(20px) saturate(125%);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -105%);
+  transition:
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 220ms ease;
+}
+
+.home-sticky-header.is-visible {
+  pointer-events: auto;
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.home-sticky-header__brand {
+  display: grid;
+  color: inherit;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.home-sticky-header__brand small {
+  margin-top: 3px;
+  font-size: 8px;
+  letter-spacing: 0.35em;
+}
+
+.home-sticky-header__nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 2.4vw, 42px);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+
+.home-sticky-header__nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.home-sticky-header__menu-toggle {
+  display: none;
+}
+
+.home-footer {
+  display: flex;
+  min-height: 72px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(28px, 6vw, 116px);
+  color: #71685e;
+  font-family: var(--font-editorial);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+
+@media (max-width: 1023px) {
+  .home-page {
+    padding-top: var(--home-header-height);
+  }
+
+  .home-page section[id] {
+    scroll-margin-top: calc(var(--home-header-height) + 32px);
+  }
+
+  .home-sticky-header {
+    pointer-events: auto;
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  .home-sticky-header__nav {
+    position: fixed;
+    top: var(--home-header-height);
+    left: 0;
+    display: flex;
+    width: 100%;
+    height: calc(100dvh - var(--home-header-height));
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 18px clamp(24px, 6vw, 56px) max(24px, env(safe-area-inset-bottom));
+    overflow-y: auto;
+    color: var(--color-oxblood);
+    background: rgb(255 255 255 / 92%);
+    -webkit-backdrop-filter: blur(24px) saturate(120%);
+    backdrop-filter: blur(24px) saturate(120%);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-14px);
+    transition:
+      opacity 180ms ease,
+      transform 260ms cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0s linear 260ms;
+  }
+
+  .home-sticky-header__nav.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition-delay: 0s;
+  }
+
+  .home-sticky-header__nav a {
+    display: flex;
+    min-height: 72px;
+    align-items: center;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-oxblood) 14%, transparent);
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+  }
+
+  .home-sticky-header__menu-toggle {
+    position: relative;
+    display: block;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 auto;
+    padding: 0;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .home-sticky-header__menu-toggle span {
+    position: absolute;
+    left: 10px;
+    width: 24px;
+    height: 1px;
+    background: currentColor;
+    transition:
+      opacity 160ms ease,
+      transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .home-sticky-header__menu-toggle span:nth-child(1) {
+    top: 14px;
+  }
+
+  .home-sticky-header__menu-toggle span:nth-child(2) {
+    top: 21px;
+  }
+
+  .home-sticky-header__menu-toggle span:nth-child(3) {
+    top: 28px;
+  }
+
+  .home-sticky-header__menu-toggle.is-open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .home-sticky-header__menu-toggle.is-open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .home-sticky-header__menu-toggle.is-open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .home-sticky-header__brand small {
+    display: none;
+  }
+}
+
+html.home-menu-open,
+html.home-menu-open body {
+  overflow: hidden;
+}
+
+html.home-menu-open {
+  scrollbar-width: none;
+}
+
+html.home-menu-open::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-sticky-header,
+  .home-sticky-header__nav,
+  .home-sticky-header__menu-toggle span {
+    transition: none;
+  }
 }

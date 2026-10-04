@@ -13,7 +13,7 @@ npm run dev:web
 
 開發伺服器預設位於 `http://localhost:3000`。
 
-首頁 Banner 從 Sanity 專案 `hnypuj6l` 的 `production` dataset 讀取已發布內容。多張圖片與敘述使用 Swiper 每 2500ms 自動輪播，以 800ms 淡入淡出；若還沒有發布或暫時無法讀取，首頁會顯示示範 Banner。其他部署環境可用 `NUXT_SANITY_PROJECT_ID` 和 `NUXT_SANITY_DATASET` 覆寫設定。
+首頁 Banner 從 Sanity 專案 `hnypuj6l` 的 `production` dataset 讀取已發布內容。CMS 提供大標題、敘述、按鈕文字與按鈕連結四個欄位；玫瑰底圖與動畫由前端維護。若尚未發布、欄位不完整或暫時無法讀取，首頁會顯示示範 Banner。其他部署環境可用 `NUXT_SANITY_PROJECT_ID` 和 `NUXT_SANITY_DATASET` 覆寫設定。
 
 ## 驗證
 
