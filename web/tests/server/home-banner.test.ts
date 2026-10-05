@@ -30,7 +30,7 @@ describe('home banner API', () => {
     }
   })
 
-  it.each(['#courses', '/courses?category=body#intro', 'https://example.com/courses', 'http://example.com'])('accepts %s', async (buttonLink) => {
+  it.each(['#courses', '/course?category=body#intro', 'https://example.com/courses', 'http://example.com'])('accepts %s', async (buttonLink) => {
     fetchMock.mockResolvedValue({ ...banner, buttonLink })
     expect(await getHomeBanner({} as never)).toEqual({ ...banner, buttonLink })
   })

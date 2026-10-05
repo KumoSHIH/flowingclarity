@@ -2,7 +2,7 @@
 
 ## 狀態與範圍
 
-狀態：已抽成共用 CSS，先由 Banner 使用；全站推廣仍為候選。2026-10-05 依 [HomeBanner.vue](../../web/app/components/HomeBanner.vue) 與 [main.css](../../web/app/assets/css/main.css) 更新；以下數值是目前實作基準，不代表全站已核准或已完成視覺驗收。
+狀態：已抽成共用 CSS，先由 Banner 使用；全站推廣仍為候選。2026-10-05 依 [HomeBanner.vue](../../app/components/HomeBanner.vue) 與 [main.css](../../app/assets/css/main.css) 更新；以下數值是目前實作基準，不代表全站已核准或已完成視覺驗收。
 
 本文件管理文字角色與按鈕外觀；容器寬度、區塊排列及元素間距由各頁規格管理。[Banner 規格](home-banner.md) 是第一個引用案例。樣式角色不取代 HTML 語意，標題層級仍依內容結構選擇。
 
@@ -46,7 +46,7 @@
 ```html
 <h1 class="display-title">展示標題</h1>
 <p class="lead-text">引導敘述</p>
-<a class="button-primary" href="/courses">
+<a class="button-primary" href="/course">
   <span>探索課程</span>
   <svg class="button-primary__icon" aria-hidden="true"><!-- 圖示 --></svg>
 </a>

@@ -13,7 +13,7 @@
 | `web/server/api/` | 讀取 Sanity 內容的伺服器 API |
 | `web/tests/` | Vitest 與 Vue Test Utils 測試 |
 | `studio/` | Sanity Studio、內容 schema 與測試 |
-| `docs/specs/` | 功能規格與驗收條件 |
+| `web/docs/` | 前端功能規格、設計稿與待辦紀錄 |
 
 ## 本機開發
 
@@ -64,4 +64,4 @@ npm run build:studio
 
 修改前請閱讀 [專案規範](AGENTS.md)；前端另有 [開發規範](web/AGENTS.md)。元件採 PascalCase，共用設計 token 位於 `web/app/assets/css/main.css`。
 
-更多說明見 [前端指南](web/README.md)、[後台指南](studio/README.md)、[Banner 規格](docs/specs/home-banner.md)與[首頁區塊規格](docs/specs/home-sections.md)。
+更多說明見 [前端指南](web/README.md)、[後台指南](studio/README.md)、[Banner 規格](web/docs/specs/home-banner.md)與[首頁區塊規格](web/docs/specs/home-sections.md)。

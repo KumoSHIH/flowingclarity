@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useRoseAtlasAnimation } from "../composables/useRoseAtlasAnimation";
+import { siteNavigationItems } from "../constants/siteNavigation";
 
 import {
   fallbackHomeBanner,
@@ -106,10 +107,13 @@ function selectCategory(id: string, event: MouseEvent) {
     </div>
     <div class="home-banner__story">
       <nav class="hero-menu" aria-label="首頁主要選單">
-        <a href="#courses">近期課程</a>
-        <a href="#course-map">課程探索</a>
-        <a href="#articles">文章分享</a>
-        <a href="#contact">個案諮詢</a>
+        <a
+          v-for="item in siteNavigationItems"
+          :key="item.href"
+          :href="item.href"
+        >
+          {{ item.label }}
+        </a>
       </nav>
       <div class="hero-story-copy">
         <a class="atlas-brand" href="#course-map" aria-label="普那生活空間首頁">

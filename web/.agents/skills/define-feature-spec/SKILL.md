@@ -10,12 +10,12 @@ description: 為 Flowing Clarity 的新頁面或功能建立規格、內容契�
 ## 開始前
 
 1. 閱讀根目錄與目標目錄的 `AGENTS.md`。
-2. 閱讀 `web/PRODUCT.md`、`web/DESIGN.md`、相關 `docs/specs/`、現有頁面與 Sanity schema。
+2. 閱讀 `web/PRODUCT.md`、`web/DESIGN.md`、相關 `web/docs/specs/`、現有頁面與 Sanity schema。
 3. 分開記錄已確認事實、示範內容、合理假設與待決事項；不得把現有假資料當成正式內容。
 
 ## 產出
 
-建立或更新 `docs/specs/<feature>.md`，內容至少包含：
+建立或更新 `web/docs/specs/<feature>.md`，內容至少包含：
 
 - 狀態：新規格從 `draft` 開始。
 - 目標與受眾：使用者來到此功能的情境、要理解或完成的主要事情。

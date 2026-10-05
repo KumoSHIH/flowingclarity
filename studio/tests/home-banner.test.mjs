@@ -24,6 +24,6 @@ test('Banner link validation allows site paths and anchors but blocks executable
     custom(callback) { validate = callback; return this },
   }
   homeBanner.fields.find(({ name }) => name === 'buttonLink').validation(rule)
-  for (const link of ['https://example.com', '/courses', '#courses']) assert.equal(validate(link), true)
+  for (const link of ['https://example.com', '/course', '#courses']) assert.equal(validate(link), true)
   for (const link of ['javascript:alert(1)', '//example.com', '/\\example.com', '#', 'courses']) assert.notEqual(validate(link), true)
 })
