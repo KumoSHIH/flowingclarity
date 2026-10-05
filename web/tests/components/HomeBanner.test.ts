@@ -19,6 +19,11 @@ describe('home banner content', () => {
     expect(wrapper.get('.hero-cta').attributes('href')).toBe(banner.buttonLink)
     expect(wrapper.findAll('.home-banner__plate')).toHaveLength(1)
     expect(wrapper.get('.home-banner__plate').attributes('alt')).toContain('玫瑰')
+    const brand = wrapper.get('.atlas-brand')
+    const brandLogo = brand.get('.atlas-brand__logo')
+    expect(brand.attributes('aria-label')).toBe('普那生活空間首頁')
+    expect(brandLogo.attributes('src')).toBe('/assets/logo-main-light.png')
+    expect(brandLogo.attributes('alt')).toBe('')
     wrapper.unmount()
   })
 

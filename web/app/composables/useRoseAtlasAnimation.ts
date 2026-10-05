@@ -73,12 +73,23 @@ export function useRoseAtlasAnimation(
           + 3 * u * t ** 2 * path[2][axis] + t ** 3 * path[3][axis]
         const x = coordinate(0) * imageWidth + (width - imageWidth) / 2
         const y = coordinate(1) * imageHeight + (height - imageHeight) / 2
-        context.globalAlpha = 0.25 + Math.sin(Math.PI * t) * 0.55
-        context.fillStyle = '#fff8d8'
+        const slowPulse = Math.sin(elapsed / (720 + index * 83) + index * 1.9)
+        const quickFlicker = Math.sin(elapsed / (230 + index * 29) + index * 0.73)
+        const intensity = 0.5 + slowPulse * 0.34 + quickFlicker * 0.16
+        const glowRadius = (mobile ? 9 : 13) + intensity * (mobile ? 4 : 7)
+        const glow = context.createRadialGradient(x, y, 0, x, y, glowRadius)
+        glow.addColorStop(0, 'rgb(255 255 238 / 100%)')
+        glow.addColorStop(0.14, 'rgb(255 251 201 / 96%)')
+        glow.addColorStop(0.45, 'rgb(255 221 104 / 48%)')
+        glow.addColorStop(1, 'rgb(255 195 70 / 0%)')
+        context.globalCompositeOperation = 'lighter'
+        context.globalAlpha = 0.48 + intensity * 0.48
+        context.fillStyle = glow
         context.beginPath()
-        context.arc(x, y, mobile ? 1.8 : 2.4, 0, Math.PI * 2)
+        context.arc(x, y, glowRadius, 0, Math.PI * 2)
         context.fill()
       }
+      context.globalCompositeOperation = 'source-over'
     }
 
     const duration = reduced ? 180 : 700
@@ -96,6 +107,7 @@ export function useRoseAtlasAnimation(
       return true
     })
     context.globalAlpha = 1
+    context.globalCompositeOperation = 'source-over'
     schedule()
   }
 

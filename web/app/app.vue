@@ -8,6 +8,13 @@ useHead({
       content: 'Flowing Clarity 身心療癒與按摩，在溫柔的觸碰中找回自己的節奏。',
     },
   ],
+  link: [
+    {
+      rel: 'icon',
+      href: '/assets/logo.png',
+      type: 'image/png',
+    },
+  ],
 })
 </script>
 

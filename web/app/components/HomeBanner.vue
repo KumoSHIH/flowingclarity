@@ -79,13 +79,8 @@ function selectCategory(id: string, event: MouseEvent) {
 
       <canvas ref="canvas" class="home-banner__canvas" aria-hidden="true" />
 
-      <a class="atlas-brand" href="#course-map" aria-label="普那生活空間首頁">
-        <span>普那生活空間</span>
-        <small>FLOWING CLARITY</small>
-      </a>
-
-      <p class="atlas-caption atlas-caption--bottom-right" aria-hidden="true">
-        A LEARNING SPACE<br />FOR BODY, MIND AND LIFE
+      <p class="atlas-caption atlas-caption--bottom-left" aria-hidden="true">
+        Pathways to creative arts <br />and well-being
       </p>
 
       <div class="atlas-categories" aria-label="課程類別">
@@ -109,7 +104,6 @@ function selectCategory(id: string, event: MouseEvent) {
         </button>
       </div>
     </div>
-
     <div class="home-banner__story">
       <nav class="hero-menu" aria-label="首頁主要選單">
         <a href="#courses">近期課程</a>
@@ -117,8 +111,17 @@ function selectCategory(id: string, event: MouseEvent) {
         <a href="#articles">文章分享</a>
         <a href="#contact">個案諮詢</a>
       </nav>
-
       <div class="hero-story-copy">
+        <a class="atlas-brand" href="#course-map" aria-label="普那生活空間首頁">
+          <img
+            class="atlas-brand__logo"
+            src="/assets/logo-main-light.png"
+            alt=""
+            width="896"
+            height="496"
+            draggable="false"
+          />
+        </a>
         <h1 id="hero-title" class="display-title">
           <span v-for="(line, index) in titleLines" :key="index">{{
             line
@@ -145,8 +148,12 @@ function selectCategory(id: string, event: MouseEvent) {
 
 <style scoped>
 .home-banner {
+  --hero-edge: clamp(28px, 3vw, 48px);
+  --hero-top: clamp(28px, 4.8vh, 52px);
+
   display: grid;
   grid-template-columns: 65% 35%;
+  grid-template-areas: "atlas story";
   width: 100%;
   height: 100svh;
   height: 100dvh;
@@ -156,6 +163,7 @@ function selectCategory(id: string, event: MouseEvent) {
 }
 
 .home-banner__atlas {
+  grid-area: atlas;
   position: relative;
   min-width: 0;
   min-height: 0;
@@ -184,27 +192,17 @@ function selectCategory(id: string, event: MouseEvent) {
 }
 
 .atlas-brand {
-  position: absolute;
-  top: 4.2%;
-  left: 4.1%;
-  z-index: 3;
-  display: grid;
-  color: inherit;
+  margin-bottom: 30px;
+  display: block;
   text-decoration: none;
 }
 
-.atlas-brand span {
-  font-size: clamp(31px, 2.6vw, 41px);
-  font-weight: 400;
-  letter-spacing: 0.16em;
-  line-height: 1;
-}
-
-.atlas-brand small {
-  margin-top: 10px;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.42em;
+.atlas-brand__logo {
+  display: block;
+  width: clamp(168px, 18vw, 190px);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
 }
 
 .atlas-legend,
@@ -231,13 +229,13 @@ function selectCategory(id: string, event: MouseEvent) {
 }
 
 .atlas-caption--bottom-left {
-  bottom: 5.5%;
+  bottom: 30px;
   left: 4.7%;
 }
 
 .atlas-caption--bottom-right {
   right: 5%;
-  bottom: 5.5%;
+  bottom: 30px;
   padding-bottom: 9px;
   border-bottom: 1px solid currentColor;
 }
@@ -264,16 +262,16 @@ function selectCategory(id: string, event: MouseEvent) {
 }
 
 .atlas-category--body {
-  top: 23%;
-  left: 26%;
+  top: 26%;
+  left: 17%;
 }
 .atlas-category--heart {
-  top: 24%;
-  right: 5%;
+  top: 23%;
+  right: 10%;
 }
 .atlas-category--life {
   bottom: 23%;
-  left: 22%;
+  left: 12%;
 }
 .atlas-category--beauty {
   right: 5%;
@@ -306,7 +304,19 @@ function selectCategory(id: string, event: MouseEvent) {
   background: #25180f61;
   border: 4px solid #f7f6f4;
   border-radius: 50%;
+  box-shadow:
+    0 0 7px rgb(255 248 231 / 82%),
+    0 0 18px rgb(255 248 231 / 44%);
   box-sizing: content-box;
+  transition: box-shadow 180ms ease;
+}
+
+.atlas-category:is(:hover, :focus-visible, .is-active)
+  .atlas-category__marker
+  i {
+  box-shadow:
+    0 0 9px rgb(255 248 231 / 92%),
+    0 0 24px rgb(255 248 231 / 60%);
 }
 
 .atlas-category__copy {
@@ -327,6 +337,7 @@ function selectCategory(id: string, event: MouseEvent) {
 }
 
 .home-banner__story {
+  grid-area: story;
   position: relative;
   min-width: 0;
   min-height: 0;
@@ -336,31 +347,42 @@ function selectCategory(id: string, event: MouseEvent) {
 
 .hero-menu {
   position: absolute;
-  top: 4.8%;
-  right: clamp(28px, 3vw, 48px);
-  z-index: 2;
-  display: grid;
-  justify-items: end;
-  gap: 19px;
+  top: var(--hero-top);
+  right: var(--hero-edge);
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 2vw, 34px);
 }
 
 .hero-menu a {
-  color: inherit;
+  position: relative;
+  color: #fff;
   text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  transition: color 180ms ease;
+  font-size: clamp(12px, 0.82vw, 14px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.15em;
+  white-space: nowrap;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
 }
 
-.hero-menu a:hover {
-  color: #f8bf4c;
+.hero-menu a:is(:hover, :focus-visible) {
+  opacity: 0.8;
+  transform: translateY(-2px);
+}
+
+.hero-menu a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 5px;
 }
 
 .hero-story-copy {
   position: absolute;
-  inset: 31% 0 8%;
-  padding-inline: clamp(28px, 3vw, 48px);
+  inset: 23% 0 8%;
+  padding-inline: var(--hero-edge);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -382,20 +404,18 @@ function selectCategory(id: string, event: MouseEvent) {
   margin: clamp(12px, 1.8vh, 20px) 0 0;
 }
 
-@media (min-width: 1024px) and (max-width: 1180px) {
-  .hero-story-copy h1 {
-    font-size: clamp(50px, 6vw, 72px);
-  }
-}
-
-@media (max-width: 1180px) {
+@media (max-width: 1250px) {
   .home-banner {
-    grid-template-columns: 62% 38%;
+    grid-template-columns: 60% 40%;
   }
 
   .atlas-category--heart,
   .atlas-category--beauty {
     right: 2%;
+  }
+
+  .hero-menu {
+    gap: 16px;
   }
 }
 
@@ -491,6 +511,7 @@ function selectCategory(id: string, event: MouseEvent) {
 
 @media (prefers-reduced-motion: reduce) {
   .atlas-category__marker,
+  .atlas-category__marker i,
   .atlas-category,
   .hero-menu a {
     transition: none;

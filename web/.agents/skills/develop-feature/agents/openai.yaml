@@ -1,0 +1,4 @@
+interface:
+  display_name: "開發 Web 功能"
+  short_description: "依序協調規格、設計、實作、驗證與 Sanity 串接"
+  default_prompt: "使用 $develop-feature 從目前進度接續完成這個 Web 功能，並逐階段檢查交接門檻。"

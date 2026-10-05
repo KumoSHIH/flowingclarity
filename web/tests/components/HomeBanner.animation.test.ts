@@ -2,10 +2,13 @@ import { mount, type VueWrapper } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import HomeBanner from '../../app/components/HomeBanner.vue'
 
+const glow = { addColorStop: vi.fn() }
 const context = {
   clearRect: vi.fn(), setTransform: vi.fn(), beginPath: vi.fn(),
   arc: vi.fn(), fill: vi.fn(), stroke: vi.fn(),
+  createRadialGradient: vi.fn(() => glow),
   globalAlpha: 1, fillStyle: '', strokeStyle: '', lineWidth: 1,
+  globalCompositeOperation: 'source-over',
 }
 let wrapper: VueWrapper | undefined
 let frames: Map<number, FrameRequestCallback>
@@ -92,6 +95,9 @@ describe('rose atlas canvas', () => {
     show()
     step(0)
     expect(context.fill).toHaveBeenCalledTimes(6)
+    expect(context.createRadialGradient).toHaveBeenCalledTimes(6)
+    expect(glow.addColorStop).toHaveBeenCalledTimes(24)
+    expect(context.globalCompositeOperation).toBe('source-over')
     expect(frames.size).toBe(1)
     intersect([{ isIntersecting: false }])
     expect(frames.size).toBe(0)

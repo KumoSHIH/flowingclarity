@@ -1,0 +1,4 @@
+interface:
+  display_name: "確認 Web 介面方向"
+  short_description: "從功能規格產出並確認桌面與手機設計方向"
+  default_prompt: "使用 $shape-ui-direction 為這份功能規格建立並確認介面設計方向。"

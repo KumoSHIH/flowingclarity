@@ -1,0 +1,4 @@
+interface:
+  display_name: "串接 Web 的 Sanity 內容"
+  short_description: "建立內容模型、Studio schema、查詢與前端資料轉換"
+  default_prompt: "使用 $integrate-sanity-content 將這個已完成的假資料功能接上 Sanity。"

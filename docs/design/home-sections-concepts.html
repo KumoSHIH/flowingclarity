@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>首頁其他區塊｜空間感設計提案</title>
+  <style>
+    :root {
+      --paper: #f8f5ef;
+      --ink: #25180f;
+      --oxblood: #392618;
+      --saffron: #f8bf4c;
+      --persimmon: #df5b35;
+      --warm-white: #f7f6f4;
+      --muted: #716256;
+      --line: rgba(57, 38, 24, .22);
+      --edge: clamp(28px, 5.8vw, 112px);
+      --font: "BIZ UDPGothic", "Noto Sans TC", "PingFang TC", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: #d8cfc1; }
+    body { margin: 0; color: var(--ink); background: #d8cfc1; font-family: var(--font); }
+    button, a { font: inherit; }
+    button { cursor: pointer; }
+    h1, h2, h3, p { margin-top: 0; }
+    p { line-height: 1.95; }
+    ::selection { color: var(--warm-white); background: var(--persimmon); }
+    :focus-visible { outline: 2px solid var(--persimmon); outline-offset: 5px; }
+    .shell { width: min(100%, 1920px); margin-inline: auto; background: var(--paper); }
+    .switcher { position: sticky; top: 0; z-index: 50; display: flex; min-height: 76px; align-items: center; justify-content: space-between; gap: 24px; padding: 12px var(--edge); color: var(--warm-white); background: rgba(37, 24, 15, .96); border-bottom: 1px solid rgba(255, 255, 255, .18); backdrop-filter: blur(18px); }
+    .switcher__title { font-size: 12px; letter-spacing: .14em; white-space: nowrap; }
+    .switcher__title small { display: block; margin-top: 6px; color: rgba(247, 246, 244, .58); font-size: 9px; }
+    .tabs { display: flex; gap: 6px; }
+    .tabs button { min-height: 42px; padding: 0 18px; color: var(--warm-white); background: transparent; border: 1px solid rgba(255, 255, 255, .28); font-size: 11px; letter-spacing: .1em; }
+    .tabs button[aria-selected="true"] { color: var(--ink); background: var(--saffron); border-color: var(--saffron); }
+    .concept[hidden] { display: none; }
+    .hero-tail { display: grid; grid-template-columns: 65% 35%; height: clamp(220px, 31vw, 410px); overflow: hidden; }
+    .hero-tail__atlas { position: relative; background: var(--saffron); }
+    .hero-tail__atlas img { width: 100%; height: 100%; object-fit: cover; object-position: center 54%; }
+    .hero-tail__atlas span { position: absolute; bottom: 28px; left: var(--edge); font-size: 9px; font-weight: 700; letter-spacing: .22em; }
+    .hero-tail__story { display: flex; align-items: flex-end; padding: 0 clamp(26px, 3vw, 52px) 28px; color: var(--warm-white); background: var(--oxblood); }
+    .hero-tail__story span { width: 100%; padding-top: 13px; border-top: 1px solid rgba(255, 255, 255, .52); font-size: 10px; letter-spacing: .13em; }
+    .section { padding-inline: var(--edge); }
+    .display { max-width: 12em; font-size: clamp(42px, 5.3vw, 86px); font-weight: 400; line-height: 1.38; letter-spacing: .02em; }
+    .body-copy { max-width: 34em; color: var(--muted); font-size: 15px; letter-spacing: .045em; }
+    .meta { font-size: 10px; font-weight: 700; letter-spacing: .17em; }
+    .line-link { display: inline-flex; min-width: 250px; align-items: center; justify-content: space-between; gap: 40px; padding: 18px 0; color: inherit; border-bottom: 1px solid currentColor; text-decoration: none; font-size: 13px; letter-spacing: .1em; }
+    .arrow { position: relative; width: 21px; height: 21px; flex: 0 0 21px; }
+    .arrow::before { content: ""; position: absolute; top: 3px; right: 3px; width: 12px; height: 12px; border-top: 1.5px solid currentColor; border-right: 1.5px solid currentColor; }
+    .arrow::after { content: ""; position: absolute; top: 10px; left: 2px; width: 16px; border-top: 1.5px solid currentColor; transform: rotate(-45deg); }
+    .line-link:hover .arrow { transform: translate(5px, -5px); }
+    .line-link .arrow { transition: transform 240ms cubic-bezier(.16, 1, .3, 1); }
+    .footer { display: flex; min-height: 82px; align-items: center; justify-content: space-between; gap: 24px; padding: 0 var(--edge); font-size: 9px; letter-spacing: .18em; }
+
+    /* A — 雙域延續 */
+    .a { background: var(--paper); }
+    .a-intro { display: grid; grid-template-columns: 65% 35%; min-height: 82vh; border-bottom: 1px solid var(--line); }
+    .a-intro__space { display: flex; flex-direction: column; justify-content: center; padding: 13vh var(--edge); }
+    .a-intro__space .display { margin-bottom: 54px; }
+    .a-intro__aside { display: flex; flex-direction: column; justify-content: flex-end; padding: 70px clamp(26px, 3vw, 52px); border-left: 1px solid var(--line); }
+    .a-intro__aside .body-copy { margin-bottom: 50px; }
+    .a-courses { padding-top: clamp(120px, 15vw, 260px); padding-bottom: clamp(150px, 18vw, 320px); }
+    .a-courses__heading { display: grid; grid-template-columns: 65% 35%; align-items: end; margin-bottom: 100px; }
+    .a-courses__heading h2 { margin: 0; font-size: clamp(48px, 6vw, 96px); font-weight: 400; letter-spacing: .02em; }
+    .a-courses__heading p { margin: 0; padding-left: 30px; border-left: 1px solid var(--line); }
+    .a-course { display: grid; grid-template-columns: 65% 35%; min-height: 185px; align-items: center; color: inherit; border-top: 1px solid var(--line); text-decoration: none; }
+    .a-course:last-child { border-bottom: 1px solid var(--line); }
+    .a-course h3 { margin: 0; font-size: clamp(30px, 3.3vw, 54px); font-weight: 400; letter-spacing: .06em; transition: color 220ms ease; }
+    .a-course__details { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding-left: 30px; color: var(--muted); }
+    .a-course:hover h3 { color: var(--persimmon); }
+    .a-about { display: grid; grid-template-columns: 65% 35%; min-height: 88vh; color: var(--warm-white); background: var(--oxblood); }
+    .a-about__image { min-height: 620px; background: url("../../web/public/images/home-banner-2.jpg") center / cover; }
+    .a-about__copy { display: flex; flex-direction: column; justify-content: flex-end; padding: 74px clamp(26px, 3vw, 52px); }
+    .a-about__copy h2 { margin-bottom: 42px; font-size: clamp(38px, 3.7vw, 60px); font-weight: 400; line-height: 1.5; letter-spacing: .04em; }
+    .a-about__copy p { color: #e8dace; }
+    .a-pause { display: grid; min-height: 72vh; place-items: center; padding-block: 120px; text-align: center; }
+    .a-pause h2 { margin-bottom: 34px; font-size: clamp(42px, 5vw, 78px); font-weight: 400; line-height: 1.45; }
+    .a-pause p { margin-inline: auto; }
+    .a-contact { display: grid; grid-template-columns: 65% 35%; align-items: end; min-height: 56vh; padding-block: 80px; color: var(--warm-white); background: var(--persimmon); }
+    .a-contact h2 { margin: 0; font-size: clamp(45px, 5.6vw, 88px); font-weight: 400; line-height: 1.35; }
+
+    /* B — 安靜房間 */
+    .b { background: #f4efe7; }
+    .b-opening { min-height: 92vh; padding: 18vh var(--edge) 12vh; }
+    .b-opening__copy { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr); align-items: end; gap: 10vw; }
+    .b-opening h1 { margin: 0; max-width: 9em; font-size: clamp(52px, 6.6vw, 104px); font-weight: 400; line-height: 1.35; letter-spacing: .02em; }
+    .b-opening p { margin: 0 0 12px; }
+    .b-room { padding: 0 var(--edge) clamp(160px, 20vw, 340px); }
+    .b-room__image { height: min(72vw, 900px); background: url("../../web/public/images/home-banner-2.jpg") center / cover; }
+    .b-room__caption { display: flex; justify-content: space-between; gap: 40px; padding-top: 20px; font-size: 10px; letter-spacing: .13em; }
+    .b-paths { padding-bottom: clamp(150px, 18vw, 300px); }
+    .b-paths__title { max-width: 8em; margin: 0 0 clamp(100px, 13vw, 220px); font-size: clamp(48px, 6vw, 94px); font-weight: 400; line-height: 1.4; }
+    .b-path { display: grid; grid-template-columns: 1fr 1fr; min-height: 48vh; align-items: center; padding-block: 40px; border-top: 1px solid var(--line); }
+    .b-path:last-child { border-bottom: 1px solid var(--line); }
+    .b-path:nth-child(even) .b-path__name { padding-left: 12vw; }
+    .b-path__name { font-size: clamp(40px, 5vw, 78px); font-weight: 400; letter-spacing: .08em; }
+    .b-path__detail { max-width: 28em; justify-self: end; color: var(--muted); }
+    .b-path__detail p { margin-bottom: 8px; }
+    .b-quote { display: grid; min-height: 76vh; place-items: center; padding-block: 120px; color: var(--warm-white); background: var(--oxblood); text-align: center; }
+    .b-quote h2 { max-width: 12em; margin-bottom: 48px; font-size: clamp(42px, 5vw, 76px); font-weight: 400; line-height: 1.55; }
+    .b-quote p { margin-inline: auto; color: #e8dace; }
+    .b-contact { min-height: 72vh; padding-block: 14vh 10vh; }
+    .b-contact h2 { max-width: 11em; margin-bottom: 72px; font-size: clamp(48px, 6.3vw, 96px); font-weight: 400; line-height: 1.35; }
+    .b-contact__bottom { display: flex; align-items: end; justify-content: space-between; gap: 50px; }
+
+    /* C — 夜色座標 */
+    .c { color: var(--warm-white); background: #2e2017; }
+    .c-opening { position: relative; min-height: 100vh; overflow: hidden; padding: 16vh var(--edge) 12vh; }
+    .c-opening::after { content: ""; position: absolute; top: 8%; right: -9%; width: min(69vw, 1050px); aspect-ratio: 1.12; background: url("../../web/public/assets/plates/rose-atlas-plate.png") center / cover; opacity: .22; mix-blend-mode: screen; }
+    .c-opening h1 { position: relative; z-index: 1; max-width: 8.8em; margin: 0; font-size: clamp(52px, 6.5vw, 102px); font-weight: 400; line-height: 1.42; letter-spacing: .02em; }
+    .c-opening p { position: absolute; z-index: 1; right: var(--edge); bottom: 11vh; max-width: 28em; color: #dfcfc0; }
+    .c-paths { padding-top: clamp(130px, 16vw, 270px); padding-bottom: clamp(170px, 20vw, 350px); }
+    .c-paths h2 { max-width: 9em; margin-bottom: 150px; font-size: clamp(45px, 5.5vw, 86px); font-weight: 400; line-height: 1.48; }
+    .c-path { display: grid; grid-template-columns: 80px 1fr 1fr; min-height: 190px; align-items: center; padding-block: 34px; border-top: 1px solid rgba(247, 246, 244, .22); }
+    .c-path:last-child { border-bottom: 1px solid rgba(247, 246, 244, .22); }
+    .c-path__marker { width: 12px; height: 12px; border: 3px solid var(--warm-white); border-radius: 50%; background: var(--saffron); box-shadow: 0 0 18px rgba(248, 191, 76, .72); }
+    .c-path h3 { margin: 0; font-size: clamp(32px, 4vw, 64px); font-weight: 400; letter-spacing: .08em; }
+    .c-path p { margin: 0; color: #d8c6b5; }
+    .c-light { display: grid; grid-template-columns: 35% 65%; min-height: 94vh; color: var(--ink); background: var(--paper); }
+    .c-light__copy { display: flex; flex-direction: column; justify-content: center; padding: 90px clamp(26px, 3vw, 52px) 90px var(--edge); }
+    .c-light__copy h2 { margin-bottom: 46px; font-size: clamp(40px, 4vw, 64px); font-weight: 400; line-height: 1.55; }
+    .c-light__image { min-height: 650px; background: url("../../web/public/images/home-banner-2.jpg") center / cover; }
+    .c-pause { display: grid; min-height: 68vh; place-items: center; padding-block: 110px; text-align: center; }
+    .c-pause h2 { max-width: 12em; margin-bottom: 38px; font-size: clamp(42px, 5vw, 78px); font-weight: 400; line-height: 1.5; }
+    .c-pause p { margin-inline: auto; color: #d8c6b5; }
+    .c-contact { position: relative; min-height: 72vh; overflow: hidden; padding-block: 14vh 10vh; color: var(--ink); background: var(--saffron); }
+    .c-contact::after { content: ""; position: absolute; right: -14vw; bottom: -35vw; width: 64vw; aspect-ratio: 1; border: 1px solid rgba(57, 38, 24, .3); border-radius: 50%; box-shadow: 0 0 0 9vw var(--saffron), 0 0 0 calc(9vw + 1px) rgba(57, 38, 24, .2), 0 0 0 20vw var(--saffron), 0 0 0 calc(20vw + 1px) rgba(57, 38, 24, .13); }
+    .c-contact h2, .c-contact .line-link { position: relative; z-index: 1; }
+    .c-contact h2 { max-width: 11em; margin-bottom: 75px; font-size: clamp(50px, 6.5vw, 100px); font-weight: 400; line-height: 1.35; }
+
+    @media (max-width: 800px) {
+      :root { --edge: 28px; }
+      .switcher { align-items: flex-start; flex-direction: column; gap: 12px; padding-block: 14px; }
+      .tabs { width: 100%; }
+      .tabs button { min-width: 0; flex: 1 1 0; padding-inline: 4px; font-size: 10px; line-height: 1.35; }
+      .hero-tail { grid-template-columns: 60% 40%; height: 180px; }
+      .hero-tail__atlas span { bottom: 17px; font-size: 7px; }
+      .hero-tail__story { padding: 0 17px 17px; }
+      .display { font-size: 44px; }
+      .body-copy { font-size: 14px; }
+      .a-intro { grid-template-columns: 1fr; min-height: 0; }
+      .a-intro__space { min-height: 68vh; padding-block: 110px; }
+      .a-intro__space .display { margin-bottom: 36px; }
+      .a-intro__aside { min-height: 330px; padding: 70px var(--edge); border-top: 1px solid var(--line); border-left: 0; }
+      .a-courses { padding-block: 120px 160px; }
+      .a-courses__heading { grid-template-columns: 1fr; gap: 45px; margin-bottom: 72px; }
+      .a-courses__heading h2 { font-size: 52px; }
+      .a-courses__heading p { padding: 0; border: 0; }
+      .a-course { grid-template-columns: 1fr; min-height: 180px; padding-block: 42px; }
+      .a-course h3 { margin-bottom: 20px; font-size: 34px; }
+      .a-course__details { padding: 0; }
+      .a-about { grid-template-columns: 1fr; min-height: 0; }
+      .a-about__image { min-height: 70vh; }
+      .a-about__copy { min-height: 62vh; padding: 90px var(--edge); }
+      .a-pause { min-height: 65vh; }
+      .a-contact { grid-template-columns: 1fr; min-height: 65vh; gap: 70px; padding-block: 90px; }
+      .a-contact h2 { font-size: 49px; }
+      .b-opening { min-height: 86vh; padding-block: 120px 90px; }
+      .b-opening__copy { grid-template-columns: 1fr; gap: 65px; }
+      .b-opening h1 { font-size: 48px; overflow-wrap: anywhere; }
+      .b-room { padding-bottom: 170px; }
+      .b-room__image { height: 115vw; }
+      .b-room__caption { align-items: flex-start; flex-direction: column; gap: 8px; }
+      .b-paths { padding-bottom: 160px; }
+      .b-paths__title { margin-bottom: 105px; font-size: 52px; }
+      .b-path { grid-template-columns: 1fr; min-height: 52vh; align-content: center; gap: 45px; padding-block: 70px; }
+      .b-path:nth-child(even) .b-path__name { padding-left: 0; }
+      .b-path__name { font-size: 48px; }
+      .b-path__detail { justify-self: start; }
+      .b-quote { min-height: 74vh; }
+      .b-contact { min-height: 78vh; padding-block: 110px; }
+      .b-contact h2 { font-size: 52px; }
+      .b-contact__bottom { align-items: flex-start; flex-direction: column; }
+      .c-opening { min-height: 92vh; padding-block: 110px; }
+      .c-opening::after { top: 34%; right: -42%; width: 125vw; opacity: .18; }
+      .c-opening h1 { font-size: 48px; overflow-wrap: anywhere; }
+      .c-opening p { position: absolute; right: var(--edge); bottom: 80px; left: var(--edge); }
+      .c-paths { padding-block: 130px 170px; }
+      .c-paths h2 { margin-bottom: 100px; font-size: 50px; }
+      .c-path { grid-template-columns: 38px 1fr; min-height: 220px; align-content: center; }
+      .c-path h3 { font-size: 38px; }
+      .c-path p { grid-column: 2; margin-top: 22px; }
+      .c-light { grid-template-columns: 1fr; min-height: 0; }
+      .c-light__copy { min-height: 62vh; padding: 90px var(--edge); }
+      .c-light__image { min-height: 72vh; }
+      .c-pause { min-height: 65vh; }
+      .c-contact { min-height: 76vh; padding-block: 110px; }
+      .c-contact h2 { font-size: 52px; }
+      .footer { align-items: flex-start; flex-direction: column; justify-content: center; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .line-link .arrow, .a-course h3 { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="switcher">
+      <div class="switcher__title">首頁其他區塊・空間感提案<small>延續目前 Banner 的留白、比例與安靜節奏</small></div>
+      <div class="tabs" role="tablist" aria-label="選擇設計稿">
+        <button id="tab-a" role="tab" aria-controls="concept-a" aria-selected="true" tabindex="0" data-target="a">A　雙域</button>
+        <button id="tab-b" role="tab" aria-controls="concept-b" aria-selected="false" tabindex="-1" data-target="b">B　房間</button>
+        <button id="tab-c" role="tab" aria-controls="concept-c" aria-selected="false" tabindex="-1" data-target="c">C　夜色</button>
+      </div>
+    </header>
+    <main>
+      <article id="concept-a" class="concept a" role="tabpanel" aria-labelledby="tab-a">
+        <div class="hero-tail"><div class="hero-tail__atlas"><img src="../../web/public/assets/plates/rose-atlas-plate.png" alt=""><span>A LEARNING SPACE FOR BODY, MIND AND LIFE</span></div><div class="hero-tail__story"><span>既有 Banner　↓　雙域繼續延伸</span></div></div>
+        <section class="a-intro"><div class="a-intro__space"><h1 class="display">慢慢感受，<br>此刻的自己。</h1><p class="body-copy">從身體開始，讓學習成為一段重新靠近自己的過程。</p></div><div class="a-intro__aside"><p class="body-copy">首頁下方繼續使用 Banner 的 65／35 比例。大面積留白承接玫瑰地圖，右側只放必要的引導。</p><a class="line-link" href="#a-courses">探索課程<span class="arrow" aria-hidden="true"></span></a></div></section>
+        <section id="a-courses" class="a-courses section"><div class="a-courses__heading"><h2>四個方向</h2><p class="body-copy">依照此刻的需要，選擇一個想靠近的方向。</p></div><a class="a-course" href="#"><h3>愛身體</h3><div class="a-course__details"><span>頭薦骨・再平衡按摩・日式臉部按摩</span><span class="arrow" aria-hidden="true"></span></div></a><a class="a-course" href="#"><h3>撫慰心</h3><div class="a-course__details"><span>童年依附創傷療癒</span><span class="arrow" aria-hidden="true"></span></div></a><a class="a-course" href="#"><h3>究生命</h3><div class="a-course__details"><span>人類圖</span><span class="arrow" aria-hidden="true"></span></div></a><a class="a-course" href="#"><h3>展現美</h3><div class="a-course__details"><span>曼陀羅靜心彩繪</span><span class="arrow" aria-hidden="true"></span></div></a></section>
+        <section class="a-about"><div class="a-about__image" role="img" aria-label="暖光照進安靜的空間，影像示意"></div><div class="a-about__copy"><h2>讓身體被聽見，<br>讓心有地方安放。</h2><p class="body-copy">品牌介紹文案示意。文字集中在右側下方，讓影像與空白成為主要感受。</p></div></section>
+        <section class="a-pause section"><div><h2>近期活動</h2><p class="body-copy">活動資訊確認後，將在這裡與你分享。</p></div></section>
+        <section class="a-contact section"><h2>留一段時間，<br>好好照顧自己。</h2><a class="line-link" href="#">聯絡方式待確認<span class="arrow" aria-hidden="true"></span></a></section>
+        <footer class="footer"><span>FLOWING CLARITY</span><span>設計方向 A ／ 雙域延續</span></footer>
+      </article>
+      <article id="concept-b" class="concept b" role="tabpanel" aria-labelledby="tab-b" hidden>
+        <div class="hero-tail"><div class="hero-tail__atlas"><img src="../../web/public/assets/plates/rose-atlas-plate.png" alt=""><span>A LEARNING SPACE FOR BODY, MIND AND LIFE</span></div><div class="hero-tail__story"><span>既有 Banner　↓　留白向下展開</span></div></div>
+        <section class="b-opening"><div class="b-opening__copy"><h1>讓每一段內容，<br>都像安靜的房間。</h1><p class="body-copy">視線不被催促，重要的資訊在足夠的空間裡被看見。</p></div></section>
+        <section class="b-room"><div class="b-room__image" role="img" aria-label="暖光照進安靜的空間，影像示意"></div><div class="b-room__caption"><span>普那生活空間・影像示意</span><span>讓照顧自己，成為日常的一部分。</span></div></section>
+        <section class="b-paths section"><h2 class="b-paths__title">從一種感受，<br>找到一條路。</h2><div class="b-path"><div class="b-path__name">愛身體</div><div class="b-path__detail"><p>頭薦骨・再平衡按摩・日式臉部按摩</p><span class="meta">實體課程</span></div></div><div class="b-path"><div class="b-path__name">撫慰心</div><div class="b-path__detail"><p>童年依附創傷療癒</p><span class="meta">實體／線上</span></div></div><div class="b-path"><div class="b-path__name">究生命</div><div class="b-path__detail"><p>人類圖</p><span class="meta">線上課程</span></div></div><div class="b-path"><div class="b-path__name">展現美</div><div class="b-path__detail"><p>曼陀羅靜心彩繪</p><span class="meta">線上課程</span></div></div></section>
+        <section class="b-quote section"><div><h2>不急著抵達答案，<br>先回來感受自己。</h2><p class="body-copy">品牌介紹文案示意。</p></div></section>
+        <section class="b-contact section"><h2>如果你正在尋找一個開始，<br>可以從一段對話出發。</h2><div class="b-contact__bottom"><p class="body-copy">近期活動與聯絡資訊待確認。</p><a class="line-link" href="#">與我們聯絡<span class="arrow" aria-hidden="true"></span></a></div></section>
+        <footer class="footer"><span>FLOWING CLARITY</span><span>設計方向 B ／ 安靜房間</span></footer>
+      </article>
+      <article id="concept-c" class="concept c" role="tabpanel" aria-labelledby="tab-c" hidden>
+        <div class="hero-tail"><div class="hero-tail__atlas"><img src="../../web/public/assets/plates/rose-atlas-plate.png" alt=""><span>A LEARNING SPACE FOR BODY, MIND AND LIFE</span></div><div class="hero-tail__story"><span>既有 Banner　↓　進入夜色座標</span></div></div>
+        <section class="c-opening"><h1>在安靜裡，<br>看見身體的微光。</h1><p class="body-copy">延續 Banner 的發光座標與深赭色場域，讓課程探索像一段緩慢的夜間漫遊。</p></section>
+        <section class="c-paths section"><h2>四個方向，<br>在各自的位置發光。</h2><div class="c-path"><span class="c-path__marker" aria-hidden="true"></span><h3>愛身體</h3><p>頭薦骨・再平衡按摩・日式臉部按摩</p></div><div class="c-path"><span class="c-path__marker" aria-hidden="true"></span><h3>撫慰心</h3><p>童年依附創傷療癒</p></div><div class="c-path"><span class="c-path__marker" aria-hidden="true"></span><h3>究生命</h3><p>人類圖</p></div><div class="c-path"><span class="c-path__marker" aria-hidden="true"></span><h3>展現美</h3><p>曼陀羅靜心彩繪</p></div></section>
+        <section class="c-light"><div class="c-light__copy"><h2>走過深色之後，<br>回到有光的日常。</h2><p class="body-copy">品牌介紹文案示意。明暗轉換只出現一次，像呼吸一樣讓頁面放鬆。</p></div><div class="c-light__image" role="img" aria-label="暖光照進安靜的空間，影像示意"></div></section>
+        <section class="c-pause section"><div><h2>近期活動</h2><p class="body-copy">活動資訊確認後，將在這裡與你分享。</p></div></section>
+        <section class="c-contact section"><h2>讓下一步，<br>從一個問題開始。</h2><a class="line-link" href="#">聯絡方式待確認<span class="arrow" aria-hidden="true"></span></a></section>
+        <footer class="footer"><span>FLOWING CLARITY</span><span>設計方向 C ／ 夜色座標</span></footer>
+      </article>
+    </main>
+  </div>
+  <script>
+    const tabs = [...document.querySelectorAll('[role="tab"]')]
+    const panels = [...document.querySelectorAll('[role="tabpanel"]')]
+    function select(tab, focus = false) {
+      tabs.forEach(item => { const active = item === tab; item.setAttribute('aria-selected', String(active)); item.tabIndex = active ? 0 : -1 })
+      panels.forEach(panel => { panel.hidden = panel.id !== `concept-${tab.dataset.target}` })
+      if (focus) tab.focus()
+      window.scrollTo({ top: 0, behavior: 'instant' })
+      history.replaceState(null, '', `#${tab.dataset.target}`)
+    }
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => select(tab))
+      tab.addEventListener('keydown', event => {
+        if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+          event.preventDefault()
+          const step = event.key === 'ArrowRight' ? 1 : tabs.length - 1
+          select(tabs[(index + step) % tabs.length], true)
+        }
+      })
+    })
+    const initial = tabs.find(tab => `#${tab.dataset.target}` === location.hash)
+    if (initial) select(initial)
+  </script>
+</body>
+</html>

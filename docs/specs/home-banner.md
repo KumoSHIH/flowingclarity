@@ -21,13 +21,15 @@ Banner 為 ID 固定為 `homeBanner` 的單一文件，只有以下四個必填�
 
 文字及按鈕的候選共用值見 [全站文字與按鈕候選規格](design-system.md)。Banner 對應「展示標題」「引導敘述」「大型主要按鈕」；目前已使用共用 CSS class 與 token，未另建 Vue 按鈕元件。
 
-樣式對應：大標題使用 `.display-title`，敘述使用 `.lead-text.lead-text--inverse`，按鈕使用 `.button-primary`，箭頭使用 `.button-primary__icon`。`.hero-story-copy` 與 `.hero-cta` 只保留 Banner 的排列與外距；中間斷點的標題字級例外保留在元件內。
+樣式對應：大標題使用 `.display-title`，敘述使用 `.lead-text.lead-text--inverse`，按鈕使用 `.button-primary`，箭頭使用 `.button-primary__icon`。`.hero-story-copy` 與 `.hero-cta` 只保留 Banner 的排列與外距。
 
 ### 已確認的版面規則
 
 - 大標題、敘述與按鈕外框的左右邊界對齊；外側間距只由 `.hero-story-copy` 管理。按鈕內距屬於按鈕自身樣式。
+- 桌面採左側 Atlas、右側 Story；Atlas 佔 65%、Story 佔 35%。不大於 1250px 且大於 1023px 時改為 60%／40%；手機為 Atlas 在上、Story 在下。
 - 大標題保留 CMS 換行，仍允許長文字折行；內容不得裁切或互相重疊。
 - 手機首頁需預留固定 header 的高度；錨點捲動也需避開 header。桌面首屏不預留此空間。
+- 桌面 Banner 選單位於 Story 右上並水平排列；品牌 logo 位於 Story 文案上方。手機隱藏 Banner 內的 logo、選單與地圖說明文字，改由固定 header 提供品牌與選單。
 
 ### 目前實作基準
 
@@ -36,13 +38,20 @@ Banner 為 ID 固定為 `homeBanner` 的單一文件，只有以下四個必填�
 | 範圍 | 版面與間距 |
 | --- | --- |
 | 共用左右間距 | `.hero-story-copy` 的 `padding-inline: clamp(28px, 3vw, 48px)`；目前手機也繼承，不是固定 `24px` |
-| 桌面文字區 | 絕對定位，頂部 `31%`、底部 `8%` |
+| 桌面文字區 | 絕對定位，頂部 `23%`、底部 `8%`；logo 寬度為 `clamp(168px, 18vw, 200px)`，下方間距 `20px` |
+| 桌面選單 | Story 右上水平排列，使用 `--hero-top`、`--hero-edge` 定位，底部為 `1px` 白線；hover 與鍵盤焦點會降低透明度並上移 `2px` |
 | 桌面垂直間距 | 敘述上方 `30px`、下方 `10px`；按鈕上方另加 `clamp(12px, 1.8vh, 20px)`。Flex 排列不折疊 margin，敘述至按鈕的間距是兩者相加 |
-| 1024–1180px 標題 | 特例字級 `clamp(50px, 6vw, 72px)`；可能比更寬桌面的標題大，待確認後再統一，不直接推廣全站 |
-| 不大於 1023px | 文字區回到正常排版，上下內距各 `50px`；敘述上方 `34px`、下方 `0`；按鈕上方 `20px` |
-| 手機 header | 共用 `--home-header-height: 76px` 設定預留空間、header 最小高度及選單起點；區塊錨點預留此高度再加 `32px` |
+| 不大於 1023px | Atlas 最小高度 `64svh`；文字區回到正常排版，上下內距各 `50px`；敘述上方 `34px`、下方 `0`；按鈕上方 `20px` |
+| 手機 header | 共用 `--home-header-height: 87px` 設定預留空間、header 最小高度及選單起點；區塊錨點預留此高度再加 `32px` |
 
 `clamp(30px, 7vh, 30px)` 的上下限相同，目前實際固定為 `30px`。此處只記錄結果，未修改 CSS。
+
+### 地圖互動與動畫
+
+- 四個課程分類以絕對座標分布在玫瑰地圖上；marker 的暖白光暈會在 hover、鍵盤焦點與選取狀態加強。手機縮小 marker 與類別文字，並隱藏課程清單。
+- Canvas 光點沿六條花瓣曲線緩慢往返，使用暖白核心、金黃徑向漸層、`lighter` 混合模式與兩組不同週期的亮度變化，形成螢火蟲式呼吸光。桌面最多六顆，手機最多三顆。
+- 點選分類會從 marker 中心產生漣漪。動畫在 Banner 離開視窗或文件隱藏時停止；Canvas DPR 上限為 2。
+- `prefers-reduced-motion: reduce` 不播放漂移光點，只保留短暫、不擴張的分類點擊回饋。
 
 ## 驗收條件
 
@@ -59,4 +68,4 @@ Banner 為 ID 固定為 `homeBanner` 的單一文件，只有以下四個必填�
 
 人工發布驗證：在 Studio 填入不同標題、敘述、按鈕文字及連結並發布，重新整理首頁確認顯示與導向。再只儲存草稿，確認公開首頁內容不變。這個步驟需使用實際 Sanity 編輯帳號，不由本機測試代替。
 
-樣式驗收：以 390px、1023px、1024px、1180px、1440px 視窗檢查三個元素的左右邊界，並測試 CMS 長標題、手動換行及長按鈕文字。手機初次載入及點選課程探索錨點後，Banner 圖片頂端均不得被 header 蓋住；選單應從 header 下緣展開。檢查 hover、鍵盤焦點及減少動態模式，記錄結果與截圖。本文件新增的是驗收條件，並非上述項目已全部通過的宣告。
+樣式驗收：以 390px、1023px、1024px、1250px、1251px、1440px 視窗檢查雙欄比例、文案邊界、logo 與選單，並測試 CMS 長標題、手動換行及長按鈕文字。手機初次載入及點選課程探索錨點後，Banner 圖片頂端均不得被 header 蓋住；選單應從 header 下緣展開。檢查分類 hover、鍵盤焦點、Canvas 光暈、分頁隱藏／恢復與減少動態模式，記錄結果與截圖。本文件新增的是驗收條件，並非上述項目已全部通過的宣告。

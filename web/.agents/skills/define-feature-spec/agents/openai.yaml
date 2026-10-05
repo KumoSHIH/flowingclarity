@@ -1,0 +1,4 @@
+interface:
+  display_name: "定義 Web 功能規格"
+  short_description: "整理頁面需求、內容契約、狀態與驗收條件"
+  default_prompt: "使用 $define-feature-spec 為這個功能建立可設計、可實作且可驗收的規格。"

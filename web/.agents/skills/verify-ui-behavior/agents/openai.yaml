@@ -1,0 +1,4 @@
+interface:
+  display_name: "驗證 Web 介面行為"
+  short_description: "檢查測試、響應式、無障礙與視覺品質"
+  default_prompt: "使用 $verify-ui-behavior 依功能規格驗證並修正目前的前端實作。"

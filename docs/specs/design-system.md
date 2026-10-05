@@ -2,17 +2,17 @@
 
 ## 狀態與範圍
 
-狀態：已抽成共用 CSS，先由 Banner 使用；全站推廣仍為候選。2026-10-04 依 [HomeBanner.vue](../../web/app/components/HomeBanner.vue) 與 [main.css](../../web/app/assets/css/main.css) 整理；以下數值是目前實作基準，不代表全站已核准或已完成視覺驗收。
+狀態：已抽成共用 CSS，先由 Banner 使用；全站推廣仍為候選。2026-10-05 依 [HomeBanner.vue](../../web/app/components/HomeBanner.vue) 與 [main.css](../../web/app/assets/css/main.css) 更新；以下數值是目前實作基準，不代表全站已核准或已完成視覺驗收。
 
 本文件管理文字角色與按鈕外觀；容器寬度、區塊排列及元素間距由各頁規格管理。[Banner 規格](home-banner.md) 是第一個引用案例。樣式角色不取代 HTML 語意，標題層級仍依內容結構選擇。
 
 ## 文字角色
 
-候選字體沿用 `--font-sans`：`BIZ UDPGothic`、`Noto Sans TC`，再使用系統無襯線字體。下表以桌面大於 1180px、手機不大於 1023px 為目前參考；中間寬度的 Banner 特例見頁面規格。
+候選字體沿用 `--font-sans`：`BIZ UDPGothic`、`Noto Sans TC`，再使用系統無襯線字體。下表以桌面大於 1023px、手機不大於 1023px 為目前參考。
 
 | 候選角色 | 用途 | 桌面字級 | 手機字級 | 字重／行高／字距 |
 | --- | --- | --- | --- | --- |
-| 展示標題 | 首屏主要訊息 | `clamp(52px, 5vw, 60px)` | `42px` | `400`／`1.2`／`0.06em` |
+| 展示標題 | 首屏主要訊息 | `clamp(50px, 5vw, 56px)` | `42px` | `400`／`1.2`／`0.06em` |
 | 引導敘述 | 展示標題下的短文 | `clamp(14px, 1.05vw, 17px)` | `14px` | `500`／`1.95`／`0.06em` |
 | 行動文字 | 主要按鈕標籤 | `clamp(17px, 1.4vw, 22px)` | `16px` | 字重與行高沿用所在頁面／字距 `0.1em` |
 
@@ -56,8 +56,8 @@
 
 共用 token 分為 `--display-title-*`、`--lead-text-*`、`--text-tracking`、`--button-primary-*` 及 `--control-focus-*`，字體和主色沿用既有 `--font-sans`、`--color-persimmon` 與 `--color-clay`。手機數值在 `max-width: 1023px` 統一切換。修改全站數值時同步更新本文件。
 
-共用 class 不設定外距、容器內距或區塊定位；這些由使用頁負責。CMS 標題的分行標記與 Banner 的 1024–1180px 字級特例仍留在 `HomeBanner.vue`。
+共用 class 不設定外距、容器內距或區塊定位；這些由使用頁負責。CMS 標題的分行標記仍留在 `HomeBanner.vue`，目前沒有中間斷點的標題字級特例。
 
-### 本次抽取驗證
+### 既有抽取驗證
 
-2026-10-04：前端 30 項測試、typecheck 與正式 build 通過。以原始 CSS 和抽取後 CSS 建立本機 Banner 文字區測試頁，在 Chrome 比對 390、1023、1024、1180、1440px 的字級、行高、顏色、內距及元素位置／尺寸，結果一致；減少動態模式確認為零秒過渡，並檢視手機與桌面截圖。此為樣式隔離驗證，未重新驗證整頁 CMS 流程或宣告全站可及性驗收完成。
+2026-10-04：前端 30 項測試、typecheck 與正式 build 通過。以原始 CSS 和抽取後 CSS 建立本機 Banner 文字區測試頁，在 Chrome 比對 390、1023、1024、1180、1440px 的字級、行高、顏色、內距及元素位置／尺寸，結果一致；減少動態模式確認為零秒過渡，並檢視手機與桌面截圖。此紀錄早於 2026-10-05 的標題尺寸與 Banner 版面調整，不代表目前版本已完成視覺驗收。

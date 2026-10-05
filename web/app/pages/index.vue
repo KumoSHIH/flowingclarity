@@ -58,9 +58,20 @@ onBeforeUnmount(() => {
       :aria-hidden="!shouldShowHeader"
       aria-label="主要導覽"
     >
-      <a class="home-sticky-header__brand" href="#course-map" @click="setMobileMenuOpen(false)">
-        <span>普那生活空間</span>
-        <small>FLOWING CLARITY</small>
+      <a
+        class="home-sticky-header__brand"
+        href="#course-map"
+        aria-label="普那生活空間首頁"
+        @click="setMobileMenuOpen(false)"
+      >
+        <img
+          class="home-sticky-header__brand-logo"
+          src="/assets/logo-main.png"
+          alt=""
+          width="896"
+          height="496"
+          draggable="false"
+        />
       </a>
       <button
         type="button"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "建立 Web 前端原型"
+  short_description: "使用型別化假資料完成 Nuxt 切版與互動"
+  default_prompt: "使用 $build-ui-prototype 依已確認規格完成這個功能的前端原型。"
