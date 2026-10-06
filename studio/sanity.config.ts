@@ -20,7 +20,11 @@ export default defineConfig({
   document: {
     newDocumentOptions: (prev, { creationContext }) =>
       creationContext.type === 'global'
-        ? prev.filter(({ templateId }) => templateId !== 'homeBanner')
+        ? prev.filter(({ templateId }) => ![
+            'homeBanner',
+            'courseOverviewPage',
+            'courseCategory',
+          ].includes(templateId))
         : prev,
   },
   schema: {

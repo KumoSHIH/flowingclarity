@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 const { fetchMock } = vi.hoisted(() => ({ fetchMock: vi.fn() }))
 vi.mock('@sanity/client', () => ({ createClient: vi.fn(() => ({ fetch: fetchMock })) }))
 vi.stubGlobal('defineEventHandler', (handler: unknown) => handler)
-vi.stubGlobal('useRuntimeConfig', () => ({ sanityProjectId: 'hnypuj6l', sanityDataset: 'production' }))
+vi.stubGlobal('useRuntimeConfig', () => ({ sanityProjectId: 'test-project-id', sanityDataset: 'production' }))
 const { default: getHomeBanner } = await import('../../server/api/home-banner.get')
 const banner = { title: '標題', summary: '敘述', buttonText: '探索課程', buttonLink: '#courses' }
 

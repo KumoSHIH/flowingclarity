@@ -1,5 +1,18 @@
 <script setup lang="ts">
-import { courseOverviewFixture } from '../fixtures/courseOverview'
+import { computed } from 'vue'
+import type { CourseOverviewApiResponse, CourseOverviewStatus } from '#shared/types/course'
+import { emptyCourseOverviewContent } from '#shared/utils/courseOverview'
+
+const { data: response, status: requestStatus, refresh } = useFetch<CourseOverviewApiResponse>(
+  '/api/course-overview',
+)
+
+const content = computed(() => response.value?.content ?? emptyCourseOverviewContent)
+const overviewStatus = computed<CourseOverviewStatus>(() => {
+  if (requestStatus.value === 'pending') return 'loading'
+  if (requestStatus.value === 'error' || response.value?.state === 'error') return 'error'
+  return 'ready'
+})
 </script>
 
 <template>
@@ -7,7 +20,11 @@ import { courseOverviewFixture } from '../fixtures/courseOverview'
     <SiteHeader always-visible />
 
     <main>
-      <CourseOverview :content="courseOverviewFixture" />
+      <CourseOverview
+        :content="content"
+        :status="overviewStatus"
+        @retry="refresh"
+      />
     </main>
 
     <footer class="course-footer">

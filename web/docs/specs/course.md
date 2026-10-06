@@ -1,6 +1,6 @@
 # 課程總覽頁規格
 
-**狀態：** frontend-ready
+**狀態：** verified
 **路由：** `/course`  
 **設計依據：** [課程頁概念稿](../design/course-page-concepts.html) 的 B「雙域目錄」骨架與 [高概念四案](../design/course-content-concepts-award.html) 的 F「光片長鏡」；最終尺寸、色彩與互動以目前 `CourseOverview.vue` 為準
 
@@ -117,10 +117,67 @@ stages:
 9. 多階段梯次可保存依序排列的 date range；單日、跨月及跨年日期皆不需自由文字。
 10. `run.firstStartDate` 與 `run.lastEndDate` 可由巢狀日期一致推導；日期倒置、重疊或順序重複時不得發布。
 
+## UI 驗證記錄
+
+2026-10-06 以 Chrome headless 驗證 1440、1023、768、390、320px，以及 720 CSS px／2× device scale 的 200% 等效版面。驗收條件 1–8 均通過：雙欄與單欄斷點正確、無水平溢位；鍵盤焦點只擴張目標光片，hash 目標位於固定 Header 下方；標題階層、圖片替代文字、44px 觸控目標與 reduced-motion 成立。loading、error、全空、分類空、無圖片、40 字課名、80 字摘要及單類 8 門課皆完成瀏覽器檢查。
+
+- 當時的自動檢查：`npm run test -w web`（43 項通過）、`npm run typecheck -w web`、`npm run build -w web`。
+- 截圖：[1440px 完整頁](../design/review/verification-course/course-1440-full.webp)、[390px 完整頁](../design/review/verification-course/course-390-full.webp)、[200% 等效版面](../design/review/verification-course/course-200-percent.webp)、[長內容](../design/review/verification-course/course-long-content-390-full.webp)；其餘狀態位於同一目錄。
+- 當時未驗證：驗收條件 9–10 尚未建立 CMS 梯次 schema；本輪未使用實體觸控裝置或螢幕閱讀器。
+
+## CMS 串接記錄
+
+2026-10-06 完成本機 Sanity 整合。Studio 已加入 `courseOverviewPage`、四個固定 `courseCategory`、`course`、`courseRun`、`courseStage` 與 `courseDateRange`；課程梯次驗證涵蓋日期倒置、日期重疊、階段順序重複或倒退，首末日期由巢狀區間推導。驗收條件 9–10 已由 Studio schema 單元測試覆蓋，但尚未在遠端 Studio 進行實際發布驗證。
+
+`/course` 已改由 `/api/course-overview` 查詢 published perspective。查詢只取固定分類與 `isPublished == true` 的已發布課程，詳情 URL 由集中式 slug helper 產生；解析層會拒絕不完整的頁面或分類契約，略過無效、未公開、順序或 slug 重複的課程，並將有效 image hotspot 轉為前端裁切位置。正常、全空、無效資料及查詢錯誤均有自動測試，fixture 只留作測試資料。
+
+本階段未部署 schema、未修改遠端 dataset，也未建立或發布正式課程內容。網站與 Studio 必須分別由環境變數提供 Sanity Project ID 與 dataset；儲存庫不記錄實際專案識別碼或憑證。
+
+- 自動檢查：`npm run test -w web`（52 項通過）、`npm run typecheck -w web`、`npm run build -w web`。
+- Studio 檢查：`npm run test -w studio`（8 項通過）、`npm run typecheck -w studio`，以及使用非正式測試 Project ID 執行的 `npm run build -w studio`。
+- 已知警告：Web 型別檢查仍輸出既有的 `vue-router/volar/sfc-route-blocks` 套件匯出警告，但型別檢查成功完成。
+
+## 內容流驗證記錄
+
+2026-10-06 對 `studio/.env.local` 所設定的 `production` dataset 執行唯讀驗證。`courseOverviewPage`、1 門公開課程與 1 個梯次存在；Studio 也確認四個分類已發布，但既有分類 ID 使用 `courseCategory.body` 等含句點格式。Sanity 公開 Data API 對四個分類皆回傳 `omitted: permission`，因未驗證請求只能讀取 ID 不含句點的 published 文件，導致網站查詢得到 0 個分類。
+
+本機 Web 原先缺少環境設定，已建立受 Git 忽略的 `web/.env` 並指向與 Studio 相同的 project／production dataset。分類固定 ID 已改為 `course-category-body`、`course-category-heart`、`course-category-life`、`course-category-beauty`，Studio 結構、GROQ 與回歸測試同步更新；四個新分類現已發布並可由匿名 Data API 讀取。
+
+四個新分類文件發布後，production 課程仍引用舊 `courseCategory.body`。查詢已加入限縮於固定 key 的遷移期相容條件：優先接受新公開 ID 的 reference，也將 `courseCategory.<key>` 映射到同 key 的新分類，使既有課程可先在前台顯示。此相容層不取代 reference 遷移，舊 ID 清理前仍須執行 migration。
+
+以 production 啟動本機 Nuxt 實測後，`/api/course-overview` 已回傳 `state: ready`、四個分類及「身心再平衡按摩」的文字、授課形式與圖片，確認前台資料鏈路恢復。若既有開發伺服器仍顯示舊結果，需重新啟動以載入更新後的 server query。
+
+- 自動檢查：Web 52 項與 Studio 8 項測試、兩邊 typecheck、兩邊 build 均通過；`npx sanity schemas validate --level warning` 為 0 errors、0 warnings。
+- 遠端狀態：Sanity CLI 尚未登入；本輪只執行匿名唯讀查詢，未修改 production。新分類已由編輯者建立，仍需以已驗證身分更新所有課程 reference，驗證前台後才可保留或清理舊文件。
+- 遷移準備：已新增 `20261006-public-course-category-ids` Sanity migration；預設 dry run，正式執行時建立新分類並更新 course reference，不刪除舊分類。
+- 尚未驗證：草稿保留舊 published 版本、發布後文字／圖片／排序／連結、最少／典型／最大內容量、遠端欄位錯誤提示、手機與桌面實際發布內容。因沒有可驗收的四分類與課程內容，本輪未產生新的內容流截圖，狀態保留 `cms-integrated`。
+- 完成條件：取得 production 寫入與 schema 部署的明確授權並完成 CLI 登入，使用可辨識且可清理的測試內容走完草稿、發布及復原流程；不得覆寫既有 `courseOverviewPage` 正式內容。
+
+## Production 部署與發布驗證記錄
+
+2026-10-06 取得 production 寫入授權後，先完整匯出 12 份文件與 3 個 assets 至本機暫存備份，再正式執行 `20261006-public-course-category-ids` migration。四個公開分類文件原已存在；migration 將「身心再平衡按摩」的分類 reference 更新為 `course-category-body`，保留舊 `courseCategory.*` 文件供後續確認與清理。Studio schema `_.schemas.default` 已部署至 project `hnypuj6l` 的 `production` dataset。
+
+以 `drafts.course-validation-20261006` 驗證草稿隔離：已驗證請求可讀取草稿，匿名 published 查詢無結果。接著短暫發布同 ID 的測試課程，匿名 GROQ 與本機 `/api/course-overview` 均正確回傳四分類順序、slug、兩種授課形式、圖片替代文字及由 hotspot 產生的 `20% 70%` 裁切位置；清除 draft 與 published 文件後再次查詢為空，前台恢復為 1 門正式資料與 3 個空分類，未覆寫 `courseOverviewPage`。
+
+- 實際驗證：Web 52 項、Studio 8 項測試、兩邊 typecheck 與 build 均通過；production 文件驗證為 0 errors、1 個既有 `homeBanner.slides` 警告。
+- 欄位防呆：未寫入 dataset 的無效課程 fixture 產生 9 個 errors 與 1 個 warning，涵蓋課名、slug、摘要、授課形式、圖片 alt 與分類內重複排序。
+- 瀏覽器驗證：Chrome headless 以 production 發布內容檢查 1440px 與 390px；雙欄／單欄、空分類、圖片裁切及文字均無溢位或重疊。截圖：[桌面首屏](../design/review/verification-course/course-production-flow-1440.webp)、[手機首屏](../design/review/verification-course/course-production-flow-390.webp)、[手機完整頁](../design/review/verification-course/course-production-flow-full-390.webp)。
+- 未執行：實體觸控裝置與螢幕閱讀器人工操作；舊 `courseCategory.*` 文件尚未刪除。
+
+## 正式內容審核記錄
+
+2026-10-06 以已驗證的 raw perspective 盤點 production。六門已確認課程中，目前只有「身心再平衡按摩」文件存在並公開；名稱、愛身體分類與實體授課形式符合 `PRODUCT.md`，但其摘要與圖片仍屬待內容負責人核准的初步內容。頭薦骨、日式臉部按摩、童年依附創傷療癒、人類圖及曼陀羅靜心彩繪均尚無文件，也沒有可供正式發布的核准摘要與 slug，因此本輪未自行補寫或發布。
+
+`courseOverviewPage.endingMessage` 原為明顯測試字串 `test word`，已在完整匯出 production 備份後以 revision 鎖定方式移除；匿名 published 查詢不再回傳該欄位。整個 dataset 對 `courseCategory.body`、`courseCategory.heart`、`courseCategory.life`、`courseCategory.beauty` 的 raw reference 查詢皆為 0，但依階段範圍保留四個舊文件，未在本輪刪除。
+
+- 已完成：正式內容矩陣盤點、測試文案清除、舊分類 reference 歸零確認與變更前備份。
+- 尚待內容負責人提供：每門課程 30–100 字正式摘要與核准 slug；若使用代表圖則一併提供圖片及替代文字，否則明確確認無圖發布。另需確認現有「身心再平衡按摩」摘要與圖片可正式使用。
+- 下一階段：取得上述核准內容後，先建立 draft 供逐門審閱，再發布並以匿名 API 與桌面／手機前台驗收；舊分類文件清理由獨立變更處理。
+
 ## 依賴、待決事項與下一階段
 
 - 依賴共用 `SiteHeader` 支援「無 banner、載入即顯示」的頁面模式；本規格不在此階段修改元件。
-- Sanity 的課程、分類與課程總覽 page schema 尚待 CMS 階段確認；目前內容契約先作為前端與 schema 的共同邊界。
-- F「光片長鏡」已依目前手動調整落實於 `CourseOverview.vue`；分類簡介、代表圖、結尾文案及課程 slug 仍是 `app/fixtures/courseOverview.ts` 中明確標示的 fixtures，尚非正式發布內容。
-- 各階段是否可獨立報名須在建立正式梯次前確認；此決定影響 stage 與 run 的切分，但不阻擋總覽 prototype。
-- 已核准的原始方向記錄於 [`web/.impeccable/surfaces/app-pages-course-vue.md`](../../.impeccable/surfaces/app-pages-course-vue.md)；目前 Vue 實作及本規格記錄其後續手動調整。下一階段以 `verify-ui-behavior` 進行規格矩陣與互動驗證。
+- 課程總覽已不再匯入 fixture 作為主要資料；production 正式內容目前僅覆蓋 1／6 門課程，且現有摘要與圖片仍待內容負責人核准。其餘五門的正式摘要與 slug 尚待提供；代表圖可選填，有圖時必須提供替代文字。
+- 各階段是否可獨立報名須在建立正式梯次前確認；此決定影響 stage 與 run 的切分，但不阻擋總覽 CMS 串接。
+- `validate-content-flow` 已完成 production schema 部署、公開 ID migration、草稿／published 隔離、匿名公開讀取、瀏覽器呈現及測試資料清除；狀態維持 `verified`。舊 `courseCategory.*` reference 已確認為 0，文件本身留待獨立清理變更。
+- 已核准的原始方向記錄於 [`web/.impeccable/surfaces/app-pages-course-vue.md`](../../.impeccable/surfaces/app-pages-course-vue.md)；目前 Vue 實作及本規格記錄其後續手動調整。

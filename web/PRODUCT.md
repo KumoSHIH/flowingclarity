@@ -40,6 +40,8 @@ Sanity 為正式內容管理方式。課程分類與授課形式如下：
 - 技術架構為 Nuxt 4、Vue 3、TypeScript 與 Tailwind CSS 4。
 - 首頁包含品牌介紹、活動、課程與聯絡區塊，內容仍為示範資料；課程區塊尚未提供報名連結。
 - Banner 從 Sanity 讀取已發布的大標題、敘述、按鈕文字及按鈕連結；內容不完整或讀取失敗時使用本機示範內容。玫瑰底圖、課程分類與動畫由前端維護。
+- `/course` 已完成 Sanity 課程總覽、固定分類、課程與梯次 schema、伺服器查詢及 production 內容流驗收；遠端 schema 已部署，公開分類 ID migration 已完成。頁面不再以 fixture 作為主要資料，目前 production 有 1 門初步課程，其餘正式內容仍待內容負責人審核與發布。
+- Production 正式內容矩陣目前覆蓋 1／6 門；其餘五門缺少核准摘要與 slug，選填代表圖若使用則需替代文字。舊 `courseCategory.*` reference 已確認為 0，舊文件尚未刪除。
 
 ### 待確認事項
 

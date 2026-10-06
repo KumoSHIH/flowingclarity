@@ -188,6 +188,11 @@ onBeforeUnmount(() => categoryObserver?.disconnect());
                     <img
                       :src="course.image.src"
                       :alt="course.image.alt"
+                      :style="
+                        course.image.objectPosition
+                          ? { objectPosition: course.image.objectPosition }
+                          : undefined
+                      "
                       width="640"
                       height="960"
                       loading="lazy"
@@ -310,7 +315,7 @@ onBeforeUnmount(() => categoryObserver?.disconnect());
 .course-directory__notice {
   max-width: 28em;
   margin: 0;
-  color: var(--color-muted);
+  color: var(--color-ink);
   font-size: 11px;
   line-height: 1.8;
   letter-spacing: 0.08em;
@@ -346,7 +351,6 @@ onBeforeUnmount(() => categoryObserver?.disconnect());
 
 .course-group__heading p {
   max-width: 25em;
-  margin: 12px 0 0;
   font-size: 14px;
   line-height: 1.9;
   letter-spacing: 0.12em;
@@ -471,7 +475,7 @@ onBeforeUnmount(() => categoryObserver?.disconnect());
 .course-group__empty {
   padding: 40px 0;
   margin: 0;
-  color: var(--color-muted);
+  color: var(--color-ink);
   border-top: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
   border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
   line-height: 1.8;

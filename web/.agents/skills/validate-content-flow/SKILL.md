@@ -11,13 +11,15 @@ description: 驗證 Flowing Clarity 從 Sanity 編輯、草稿與發布到前台
 
 先閱讀功能規格、schema、query、轉換層與現有測試。執行兩個 workspace 的測試與 typecheck，並執行 web、studio build。核對 GROQ projection、欄位 validation、fallback、連結安全與公開資料範圍，不以單元測試取代真實發布流程。
 
+對不帶 token 的公開網站，必須另外使用未驗證的 `published` 請求驗證實際 Data API 可讀性；Studio 顯示 Published 不等於匿名前台一定能讀取。公開文件 `_id` 不得包含句點。若 Studio 看得到但匿名 GROQ 查不到，直接檢查文件端點並區分 `omitted: permission`、`existence` 與內容契約錯誤，不要先歸因於快取或前端渲染。
+
 ## 編輯與發布流程
 
 使用測試內容逐項驗證：
 
 1. Studio 中的欄位名稱、說明、preview、必填與錯誤訊息可理解。
 2. 只儲存草稿時，公開前台維持上一個已發布版本。
-3. 發布後重新載入前台，文字、圖片、排序、連結及條件式內容正確。
+3. 發布後以不帶 token 的請求確認文件與 reference 目標均可公開讀取，再重新載入前台，確認文字、圖片、排序、連結及條件式內容正確。
 4. 最少、典型與最大內容量，以及長標題、缺少選填內容和空集合符合規格。
 5. 無文件、無效資料與讀取失敗時顯示指定 fallback 或 empty state。
 6. 手機與桌面均不裁切、不重疊，鍵盤操作與焦點狀態仍然有效。

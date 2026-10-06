@@ -3,6 +3,7 @@ export type CourseDeliveryMode = 'inPerson' | 'online'
 export interface CourseImage {
   src: string
   alt: string
+  objectPosition?: string
 }
 
 export interface CourseOverviewItem {
@@ -33,3 +34,7 @@ export interface CourseOverviewContent {
 }
 
 export type CourseOverviewStatus = 'ready' | 'loading' | 'error'
+
+export type CourseOverviewApiResponse =
+  | { state: 'ready', content: CourseOverviewContent }
+  | { state: 'empty' | 'error', content: null }

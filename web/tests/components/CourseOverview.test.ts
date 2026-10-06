@@ -20,6 +20,7 @@ describe('CourseOverview', () => {
   })
 
   afterEach(() => {
+    window.history.replaceState(null, '', '/')
     vi.unstubAllGlobals()
     vi.clearAllMocks()
   })
@@ -67,6 +68,40 @@ describe('CourseOverview', () => {
 
     expect(heartDirectoryLink.attributes('aria-current')).toBe('location')
     expect(wrapper.get('a[href="#body"]').attributes('aria-current')).toBeUndefined()
+  })
+
+  it('initializes the active directory item from a valid URL hash', async () => {
+    window.history.replaceState(null, '', '/course#heart')
+    const wrapper = mount(CourseOverview, {
+      props: { content: courseOverviewFixture },
+    })
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.get('a[href="#heart"]').attributes('aria-current')).toBe('location')
+    expect(wrapper.get('a[href="#body"]').attributes('aria-current')).toBeUndefined()
+  })
+
+  it('excludes unpublished courses from links and directory counts', () => {
+    const bodyCategory = courseOverviewFixture.categories[0]!
+    const content = {
+      ...courseOverviewFixture,
+      categories: courseOverviewFixture.categories.map(category => category.key === 'body'
+        ? {
+            ...bodyCategory,
+            courses: bodyCategory.courses.map((course, index) => ({
+              ...course,
+              isPublished: index !== 0,
+            })),
+          }
+        : category),
+    }
+    const wrapper = mount(CourseOverview, {
+      props: { content },
+    })
+
+    expect(wrapper.get('a[href="#body"] .course-directory__count').text()).toContain('2 門')
+    expect(wrapper.find('a[href="/course/craniosacral"]').exists()).toBe(false)
   })
 
   it('splits four to eight courses into rows of no more than four panels', () => {
