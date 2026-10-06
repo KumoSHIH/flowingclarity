@@ -51,6 +51,49 @@ describe('CourseOverview', () => {
     expect(wrapper.text()).not.toContain('直覺式塔羅')
   })
 
+  it('renders each course as one light-panel link and updates the active directory item', async () => {
+    const wrapper = mount(CourseOverview, {
+      props: { content: courseOverviewFixture },
+    })
+    await wrapper.vm.$nextTick()
+
+    const firstCourse = wrapper.get('.course-item')
+    expect(firstCourse.findAll('a')).toHaveLength(0)
+    expect(firstCourse.find('.course-item__visual').exists()).toBe(true)
+    expect(firstCourse.find('.course-item__copy').exists()).toBe(true)
+
+    const heartDirectoryLink = wrapper.get('a[href="#heart"]')
+    await heartDirectoryLink.trigger('click')
+
+    expect(heartDirectoryLink.attributes('aria-current')).toBe('location')
+    expect(wrapper.get('a[href="#body"]').attributes('aria-current')).toBeUndefined()
+  })
+
+  it('splits four to eight courses into rows of no more than four panels', () => {
+    const bodyCategory = courseOverviewFixture.categories[0]!
+    const expandedContent = {
+      ...courseOverviewFixture,
+      categories: courseOverviewFixture.categories.map(category => category.key === 'body'
+        ? {
+            ...bodyCategory,
+            courses: Array.from({ length: 8 }, (_, index) => ({
+              ...bodyCategory.courses[index % bodyCategory.courses.length]!,
+              title: `課程 ${index + 1}`,
+              slug: `course-${index + 1}`,
+              order: index + 1,
+            })),
+          }
+        : category),
+    }
+    const wrapper = mount(CourseOverview, {
+      props: { content: expandedContent },
+    })
+
+    const rows = wrapper.get('#body').findAll('.course-list')
+    expect(rows).toHaveLength(2)
+    expect(rows.map(row => row.findAll('li').length)).toEqual([4, 4])
+  })
+
   it('keeps an empty category in the directory and explains its state', () => {
     const wrapper = mount(CourseOverview, {
       props: { content: courseOverviewCategoryEmptyFixture },

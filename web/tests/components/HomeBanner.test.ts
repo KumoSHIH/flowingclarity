@@ -22,7 +22,7 @@ describe('home banner content', () => {
     const brand = wrapper.get('.atlas-brand')
     const brandLogo = brand.get('.atlas-brand__logo')
     expect(brand.attributes('aria-label')).toBe('普那生活空間首頁')
-    expect(brandLogo.attributes('src')).toBe('/assets/logo-main-light.png')
+    expect(brandLogo.attributes('src')).toBe('/assets/logo-main.png')
     expect(brandLogo.attributes('alt')).toBe('')
     wrapper.unmount()
   })

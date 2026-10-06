@@ -5,11 +5,16 @@
   --font-display: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
   --font-editorial: Georgia, "Times New Roman", serif;
   --color-paper: #f8f5ef;
+  --color-sand: #e8dfd2;
   --color-ink: #38342e;
   --color-muted: #81776a;
   --color-clay: #a46b54;
   --color-saffron: #f8bf4c;
   --color-oxblood: #392618;
+  --color-night: #241710;
+  --color-film: #352319;
+  --color-bark: #766254;
+  --color-warm-muted: #d8c7b8;
   --color-persimmon: #df5b35;
   --color-warm-white: #f7f6f4;
 }
@@ -145,7 +150,8 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 clamp(28px, 6vw, 116px);
-  color: #71685e;
+  color: var(--color-paper);
+  background: var(--color-bark);
   font-family: var(--font-editorial);
   font-size: 10px;
   letter-spacing: 0.16em;

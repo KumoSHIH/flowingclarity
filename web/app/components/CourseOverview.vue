@@ -6,78 +6,98 @@ import {
   onMounted,
   ref,
   type ComponentPublicInstance,
-} from 'vue'
+} from "vue";
 import type {
   CourseDeliveryMode,
   CourseOverviewContent,
   CourseOverviewStatus,
-} from '../../shared/types/course'
-import { getCoursePath } from '../utils/courseRoutes'
+} from "../../shared/types/course";
+import { getCoursePath } from "../utils/courseRoutes";
 
-const props = withDefaults(defineProps<{
-  content: CourseOverviewContent
-  status?: CourseOverviewStatus
-}>(), {
-  status: 'ready',
-})
+const props = withDefaults(
+  defineProps<{
+    content: CourseOverviewContent;
+    status?: CourseOverviewStatus;
+  }>(),
+  {
+    status: "ready",
+  },
+);
 
 const emit = defineEmits<{
-  retry: []
-}>()
+  retry: [];
+}>();
 
 const deliveryModeLabels: Record<CourseDeliveryMode, string> = {
-  inPerson: '實體',
-  online: '線上',
-}
+  inPerson: "實體",
+  online: "線上",
+};
 
-const orderedCategories = computed(() => props.content.categories
-  .toSorted((first, second) => first.order - second.order)
-  .map(category => ({
-    ...category,
-    courses: category.courses
-      .filter(course => course.isPublished)
-      .toSorted((first, second) => first.order - second.order),
-  })))
+const orderedCategories = computed(() =>
+  props.content.categories
+    .toSorted((first, second) => first.order - second.order)
+    .map((category) => ({
+      ...category,
+      courses: category.courses
+        .filter((course) => course.isPublished)
+        .toSorted((first, second) => first.order - second.order),
+    }))
+    .map((category) => ({
+      ...category,
+      courseRows: Array.from(
+        { length: Math.ceil(category.courses.length / 4) },
+        (_, rowIndex) => category.courses.slice(rowIndex * 4, rowIndex * 4 + 4),
+      ),
+    })),
+);
 
-const totalCourses = computed(() => orderedCategories.value
-  .reduce((total, category) => total + category.courses.length, 0))
-const hasCourses = computed(() => totalCourses.value > 0)
-const activeCategorySlug = ref('')
-const categorySections = new Map<string, HTMLElement>()
-let categoryObserver: IntersectionObserver | null = null
+const totalCourses = computed(() =>
+  orderedCategories.value.reduce(
+    (total, category) => total + category.courses.length,
+    0,
+  ),
+);
+const hasCourses = computed(() => totalCourses.value > 0);
+const activeCategorySlug = ref("");
+const categorySections = new Map<string, HTMLElement>();
+let categoryObserver: IntersectionObserver | null = null;
 
 const setCategorySection = (
   element: Element | ComponentPublicInstance | null,
 ) => {
-  if (element instanceof HTMLElement) categorySections.set(element.id, element)
-}
+  if (element instanceof HTMLElement) categorySections.set(element.id, element);
+};
 
 onMounted(async () => {
-  if (props.status !== 'ready' || !hasCourses.value) return
+  if (props.status !== "ready" || !hasCourses.value) return;
 
-  await nextTick()
-  const requestedSlug = window.location.hash.slice(1)
+  await nextTick();
+  const requestedSlug = window.location.hash.slice(1);
   activeCategorySlug.value = orderedCategories.value.some(
-    category => category.slug === requestedSlug,
+    (category) => category.slug === requestedSlug,
   )
     ? requestedSlug
-    : (orderedCategories.value[0]?.slug ?? '')
+    : (orderedCategories.value[0]?.slug ?? "");
 
   categoryObserver = new IntersectionObserver(
     (entries) => {
       const visibleSection = entries
-        .filter(entry => entry.isIntersecting)
-        .sort((first, second) => first.boundingClientRect.top - second.boundingClientRect.top)[0]
+        .filter((entry) => entry.isIntersecting)
+        .sort(
+          (first, second) =>
+            first.boundingClientRect.top - second.boundingClientRect.top,
+        )[0];
 
-      if (visibleSection?.target.id) activeCategorySlug.value = visibleSection.target.id
+      if (visibleSection?.target.id)
+        activeCategorySlug.value = visibleSection.target.id;
     },
-    { rootMargin: '-24% 0px -58% 0px', threshold: 0 },
-  )
+    { rootMargin: "-24% 0px -58% 0px", threshold: 0 },
+  );
 
-  categorySections.forEach(section => categoryObserver?.observe(section))
-})
+  categorySections.forEach((section) => categoryObserver?.observe(section));
+});
 
-onBeforeUnmount(() => categoryObserver?.disconnect())
+onBeforeUnmount(() => categoryObserver?.disconnect());
 </script>
 
 <template>
@@ -92,22 +112,18 @@ onBeforeUnmount(() => categoryObserver?.disconnect())
         <p class="course-directory__prompt">{{ content.directoryPrompt }}</p>
       </div>
 
-      <nav
-        v-if="status === 'ready' && hasCourses"
-        aria-label="課程分類"
-      >
+      <nav v-if="status === 'ready' && hasCourses" aria-label="課程分類">
         <ol>
-          <li
-            v-for="category in orderedCategories"
-            :key="category.key"
-          >
+          <li v-for="category in orderedCategories" :key="category.key">
             <a
               :href="`#${category.slug}`"
-              :aria-current="activeCategorySlug === category.slug ? 'location' : undefined"
+              :aria-current="
+                activeCategorySlug === category.slug ? 'location' : undefined
+              "
+              @click="activeCategorySlug = category.slug"
             >
               <span>{{ category.name }}</span>
               <span class="course-directory__count">
-                <span v-if="activeCategorySlug === category.slug" class="course-directory__current">目前</span>
                 {{ category.courses.length }} 門
               </span>
             </a>
@@ -115,16 +131,16 @@ onBeforeUnmount(() => categoryObserver?.disconnect())
         </ol>
       </nav>
 
-      <p
-        v-if="content.prototypeNotice"
-        class="course-directory__notice"
-      >
+      <p v-if="content.prototypeNotice" class="course-directory__notice">
         {{ content.prototypeNotice }}
       </p>
     </aside>
 
     <div class="course-directory__content" aria-live="polite">
-      <div v-if="status === 'loading'" class="course-state course-state--loading">
+      <div
+        v-if="status === 'loading'"
+        class="course-state course-state--loading"
+      >
         <span class="course-state__line course-state__line--title" />
         <span class="course-state__line" />
         <span class="course-state__line" />
@@ -160,34 +176,44 @@ onBeforeUnmount(() => categoryObserver?.disconnect())
             這個方向目前沒有已發布的課程。
           </p>
 
-          <ul v-else class="course-list">
-            <li v-for="course in category.courses" :key="course.slug">
-              <a class="course-item" :href="getCoursePath(course.slug)">
-                <span class="course-item__copy">
-                  <span class="course-item__modes">
-                    {{ course.deliveryModes.map(mode => deliveryModeLabels[mode]).join('・') }}
+          <div v-else class="course-rows">
+            <ul
+              v-for="(row, rowIndex) in category.courseRows"
+              :key="`${category.key}-${rowIndex}`"
+              class="course-list"
+            >
+              <li v-for="course in row" :key="course.slug">
+                <a class="course-item" :href="getCoursePath(course.slug)">
+                  <span v-if="course.image" class="course-item__visual">
+                    <img
+                      :src="course.image.src"
+                      :alt="course.image.alt"
+                      width="640"
+                      height="960"
+                      loading="lazy"
+                    />
                   </span>
-                  <h3 class="course-item__title">{{ course.title }}</h3>
-                  <span class="course-item__arrow" aria-hidden="true" />
-                </span>
-                <span
-                  v-if="course.image"
-                  class="course-item__visual"
-                >
-                  <img
-                    :src="course.image.src"
-                    :alt="course.image.alt"
-                    width="640"
-                    height="360"
-                    loading="lazy"
+                  <span
+                    v-else
+                    class="course-item__visual course-item__visual--empty"
+                    aria-hidden="true"
                   >
-                </span>
-                <span v-else class="course-item__visual course-item__visual--empty" aria-hidden="true">
-                  <span />
-                </span>
-              </a>
-            </li>
-          </ul>
+                    <span />
+                  </span>
+                  <span class="course-item__copy">
+                    <span class="course-item__modes">
+                      {{
+                        course.deliveryModes
+                          .map((mode) => deliveryModeLabels[mode])
+                          .join("・")
+                      }}
+                    </span>
+                    <h3 class="course-item__title">{{ course.title }}</h3>
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </div>
         </section>
 
         <section v-if="content.endingMessage" class="course-ending">
@@ -202,7 +228,7 @@ onBeforeUnmount(() => categoryObserver?.disconnect())
 <style scoped>
 .course-directory {
   display: grid;
-  grid-template-columns: minmax(300px, 35%) minmax(0, 65%);
+  grid-template-columns: minmax(300px, 30%) minmax(0, 70%);
   align-items: start;
   color: var(--color-ink);
   background: var(--color-paper);
@@ -218,9 +244,9 @@ onBeforeUnmount(() => categoryObserver?.disconnect())
   gap: 48px;
   padding: clamp(64px, 7vw, 112px) clamp(28px, 3.2vw, 58px) 48px;
   overflow-y: auto;
-  color: var(--color-warm-white);
-  background: var(--color-oxblood);
-  scrollbar-color: color-mix(in srgb, var(--color-saffron) 70%, transparent) transparent;
+  background: var(--color-sand);
+  scrollbar-color: color-mix(in srgb, var(--color-saffron) 70%, transparent)
+    transparent;
   scrollbar-width: thin;
 }
 
@@ -236,7 +262,6 @@ onBeforeUnmount(() => categoryObserver?.disconnect())
 .course-directory__prompt {
   max-width: 12em;
   margin: 28px 0 0;
-  color: #e2d3c6;
   font-size: clamp(17px, 1.4vw, 22px);
   line-height: 1.8;
   letter-spacing: 0.08em;
@@ -254,20 +279,24 @@ onBeforeUnmount(() => categoryObserver?.disconnect())
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  color: #e2d3c6;
-  border-bottom: 1px solid rgb(247 246 244 / 22%);
+  color: var(--color-ink);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
   text-decoration: none;
   letter-spacing: 0.07em;
   transition: color 180ms ease;
 }
 
 .course-directory__index li:first-child a {
-  border-top: 1px solid rgb(247 246 244 / 22%);
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
 }
 
 .course-directory__index a:hover,
-.course-directory__index a[aria-current='location'] {
-  color: var(--color-saffron);
+.course-directory__index a[aria-current="location"] {
+  color: var(--color-oxblood);
+}
+
+.course-directory__index a[aria-current="location"] {
+  font-weight: 700;
 }
 
 .course-directory__count {
@@ -278,26 +307,10 @@ onBeforeUnmount(() => categoryObserver?.disconnect())
   white-space: nowrap;
 }
 
-.course-directory__current {
-  color: var(--color-warm-white);
-  font-size: 9px;
-  letter-spacing: 0.14em;
-}
-
-.course-directory__current::before {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-right: 7px;
-  background: var(--color-saffron);
-  border-radius: 50%;
-  content: '';
-}
-
 .course-directory__notice {
   max-width: 28em;
   margin: 0;
-  color: #cdbbad;
+  color: var(--color-muted);
   font-size: 11px;
   line-height: 1.8;
   letter-spacing: 0.08em;
@@ -305,121 +318,117 @@ onBeforeUnmount(() => categoryObserver?.disconnect())
 
 .course-directory__content {
   min-width: 0;
+  padding-top: 30px;
 }
 
 .course-group {
-  padding: clamp(96px, 10vw, 168px) clamp(28px, 6vw, 112px);
-  border-bottom: 1px solid color-mix(in srgb, var(--color-oxblood) 20%, transparent);
+  min-height: calc(100svh - var(--home-header-height));
+  padding: clamp(72px, 8vw, 80px) clamp(28px, 4vw, 72px);
+  overflow: hidden;
   scroll-margin-top: calc(var(--home-header-height) + 20px);
 }
 
 .course-group__heading {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(240px, 42%);
-  align-items: end;
+  display: flex;
   gap: 40px;
-  margin-bottom: clamp(58px, 6vw, 92px);
+  margin-bottom: 50px;
 }
 
 .course-group__heading h2 {
+  max-width: 5em;
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(44px, 4.7vw, 72px);
+  font-size: clamp(50px, 7vw, 60px);
   font-weight: 400;
-  line-height: 1.32;
-  letter-spacing: 0.06em;
+  line-height: 1.05;
+  letter-spacing: 0.05em;
 }
 
 .course-group__heading p {
-  max-width: 34em;
-  margin: 0;
-  color: #71685e;
-  font-size: 15px;
-  line-height: 1.95;
-  letter-spacing: 0.04em;
+  max-width: 25em;
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.9;
+  letter-spacing: 0.12em;
+}
+
+.course-rows {
+  display: grid;
+  gap: 18px;
 }
 
 .course-list {
+  display: flex;
+  min-height: 430px;
+  align-items: stretch;
+  gap: 18px;
   padding: 0;
   margin: 0;
   list-style: none;
 }
 
+.course-list li {
+  min-width: 0;
+  flex: 1 1 0;
+  transition: flex-grow 750ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.course-list li:has(.course-item:is(:hover, :focus-visible)) {
+  flex-grow: 2.2;
+}
+
 .course-item {
-  display: grid;
-  min-height: 238px;
-  grid-template-columns: minmax(0, 1fr) minmax(210px, 34%);
-  align-items: center;
-  gap: clamp(28px, 4vw, 64px);
-  padding: 34px 0;
-  color: inherit;
-  border-top: 1px solid color-mix(in srgb, var(--color-oxblood) 20%, transparent);
+  position: relative;
+  display: flex;
+  height: 430px;
+  min-height: 44px;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  color: var(--color-warm-white);
+  background: var(--color-film);
   text-decoration: none;
 }
 
-.course-list li:last-child .course-item {
-  border-bottom: 1px solid color-mix(in srgb, var(--color-oxblood) 20%, transparent);
-}
-
 .course-item__copy {
+  z-index: 2;
   position: relative;
   display: grid;
-  gap: 18px;
-  padding-right: 54px;
+  align-items: end;
+  padding: 30px 20px;
 }
 
 .course-item__modes {
-  color: #71685e;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  color: var(--color-saffron);
+  font-size: 14px;
+  letter-spacing: 0.18em;
 }
 
 .course-item__title {
-  max-width: 15em;
   margin: 0;
+  padding: 10px 0;
   font-family: var(--font-display);
-  font-size: clamp(27px, 3vw, 46px);
-  line-height: 1.45;
+  font-size: clamp(24px, 2vw, 30px);
+  font-weight: 400;
+  line-height: 1.35;
   letter-spacing: 0.035em;
   overflow-wrap: anywhere;
-}
-
-.course-item__arrow {
-  position: absolute;
-  right: 6px;
-  bottom: 10px;
-  width: 25px;
-  height: 25px;
-  transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.course-item__arrow::before {
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  width: 14px;
-  height: 14px;
-  border-top: 1.5px solid currentColor;
-  border-right: 1.5px solid currentColor;
-  content: '';
-}
-
-.course-item__arrow::after {
-  position: absolute;
-  top: 12px;
-  left: 2px;
-  width: 20px;
-  border-top: 1.5px solid currentColor;
-  content: '';
-  transform: rotate(-45deg);
+  transition: font-size 0.3s ease;
 }
 
 .course-item__visual {
+  position: absolute;
+  inset: 0;
   display: block;
-  height: 170px;
   overflow: hidden;
-  background: #d8cabb;
+  background: var(--color-clay);
+}
+
+.course-item__visual::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 30%, rgb(25 15 9 / 92%) 100%);
+  content: "";
 }
 
 .course-item__visual img {
@@ -427,38 +436,44 @@ onBeforeUnmount(() => categoryObserver?.disconnect())
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(0.7) sepia(0.08);
-  transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  filter: saturate(0.58) brightness(0.8);
+  transform: scale(1.04);
+  transition:
+    filter 500ms ease,
+    transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .course-item__visual--empty {
   display: grid;
   place-items: center;
-  background: #e7ded2;
+  background:
+    linear-gradient(145deg, rgb(57 38 24 / 18%), transparent 46%),
+    var(--color-clay);
 }
 
 .course-item__visual--empty span {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   background: var(--color-saffron);
   border: 3px solid var(--color-warm-white);
   border-radius: 50%;
 }
 
-.course-item:hover .course-item__visual img {
-  transform: scale(1.035);
+.course-item:is(:hover, :focus-visible) .course-item__visual img {
+  filter: saturate(0.86) brightness(0.9);
+  transform: scale(1);
 }
 
-.course-item:hover .course-item__arrow {
-  transform: translate(5px, -5px);
+.course-item:is(:hover, :focus-visible) .course-item__title {
+  font-size: clamp(24px, 2.7vw, 36px);
 }
 
 .course-group__empty {
   padding: 40px 0;
   margin: 0;
-  color: #71685e;
-  border-top: 1px solid color-mix(in srgb, var(--color-oxblood) 20%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--color-oxblood) 20%, transparent);
+  color: var(--color-muted);
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 20%, transparent);
   line-height: 1.8;
 }
 
@@ -507,13 +522,14 @@ onBeforeUnmount(() => categoryObserver?.disconnect())
 
 .course-state {
   align-content: center;
-  background: var(--color-paper);
+  color: var(--color-warm-white);
+  background: var(--color-night);
 }
 
 .course-state p {
   max-width: 34em;
   margin: 0 0 32px;
-  color: #71685e;
+  color: var(--color-warm-muted);
   line-height: 1.9;
 }
 
@@ -527,14 +543,14 @@ onBeforeUnmount(() => categoryObserver?.disconnect())
   width: min(520px, 88%);
   height: 1px;
   margin-bottom: 56px;
-  background: color-mix(in srgb, var(--color-oxblood) 20%, transparent);
+  background: rgb(247 246 244 / 18%);
 }
 
 .course-state__line--title {
   width: min(340px, 64%);
   height: 54px;
   margin-bottom: 80px;
-  background: #e7ded2;
+  background: rgb(247 246 244 / 14%);
 }
 
 @media (max-width: 1023px) {
@@ -556,29 +572,38 @@ onBeforeUnmount(() => categoryObserver?.disconnect())
   }
 
   .course-group {
-    padding-block: 96px;
+    min-height: auto;
+    padding-block: 90px;
   }
 
   .course-group__heading {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     gap: 28px;
-    margin-bottom: 54px;
+    margin-bottom: 75px;
+  }
+
+  .course-group__heading h2 {
+    font-size: clamp(52px, 12vw, 76px);
+  }
+
+  .course-rows {
+    gap: 32px;
+  }
+
+  .course-list {
+    min-height: 0;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .course-list li,
+  .course-list li:has(.course-item:is(:hover, :focus-visible)) {
+    width: 100%;
+    flex: none;
   }
 
   .course-item {
-    min-height: 0;
-    grid-template-columns: 1fr;
-    gap: 26px;
-    padding: 38px 0;
-  }
-
-  .course-item__copy {
-    min-height: 110px;
-  }
-
-  .course-item__visual {
-    height: auto;
-    aspect-ratio: 16 / 9;
+    height: clamp(340px, 72vw, 430px);
   }
 
   .course-ending,
@@ -601,13 +626,31 @@ onBeforeUnmount(() => categoryObserver?.disconnect())
   .course-state {
     padding-inline: 24px;
   }
+
+  .course-item__copy {
+    padding: 24px;
+  }
+
+  .course-item__title {
+    font-size: clamp(26px, 8.2vw, 34px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .course-directory__index a,
-  .course-item__arrow,
+  .course-list li,
+  .course-item__title,
   .course-item__visual img {
     transition: none;
+  }
+
+  .course-list li:has(.course-item:is(:hover, :focus-visible)) {
+    flex-grow: 1;
+  }
+
+  .course-item:is(:hover, :focus-visible) .course-item__visual img {
+    filter: saturate(0.58) brightness(0.8);
+    transform: scale(1.04);
   }
 }
 </style>

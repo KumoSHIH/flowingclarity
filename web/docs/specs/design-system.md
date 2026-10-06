@@ -16,7 +16,7 @@
 | 引導敘述 | 展示標題下的短文 | `clamp(14px, 1.05vw, 17px)` | `14px` | `500`／`1.95`／`0.06em` |
 | 行動文字 | 主要按鈕標籤 | `clamp(17px, 1.4vw, 22px)` | `16px` | 字重與行高沿用所在頁面／字距 `0.1em` |
 
-目前深色 Banner 的標題為 `#f7f6f4`，敘述為 `#e9ded7`，背景為 `#392618`。這組配色限深色表面；淺色版本、一般內文及區塊標題的數值尚待定義，不直接沿用首屏字級。
+目前淺色 Banner Story 欄的標題與敘述繼承 `#38342e`，背景為 `#e8dfd2`；深色表面使用 `#f7f6f4`，次要文字使用 `#d8c7b8`。一般區塊標題不直接沿用首屏字級。
 
 ## 主要按鈕
 
@@ -52,7 +52,7 @@
 </a>
 ```
 
-深色背景的敘述加上 `lead-text--inverse`；`.display-title` 與基本 `.lead-text` 繼承容器文字顏色。`.button-primary` 目前代表大型主要行動，也可用於 `<button type="button">`。共用 class 放在 `@layer components`，頁面可用 Tailwind utility 明確覆寫。
+深色背景的敘述加上 `lead-text--inverse`；淺色 Banner 使用基本 `.lead-text` 並繼承容器文字顏色。`.button-primary` 目前代表大型主要行動，也可用於 `<button type="button">`。共用 class 放在 `@layer components`，頁面可用 Tailwind utility 明確覆寫。
 
 共用 token 分為 `--display-title-*`、`--lead-text-*`、`--text-tracking`、`--button-primary-*` 及 `--control-focus-*`，字體和主色沿用既有 `--font-sans`、`--color-persimmon` 與 `--color-clay`。手機數值在 `max-width: 1023px` 統一切換。修改全站數值時同步更新本文件。
 

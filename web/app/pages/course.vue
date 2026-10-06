@@ -46,7 +46,7 @@ import { courseOverviewFixture } from '../fixtures/courseOverview'
   justify-content: space-between;
   gap: 24px;
   padding: 0 clamp(28px, 6vw, 116px);
-  color: #d8c6b8;
+  color: var(--color-warm-muted);
   background: var(--color-oxblood);
   font-family: var(--font-editorial);
   font-size: 10px;

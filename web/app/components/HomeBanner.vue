@@ -68,6 +68,15 @@ function selectCategory(id: string, event: MouseEvent) {
     aria-labelledby="hero-title"
   >
     <div ref="atlas" class="home-banner__atlas">
+      <nav class="hero-menu" aria-label="首頁主要選單">
+        <a
+          v-for="item in siteNavigationItems"
+          :key="item.href"
+          :href="item.href"
+        >
+          {{ item.label }}
+        </a>
+      </nav>
       <img
         class="home-banner__plate"
         src="/assets/plates/rose-atlas-plate.png"
@@ -106,20 +115,11 @@ function selectCategory(id: string, event: MouseEvent) {
       </div>
     </div>
     <div class="home-banner__story">
-      <nav class="hero-menu" aria-label="首頁主要選單">
-        <a
-          v-for="item in siteNavigationItems"
-          :key="item.href"
-          :href="item.href"
-        >
-          {{ item.label }}
-        </a>
-      </nav>
       <div class="hero-story-copy">
         <a class="atlas-brand" href="#course-map" aria-label="普那生活空間首頁">
           <img
             class="atlas-brand__logo"
-            src="/assets/logo-main-light.png"
+            src="/assets/logo-main.png"
             alt=""
             width="896"
             height="496"
@@ -131,7 +131,7 @@ function selectCategory(id: string, event: MouseEvent) {
             line
           }}</span>
         </h1>
-        <p class="lead-text lead-text--inverse">{{ content.summary }}</p>
+        <p class="lead-text">{{ content.summary }}</p>
         <a class="hero-cta button-primary" :href="content.buttonLink">
           <span>{{ content.buttonText }}</span>
           <svg
@@ -156,14 +156,14 @@ function selectCategory(id: string, event: MouseEvent) {
   --hero-top: clamp(28px, 4.8vh, 52px);
 
   display: grid;
-  grid-template-columns: 65% 35%;
+  grid-template-columns: 67% 33%;
   grid-template-areas: "atlas story";
   width: 100%;
   height: 100svh;
   height: 100dvh;
   min-height: 680px;
   overflow: hidden;
-  background: #f8bf4c;
+  background: var(--color-saffron);
 }
 
 .home-banner__atlas {
@@ -172,7 +172,7 @@ function selectCategory(id: string, event: MouseEvent) {
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  color: #25180f;
+  color: var(--color-oxblood);
 }
 
 .home-banner__plate {
@@ -252,7 +252,7 @@ function selectCategory(id: string, event: MouseEvent) {
   gap: 14px;
   margin: 0;
   padding: 8px;
-  color: #25180f;
+  color: var(--color-oxblood);
   background: transparent;
   border: 0;
   font: inherit;
@@ -289,7 +289,7 @@ function selectCategory(id: string, event: MouseEvent) {
   height: 40px;
   flex: 0 0 auto;
   place-items: center;
-  border: 1px solid color-mix(in srgb, #25180f 68%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-oxblood) 68%, transparent);
   border-radius: 50%;
   transition:
     background 220ms ease,
@@ -305,8 +305,8 @@ function selectCategory(id: string, event: MouseEvent) {
   position: relative;
   width: 11px;
   height: 11px;
-  background: #25180f61;
-  border: 4px solid #f7f6f4;
+  background: color-mix(in srgb, var(--color-oxblood) 38%, transparent);
+  border: 4px solid var(--color-warm-white);
   border-radius: 50%;
   box-shadow:
     0 0 7px rgb(255 248 231 / 82%),
@@ -345,25 +345,26 @@ function selectCategory(id: string, event: MouseEvent) {
   position: relative;
   min-width: 0;
   min-height: 0;
-  color: #f7f6f4;
-  background: #392618;
+  color: var(--color-ink);
+  background: var(--color-sand);
 }
 
 .hero-menu {
   position: absolute;
   top: var(--hero-top);
-  right: var(--hero-edge);
+  left: 50%;
   z-index: 4;
   display: flex;
   align-items: center;
   gap: clamp(18px, 2vw, 34px);
+  color: var(--color-oxblood);
+  transform: translateX(-50%);
 }
 
 .hero-menu a {
   position: relative;
-  color: #fff;
   text-decoration: none;
-  font-size: clamp(12px, 0.82vw, 14px);
+  font-size: 14px;
   font-weight: 700;
   line-height: 1;
   letter-spacing: 0.15em;
@@ -385,7 +386,7 @@ function selectCategory(id: string, event: MouseEvent) {
 
 .hero-story-copy {
   position: absolute;
-  inset: 23% 0 8%;
+  inset: 18% 0 8%;
   padding-inline: var(--hero-edge);
   display: flex;
   flex-direction: column;

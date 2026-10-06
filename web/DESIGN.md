@@ -3,11 +3,16 @@ name: Flowing Clarity
 description: 以溫暖紙感、地形線與沉靜排版，引導人辨認身心需求的課程網站。
 colors:
   paper: "#f8f5ef"
+  sand: "#e8dfd2"
   ink: "#38342e"
   muted: "#81776a"
   clay: "#a46b54"
   saffron: "#f8bf4c"
   oxblood: "#392618"
+  night: "#241710"
+  film: "#352319"
+  bark: "#766254"
+  warm-muted: "#d8c7b8"
   persimmon: "#df5b35"
   warm-white: "#f7f6f4"
 typography:
@@ -64,7 +69,7 @@ components:
 
 ## Colors
 
-紙張中性色承載閱讀，藏紅花黃與深赭棕建立大面積對比，柿橘只用於主要行動；色值以前置 frontmatter 為準。
+紙張白與淺砂色承載閱讀，深夜棕與光片棕建立沉浸場景，樹皮棕用於頁尾收束；藏紅花黃標示位置與狀態，柿橘只用於主要行動。色值以前置 frontmatter 為準。
 
 **The Warm Contrast Rule.** 深色表面使用暖白文字；陶土色負責焦點與小型標示，不作大面積背景。
 
