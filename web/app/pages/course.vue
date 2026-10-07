@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { siteSettingsFixture } from '../fixtures/siteSettings';
 import type {
   CourseOverviewApiResponse,
   CourseOverviewStatus,
@@ -37,7 +38,7 @@ const overviewStatus = computed<CourseOverviewStatus>(() => {
       />
     </main>
 
-    <SiteFooter />
+    <SiteFooter :content="siteSettingsFixture" current-path="/course" />
   </div>
 </template>
 

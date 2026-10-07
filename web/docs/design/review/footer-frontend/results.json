@@ -1,0 +1,446 @@
+[
+  {
+    "route": "/",
+    "width": 320,
+    "footerWidth": 305,
+    "overflow": true,
+    "links": [
+      {
+        "href": "/events",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/course",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/session",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/articles",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/about",
+        "height": 58,
+        "current": null
+      }
+    ],
+    "flowing": false,
+    "clip": {
+      "x": 0,
+      "y": 87,
+      "width": 305,
+      "height": 1052.6875,
+      "scale": 1
+    },
+    "contentOverflow": []
+  },
+  {
+    "route": "/",
+    "width": 560,
+    "footerWidth": 545,
+    "overflow": true,
+    "links": [
+      {
+        "href": "/events",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/course",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/session",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/articles",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/about",
+        "height": 58,
+        "current": null
+      }
+    ],
+    "flowing": true,
+    "clip": {
+      "x": 0,
+      "y": 87,
+      "width": 545,
+      "height": 1015.796875,
+      "scale": 1
+    },
+    "contentOverflow": []
+  },
+  {
+    "route": "/",
+    "width": 900,
+    "footerWidth": 885,
+    "overflow": true,
+    "links": [
+      {
+        "href": "/events",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/course",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/session",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/articles",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/about",
+        "height": 58,
+        "current": null
+      }
+    ],
+    "flowing": true,
+    "clip": {
+      "x": 0,
+      "y": 87,
+      "width": 885,
+      "height": 1042.328125,
+      "scale": 1
+    },
+    "contentOverflow": []
+  },
+  {
+    "route": "/",
+    "width": 1024,
+    "footerWidth": 1024,
+    "overflow": false,
+    "links": [
+      {
+        "href": "/events",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/course",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/session",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/articles",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/about",
+        "height": 58,
+        "current": null
+      }
+    ],
+    "flowing": true,
+    "clip": {
+      "x": 0,
+      "y": 0,
+      "width": 1024,
+      "height": 850,
+      "scale": 1
+    },
+    "contentOverflow": []
+  },
+  {
+    "route": "/",
+    "width": 1440,
+    "footerWidth": 1440,
+    "overflow": false,
+    "links": [
+      {
+        "href": "/events",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/course",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/session",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/articles",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/about",
+        "height": 58,
+        "current": null
+      }
+    ],
+    "flowing": true,
+    "clip": {
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 864.296875,
+      "scale": 1
+    },
+    "contentOverflow": []
+  },
+  {
+    "route": "/course",
+    "width": 320,
+    "footerWidth": 305,
+    "overflow": true,
+    "links": [
+      {
+        "href": "/events",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/course",
+        "height": 58,
+        "current": "page"
+      },
+      {
+        "href": "/session",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/articles",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/about",
+        "height": 58,
+        "current": null
+      }
+    ],
+    "flowing": true,
+    "clip": {
+      "x": 0,
+      "y": 87,
+      "width": 305,
+      "height": 1052.6875,
+      "scale": 1
+    },
+    "contentOverflow": []
+  },
+  {
+    "route": "/course",
+    "width": 560,
+    "footerWidth": 545,
+    "overflow": true,
+    "links": [
+      {
+        "href": "/events",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/course",
+        "height": 58,
+        "current": "page"
+      },
+      {
+        "href": "/session",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/articles",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/about",
+        "height": 58,
+        "current": null
+      }
+    ],
+    "flowing": true,
+    "clip": {
+      "x": 0,
+      "y": 87,
+      "width": 545,
+      "height": 1015.796875,
+      "scale": 1
+    },
+    "contentOverflow": []
+  },
+  {
+    "route": "/course",
+    "width": 900,
+    "footerWidth": 885,
+    "overflow": true,
+    "links": [
+      {
+        "href": "/events",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/course",
+        "height": 58,
+        "current": "page"
+      },
+      {
+        "href": "/session",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/articles",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/about",
+        "height": 58,
+        "current": null
+      }
+    ],
+    "flowing": true,
+    "clip": {
+      "x": 0,
+      "y": 87,
+      "width": 885,
+      "height": 1042.328125,
+      "scale": 1
+    },
+    "contentOverflow": []
+  },
+  {
+    "route": "/course",
+    "width": 1024,
+    "footerWidth": 1024,
+    "overflow": false,
+    "links": [
+      {
+        "href": "/events",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/course",
+        "height": 58,
+        "current": "page"
+      },
+      {
+        "href": "/session",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/articles",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/about",
+        "height": 58,
+        "current": null
+      }
+    ],
+    "flowing": true,
+    "clip": {
+      "x": 0,
+      "y": 87,
+      "width": 1024,
+      "height": 850,
+      "scale": 1
+    },
+    "contentOverflow": []
+  },
+  {
+    "route": "/course",
+    "width": 1440,
+    "footerWidth": 1440,
+    "overflow": false,
+    "links": [
+      {
+        "href": "/events",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/course",
+        "height": 58,
+        "current": "page"
+      },
+      {
+        "href": "/session",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/articles",
+        "height": 58,
+        "current": null
+      },
+      {
+        "href": "/about",
+        "height": 58,
+        "current": null
+      }
+    ],
+    "flowing": true,
+    "clip": {
+      "x": 0,
+      "y": 87,
+      "width": 1440,
+      "height": 864.296875,
+      "scale": 1
+    },
+    "contentOverflow": []
+  },
+  {
+    "reducedMotion": {
+      "dots": 0,
+      "lines": 3,
+      "flowing": false
+    }
+  },
+  {
+    "keyboard": {
+      "href": "/course",
+      "outline": "solid"
+    }
+  },
+  {
+    "text200": {
+      "contentOverflow": [],
+      "height": 2167.609375
+    }
+  },
+  {
+    "longText": {
+      "contentOverflow": []
+    }
+  }
+]

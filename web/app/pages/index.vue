@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { siteSettingsFixture } from '../fixtures/siteSettings';
 import type { HomeBannerContent } from "#shared/utils/homeBanner";
 
 const { data: banner } = useFetch<HomeBannerContent | null>("/api/home-banner");
@@ -25,6 +26,6 @@ const heroElement = ref<HTMLElement | null>(null);
       </div>
     </main>
 
-    <SiteFooter />
+    <SiteFooter :content="siteSettingsFixture" current-path="/" />
   </div>
 </template>

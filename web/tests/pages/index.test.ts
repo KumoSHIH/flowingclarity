@@ -60,7 +60,7 @@ describe('home page mobile navigation', () => {
     expect(links.map(link => link.attributes('href'))).toEqual([
       '/events',
       '/course',
-      '/reservation',
+      '/session',
       '/articles',
       '/about',
     ])

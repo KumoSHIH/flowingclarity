@@ -60,9 +60,9 @@
 
 ## 共用頁尾元件
 
-狀態：已完成（2026-10-06）。首頁與課程頁的品牌頁尾已集中至 `app/components/SiteFooter.vue`，頁面只傳入各自的收束文案；`home` 與 `course` 變體保留原有背景色、高度及手機排列。頁尾沒有互動、遠端資料或待處理狀態，後續新增頁面時應優先沿用此元件，只有出現新的已核准視覺需求才新增變體。
+狀態：2026-10-07 已接續 L「靜默座標」前端實作。首頁與課程頁共用 `app/components/SiteFooter.vue`，傳入同一份型別化全站設定 fixture 與目前路徑；取代先前 home／course 文案變體。元件包含五項導覽、聯絡入口、目前頁標記及會依視窗、頁籤與 reduced-motion 狀態啟停的 SVG 動畫。暖砂色與既有字體沿用共用 token，構圖與動畫維持元件範圍。正式狀態與後續依賴以 [Footer 規格](footer.md) 為準。
 
-驗證結果：`npm run test -w web` 共 54 項通過，`npm run typecheck -w web` 與 `npm run build -w web` 通過。正式建置仍顯示既有的 Nuxt／Tailwind sourcemap 警告；typecheck 仍顯示既有的 `vue-router/volar/sfc-route-blocks` 套件匯出警告，兩者均未造成失敗。此次只搬移既有 markup 與 CSS，未進行額外視覺調整；下一階段沒有頁尾相關待辦。
+驗證結果：本輪前端測試共 57 項通過，typecheck 與 build 通過；既有 Nuxt／Tailwind sourcemap、Vue Router 型別插件警告未造成失敗。仍待四個導覽目的頁、完整 UI 驗收、Sanity 全站設定與正式內容核准。
 
 ### 既有抽取驗證
 
