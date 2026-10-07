@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#241710">
+  <title>Flowing Clarity｜頁尾設計四案</title>
+  <style>
+    :root {
+      --paper: #f8f5ef;
+      --sand: #e8dfd2;
+      --ink: #38342e;
+      --muted: #71685e;
+      --clay: #a46b54;
+      --saffron: #f8bf4c;
+      --oxblood: #392618;
+      --night: #241710;
+      --bark: #766254;
+      --persimmon: #df5b35;
+      --warm-white: #f7f6f4;
+      --warm-muted: #d8c7b8;
+      --edge: clamp(26px, 5.8vw, 112px);
+      --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+      --sans: "BIZ UDPGothic", "Noto Sans TC", "PingFang TC", sans-serif;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 320px; scroll-behavior: smooth; background: #b8ad9f; }
+    body { margin: 0; color: var(--ink); background: #b8ad9f; font-family: var(--sans); }
+    a, button { color: inherit; font: inherit; }
+    a { text-decoration-thickness: 1px; text-underline-offset: .32em; }
+    button { cursor: pointer; }
+    svg { display: block; }
+    ::selection { color: var(--warm-white); background: var(--persimmon); }
+    :focus-visible { outline: 2px solid var(--persimmon); outline-offset: 5px; }
+
+    .prototype { width: min(100%, 1920px); margin-inline: auto; background: var(--paper); }
+    .chooser {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: grid;
+      grid-template-columns: minmax(210px, .85fr) minmax(420px, 1.15fr);
+      min-height: 82px;
+      color: var(--warm-white);
+      background: rgb(36 23 16 / 96%);
+      border-bottom: 1px solid rgb(247 246 244 / 20%);
+      backdrop-filter: blur(18px) saturate(115%);
+    }
+    .chooser__title { display: flex; flex-direction: column; justify-content: center; padding: 13px var(--edge); }
+    .chooser__title strong { font: 400 13px/1.2 var(--serif); letter-spacing: .13em; }
+    .chooser__title span { margin-top: 8px; color: #b9aa9c; font-size: 11px; letter-spacing: .05em; }
+    .tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-left: 1px solid rgb(247 246 244 / 16%); }
+    .tabs button { min-width: 0; min-height: 82px; padding: 10px; color: #cdbdaf; background: transparent; border: 0; border-right: 1px solid rgb(247 246 244 / 16%); font-size: 11px; letter-spacing: .12em; transition: color 180ms ease, background 240ms ease; }
+    .tabs button[aria-selected="true"] { color: var(--night); background: var(--saffron); }
+    .tabs button span { display: block; margin-top: 7px; font: 400 15px/1.2 var(--serif); letter-spacing: .06em; }
+    .concept[hidden] { display: none; }
+
+    .approach {
+      display: grid;
+      min-height: clamp(250px, 35vh, 410px);
+      place-items: end start;
+      padding: clamp(70px, 11vh, 130px) var(--edge) clamp(40px, 7vh, 76px);
+      color: var(--muted);
+      background: var(--paper);
+      border-bottom: 1px solid rgb(56 52 46 / 15%);
+    }
+    .approach__inner { display: flex; width: 100%; align-items: end; justify-content: space-between; gap: 40px; }
+    .approach p { max-width: 27em; margin: 0; font-size: clamp(16px, 1.5vw, 22px); line-height: 1.8; letter-spacing: .05em; }
+    .approach span { flex: 0 0 auto; font-size: 11px; font-weight: 700; letter-spacing: .18em; }
+    .concept-note { display: grid; grid-template-columns: minmax(200px, .65fr) minmax(0, 1.35fr); gap: 50px; padding: 30px var(--edge) 34px; color: var(--warm-white); background: #17100c; border-top: 1px solid rgb(247 246 244 / 18%); }
+    .concept-note strong { font: 400 18px/1.4 var(--serif); letter-spacing: .06em; }
+    .concept-note p { max-width: 58em; margin: 0; color: #d8c7b8; font-size: 14px; line-height: 1.9; letter-spacing: .04em; }
+    .footer-nav { margin: 0; padding: 0; list-style: none; }
+    .footer-nav a { text-decoration: none; }
+    .arrow { position: relative; width: 22px; height: 22px; flex: 0 0 22px; transition: transform 350ms var(--ease); }
+    .arrow::before { position: absolute; top: 4px; right: 3px; width: 11px; height: 11px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; content: ""; }
+    .arrow::after { position: absolute; top: 10px; left: 2px; width: 17px; border-top: 1px solid currentColor; content: ""; transform: rotate(-45deg); transform-origin: center; }
+    a:is(:hover, :focus-visible) .arrow { transform: translate(4px, -4px); }
+
+    /* A — 餘光座標 */
+    .footer-a { position: relative; min-height: 690px; overflow: clip; color: var(--warm-white); background: var(--oxblood); }
+    .footer-a__line { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .footer-a__line path { fill: none; stroke: rgb(248 191 76 / 54%); stroke-width: 1.2; stroke-dasharray: 1 13; stroke-linecap: round; }
+    .footer-a__line circle { fill: var(--saffron); filter: drop-shadow(0 0 9px rgb(248 191 76 / 78%)); offset-path: path("M-100,520 C210,600 350,245 690,350 S1170,690 1560,200"); animation: travel 13s linear infinite; }
+    .footer-a__top { position: relative; z-index: 1; display: grid; grid-template-columns: 1.4fr .6fr; min-height: 450px; padding: clamp(66px, 8vw, 120px) var(--edge) 40px; }
+    .footer-a__statement { align-self: start; max-width: 9.2em; margin: 0; font: 400 clamp(48px, 7vw, 112px)/1.08 var(--serif); letter-spacing: .035em; text-wrap: balance; }
+    .footer-a__nav { align-self: start; border-top: 1px solid rgb(247 246 244 / 52%); }
+    .footer-a__nav li { border-bottom: 1px solid rgb(247 246 244 / 20%); }
+    .footer-a__nav a { display: flex; min-height: 66px; align-items: center; justify-content: space-between; gap: 25px; font-size: 12px; letter-spacing: .12em; }
+    .footer-a__nav a::after { width: 7px; height: 7px; background: var(--saffron); border-radius: 50%; content: ""; transition: transform 280ms var(--ease), box-shadow 280ms ease; }
+    .footer-a__nav a:is(:hover, :focus-visible)::after { box-shadow: 0 0 0 7px rgb(248 191 76 / 13%), 0 0 18px rgb(248 191 76 / 80%); transform: scale(1.35); }
+    .footer-a__brand { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 40px; padding: 38px var(--edge) 28px; border-top: 1px solid rgb(247 246 244 / 34%); }
+    .footer-a__wordmark { margin-left: -.035em; font: 400 clamp(64px, 12.4vw, 220px)/.72 var(--serif); letter-spacing: -.04em; white-space: nowrap; }
+    .footer-a__meta { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; padding-bottom: 4px; color: var(--warm-muted); font-size: 11px; line-height: 1.5; letter-spacing: .12em; text-align: right; }
+
+    /* B — 留白信箋 */
+    .footer-b { display: grid; grid-template-columns: minmax(0, 1.36fr) minmax(320px, .64fr); min-height: 720px; color: var(--ink); background: var(--paper); }
+    .footer-b__letter { display: flex; min-width: 0; flex-direction: column; justify-content: space-between; padding: clamp(70px, 9vw, 132px) var(--edge) 42px; }
+    .footer-b__statement { max-width: 10em; margin: 0; font: 400 clamp(52px, 7.7vw, 122px)/1.28 var(--serif); letter-spacing: .045em; text-wrap: balance; }
+    .footer-b__signature { display: flex; align-items: end; justify-content: space-between; gap: 40px; padding-top: 80px; }
+    .footer-b__signature img { width: clamp(128px, 14vw, 190px); height: auto; }
+    .footer-b__signature span { color: var(--muted); font-size: 11px; letter-spacing: .12em; }
+    .footer-b__index { display: flex; flex-direction: column; justify-content: space-between; padding: clamp(70px, 9vw, 132px) clamp(30px, 3.5vw, 62px) 42px; color: var(--warm-white); background: var(--bark); }
+    .footer-b__index-heading { margin: 0; font: 400 clamp(25px, 2.4vw, 38px)/1.45 var(--serif); letter-spacing: .06em; }
+    .footer-b__nav { margin-top: 70px; border-top: 1px solid rgb(247 246 244 / 48%); }
+    .footer-b__nav li { border-bottom: 1px solid rgb(247 246 244 / 20%); }
+    .footer-b__nav a { display: grid; grid-template-columns: 1fr auto; min-height: 68px; align-items: center; gap: 18px; font-size: 12px; letter-spacing: .11em; }
+    .footer-b__foot { display: flex; align-items: end; justify-content: space-between; gap: 24px; color: var(--warm-white); font-size: 11px; line-height: 1.7; letter-spacing: .1em; }
+    .footer-b__seal { display: grid; width: 52px; height: 52px; flex: 0 0 52px; place-items: center; color: var(--night); background: var(--persimmon); font: 400 18px/1 var(--serif); }
+
+    /* C — 四向索引 */
+    .footer-c { display: grid; grid-template-columns: minmax(360px, .72fr) minmax(0, 1.28fr); min-height: 700px; color: var(--night); background: var(--saffron); }
+    .footer-c__brand { display: flex; flex-direction: column; justify-content: space-between; padding: clamp(68px, 8vw, 118px) clamp(34px, 5vw, 84px) 40px; color: var(--warm-white); background: var(--night); }
+    .footer-c__brand img { width: clamp(150px, 17vw, 220px); height: auto; }
+    .footer-c__brand h2 { max-width: 7em; margin: 40px 0; font: 400 clamp(44px, 5.8vw, 86px)/1.2 var(--serif); letter-spacing: .045em; }
+    .footer-c__brand p { max-width: 27em; margin: 0; color: var(--warm-muted); font-size: 14px; line-height: 1.9; letter-spacing: .04em; }
+    .footer-c__map { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(250px, 1fr)); }
+    .footer-c__map::before, .footer-c__map::after { position: absolute; z-index: 2; pointer-events: none; content: ""; }
+    .footer-c__map::before { top: 50%; left: 0; width: 100%; border-top: 1px solid rgb(36 23 16 / 36%); }
+    .footer-c__map::after { top: 0; left: 50%; height: 100%; border-left: 1px solid rgb(36 23 16 / 36%); }
+    .footer-c__map a { position: relative; display: flex; min-height: 250px; flex-direction: column; justify-content: space-between; padding: clamp(30px, 4vw, 68px); overflow: hidden; text-decoration: none; }
+    .footer-c__map a::before { position: absolute; right: -44px; bottom: -44px; width: 132px; height: 132px; border: 1px solid rgb(36 23 16 / 36%); border-radius: 50%; content: ""; transition: width 580ms var(--ease), height 580ms var(--ease), right 580ms var(--ease), bottom 580ms var(--ease); }
+    .footer-c__map a:is(:hover, :focus-visible)::before { right: -120px; bottom: -120px; width: 480px; height: 480px; }
+    .footer-c__map small { font-size: 11px; font-weight: 700; letter-spacing: .16em; }
+    .footer-c__map strong { position: relative; z-index: 1; align-self: flex-start; font: 400 clamp(35px, 4.2vw, 64px)/1.25 var(--serif); letter-spacing: .08em; }
+    .footer-c__map .arrow { align-self: flex-end; }
+    .footer-c__bottom { grid-column: 1 / -1; display: flex; min-height: 68px; align-items: center; justify-content: space-between; gap: 30px; padding: 14px var(--edge); color: var(--night); background: var(--persimmon); font-size: 11px; letter-spacing: .12em; }
+    .footer-c__bottom a { font-weight: 700; }
+
+    /* D — 夜間迴路 */
+    .footer-d { position: relative; min-height: 760px; overflow: clip; color: var(--warm-white); background: var(--night); }
+    .footer-d::before { position: absolute; top: 50%; left: 54%; width: min(78vw, 1260px); aspect-ratio: 1.23; background: url("../../public/assets/plates/rose-atlas-plate.png") center / cover; content: ""; opacity: .14; transform: translate(-50%, -50%) rotate(8deg) scale(1.08); mix-blend-mode: screen; }
+    .footer-d__orbital { position: absolute; inset: -18% -9%; border: 1px solid rgb(248 191 76 / 28%); border-radius: 50%; pointer-events: none; transform: rotate(-12deg); }
+    .footer-d__orbital::before, .footer-d__orbital::after { position: absolute; border: 1px solid rgb(248 191 76 / 18%); border-radius: 50%; content: ""; }
+    .footer-d__orbital::before { inset: 13%; }
+    .footer-d__orbital::after { inset: 28%; }
+    .footer-d__head { position: relative; z-index: 1; display: flex; align-items: start; justify-content: space-between; gap: 40px; padding: 38px var(--edge); border-bottom: 1px solid rgb(247 246 244 / 22%); font-size: 11px; letter-spacing: .12em; }
+    .footer-d__head span:last-child { color: var(--warm-muted); text-align: right; }
+    .footer-d__body { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr auto; min-height: 570px; align-items: center; gap: 70px; padding: 70px var(--edge); }
+    .footer-d__statement { max-width: 10em; margin: 0; font: 400 clamp(55px, 8.5vw, 136px)/1.12 var(--serif); letter-spacing: .025em; text-wrap: balance; }
+    .footer-d__statement em { display: block; color: var(--saffron); font-style: normal; }
+    .footer-d__nav { width: min(26vw, 350px); border-top: 1px solid rgb(247 246 244 / 50%); }
+    .footer-d__nav li { border-bottom: 1px solid rgb(247 246 244 / 22%); }
+    .footer-d__nav a { display: flex; min-height: 68px; align-items: center; justify-content: space-between; gap: 24px; font-size: 11px; letter-spacing: .12em; transition: padding 280ms var(--ease), color 180ms ease; }
+    .footer-d__nav a:is(:hover, :focus-visible) { padding-left: 13px; color: var(--saffron); }
+    .footer-d__return { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 26px; min-height: 110px; padding: 24px var(--edge); border-top: 1px solid rgb(247 246 244 / 22%); }
+    .footer-d__return::before, .footer-d__return::after { border-top: 1px solid rgb(247 246 244 / 22%); content: ""; }
+    .footer-d__return a { display: inline-flex; min-width: 190px; min-height: 46px; align-items: center; justify-content: center; gap: 18px; font: 400 16px/1 var(--serif); letter-spacing: .1em; text-decoration: none; }
+    .footer-d__return svg { width: 20px; transition: transform 350ms var(--ease); }
+    .footer-d__return a:is(:hover, :focus-visible) svg { transform: translateY(-5px); }
+
+    @keyframes travel { to { offset-distance: 100%; } }
+
+    @media (max-width: 900px) {
+      .chooser { grid-template-columns: 1fr; }
+      .chooser__title { display: none; }
+      .tabs { border-left: 0; }
+      .tabs button { min-height: 66px; padding-inline: 4px; font-size: 11px; letter-spacing: .05em; }
+      .tabs button span { font-size: 12px; }
+      .approach { min-height: 230px; }
+      .approach__inner { align-items: flex-start; flex-direction: column; gap: 28px; }
+      .concept-note { grid-template-columns: 1fr; gap: 13px; }
+      .footer-a__top { grid-template-columns: 1fr; gap: 68px; }
+      .footer-a__nav { width: min(100%, 470px); }
+      .footer-a__brand { grid-template-columns: 1fr; }
+      .footer-a__meta { align-items: flex-start; text-align: left; }
+      .footer-b { grid-template-columns: 1fr; }
+      .footer-b__letter { min-height: 620px; }
+      .footer-b__index { min-height: 570px; }
+      .footer-c { grid-template-columns: 1fr; }
+      .footer-c__brand { min-height: 560px; }
+      .footer-d__body { grid-template-columns: 1fr; align-content: center; }
+      .footer-d__nav { width: min(100%, 470px); }
+    }
+
+    @media (max-width: 560px) {
+      :root { --edge: 24px; }
+      .tabs button { min-height: 62px; }
+      .tabs button > span { display: none; }
+      .approach { min-height: 210px; padding-block: 60px 38px; }
+      .approach p { font-size: 15px; }
+      .concept-note { padding-block: 25px 28px; }
+      .footer-a { min-height: 720px; }
+      .footer-a__top { min-height: 520px; padding-top: 74px; }
+      .footer-a__statement { font-size: 49px; }
+      .footer-a__brand { padding-top: 30px; }
+      .footer-a__wordmark { font-size: 20vw; line-height: .85; }
+      .footer-b__letter { min-height: 580px; padding-block: 74px 32px; }
+      .footer-b__statement { font-size: 49px; }
+      .footer-b__signature { align-items: flex-start; flex-direction: column; padding-top: 70px; }
+      .footer-b__index { min-height: 520px; padding: 68px var(--edge) 32px; }
+      .footer-c__brand { min-height: 520px; padding: 70px var(--edge) 36px; }
+      .footer-c__brand h2 { font-size: 51px; }
+      .footer-c__map { grid-template-columns: 1fr; grid-template-rows: none; }
+      .footer-c__map::before, .footer-c__map::after { display: none; }
+      .footer-c__map a { min-height: 230px; border-bottom: 1px solid rgb(36 23 16 / 34%); }
+      .footer-c__map strong { font-size: 41px; }
+      .footer-c__bottom { align-items: flex-start; flex-direction: column; padding-block: 22px; }
+      .footer-d__head { min-height: 98px; align-items: flex-start; flex-direction: column; gap: 10px; }
+      .footer-d__head span:last-child { text-align: left; }
+      .footer-d__body { min-height: 650px; gap: 80px; padding-block: 88px; }
+      .footer-d__statement { font-size: 54px; }
+      .footer-d__nav { width: 100%; }
+      .footer-d__return { grid-template-columns: 1fr; min-height: 100px; }
+      .footer-d__return::before, .footer-d__return::after { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="prototype">
+    <header class="chooser">
+      <div class="chooser__title">
+        <strong>FLOWING CLARITY・頁尾設計四案</strong>
+        <span>在最後一屏，讓品牌留下不同形狀的餘韻</span>
+      </div>
+      <div class="tabs" role="tablist" aria-label="選擇頁尾設計">
+        <button id="tab-a" role="tab" aria-selected="true" aria-controls="concept-a" data-target="a">A<span>餘光座標</span></button>
+        <button id="tab-b" role="tab" aria-selected="false" aria-controls="concept-b" data-target="b" tabindex="-1">B<span>留白信箋</span></button>
+        <button id="tab-c" role="tab" aria-selected="false" aria-controls="concept-c" data-target="c" tabindex="-1">C<span>四向索引</span></button>
+        <button id="tab-d" role="tab" aria-selected="false" aria-controls="concept-d" data-target="d" tabindex="-1">D<span>夜間迴路</span></button>
+      </div>
+    </header>
+
+    <main>
+      <article id="concept-a" class="concept" role="tabpanel" aria-labelledby="tab-a">
+        <section class="approach" aria-label="頁尾前一段內容示意">
+          <div class="approach__inner"><p>走到頁面尾端，不是結束。讓最後一段空間，替剛才讀過的內容留下呼吸。</p><span>SCROLL TO THE AFTERGLOW</span></div>
+        </section>
+        <footer class="footer-a">
+          <svg class="footer-a__line" viewBox="0 0 1600 690" preserveAspectRatio="none" aria-hidden="true"><path d="M-100 520 C210 600 350 245 690 350 S1170 690 1560 200"/><circle r="4" cx="0" cy="0"/></svg>
+          <div class="footer-a__top">
+            <p class="footer-a__statement">留一點空白，給自己。</p>
+            <nav aria-label="頁尾導覽"><ul class="footer-nav footer-a__nav">
+              <li><a href="/events">近期活動</a></li><li><a href="/course">課程探索</a></li><li><a href="/reservation">個案諮詢</a></li><li><a href="/articles">文章分享</a></li><li><a href="/about">關於我們</a></li>
+            </ul></nav>
+          </div>
+          <div class="footer-a__brand"><div class="footer-a__wordmark">FLOWING CLARITY</div><div class="footer-a__meta"><span>普那生活空間</span><span>BODY・HEART・LIFE・BEAUTY</span></div></div>
+        </footer>
+        <aside class="concept-note"><strong>A｜餘光座標</strong><p>將首頁的感知地圖延續到最後一屏。光點沿路徑離開畫面，巨型英文品牌則像地景一樣壓住底部；資訊完整，但第一印象仍然是情緒與餘韻。</p></aside>
+      </article>
+
+      <article id="concept-b" class="concept" role="tabpanel" aria-labelledby="tab-b" hidden>
+        <section class="approach" aria-label="頁尾前一段內容示意">
+          <div class="approach__inner"><p>在資訊密度之後，用一張打開的信，讓文字和留白重新成為主角。</p><span>AN OPEN LETTER</span></div>
+        </section>
+        <footer class="footer-b">
+          <div class="footer-b__letter">
+            <p class="footer-b__statement">願每次靠近自己，都不必匆忙。</p>
+            <div class="footer-b__signature"><img src="../../public/assets/logo-main.png" alt="普那生活空間" width="896" height="496"><span>FLOWING CLARITY</span></div>
+          </div>
+          <div class="footer-b__index">
+            <div><h2 class="footer-b__index-heading">從此刻的需要，<br>繼續探索。</h2><nav aria-label="頁尾導覽"><ol class="footer-nav footer-b__nav">
+              <li><a href="/events"><span>近期活動</span><span class="arrow" aria-hidden="true"></span></a></li>
+              <li><a href="/course"><span>課程探索</span><span class="arrow" aria-hidden="true"></span></a></li>
+              <li><a href="/reservation"><span>個案諮詢</span><span class="arrow" aria-hidden="true"></span></a></li>
+              <li><a href="/articles"><span>文章分享</span><span class="arrow" aria-hidden="true"></span></a></li>
+              <li><a href="/about"><span>關於我們</span><span class="arrow" aria-hidden="true"></span></a></li>
+            </ol></nav></div>
+            <div class="footer-b__foot"><span>BODY・HEART<br>LIFE・BEAUTY</span><span class="footer-b__seal" aria-hidden="true">流</span></div>
+          </div>
+        </footer>
+        <aside class="concept-note"><strong>B｜留白信箋</strong><p>以一封未折起的信作為結尾：左側只留一句溫柔但不推銷的話，右側像信封內頁般收納導覽。最安靜、最有人情味，也最能讓品牌聲音被記住。</p></aside>
+      </article>
+
+      <article id="concept-c" class="concept" role="tabpanel" aria-labelledby="tab-c" hidden>
+        <section class="approach" aria-label="頁尾前一段內容示意">
+          <div class="approach__inner"><p>如果還不知道要往哪裡走，就從身體、心、生命與美之間，找到下一個方向。</p><span>CHOOSE A DIRECTION</span></div>
+        </section>
+        <footer class="footer-c">
+          <div class="footer-c__brand"><img src="../../public/assets/logo-main-light.png" alt="普那生活空間" width="896" height="496"><h2>循著需要，找到學習的方向。</h2><p>課程分成四個入口。從當下最有感覺的地方開始，不必一次知道所有答案。</p></div>
+          <nav class="footer-c__map" aria-label="課程分類">
+            <a href="/course#body"><small>BODY</small><strong>愛身體</strong><span class="arrow" aria-hidden="true"></span></a>
+            <a href="/course#heart"><small>HEART</small><strong>撫慰心</strong><span class="arrow" aria-hidden="true"></span></a>
+            <a href="/course#life"><small>LIFE</small><strong>究生命</strong><span class="arrow" aria-hidden="true"></span></a>
+            <a href="/course#beauty"><small>BEAUTY</small><strong>展現美</strong><span class="arrow" aria-hidden="true"></span></a>
+          </nav>
+          <div class="footer-c__bottom"><span>FLOWING CLARITY・普那生活空間</span><a href="/about">認識我們</a></div>
+        </footer>
+        <aside class="concept-note"><strong>C｜四向索引</strong><p>把頁尾變成第二次理解產品的機會。四個已確認的課程分類直接成為可探索地圖；藏紅花黃不是裝飾，而是清楚、帶方向感的行動表面。</p></aside>
+      </article>
+
+      <article id="concept-d" class="concept" role="tabpanel" aria-labelledby="tab-d" hidden>
+        <section class="approach" aria-label="頁尾前一段內容示意">
+          <div class="approach__inner"><p>有些結束像夜色：不是把門關上，而是讓感受慢慢浮現。</p><span>AFTER THE LAST LINE</span></div>
+        </section>
+        <footer class="footer-d">
+          <div class="footer-d__orbital" aria-hidden="true"></div>
+          <div class="footer-d__head"><span>FLOWING CLARITY・普那生活空間</span><span>BODY・HEART・LIFE・BEAUTY</span></div>
+          <div class="footer-d__body">
+            <p class="footer-d__statement">最後，<em>也是另一個開始。</em></p>
+            <nav aria-label="頁尾導覽"><ul class="footer-nav footer-d__nav">
+              <li><a href="/events"><span>近期活動</span><span class="arrow" aria-hidden="true"></span></a></li>
+              <li><a href="/course"><span>課程探索</span><span class="arrow" aria-hidden="true"></span></a></li>
+              <li><a href="/reservation"><span>個案諮詢</span><span class="arrow" aria-hidden="true"></span></a></li>
+              <li><a href="/articles"><span>文章分享</span><span class="arrow" aria-hidden="true"></span></a></li>
+              <li><a href="/about"><span>關於我們</span><span class="arrow" aria-hidden="true"></span></a></li>
+            </ul></nav>
+          </div>
+          <div class="footer-d__return"><span></span><a href="#top" data-return><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 17V3M4.5 8.5 10 3l5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>回到開始</a><span></span></div>
+        </footer>
+        <aside class="concept-note"><strong>D｜夜間迴路</strong><p>最沉浸的一案。地圖圖版退成夜裡的記憶，軌道線把閱讀終點變成循環；「回到開始」是唯一強調動作，適合需要戲劇性收束的長頁面。</p></aside>
+      </article>
+    </main>
+  </div>
+
+  <script>
+    document.documentElement.id = 'top'
+    history.scrollRestoration = 'manual'
+    const tabs = [...document.querySelectorAll('[role="tab"]')]
+    const panels = [...document.querySelectorAll('[role="tabpanel"]')]
+    const requested = new URLSearchParams(location.search).get('panel')
+    const initial = ['a', 'b', 'c', 'd'].includes(requested) ? requested : 'a'
+
+    function select(tab, shouldFocus = false, updateHistory = true) {
+      tabs.forEach((item) => {
+        const active = item === tab
+        item.setAttribute('aria-selected', String(active))
+        item.tabIndex = active ? 0 : -1
+      })
+      panels.forEach((panel) => { panel.hidden = panel.id !== `concept-${tab.dataset.target}` })
+      if (updateHistory) history.replaceState(null, '', `?panel=${tab.dataset.target}`)
+      scrollTo({ top: 0, behavior: 'instant' })
+      if (shouldFocus) tab.focus()
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => select(tab))
+      tab.addEventListener('keydown', (event) => {
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return
+        event.preventDefault()
+        const step = event.key === 'ArrowRight' ? 1 : -1
+        select(tabs[(index + step + tabs.length) % tabs.length], true)
+      })
+    })
+    document.querySelector('[data-return]').addEventListener('click', (event) => {
+      event.preventDefault()
+      scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })
+    })
+    select(tabs.find((tab) => tab.dataset.target === initial), false, false)
+  </script>
+</body>
+</html>

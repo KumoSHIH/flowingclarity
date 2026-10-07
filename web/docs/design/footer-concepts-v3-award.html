@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#241710">
+  <title>Flowing Clarity｜頁尾設計第三輪</title>
+  <style>
+    :root {
+      --paper: #f8f5ef; --sand: #e8dfd2; --ink: #38342e; --muted: #81776a;
+      --saffron: #f8bf4c; --oxblood: #392618; --night: #241710; --bark: #766254;
+      --clay: #a46b54; --persimmon: #df5b35; --warm-white: #f7f6f4; --warm-muted: #d8c7b8;
+      --edge: clamp(24px, 5.8vw, 112px); --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+      --sans: "BIZ UDPGothic", "Noto Sans TC", "PingFang TC", sans-serif; --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+    * { box-sizing: border-box; }
+    html { min-width: 320px; scroll-behavior: smooth; background: var(--sand); }
+    body { margin: 0; color: var(--ink); background: var(--sand); font-family: var(--sans); }
+    a, button { color: inherit; font: inherit; } button { cursor: pointer; } address { font-style: normal; }
+    img, svg { display: block; } a { text-underline-offset: .3em; }
+    ::selection { color: var(--warm-white); background: var(--persimmon); }
+    :focus-visible { outline: 2px solid var(--persimmon); outline-offset: 5px; }
+    .prototype { width: min(100%, 1920px); margin-inline: auto; background: var(--paper); }
+    .chooser { position: sticky; top: 0; z-index: 60; display: grid; grid-template-columns: minmax(270px,.8fr) minmax(560px,1.2fr); min-height: 82px; color: var(--warm-white); background: rgb(36 23 16 / 97%); border-bottom: 1px solid rgb(247 246 244 / 18%); backdrop-filter: blur(18px); }
+    .chooser__title { display: flex; flex-direction: column; justify-content: center; padding: 12px var(--edge); }
+    .chooser__title strong { font: 400 14px/1.2 var(--serif); letter-spacing: .05em; }
+    .chooser__title span { margin-top: 7px; color: var(--warm-muted); font-size: 12px; letter-spacing: .03em; }
+    .tabs { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); border-left: 1px solid rgb(247 246 244 / 16%); }
+    .tabs button { min-width: 0; min-height: 82px; padding: 10px; color: var(--warm-muted); background: transparent; border: 0; border-right: 1px solid rgb(247 246 244 / 16%); font-size: 12px; letter-spacing: .05em; }
+    .tabs button span { display: block; margin-top: 7px; font: 400 16px/1.2 var(--serif); letter-spacing: .03em; }
+    .tabs button[aria-selected="true"] { color: var(--night); background: var(--saffron); }
+    .tabs button[aria-selected="true"]:focus-visible { outline-color: var(--night); }
+    .concept[hidden] { display: none; }
+    .approach { display: grid; min-height: clamp(220px,31vh,360px); place-items: end start; padding: clamp(64px,10vh,110px) var(--edge) clamp(38px,6vh,64px); color: var(--bark); background: var(--paper); border-bottom: 1px solid rgb(56 52 46 / 16%); }
+    .approach__inner { display: flex; width: 100%; align-items: end; justify-content: space-between; gap: 50px; }
+    .approach p { max-width: 31em; margin: 0; font-size: clamp(17px,1.45vw,22px); line-height: 1.85; letter-spacing: .04em; }
+    .approach span { flex: 0 0 auto; font-size: 12px; font-weight: 700; letter-spacing: .15em; }
+    .concept-note { display: grid; grid-template-columns: minmax(210px,.6fr) minmax(0,1.4fr); gap: 48px; padding: 31px var(--edge) 34px; color: var(--warm-white); background: #17100c; border-top: 1px solid rgb(247 246 244 / 18%); }
+    .concept-note strong { font: 400 18px/1.4 var(--serif); letter-spacing: .04em; }
+    .concept-note p { max-width: 62em; margin: 0; color: var(--warm-muted); font-size: 14px; line-height: 1.9; letter-spacing: .03em; }
+    .footer-nav { margin: 0; padding: 0; list-style: none; } .footer-nav a { text-decoration: none; }
+    .arrow { position: relative; width: 21px; height: 21px; flex: 0 0 21px; transition: transform 340ms var(--ease); }
+    .arrow::before { position: absolute; top: 4px; right: 3px; width: 11px; height: 11px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; content: ""; }
+    .arrow::after { position: absolute; top: 10px; left: 2px; width: 17px; border-top: 1px solid currentColor; content: ""; transform: rotate(-45deg); }
+    a:is(:hover,:focus-visible) .arrow { transform: translate(4px,-4px); }
+    .socials { display: flex; gap: 24px; font-size: 14px; letter-spacing: .04em; }
+
+    /* I — 流動折帶 */
+    .footer-i { position: relative; min-height: 780px; overflow: hidden; color: var(--warm-white); background: var(--night); }
+    .footer-i__fold { position: absolute; z-index: 0; top: 15%; right: -8%; width: 118%; height: 43%; background: var(--saffron); clip-path: polygon(0 32%,72% 0,100% 35%,28% 100%); transition: transform 900ms var(--ease); }
+    .footer-i:is(:hover,:focus-within) .footer-i__fold { transform: translateX(-2.5%) rotate(-1deg); }
+    .footer-i__top { position: relative; z-index: 1; display: flex; align-items: start; justify-content: space-between; gap: 40px; padding: 42px var(--edge); }
+    .footer-i__top img { width: clamp(145px,14vw,205px); height: auto; }
+    .footer-i__top p { max-width: 18em; margin: 0; font: 400 clamp(20px,2.2vw,32px)/1.45 var(--serif); text-align: right; }
+    .footer-i__main { position: relative; z-index: 1; display: grid; grid-template-columns: 1.15fr .85fr; min-height: 570px; align-items: stretch; gap: 8vw; padding: 38px var(--edge) 46px; }
+    .footer-i__main > div:first-child { display: flex; min-width: 0; flex-direction: column; justify-content: space-between; }
+    .footer-i__statement { position: relative; max-width: 9em; margin: -10px 0 150px clamp(70px,8vw,145px); padding: .06em .12em .14em; color: var(--night); background: var(--saffron); font: 400 clamp(53px,5.5vw,78px)/1.12 var(--serif); letter-spacing: -.02em; overflow-wrap: anywhere; text-wrap: balance; }
+    .footer-i__contact { display: grid; gap: 12px; color: var(--warm-white); font-size: 14px; line-height: 1.8; }
+    .footer-i__contact a { min-height: 48px; align-content: center; }
+    .footer-i__side { align-self: end; }
+    .footer-i__nav { border-top: 1px solid rgb(247 246 244 / 55%); }
+    .footer-i__nav li { border-bottom: 1px solid rgb(247 246 244 / 24%); }
+    .footer-i__nav a { display: flex; min-height: 63px; align-items: center; justify-content: space-between; gap: 25px; font-size: 14px; letter-spacing: .04em; }
+    .footer-i__meta { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-top: 36px; color: var(--warm-muted); font-size: 12px; line-height: 1.7; letter-spacing: .05em; }
+
+    /* J — 四扇門 */
+    .footer-j { color: var(--warm-white); background: var(--oxblood); }
+    .footer-j__intro { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; padding: clamp(66px,8vw,116px) var(--edge) 70px; }
+    .footer-j__intro img { width: clamp(150px,15vw,220px); height: auto; }
+    .footer-j__statement { max-width: 10em; margin: 0; justify-self: end; font: 400 clamp(45px,5.5vw,82px)/1.2 var(--serif); letter-spacing: .01em; text-align: right; text-wrap: balance; }
+    .footer-j__doors { display: flex; min-height: 380px; border-top: 1px solid rgb(247 246 244 / 24%); border-bottom: 1px solid rgb(247 246 244 / 24%); }
+    .footer-j__doors li { display: flex; min-width: 0; flex: 1 1 0; border-right: 1px solid rgb(247 246 244 / 24%); transition: flex 620ms var(--ease), background 320ms ease, color 180ms ease; }
+    .footer-j__doors li:first-child { flex: 1.25 1 0; }
+    .footer-j__doors li:nth-child(3) { flex: .82 1 0; }
+    .footer-j__doors li:last-child { border-right: 0; }
+    .footer-j__doors:has(a:hover) li:not(:has(a:hover)) { flex: .72 1 0; }
+    .footer-j__doors li:has(a:is(:hover,:focus-visible)) { flex: 1.65 1 0; color: var(--night); background: var(--saffron); }
+    .footer-j__doors a { display: flex; width: 100%; min-height: 380px; flex-direction: column; justify-content: space-between; padding: 34px clamp(24px,3vw,50px); }
+    .footer-j__doors small { font-size: 12px; letter-spacing: .14em; }
+    .footer-j__doors strong { max-width: 5em; font: 400 clamp(26px,3vw,46px)/1.35 var(--serif); letter-spacing: .04em; }
+    .footer-j__doors a:focus-visible { outline-color: var(--warm-white); outline-offset: -8px; }
+    .footer-j__doors li:has(a:focus-visible) a { outline-color: var(--night); }
+    .footer-j__base { display: grid; grid-template-columns: 1.3fr .7fr; gap: 60px; padding: 48px var(--edge); }
+    .footer-j__contact { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 40px; font-size: 14px; line-height: 1.8; }
+    .footer-j__contact a { min-height: 48px; align-content: center; }
+    .footer-j__legal { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; gap: 35px; color: var(--warm-muted); font-size: 12px; line-height: 1.7; letter-spacing: .05em; text-align: right; }
+
+    /* K — 地址海報 */
+    .footer-k { min-height: 800px; color: var(--night); background: var(--paper); }
+    .footer-k__poster { position: relative; min-height: 610px; overflow: hidden; padding: 52px var(--edge); background: var(--sand); }
+    .footer-k__poster::before { position: absolute; inset: 0 0 0 auto; width: 19%; background: var(--saffron); content: ""; }
+    .footer-k__poster::after { position: absolute; top: 0; right: 19%; height: 100%; border-right: 1px solid rgb(36 23 16 / 34%); content: ""; }
+    .footer-k__top { position: relative; z-index: 1; display: flex; align-items: start; justify-content: space-between; gap: 40px; }
+    .footer-k__top img { width: clamp(145px,14vw,210px); height: auto; }
+    .footer-k__top p { max-width: 22em; margin: 0; font: 400 clamp(18px,2vw,28px)/1.5 var(--serif); text-align: right; }
+    .footer-k__address { position: relative; z-index: 1; max-width: 11em; margin: clamp(82px,10vw,150px) 0 0; font: 400 clamp(49px,6.5vw,96px)/1.15 var(--serif); letter-spacing: -.015em; text-wrap: balance; }
+    .footer-k__coordinate { position: absolute; right: calc(19% - 6px); bottom: 44px; display: flex; align-items: center; gap: 14px; font-size: 12px; font-weight: 700; letter-spacing: .13em; writing-mode: vertical-rl; }
+    .footer-k__coordinate::before { width: 11px; height: 11px; background: var(--saffron); border: 2px solid var(--night); border-radius: 50%; content: ""; }
+    .footer-k__info { display: grid; grid-template-columns: 1.15fr 1fr .85fr; min-height: 190px; }
+    .footer-k__contact, .footer-k__nav, .footer-k__end { padding: 38px clamp(26px,3.8vw,66px); }
+    .footer-k__contact { display: grid; align-content: center; gap: 9px; background: var(--saffron); font-size: 14px; line-height: 1.7; }
+    .footer-k__contact a { min-height: 48px; align-content: center; }
+    .footer-k__nav { display: grid; grid-template-columns: 1fr 1fr; align-content: center; gap: 16px 26px; color: var(--warm-white); background: var(--night); }
+    .footer-k__nav a { display: flex; min-height: 48px; align-items: center; font-size: 14px; letter-spacing: .04em; }
+    .footer-k__end { display: flex; flex-direction: column; justify-content: space-between; color: var(--warm-white); background: var(--bark); }
+    .footer-k__end span:last-child { font-size: 12px; line-height: 1.7; letter-spacing: .05em; }
+
+    /* L — 靜默座標 */
+    .footer-l { position: relative; min-height: 850px; overflow: hidden; color: var(--ink); background: var(--sand); }
+    .footer-l :focus-visible { outline-color: var(--ink); }
+    .footer-l__flow { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none; }
+    .footer-l__flow-base { fill: none; stroke: var(--warm-white); stroke-linecap: round; stroke-width: 1; opacity: .58; vector-effect: non-scaling-stroke; }
+    .footer-l__flow-base--soft { opacity: .36; }
+    .footer-l__flow-base--faint { opacity: .22; }
+    .footer-l__flow-dots-glow, .footer-l__flow-dots { fill: none; stroke: var(--warm-white); stroke-dasharray: .002 .22; stroke-dashoffset: 1; stroke-linecap: round; vector-effect: non-scaling-stroke; animation-play-state: paused; }
+    .footer-l__flow-dots-glow { stroke-width: 22; opacity: .24; filter: blur(9px); animation: footer-l-flow 20s linear infinite, footer-l-glow-pulse 3.6s ease-in-out -1.2s infinite; animation-play-state:paused; }
+    .footer-l__flow-dots { stroke-width: 3; opacity: .52; filter: drop-shadow(0 0 8px rgb(247 246 244 / 82%)); animation: footer-l-flow 20s linear infinite, footer-l-core-pulse 3.6s ease-in-out -1.2s infinite; animation-play-state:paused; }
+    .footer-l__flow-dots-glow--slow, .footer-l__flow-dots--slow { stroke-dasharray: .002 .28; animation-duration: 27s, 5.1s; animation-delay: -11s, -3.8s; }
+    .footer-l__flow-dots-glow--slow { stroke-width: 19; }
+    .footer-l__flow-dots--slow { stroke-width: 2.5; }
+    .footer-l.is-flowing :is(.footer-l__flow-dots-glow,.footer-l__flow-dots) { animation-play-state: running; }
+    .footer-l:is(:hover,:focus-within) .footer-l__flow-dots-glow { opacity: .44; }
+    .footer-l:is(:hover,:focus-within) .footer-l__flow-dots { opacity: 1; }
+    @keyframes footer-l-flow { to { stroke-dashoffset: 0; } }
+    @keyframes footer-l-glow-pulse { 0%,100% { opacity:.14; } 38% { opacity:.5; } 58% { opacity:.22; } 76% { opacity:.4; } }
+    @keyframes footer-l-core-pulse { 0%,100% { opacity:.26; } 38% { opacity:.58; } 58% { opacity:.34; } 76% { opacity:.5; } }
+    .footer-l__shell { position: relative; z-index: 1; display: grid; grid-template-columns: 36% 64%; min-height: 850px; }
+    .footer-l__brand { display: flex; flex-direction: column; justify-content: space-between; padding: 48px clamp(28px,4vw,76px); }
+    .footer-l__brand img { width: clamp(145px,15vw,220px); height: auto; }
+    .footer-l__brand p { max-width: 13em; margin: 0; font: 400 clamp(31px,3.4vw,52px)/1.35 var(--serif); letter-spacing: .02em; }
+    .footer-l__content { display: flex; flex-direction: column; justify-content: space-between; padding: clamp(80px,10vw,150px) var(--edge) 48px clamp(45px,6vw,100px); }
+    .footer-l__mobile-logo { display: none; }
+    .footer-l__statement { max-width: 11em; margin: 0; font: 400 clamp(48px,6vw,92px)/1.18 var(--serif); letter-spacing: -.015em; text-wrap: balance; }
+    .footer-l__bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; padding-top: 110px; }
+    .footer-l__contact { display: grid; gap: 0; font-size: 14px; line-height: 1.75; }
+    .footer-l__contact > span, .footer-l__contact > a, .footer-l__contact .socials { display: flex; min-height: 48px; align-items: center; }
+    .footer-l__contact .socials a { display: flex; min-height: 48px; align-items: center; }
+    .footer-l__nav { border-top: 1px solid rgb(56 52 46 / 42%); }
+    .footer-l__nav li { border-bottom: 1px solid rgb(56 52 46 / 22%); }
+    .footer-l__nav a { display: flex; min-height: 58px; align-items: center; justify-content: space-between; gap: 20px; font-size: 14px; }
+    .footer-l__meta { display: flex; align-items: center; justify-content: flex-end; gap: 30px; margin-top: 42px; color: var(--ink); font-size: 12px; line-height: 1.7; letter-spacing: .05em; text-align: right; }
+
+    @media(max-width:900px) {
+      .chooser { grid-template-columns: 1fr; } .chooser__title { display:none; } .tabs { border-left:0; }
+      .tabs button { min-height:68px; padding-inline:4px; } .approach__inner { align-items:flex-start; flex-direction:column; gap:25px; }
+      .concept-note { grid-template-columns:1fr; gap:13px; }
+      .footer-i__main { grid-template-columns:1fr; gap:70px; } .footer-i__fold { top:18%; height:31%; }
+      .footer-j__intro { grid-template-columns:1fr; } .footer-j__statement { justify-self:start; text-align:left; }
+      .footer-j__doors { flex-direction:column; } .footer-j__doors li:nth-child(n), .footer-j__doors:has(a:hover) li:not(:has(a:hover)), .footer-j__doors li:has(a:is(:hover,:focus-visible)) { flex:auto; }
+      .footer-j__doors a { min-height:110px; flex-direction:row; align-items:center; }
+      .footer-j__base { grid-template-columns:1fr; } .footer-j__legal { align-items:flex-start; text-align:left; }
+      .footer-k__info { grid-template-columns:1fr 1fr; } .footer-k__end { grid-column:1/-1; min-height:130px; }
+      .footer-l__flow { width: 150%; transform: translateX(-17%); }
+      .footer-l__shell { grid-template-columns:1fr; } .footer-l__brand { display:none; }
+      .footer-l__mobile-logo { display:block; width:140px; height:auto; margin-bottom:70px; }
+      .footer-l__bottom { grid-template-columns:1fr; }
+    }
+    @media(max-width:560px) {
+      :root { --edge:24px; } .tabs button span { display:none; } .approach { min-height:230px; padding-block:62px 38px; } .approach p { font-size:15px; }
+      .footer-i__top { align-items:flex-start; flex-direction:column; } .footer-i__top p { text-align:left; }
+      .footer-i__fold { top:19%; right:-38%; width:160%; height:27%; clip-path:polygon(0 15%,88% 0,100% 55%,25% 100%,0 70%); transform:rotate(-4deg); }
+      .footer-i:is(:hover,:focus-within) .footer-i__fold { transform:rotate(-4deg); }
+      .footer-i__main { padding-top:12px; } .footer-i__statement { width:fit-content; max-width:100%; margin:90px 0 180px; font-size:42px; } .footer-i__top p, .footer-i__contact { max-width:100%; overflow-wrap:anywhere; } .footer-i__meta { align-items:flex-start; flex-direction:column; }
+      .footer-j__intro { padding-block:70px; } .footer-j__statement { font-size:48px; } .footer-j__doors a { min-height:96px; padding-inline:24px; }
+      .footer-j__doors strong { font-size:25px; } .footer-j__contact { grid-template-columns:1fr; overflow-wrap:anywhere; }
+      .footer-k__poster { min-height:690px; } .footer-k__poster::after { right:72px; } .footer-k__top { flex-direction:column; }
+      .footer-k__top p { text-align:left; } .footer-k__address { margin-top:110px; font-size:48px; }
+      .footer-k__coordinate { right:66px; } .footer-k__info { grid-template-columns:1fr; } .footer-k__nav { min-height:190px; }
+      .footer-k__contact, .footer-k__nav, .footer-k__end { padding:34px 24px; } .footer-k__contact { overflow-wrap:anywhere; }
+      .footer-l__flow { width: 190%; transform: translateX(-24%); }
+      .footer-l__content { padding:75px 24px 42px; }
+      .footer-l__statement { font-size:47px; } .footer-l__bottom { gap:65px; padding-top:100px; } .footer-l__contact { overflow-wrap:anywhere; }
+      .footer-l__meta { align-items:flex-end; flex-direction:column; }
+    }
+    @media(prefers-reduced-motion:reduce) {
+      html { scroll-behavior:auto; } *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; }
+      .footer-l__flow-dots-glow, .footer-l__flow-dots { display:none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="prototype">
+    <header class="chooser"><div class="chooser__title"><strong>FLOWING CLARITY・頁尾第三輪</strong><span>L 靜默座標・選定深化</span></div><div class="tabs" role="tablist" aria-label="選擇第三輪頁尾設計"><button id="tab-i" role="tab" aria-label="I 流動折帶" aria-selected="false" aria-controls="concept-i" data-target="i" tabindex="-1">I<span>流動折帶</span></button><button id="tab-j" role="tab" aria-label="J 四扇門" aria-selected="false" aria-controls="concept-j" data-target="j" tabindex="-1">J<span>四扇門</span></button><button id="tab-k" role="tab" aria-label="K 地址海報" aria-selected="false" aria-controls="concept-k" data-target="k" tabindex="-1">K<span>地址海報</span></button><button id="tab-l" role="tab" aria-label="L 靜默座標" aria-selected="true" aria-controls="concept-l" data-target="l">L<span>靜默座標</span></button></div></header>
+    <main>
+      <article id="concept-i" class="concept" role="tabpanel" aria-labelledby="tab-i">
+        <section class="approach"><div class="approach__inner"><p>讓內容像一條折帶穿過頁面：不是欄位的集合，而是一段仍在流動的路。</p><span>ONE CONTINUOUS PATH</span></div></section>
+        <footer class="footer-i"><div class="footer-i__fold" aria-hidden="true"></div><div class="footer-i__top"><img src="../../public/assets/logo-main-light.png" alt="普那生活空間" width="896" height="496"><p lang="en">Pathways to creative arts and well-being</p></div><div class="footer-i__main"><div><p class="footer-i__statement">往身體靠近，也往生活裡去。</p><address class="footer-i__contact"><span>高雄市民生一路201號A棟2樓</span><a href="tel:+886934031389">+886 934 031 389</a><a href="mailto:nancypune@hotmail.com">nancypune@hotmail.com</a><div class="socials"><span>Facebook</span><span>LINE</span></div></address></div><div class="footer-i__side"><nav aria-label="頁尾導覽"><ul class="footer-nav footer-i__nav"><li><a href="/events"><span>近期活動</span><span class="arrow" aria-hidden="true"></span></a></li><li><a href="/course"><span>創藝身心路徑</span><span class="arrow" aria-hidden="true"></span></a></li><li><a href="/reservation"><span>個案諮詢</span><span class="arrow" aria-hidden="true"></span></a></li><li><a href="/about"><span>關於我們</span><span class="arrow" aria-hidden="true"></span></a></li></ul></nav><div class="footer-i__meta"><span>Copyright © Flowing with Clarity.<br>All Rights Reserved.</span><span>KAOHSIUNG・TAIWAN</span></div></div></div></footer>
+        <aside class="concept-note"><strong>I｜流動折帶</strong><p>藏紅花折帶是畫面的主角，但不承載假功能；它把中文主張、聯絡資訊與右側導覽串成一條有方向的路。Hover 或 focus 時只產生一次微幅錯位。</p></aside>
+      </article>
+      <article id="concept-j" class="concept" role="tabpanel" aria-labelledby="tab-j" hidden>
+        <section class="approach"><div class="approach__inner"><p>四個入口不是清單，而是四扇門；每一次選擇，都讓下一個空間稍微打開。</p><span>FOUR WAYS IN</span></div></section>
+        <footer class="footer-j"><div class="footer-j__intro"><img src="../../public/assets/logo-main-light.png" alt="普那生活空間" width="896" height="496"><p class="footer-j__statement" lang="en">Pathways to creative arts and well-being</p></div><nav aria-label="頁尾導覽"><ul class="footer-nav footer-j__doors"><li><a href="/events"><small>EVENTS</small><strong>近期活動</strong><span class="arrow" aria-hidden="true"></span></a></li><li><a href="/course"><small>PATHWAYS</small><strong>創藝身心路徑</strong><span class="arrow" aria-hidden="true"></span></a></li><li><a href="/reservation"><small>SESSION</small><strong>個案諮詢</strong><span class="arrow" aria-hidden="true"></span></a></li><li><a href="/about"><small>ABOUT</small><strong>關於我們</strong><span class="arrow" aria-hidden="true"></span></a></li></ul></nav><div class="footer-j__base"><address class="footer-j__contact"><span>高雄市民生一路201號A棟2樓</span><a href="tel:+886934031389">+886 934 031 389</a><a href="mailto:nancypune@hotmail.com">nancypune@hotmail.com</a><div class="socials"><span>Facebook</span><span>LINE</span></div></address><div class="footer-j__legal"><span>KAOHSIUNG・TAIWAN</span><span>Copyright © Flowing with Clarity.<br>All Rights Reserved.</span></div></div></footer>
+        <aside class="concept-note"><strong>J｜四扇門</strong><p>導覽本身就是空間。四扇不等寬門保持可讀，游標或鍵盤進入時該門才擴張；資訊密度完整，但閱讀中心從品牌宣言轉為「下一步去哪裡」。</p></aside>
+      </article>
+      <article id="concept-k" class="concept" role="tabpanel" aria-labelledby="tab-k" hidden>
+        <section class="approach"><div class="approach__inner"><p>一個真實地址，讓所有身心路徑有了可以抵達的地方。</p><span>A PLACE TO ARRIVE</span></div></section>
+        <footer class="footer-k"><div class="footer-k__poster"><div class="footer-k__top"><img src="../../public/assets/logo-main.png" alt="普那生活空間" width="896" height="496"><p lang="en">Pathways to creative arts and well-being</p></div><address class="footer-k__address">高雄市民生一路201號 A棟2樓</address><span class="footer-k__coordinate">KAOHSIUNG・MINSHENG 1ST ROAD</span></div><div class="footer-k__info"><address class="footer-k__contact"><a href="tel:+886934031389">T：+886 934 031 389</a><a href="mailto:nancypune@hotmail.com">E：nancypune@hotmail.com</a><div class="socials"><span>Facebook</span><span>LINE</span></div></address><nav aria-label="頁尾導覽"><ul class="footer-nav footer-k__nav"><li><a href="/events">近期活動</a></li><li><a href="/course">創藝身心路徑</a></li><li><a href="/reservation">個案諮詢</a></li><li><a href="/about">關於我們</a></li></ul></nav><div class="footer-k__end"><span>FLOWING CLARITY</span><span>Copyright © Flowing with Clarity.<br>All Rights Reserved.</span></div></div></footer>
+        <aside class="concept-note"><strong>K｜地址海報</strong><p>把最常被縮小的地址放到最大，讓 Footer 成為「如何抵達」的品牌海報。淺砂紙面與藏紅花色標記建立目的地訊號；其餘聯絡、導覽與版權收進三色資訊帶。</p></aside>
+      </article>
+      <article id="concept-l" class="concept" role="tabpanel" aria-labelledby="tab-l" hidden>
+        <section class="approach"><div class="approach__inner"><p>當其他內容都說完，留下一組流動座標，讓資訊安靜地找到自己的位置。</p><span>THE QUIET COORDINATE</span></div></section>
+        <footer class="footer-l"><svg class="footer-l__flow" viewBox="0 0 1440 850" preserveAspectRatio="none" aria-hidden="true"><path class="footer-l__flow-base" pathLength="1" d="M-80 690C120 620 120 410 330 350S520 110 760 155 960 380 1200 260 1390 90 1520 150"/><path class="footer-l__flow-base footer-l__flow-base--soft" pathLength="1" d="M-60 780C180 700 185 520 390 455S645 245 860 315 1055 575 1280 440 1450 260 1540 300"/><path class="footer-l__flow-base footer-l__flow-base--faint" pathLength="1" d="M210 930C205 730 430 665 365 500S505 310 585 175 850 55 940 225 1050 440 1240 335"/><path class="footer-l__flow-dots-glow" pathLength="1" d="M-80 690C120 620 120 410 330 350S520 110 760 155 960 380 1200 260 1390 90 1520 150"/><path class="footer-l__flow-dots" pathLength="1" d="M-80 690C120 620 120 410 330 350S520 110 760 155 960 380 1200 260 1390 90 1520 150"/><path class="footer-l__flow-dots-glow footer-l__flow-dots-glow--slow" pathLength="1" d="M-60 780C180 700 185 520 390 455S645 245 860 315 1055 575 1280 440 1450 260 1540 300"/><path class="footer-l__flow-dots footer-l__flow-dots--slow" pathLength="1" d="M-60 780C180 700 185 520 390 455S645 245 860 315 1055 575 1280 440 1450 260 1540 300"/></svg><div class="footer-l__shell"><div class="footer-l__brand"><img src="../../public/assets/logo-main.png" alt="普那生活空間" width="896" height="496"><p>留一點空白，讓感受抵達。</p></div><div class="footer-l__content"><img class="footer-l__mobile-logo" src="../../public/assets/logo-main.png" alt="普那生活空間" width="896" height="496"><p class="footer-l__statement" lang="en">Pathways to creative arts and well-being</p><div><div class="footer-l__bottom"><address class="footer-l__contact"><span>高雄市民生一路201號A棟2樓</span><a href="tel:+886934031389">+886 934 031 389</a><a href="mailto:nancypune@hotmail.com">nancypune@hotmail.com</a><div class="socials"><a href="#" aria-label="Facebook（網址待確認）">Facebook</a><a href="#" aria-label="LINE（網址待確認）">LINE</a></div></address><nav aria-label="頁尾導覽"><ul class="footer-nav footer-l__nav"><li><a href="/events"><span>近期活動</span><span class="arrow" aria-hidden="true"></span></a></li><li><a href="/course"><span>創藝身心路徑</span><span class="arrow" aria-hidden="true"></span></a></li><li><a href="/reservation"><span>個案諮詢</span><span class="arrow" aria-hidden="true"></span></a></li><li><a href="/about"><span>關於我們</span><span class="arrow" aria-hidden="true"></span></a></li></ul></nav></div><div class="footer-l__meta"><span>Copyright © Flowing with Clarity. All Rights Reserved.</span></div></div></div></div></footer>
+        <aside class="concept-note"><strong>L｜靜默座標</strong><p>暖砂紙面上保留三條白色感知路徑；兩組稀疏白點以鬆柔光暈與半透明核心疊成，錯峰閃爍並沿路徑緩慢流動。手機收起左側感受文字，讓品牌、主張與聯絡資訊使用完整寬度。</p></aside>
+      </article>
+    </main>
+  </div>
+  <script>
+    history.scrollRestoration='manual';
+    const tabs=[...document.querySelectorAll('[role="tab"]')],panels=[...document.querySelectorAll('[role="tabpanel"]')];
+    const requested=new URLSearchParams(location.search).get('panel'),initial=['i','j','k','l'].includes(requested)?requested:'l';
+    function select(tab,focus=false,historyUpdate=true){tabs.forEach(item=>{const active=item===tab;item.setAttribute('aria-selected',String(active));item.tabIndex=active?0:-1});panels.forEach(panel=>{panel.hidden=panel.id!==`concept-${tab.dataset.target}`});if(historyUpdate)history.replaceState(null,'',`?panel=${tab.dataset.target}`);scrollTo({top:0,behavior:'instant'});if(focus)tab.focus()}
+    tabs.forEach((tab,index)=>{tab.addEventListener('click',()=>select(tab));tab.addEventListener('keydown',event=>{if(event.key!=='ArrowLeft'&&event.key!=='ArrowRight')return;event.preventDefault();select(tabs[(index+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length],true)})});
+    select(tabs.find(tab=>tab.dataset.target===initial),false,false);
+    document.querySelectorAll('.socials a[href="#"]').forEach(link=>link.addEventListener('click',event=>event.preventDefault()));
+    const flowingFooter=document.querySelector('.footer-l');
+    if(flowingFooter){const flowObserver=new IntersectionObserver(([entry])=>flowingFooter.classList.toggle('is-flowing',Boolean(entry?.isIntersecting)),{threshold:.08});flowObserver.observe(flowingFooter);document.addEventListener('visibilitychange',()=>flowingFooter.classList.toggle('is-flowing',!document.hidden&&flowingFooter.getBoundingClientRect().top<innerHeight&&flowingFooter.getBoundingClientRect().bottom>0));}
+  </script>
+</body>
+</html>

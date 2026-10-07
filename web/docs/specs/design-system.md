@@ -58,6 +58,12 @@
 
 共用 class 不設定外距、容器內距或區塊定位；這些由使用頁負責。CMS 標題的分行標記仍留在 `HomeBanner.vue`，目前沒有中間斷點的標題字級特例。
 
+## 共用頁尾元件
+
+狀態：已完成（2026-10-06）。首頁與課程頁的品牌頁尾已集中至 `app/components/SiteFooter.vue`，頁面只傳入各自的收束文案；`home` 與 `course` 變體保留原有背景色、高度及手機排列。頁尾沒有互動、遠端資料或待處理狀態，後續新增頁面時應優先沿用此元件，只有出現新的已核准視覺需求才新增變體。
+
+驗證結果：`npm run test -w web` 共 54 項通過，`npm run typecheck -w web` 與 `npm run build -w web` 通過。正式建置仍顯示既有的 Nuxt／Tailwind sourcemap 警告；typecheck 仍顯示既有的 `vue-router/volar/sfc-route-blocks` 套件匯出警告，兩者均未造成失敗。此次只搬移既有 markup 與 CSS，未進行額外視覺調整；下一階段沒有頁尾相關待辦。
+
 ### 既有抽取驗證
 
 2026-10-04：前端 30 項測試、typecheck 與正式 build 通過。以原始 CSS 和抽取後 CSS 建立本機 Banner 文字區測試頁，在 Chrome 比對 390、1023、1024、1180、1440px 的字級、行高、顏色、內距及元素位置／尺寸，結果一致；減少動態模式確認為零秒過渡，並檢視手機與桌面截圖。此紀錄早於 2026-10-05 的標題尺寸與 Banner 版面調整，不代表目前版本已完成視覺驗收。

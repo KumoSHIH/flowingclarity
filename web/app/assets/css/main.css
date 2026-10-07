@@ -144,19 +144,6 @@ body {
   color: #71685e;
 }
 
-.home-footer {
-  display: flex;
-  min-height: 72px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 clamp(28px, 6vw, 116px);
-  color: var(--color-paper);
-  background: var(--color-bark);
-  font-family: var(--font-editorial);
-  font-size: 10px;
-  letter-spacing: 0.16em;
-}
-
 @media (max-width: 1023px) {
   .home-page {
     padding-top: var(--home-header-height);

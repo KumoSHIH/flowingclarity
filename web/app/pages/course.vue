@@ -1,22 +1,32 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { CourseOverviewApiResponse, CourseOverviewStatus } from '#shared/types/course'
-import { emptyCourseOverviewContent } from '#shared/utils/courseOverview'
+import { computed } from "vue";
+import type {
+  CourseOverviewApiResponse,
+  CourseOverviewStatus,
+} from "#shared/types/course";
+import { emptyCourseOverviewContent } from "#shared/utils/courseOverview";
 
-const { data: response, status: requestStatus, refresh } = useFetch<CourseOverviewApiResponse>(
-  '/api/course-overview',
-)
+const {
+  data: response,
+  status: requestStatus,
+  refresh,
+} = useFetch<CourseOverviewApiResponse>("/api/course-overview");
 
-const content = computed(() => response.value?.content ?? emptyCourseOverviewContent)
+const content = computed(
+  () => response.value?.content ?? emptyCourseOverviewContent,
+);
 const overviewStatus = computed<CourseOverviewStatus>(() => {
-  if (requestStatus.value === 'pending') return 'loading'
-  if (requestStatus.value === 'error' || response.value?.state === 'error') return 'error'
-  return 'ready'
-})
+  if (requestStatus.value === "pending") return "loading";
+  if (requestStatus.value === "error" || response.value?.state === "error")
+    return "error";
+  return "ready";
+});
 </script>
 
 <template>
-  <div class="course-page mx-auto min-h-screen max-w-[1920px] overflow-clip font-sans">
+  <div
+    class="course-page mx-auto min-h-screen max-w-[1920px] overflow-clip font-sans"
+  >
     <SiteHeader always-visible />
 
     <main>
@@ -27,10 +37,7 @@ const overviewStatus = computed<CourseOverviewStatus>(() => {
       />
     </main>
 
-    <footer class="course-footer">
-      <span>FLOWING CLARITY</span>
-      <span>循著需要，找到學習的方向。</span>
-    </footer>
+    <SiteFooter />
   </div>
 </template>
 
@@ -54,29 +61,6 @@ const overviewStatus = computed<CourseOverviewStatus>(() => {
 
 :global(html) {
   scroll-behavior: smooth;
-}
-
-.course-footer {
-  display: flex;
-  min-height: 84px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 0 clamp(28px, 6vw, 116px);
-  color: var(--color-warm-muted);
-  background: var(--color-oxblood);
-  font-family: var(--font-editorial);
-  font-size: 10px;
-  letter-spacing: 0.16em;
-}
-
-@media (max-width: 640px) {
-  .course-footer {
-    min-height: 120px;
-    align-items: flex-start;
-    flex-direction: column;
-    justify-content: center;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

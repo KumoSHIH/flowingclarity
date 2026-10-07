@@ -25,9 +25,6 @@ const heroElement = ref<HTMLElement | null>(null);
       </div>
     </main>
 
-    <footer class="home-footer">
-      <span>FLOWING CLARITY</span>
-      <span>留一點空白，給自己。</span>
-    </footer>
+    <SiteFooter />
   </div>
 </template>

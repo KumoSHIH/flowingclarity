@@ -11,6 +11,7 @@ const componentStubs = {
   HomeEvents: true,
   HomeCourses: true,
   HomeContact: true,
+  SiteFooter: true,
 }
 
 describe('home page mobile navigation', () => {
