@@ -36,6 +36,7 @@ describe('course page', () => {
         stubs: {
           SiteHeader: SiteHeaderStub,
           SiteFooter: true,
+          SiteFooterUnavailable: true,
           CourseOverview,
         },
       },

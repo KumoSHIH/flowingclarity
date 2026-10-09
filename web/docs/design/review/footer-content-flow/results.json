@@ -1,0 +1,262 @@
+{
+  "checkedAt": "2026-10-07T15:20:39.021Z",
+  "results": [
+    {
+      "path": "/",
+      "width": 320,
+      "background": "rgb(118, 98, 84)",
+      "footerLogo": null,
+      "brandFallback": "晰流文化 | 普那生活空間",
+      "brandDisplay": {
+        "display": "block",
+        "color": "rgb(248, 245, 239)",
+        "opacity": "1",
+        "x": 24,
+        "y": 6387.703125,
+        "width": 257,
+        "height": 84
+      },
+      "unavailable": false,
+      "footerDestinations": [
+        "/events",
+        "/course",
+        "/session",
+        "/articles",
+        "/about"
+      ],
+      "heroDestinations": [
+        "/events",
+        "/course",
+        "/session",
+        "/articles",
+        "/about"
+      ],
+      "current": null,
+      "targetBlankCount": 5,
+      "relSafe": true,
+      "navHeights": [
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "overflows": [],
+      "footerTop": 6339.703125,
+      "footerHeight": 1106.1875,
+      "headerHeight": 88,
+      "semantics": {
+        "footer": "FOOTER",
+        "navLabel": "頁尾導覽",
+        "address": true,
+        "decorativeHidden": "true"
+      }
+    },
+    {
+      "path": "/",
+      "width": 1440,
+      "background": "rgb(118, 98, 84)",
+      "footerLogo": null,
+      "brandFallback": "晰流文化 | 普那生活空間",
+      "brandDisplay": {
+        "display": "block",
+        "color": "rgb(248, 245, 239)",
+        "opacity": "1",
+        "x": 57.59375,
+        "y": 5888.125,
+        "width": 397.8125,
+        "height": 42
+      },
+      "unavailable": false,
+      "footerDestinations": [
+        "/events",
+        "/course",
+        "/session",
+        "/articles",
+        "/about"
+      ],
+      "heroDestinations": [
+        "/events",
+        "/course",
+        "/session",
+        "/articles",
+        "/about"
+      ],
+      "current": null,
+      "targetBlankCount": 5,
+      "relSafe": true,
+      "navHeights": [
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "overflows": [],
+      "footerTop": 5840.125,
+      "footerHeight": 863.296875,
+      "headerHeight": 99,
+      "semantics": {
+        "footer": "FOOTER",
+        "navLabel": "頁尾導覽",
+        "address": true,
+        "decorativeHidden": "true"
+      }
+    },
+    {
+      "path": "/course",
+      "width": 320,
+      "background": "rgb(118, 98, 84)",
+      "footerLogo": null,
+      "brandFallback": "晰流文化 | 普那生活空間",
+      "brandDisplay": {
+        "display": "block",
+        "color": "rgb(248, 245, 239)",
+        "opacity": "1",
+        "x": 24,
+        "y": 3180.078125,
+        "width": 257,
+        "height": 84
+      },
+      "unavailable": false,
+      "footerDestinations": [
+        "/events",
+        "/course",
+        "/session",
+        "/articles",
+        "/about"
+      ],
+      "heroDestinations": [],
+      "current": "/course",
+      "targetBlankCount": 5,
+      "relSafe": true,
+      "navHeights": [
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "overflows": [],
+      "footerTop": 3132.078125,
+      "footerHeight": 1106.1875,
+      "headerHeight": 88,
+      "semantics": {
+        "footer": "FOOTER",
+        "navLabel": "頁尾導覽",
+        "address": true,
+        "decorativeHidden": "true"
+      }
+    },
+    {
+      "path": "/course",
+      "width": 1440,
+      "background": "rgb(118, 98, 84)",
+      "footerLogo": null,
+      "brandFallback": "晰流文化 | 普那生活空間",
+      "brandDisplay": {
+        "display": "block",
+        "color": "rgb(248, 245, 239)",
+        "opacity": "1",
+        "x": 57.59375,
+        "y": 3817,
+        "width": 397.8125,
+        "height": 42
+      },
+      "unavailable": false,
+      "footerDestinations": [
+        "/events",
+        "/course",
+        "/session",
+        "/articles",
+        "/about"
+      ],
+      "heroDestinations": [],
+      "current": "/course",
+      "targetBlankCount": 5,
+      "relSafe": true,
+      "navHeights": [
+        58,
+        58,
+        58,
+        58,
+        58
+      ],
+      "overflows": [],
+      "footerTop": 3769,
+      "footerHeight": 863.296875,
+      "headerHeight": 99,
+      "semantics": {
+        "footer": "FOOTER",
+        "navLabel": "頁尾導覽",
+        "address": true,
+        "decorativeHidden": "true"
+      }
+    }
+  ],
+  "keyboard": [
+    {
+      "text": "+886 934 031 389",
+      "href": "tel:+886934031389",
+      "outline": "solid",
+      "inFooter": true
+    },
+    {
+      "text": "nancypune@hotmail.com",
+      "href": "mailto:nancypune@hotmail.com",
+      "outline": "solid",
+      "inFooter": true
+    },
+    {
+      "text": "FACEBOOK",
+      "href": "https://www.facebook.com/profile.php?id=100057416771206",
+      "outline": "solid",
+      "inFooter": true
+    },
+    {
+      "text": "LINE",
+      "href": "https://line.me/R/ti/p/@byg5955l",
+      "outline": "solid",
+      "inFooter": true
+    },
+    {
+      "text": "近期活動",
+      "href": "/events",
+      "outline": "solid",
+      "inFooter": true
+    },
+    {
+      "text": "課程探索",
+      "href": "/course",
+      "outline": "solid",
+      "inFooter": true
+    },
+    {
+      "text": "個案諮詢",
+      "href": "/session",
+      "outline": "solid",
+      "inFooter": true
+    },
+    {
+      "text": "文章分享",
+      "href": "/articles",
+      "outline": "solid",
+      "inFooter": true
+    },
+    {
+      "text": "關於我們",
+      "href": "/about",
+      "outline": "solid",
+      "inFooter": true
+    }
+  ],
+  "zoom": {
+    "overflow": 0,
+    "documentOverflow": false
+  },
+  "reducedMotion": {
+    "dots": 0,
+    "lines": 3,
+    "flowing": false
+  }
+}

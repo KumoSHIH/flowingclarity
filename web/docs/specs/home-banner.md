@@ -17,6 +17,12 @@ Banner 為 ID 固定為 `homeBanner` 的單一文件，只有以下四個必填�
 
 不再提供圖片、替代文字及輪播內容欄位。底圖仍保有前端替代文字。舊資料不需刪除，但不再由 API 讀取；既有文件需補上按鈕欄位並重新發布。
 
+### 全站導覽資料
+
+2026-10-07：`hero-menu` 改由首頁將 `useSiteSettings` 的 `navigationItems` 傳入，與 Header、Footer 共用 `site-settings` 單例中的五項名稱、順序、目的地及輔助說明；不在 `homeBanner` 增設另一份選單。個案諮詢為 `/session`。無有效全站設定時保留已確認的五項本機導覽，但四個目的頁與正式設定發布仍是上線門檻。Banner 自身四欄位及其 fallback 政策不受本次變更影響。
+
+本機整合測試已驗證共用設定傳遞及 hero-menu 輔助說明更新。2026-10-08 遠端內容流以第一項 `accessibleLabel` 測試標記驗證：草稿不影響公開版，發布後 Header、hero-menu、Footer 同步，還原後標記移除且完整內容雜湊一致。Studio 編輯介面與完整目的頁仍待驗收，詳見 [Footer 規格](footer.md)。
+
 ## 文字、按鈕與版面
 
 文字及按鈕的候選共用值見 [全站文字與按鈕候選規格](design-system.md)。Banner 對應「展示標題」「引導敘述」「大型主要按鈕」；目前已使用共用 CSS class 與 token，未另建 Vue 按鈕元件。

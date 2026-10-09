@@ -18,12 +18,16 @@ export default defineConfig({
     structureTool({ structure }),
   ],
   document: {
+    actions: (prev, context) => context.schemaType === 'siteSettings'
+      ? prev.filter(action => !['duplicate', 'delete', 'unpublish'].includes(action.action ?? ''))
+      : prev,
     newDocumentOptions: (prev, { creationContext }) =>
       creationContext.type === 'global'
         ? prev.filter(({ templateId }) => ![
             'homeBanner',
             'courseOverviewPage',
             'courseCategory',
+            'siteSettings',
           ].includes(templateId))
         : prev,
   },

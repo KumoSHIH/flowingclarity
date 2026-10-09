@@ -5,6 +5,7 @@ import type { SiteSettings } from '../types/siteSettings'
 export const siteSettingsFixture: SiteSettings = {
   brandName: '普那生活空間',
   brandLogo: { src: '/assets/logo-main.png', width: 896, height: 496 },
+  footerLogo: { src: '/assets/logo-main-light.png', width: 896, height: 496 },
   brandMessages: {
     englishStatement: 'Pathways to creative arts and well-being',
     closingStatement: '留一點空白，讓感受抵達。',

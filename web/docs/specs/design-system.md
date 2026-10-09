@@ -60,9 +60,11 @@
 
 ## 共用頁尾元件
 
-狀態：2026-10-07 已接續 L「靜默座標」前端實作。首頁與課程頁共用 `app/components/SiteFooter.vue`，傳入同一份型別化全站設定 fixture 與目前路徑；取代先前 home／course 文案變體。元件包含五項導覽、聯絡入口、目前頁標記及會依視窗、頁籤與 reduced-motion 狀態啟停的 SVG 動畫。暖砂色與既有字體沿用共用 token，構圖與動畫維持元件範圍。正式狀態與後續依賴以 [Footer 規格](footer.md) 為準。
+狀態：2026-10-07 已完成 L「靜默座標」本機 CMS 串接及使用者手動樣式同步。首頁與課程頁共用 `SiteFooter.vue`，資料來自 `useSiteSettings`；Header、hero-menu、Footer 共用五項導覽，Header Logo 與 Footer Logo 在同一份設定內獨立維護。無有效資料顯示中性 unavailable 狀態，不以 fixture 補位。
 
-驗證結果：本輪前端測試共 57 項通過，typecheck 與 build 通過；既有 Nuxt／Tailwind sourcemap、Vue Router 型別插件警告未造成失敗。仍待四個導覽目的頁、完整 UI 驗收、Sanity 全站設定與正式內容核准。
+Footer 採主色 bark（`#766254`）表面與 paper 文字，保留 2.4px 連結字距、0.5s 色彩過渡及底部分隔線。Hover／目前頁用 saffron 35% + paper 65% 混色及底線，焦點為 paper 外框。SVG 每輪位移對齊 dash 重複間距，週期為 4.44s／7.614s；離屏／背景頁籤暫停，reduced motion 僅保留靜態線。這些構圖／動態參數僅屬 Footer，不影響其他元件。
+
+新版典型內容量測 320、560、900、1024、1440px，最少／最長內容量測 320、1440px，無文字或操作元素水平溢位。2026-10-08 已完成遠端 schema 與 API 層草稿／發布／還原驗證；最新證據見 [Footer 規格](footer.md) 及 [review](../design/review/footer-content-flow/README.md)。仍待 Studio hostname／編輯介面、正式內容核准、四個目的頁及完整人工驗收。
 
 ### 既有抽取驗證
 

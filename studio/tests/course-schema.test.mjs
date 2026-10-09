@@ -14,6 +14,7 @@ test('course content types are registered with their required semantic fields', 
   assert.deepEqual(
     schemaTypes.map(({ name }) => name),
     [
+      'siteSettings',
       'homeBanner',
       'courseOverviewPage',
       'courseCategory',

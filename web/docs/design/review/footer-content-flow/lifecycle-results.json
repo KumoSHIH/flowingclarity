@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-08",
+  "timezone": "Asia/Taipei",
+  "schemaDeployment": {
+    "deployed": true,
+    "schemas": 1
+  },
+  "studioDeployment": {
+    "deployed": false,
+    "dryRunBuildPassed": true,
+    "reason": "No studio hostname configured"
+  },
+  "before": {
+    "published": 1,
+    "draft": 0,
+    "digest": "a7539e20838f"
+  },
+  "draftIsolation": {
+    "authenticatedDraft": 1,
+    "authenticatedDraftMarker": 1,
+    "anonymousPublished": 1,
+    "anonymousPublicMarker": 0,
+    "anonymousDraftVisible": 0
+  },
+  "publishedTest": {
+    "anonymousPublicMarker": 1,
+    "localApiState": "ready",
+    "syncedConsumers": ["SiteHeader", "HomeBanner.hero-menu", "SiteFooter"]
+  },
+  "restored": {
+    "published": 1,
+    "draft": 0,
+    "anonymousPublicMarker": 0,
+    "contentMatchesBackup": true,
+    "digest": "a7539e20838f"
+  },
+  "schemaValidation": {
+    "validDocuments": 1,
+    "errors": 0,
+    "warnings": 0,
+    "infoMarkers": 0,
+    "referencesValid": true
+  }
+}

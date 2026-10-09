@@ -38,6 +38,7 @@ Sanity 為正式內容管理方式。課程分類與授課形式如下：
 ### 目前實作
 
 - 技術架構為 Nuxt 4、Vue 3、TypeScript 與 Tailwind CSS 4。
+- 全站設定已完成 Sanity 單例、遠端 schema、published-only 查詢及前台串接：Header、hero-menu、Footer 共用五項導覽；Header Logo 與 Footer Logo 在同一文件內獨立設定。2026-10-08 已驗證草稿隔離、匿名發布讀取、三處同步及完整還原；目前公開文件未設定 Footer Logo，因此顯示品牌文字備援。Studio 尚無部署 hostname，且四個目的頁尚未建立，仍是發布門檻。
 - 首頁包含品牌介紹、活動、課程與聯絡區塊，內容仍為示範資料；課程區塊尚未提供報名連結。
 - Banner 從 Sanity 讀取已發布的大標題、敘述、按鈕文字及按鈕連結；內容不完整或讀取失敗時使用本機示範內容。玫瑰底圖、課程分類與動畫由前端維護。
 - `/course` 已完成 Sanity 課程總覽、固定分類、課程與梯次 schema、伺服器查詢及 production 內容流驗收；遠端 schema 已部署，公開分類 ID migration 已完成。頁面不再以 fixture 作為主要資料，目前 production 有 1 門初步課程，其餘正式內容仍待內容負責人審核與發布。

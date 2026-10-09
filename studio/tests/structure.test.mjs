@@ -17,6 +17,10 @@ test('the Studio structure exposes singletons, fixed categories and course colle
   const root = structure(S, {}).serialize({ path: [] })
 
   assert.equal(root.id, 'content')
+  const settings = root.items.shift()
+  assert.equal(settings.id, 'site-settings')
+  assert.equal(settings.child.options.id, 'site-settings')
+  assert.equal(settings.child.options.type, 'siteSettings')
   assert.equal(root.items[0].id, 'home-banner')
   assert.equal(root.items[0].child.id, 'homeBanner')
   assert.equal(root.items[0].child.options.id, 'homeBanner')

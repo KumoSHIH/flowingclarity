@@ -1,5 +1,6 @@
 import type { StructureResolver } from 'sanity/structure'
 import { courseCategoryDefinitions } from './schemaTypes/courseCategory.ts'
+import { siteSettingsId } from './schemaTypes/siteSettings.ts'
 
 const courseCategories = Object.values(courseCategoryDefinitions)
 
@@ -8,6 +9,9 @@ export const structure: StructureResolver = (S) =>
     .id('content')
     .title('內容')
     .items([
+      S.listItem().id('site-settings').title('全站共用設定').child(
+        S.document().id(siteSettingsId).schemaType('siteSettings').documentId(siteSettingsId),
+      ),
       S.listItem()
         .id('home-banner')
         .title('首頁 Banner')

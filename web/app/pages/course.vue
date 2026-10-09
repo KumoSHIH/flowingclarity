@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { siteSettingsFixture } from '../fixtures/siteSettings';
+import { useSiteSettings } from '../composables/useSiteSettings';
 import type {
   CourseOverviewApiResponse,
   CourseOverviewStatus,
 } from "#shared/types/course";
 import { emptyCourseOverviewContent } from "#shared/utils/courseOverview";
+const { settings } = useSiteSettings();
 
 const {
   data: response,
@@ -28,7 +29,7 @@ const overviewStatus = computed<CourseOverviewStatus>(() => {
   <div
     class="course-page mx-auto min-h-screen max-w-[1920px] overflow-clip font-sans"
   >
-    <SiteHeader always-visible />
+    <SiteHeader always-visible :settings="settings" />
 
     <main>
       <CourseOverview
@@ -38,7 +39,8 @@ const overviewStatus = computed<CourseOverviewStatus>(() => {
       />
     </main>
 
-    <SiteFooter :content="siteSettingsFixture" current-path="/course" />
+    <SiteFooter v-if="settings" :content="settings" current-path="/course" />
+    <SiteFooterUnavailable v-else />
   </div>
 </template>
 

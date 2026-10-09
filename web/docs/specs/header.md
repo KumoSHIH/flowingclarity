@@ -35,13 +35,13 @@
 | 4 | 文章分享 | `/articles` | 單元首頁或頁面 |
 | 5 | 關於我們 | `/about` | 單元首頁或頁面 |
 
-固定 Header、Banner 與 Footer 導覽必須共用這份順序與目的地，不得各自維護不同內容。目前 Sanity 尚未建立全站設定 schema，實作仍暫由 `app/constants/siteNavigation.ts` 提供；後續資料化時遷移至同一份 `siteSettings.navigationItems`，不得建立 Header、Banner 或 Footer 專屬導覽欄位。未來若新增項目，總數最多 6 個，且必須先有可到達的站內頁面。
+固定 Header、Banner 的 hero-menu 與 Footer 導覽共用 `siteSettings.navigationItems`；頁面透過 `useSiteSettings` 取得一次設定再傳入三處。無有效設定時 Header／hero-menu 保留已確認的五項導覽常數，但不代表可發布。第一版 schema 固定五項名稱、順序及目的地；新增項目須先修改規格與 validation，並完成目的頁。
 
 ## 後臺共用設定方向
 
-後續在 Sanity 建立工作名稱為 `siteSettings` 的單例文件，全站只允許一份已發布設定。Header 與 Footer 不各自建立 `headerSettings`、`footerSettings` 或重複的品牌、Logo、導覽欄位；共用品牌識別與 `navigationItems` 由同一文件及同一查詢取得。Footer 專用的聯絡、社群、品牌主張與版權欄位也收在此單例的對應群組，以欄位語意而非畫面位置命名。
+Sanity 使用 `siteSettings` 單例（固定 ID `site-settings`）。Header 與 Footer 共用品牌名稱與導覽，但依使用者要求分別使用 `brandLogo`（Header Logo）與 `footerLogo`（Footer Logo）；兩者不互相備援，缺圖顯示品牌名稱。不另建 `headerSettings` 或 `footerSettings`。Footer 聯絡、社群、品牌主張及版權仍放在同一文件的語意群組。
 
-目前 `studio/schemaTypes/index.ts` 未註冊此 schema，本節只確認資料關係與後續方向，不代表 schema、Studio 表單、查詢或正式資料已完成。建立 schema 時須提供單例結構、固定文件 ID、欄位驗證、預覽及防止新增重複文件的 Studio 結構設定。
+2026-10-08 已部署 schema，並以現有公開文件完成草稿隔離、發布後匿名讀取、Header／hero-menu／Footer 同步及原內容還原。Studio 網頁尚無 hostname，未完成實際編輯介面的欄位操作驗收；Header 整體功能驗收也仍受四個目的頁阻擋。
 
 ## 狀態與行為
 
@@ -70,5 +70,5 @@ Header 使用 `header`，主要導覽使用具名稱的 `nav`；品牌為可操�
 
 - `/events`、`/course`、`/session`、`/articles`、`/about` 的頁面內容與交付時程是 Header 實作的依賴。
 - 若 Header 要跨頁共用，需確認目前頁標示方式，以及品牌入口在首頁是否重新載入或捲回頂端。
-- 後臺階段需建立 `siteSettings` 單例、共享查詢、欄位驗證及缺值政策；在此之前不得把現有前端常數記載為已完成的 Sanity 整合。
+- 全站設定串接、遠端 schema 與 API 層草稿／發布驗收已完成；仍需正式內容核准、Studio hostname／編輯介面驗收及四個目的頁。查詢失敗時品牌入口只顯示「首頁」，不使用未核准品牌 fixture。
 - 設計階段需提供桌面／行動視覺稿與品牌文字備援樣式；開發階段需統一三處導覽資料，並補齊焦點、路由與目的頁面可到達性的回歸測試。

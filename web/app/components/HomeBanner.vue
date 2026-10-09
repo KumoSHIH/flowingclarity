@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import { useRoseAtlasAnimation } from "../composables/useRoseAtlasAnimation";
 import { siteNavigationItems } from "../constants/siteNavigation";
+import type { SiteNavigationItem } from '../constants/siteNavigation';
 
 import {
   fallbackHomeBanner,
@@ -9,7 +10,8 @@ import {
   type HomeBannerContent,
 } from "#shared/utils/homeBanner";
 
-const props = defineProps<{ banner?: HomeBannerContent | null }>();
+const props = defineProps<{ banner?: HomeBannerContent | null; navigationItems?: readonly SiteNavigationItem[] }>();
+const items = computed<readonly SiteNavigationItem[]>(() => props.navigationItems ?? siteNavigationItems);
 const content = computed(
   () => parseHomeBanner(props.banner) ?? fallbackHomeBanner,
 );
@@ -70,9 +72,10 @@ function selectCategory(id: string, event: MouseEvent) {
     <div ref="atlas" class="home-banner__atlas">
       <nav class="hero-menu" aria-label="首頁主要選單">
         <a
-          v-for="item in siteNavigationItems"
+          v-for="item in items"
           :key="item.href"
           :href="item.href"
+          :aria-label="item.accessibleLabel"
         >
           {{ item.label }}
         </a>

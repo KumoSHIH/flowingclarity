@@ -1,15 +1,22 @@
 <script setup lang="ts">
-import { ref, toRef } from 'vue'
+import { computed, ref, toRef, watch } from 'vue'
+import type { SiteSettings } from '../types/siteSettings'
 import { siteNavigationItems } from '../constants/siteNavigation'
+import type { SiteNavigationItem } from '../constants/siteNavigation'
 import { useSiteHeader } from '../composables/useSiteHeader'
 
 const props = withDefaults(defineProps<{
   revealAfter?: HTMLElement | null
   alwaysVisible?: boolean
+  settings?: SiteSettings | null
 }>(), {
   revealAfter: null,
   alwaysVisible: false,
 })
+
+const logoFailed = ref(false)
+watch(() => props.settings?.brandLogo?.src, () => { logoFailed.value = false })
+const items = computed<readonly SiteNavigationItem[]>(() => props.settings?.navigationItems ?? siteNavigationItems)
 
 const menuButton = ref<HTMLButtonElement | null>(null)
 const navigation = ref<HTMLElement | null>(null)
@@ -38,18 +45,21 @@ const {
   >
     <a
       class="home-sticky-header__brand"
-      href="/"
-      aria-label="普那生活空間首頁"
+      :href="settings?.brandDestination ?? '/'"
+      :aria-label="settings ? `${settings.brandName}首頁` : '首頁'"
       @click="closeMobileMenu()"
     >
       <img
+        v-if="settings?.brandLogo && !logoFailed"
         class="home-sticky-header__brand-logo"
-        src="/assets/logo-main.png"
+        :src="settings.brandLogo.src"
         alt=""
-        width="896"
-        height="496"
+        :width="settings.brandLogo.width"
+        :height="settings.brandLogo.height"
         draggable="false"
+        @error="logoFailed = true"
       />
+      <span v-else class="leading-normal">{{ settings?.brandName ?? '首頁' }}</span>
     </a>
     <button
       ref="menuButton"
@@ -74,9 +84,10 @@ const {
       aria-label="主要選單"
     >
       <a
-        v-for="item in siteNavigationItems"
+        v-for="item in items"
         :key="item.href"
         :href="item.href"
+        :aria-label="item.accessibleLabel"
         @click="closeMobileMenu()"
       >
         {{ item.label }}

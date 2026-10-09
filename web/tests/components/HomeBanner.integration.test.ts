@@ -28,6 +28,7 @@ it('connects the homepage API content to the Banner and retains fallback during 
         HomeCourses: true,
         HomeContact: true,
         SiteFooter: true,
+        SiteFooterUnavailable: true,
       },
     },
   })
