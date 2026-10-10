@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>課程內頁響應式整合版｜章節潮汐</title>
+  <style>
+    @font-face {
+      font-family: "Noto Serif TC";
+      src: url("../../public/fonts/NotoSerifTC-Variable.ttf") format("truetype");
+      font-weight: 200 900;
+      font-display: swap;
+    }
+
+    :root {
+      --paper: #f8f5ef;
+      --sand: #e8dfd2;
+      --ink: #38342e;
+      --muted: #696158;
+      --line: #cec3b5;
+      --bark: #766254;
+      --oxblood: #392618;
+      --night: #241710;
+      --saffron: #f8bf4c;
+      --persimmon: #df5b35;
+      --white: #f7f6f4;
+      --serif: "Noto Serif TC", "Songti TC", serif;
+      --sans: "Noto Sans TC", "PingFang TC", system-ui, sans-serif;
+      color-scheme: light;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.9;
+      letter-spacing: .045em;
+    }
+    body::selection { color: var(--white); background: var(--bark); }
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    button, a { font: inherit; }
+    a { color: inherit; }
+    button { color: inherit; }
+    :focus-visible { outline: 2px solid var(--persimmon); outline-offset: 5px; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: var(--sand); }
+    ::-webkit-scrollbar-thumb { background: var(--bark); border: 2px solid var(--sand); }
+
+    .display {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 400;
+      line-height: 1.18;
+      letter-spacing: .045em;
+      text-wrap: balance;
+    }
+    .lede { margin: 0; font-size: clamp(17px, 1.35vw, 21px); line-height: 1.9; }
+    .body-copy { margin: 0; max-width: 70ch; color: var(--muted); line-height: 2; }
+    .asset-label {
+      position: absolute;
+      z-index: 3;
+      right: 16px;
+      bottom: 16px;
+      padding: 5px 9px;
+      color: var(--white);
+      background: rgba(36, 23, 16, .78);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .14em;
+    }
+
+    .status-bar {
+      display: grid;
+      grid-template-columns: 1.4fr repeat(3, 1fr);
+      min-height: 54px;
+      color: var(--white);
+      background: var(--night);
+      border-bottom: 1px solid rgba(255,255,255,.14);
+      font-size: 10px;
+      letter-spacing: .13em;
+    }
+    .status-bar > div {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 24px;
+      border-right: 1px solid rgba(255,255,255,.13);
+    }
+    .status-bar strong { color: var(--saffron); font-size: 11px; }
+    .status-bar .active { color: var(--night); background: var(--saffron); }
+    .status-bar .active strong { color: var(--night); }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 88px;
+      padding: 0 clamp(28px, 5.4vw, 84px);
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+    }
+    .logo img { width: 132px; height: auto; object-fit: contain; }
+    .site-nav { display: flex; gap: 38px; }
+    .site-nav a {
+      position: relative;
+      padding: 10px 0;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .15em;
+    }
+    .site-nav a[aria-current="page"]::after {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: var(--saffron);
+      content: "";
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 58%) minmax(0, 42%);
+      min-height: 720px;
+      color: var(--white);
+      background: var(--oxblood);
+    }
+    .hero__visual { position: relative; z-index: 1; min-height: 720px; overflow: visible; }
+    .hero__visual > img { position: absolute; inset: 0; }
+    .hero__visual::after {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 68%, rgba(57,38,24,.28));
+      content: "";
+    }
+    .hero__title {
+      position: absolute;
+      z-index: 2;
+      right: -100px;
+      bottom: 86px;
+      max-width: 610px;
+      font-size: clamp(66px, 6.4vw, 104px);
+      line-height: 1.05;
+      color: var(--white);
+    }
+    .hero__copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 106px clamp(54px, 6vw, 112px) 72px 142px;
+    }
+    .hero__copy .lede { max-width: 30ch; }
+    .hero__rule { width: 100%; margin: 32px 0 22px; border: 0; border-top: 1px solid rgba(255,255,255,.25); }
+    .hero__meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 30px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 11px;
+    }
+    .hero__meta strong { display: block; margin-bottom: 2px; color: var(--saffron); letter-spacing: .12em; }
+    .primary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      min-height: 82px;
+      padding: 0 30px;
+      color: var(--white);
+      background: var(--persimmon);
+      border: 0;
+      border-radius: 0;
+      text-decoration: none;
+      font-size: 19px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .25s ease, color .25s ease;
+    }
+    .primary:hover { background: #c94f34; }
+    .primary[disabled] { color: #dfd5ca; background: #8a6153; cursor: not-allowed; }
+    .arrow { position: relative; width: 34px; height: 16px; }
+    .arrow::before { position: absolute; top: 7px; left: 0; width: 32px; border-top: 1px solid currentColor; content: ""; }
+    .arrow::after { position: absolute; top: 3px; right: 0; width: 9px; height: 9px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; transform: rotate(45deg); content: ""; }
+
+    .chapters {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      padding: 0 clamp(28px, 5.4vw, 84px);
+      background: rgba(248,245,239,.96);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+    }
+    .chapters a {
+      display: grid;
+      place-items: center;
+      min-height: 68px;
+      border-right: 1px solid var(--line);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+    }
+    .chapters a:first-child { border-left: 1px solid var(--line); }
+    .chapters a[aria-current="location"] { background: var(--saffron); }
+
+    .intro {
+      display: grid;
+      grid-template-columns: .92fr 1.08fr;
+      gap: clamp(70px, 10vw, 170px);
+      padding: 150px clamp(42px, 7vw, 112px) 176px;
+    }
+    .intro h2 { max-width: 8.5em; font-size: clamp(54px, 5.4vw, 86px); }
+    .intro__copy { padding-top: 18px; }
+    .intro__copy .lede { margin-bottom: 32px; max-width: 34ch; }
+
+    .gallery-lab { padding: 136px clamp(42px, 7vw, 112px) 160px; background: var(--sand); }
+    .gallery-lab__source { display: block; margin-top: 22px; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .12em; }
+    .gallery-lab__head { display: grid; grid-template-columns: 1fr .9fr; gap: 90px; align-items: end; margin-bottom: 70px; }
+    .gallery-lab__head h2 { max-width: 10em; font-size: clamp(50px, 5vw, 78px); }
+    .gallery-lab__controls {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      margin-bottom: 74px;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+    }
+    .gallery-lab__controls button {
+      min-height: 74px;
+      padding: 12px 15px;
+      background: transparent;
+      border: 0;
+      border-right: 1px solid var(--line);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .1em;
+    }
+    .gallery-lab__controls button:last-child { border-right: 0; }
+    .gallery-lab__controls button[aria-selected="true"] { color: var(--paper); background: var(--oxblood); }
+    .gallery-mode[hidden] { display: none; }
+    .gallery-mode__note { display: flex; justify-content: space-between; gap: 40px; margin-top: 38px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 12px; }
+    .gallery-mode__note span:last-child { color: var(--muted); }
+    .photo { position: relative; overflow: hidden; background: var(--bark); }
+    .photo img { transition: transform .9s cubic-bezier(.16,1,.3,1); }
+    .photo:hover img { transform: scale(1.035); }
+    .photo figcaption {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      max-width: 24em;
+      padding: 18px 22px;
+      color: var(--white);
+      background: rgba(36,23,16,.9);
+      font-size: 12px;
+      line-height: 1.7;
+      transform: translateY(0);
+    }
+
+    .collage {
+      position: relative;
+      min-height: 940px;
+    }
+    .collage .photo:nth-child(1) { position: absolute; top: 0; left: 0; width: 57%; height: 450px; }
+    .collage .photo:nth-child(2) { position: absolute; top: 198px; right: 0; width: 38%; height: 525px; }
+    .collage .photo:nth-child(3) { position: absolute; bottom: 0; left: 13%; width: 31%; height: 420px; }
+    .collage .photo:nth-child(4) { position: absolute; right: 22%; bottom: 24px; width: 18%; height: 300px; }
+    .collage__statement {
+      position: absolute;
+      z-index: 2;
+      top: 345px;
+      left: 41%;
+      width: 315px;
+      padding: 32px;
+      color: var(--white);
+      background: var(--bark);
+      font-family: var(--serif);
+      font-size: 23px;
+      line-height: 1.65;
+    }
+
+    .stage-map { display: grid; gap: 76px; }
+    .stage-row { display: grid; grid-template-columns: 145px 1fr; gap: 42px; }
+    .stage-row__label { padding-top: 14px; border-top: 1px solid var(--ink); }
+    .stage-row__label strong { display: block; font-family: var(--serif); font-size: 29px; font-weight: 500; }
+    .stage-row__label span { color: var(--muted); font-size: 11px; }
+    .stage-row__cards { display: grid; grid-template-columns: repeat(12, 1fr); gap: 22px; }
+    .stage-card { grid-column: span 4; }
+    .stage-row:nth-child(2) .stage-card:first-child { grid-column: 1 / span 5; }
+    .stage-row:nth-child(2) .stage-card:nth-child(2) { grid-column: 6 / span 3; margin-top: 76px; }
+    .stage-row:nth-child(2) .stage-card:nth-child(3) { grid-column: 9 / span 4; }
+    .stage-row:nth-child(3) .stage-card:first-child { grid-column: 2 / span 5; }
+    .stage-row:nth-child(3) .stage-card:nth-child(2) { grid-column: 7 / span 5; }
+    .stage-card__image { position: relative; height: 255px; overflow: hidden; background: var(--bark); }
+    .stage-card__image::after { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(36,23,16,.62), transparent 70%); content: ""; }
+    .stage-card h3 { position: absolute; z-index: 2; right: 18px; bottom: 16px; left: 18px; margin: 0; color: var(--white); font-family: var(--serif); font-size: 22px; font-weight: 500; }
+    .stage-card p { margin: 14px 0 0; color: var(--muted); font-size: 13px; line-height: 1.8; }
+
+    .chapter-weave { display: grid; gap: 0; border-top: 1px solid var(--ink); }
+    .weave-row { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(58px, 7vw, 112px); align-items: center; padding: 70px 0; border-bottom: 1px solid var(--line); }
+    .weave-row:nth-child(even) .weave-row__image { order: 2; }
+    .weave-row__image { position: relative; height: 430px; overflow: hidden; background: var(--bark); }
+    .weave-row__copy { max-width: 610px; }
+    .weave-row__copy h3 { margin: 0 0 22px; font-family: var(--serif); font-size: 34px; font-weight: 500; line-height: 1.4; }
+    .weave-row__copy p { margin: 0 0 20px; color: var(--muted); }
+    .weave-row__copy ul { display: grid; gap: 10px; margin: 0; padding-left: 1.25em; line-height: 1.8; }
+    .weave-row__copy li::marker { color: var(--persimmon); }
+
+    .unit-folio { padding: 10px 0 0; }
+    .folio-chapter + .folio-chapter { margin-top: 120px; padding-top: 94px; border-top: 1px solid var(--ink); }
+    .folio-chapter__head { display: grid; grid-template-columns: .72fr 1.28fr; gap: 80px; margin-bottom: 54px; }
+    .folio-chapter__head h3 { margin: 0; font-family: var(--serif); font-size: 42px; font-weight: 500; line-height: 1.35; }
+    .folio-chapter__head p { margin: 0; max-width: 68ch; color: var(--muted); }
+    .folio-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 42px 24px; }
+    .folio-card { grid-column: 1 / span 5; margin: 0; }
+    .folio-card:nth-child(even) { grid-column: 7 / span 5; margin-top: 84px; }
+    .folio-card img { height: 300px; }
+    .folio-card figcaption { display: grid; grid-template-columns: 42px 1fr; gap: 16px; padding-top: 18px; color: var(--muted); line-height: 1.8; }
+    .folio-card figcaption strong { color: var(--ink); font-family: var(--serif); font-size: 22px; font-weight: 500; }
+
+    .method-dossier { display: grid; gap: 110px; }
+    .dossier-lead { display: grid; grid-template-columns: .78fr 1.22fr; gap: 70px; align-items: start; }
+    .dossier-lead__index { position: sticky; top: 104px; padding-top: 18px; border-top: 1px solid var(--ink); }
+    .dossier-lead__index h3 { margin: 0 0 26px; font-family: var(--serif); font-size: 48px; font-weight: 500; line-height: 1.3; }
+    .dossier-lead__index p { margin: 0; max-width: 31ch; color: var(--muted); }
+    .dossier-entries { border-top: 1px solid var(--line); }
+    .dossier-entry { display: grid; grid-template-columns: 78px 1fr; gap: 28px; padding: 36px 0; border-bottom: 1px solid var(--line); }
+    .dossier-entry > strong { color: var(--oxblood); font-size: 12px; }
+    .dossier-entry h4 { margin: 0 0 12px; font-family: var(--serif); font-size: 27px; font-weight: 500; }
+    .dossier-entry p { margin: 0 0 12px; color: var(--muted); }
+    .dossier-entry ul { display: grid; gap: 7px; margin: 0; padding-left: 1.25em; color: var(--muted); }
+    .dossier-gallery { display: grid; grid-template-columns: 1.28fr .72fr; gap: 24px; align-items: start; }
+    .dossier-gallery__main { position: relative; height: 610px; overflow: hidden; }
+    .dossier-gallery__side { display: grid; gap: 24px; }
+    .dossier-gallery__side figure { margin: 0; }
+    .dossier-gallery__side img { height: 255px; }
+    .dossier-gallery__side figcaption { padding-top: 14px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+    .dossier-gallery__statement { padding: 28px; color: var(--white); background: var(--bark); font-family: var(--serif); font-size: 24px; line-height: 1.65; }
+
+    .teacher { display: grid; grid-template-columns: 43% 57%; min-height: 620px; }
+    .teacher__portrait { position: relative; display: grid; place-items: center; padding: 16px; color: var(--white); background: var(--bark); }
+    .teacher__portrait::before, .teacher__portrait::after { position: absolute; width: 122px; height: 122px; border: 1px solid rgba(248,191,76,.28); border-radius: 50%; content: ""; }
+    .teacher__portrait::after { width: 76px; height: 76px; }
+    .teacher__portrait span { z-index: 1; font-size: 10px; letter-spacing: .14em; }
+    .teacher__copy { display: flex; flex-direction: column; justify-content: center; padding: 90px clamp(60px, 8vw, 150px); }
+    .teacher__copy h2 { margin-bottom: 28px; font-size: clamp(48px, 4.6vw, 74px); }
+    .teacher__copy .lede { margin-bottom: 22px; max-width: 31ch; }
+
+    .quote {
+      display: grid;
+      place-items: center;
+      min-height: 520px;
+      padding: 90px 9vw;
+      color: var(--white);
+      text-align: center;
+      background: var(--bark);
+    }
+    .quote blockquote { max-width: 1030px; margin: 0; font-family: var(--serif); font-size: clamp(38px, 4.2vw, 68px); line-height: 1.55; }
+    .quote cite { margin-top: 26px; font-size: 11px; font-style: normal; letter-spacing: .15em; }
+
+    .curriculum { display: grid; grid-template-columns: .8fr 1.2fr; gap: 110px; padding: 150px clamp(42px, 7vw, 112px); }
+    .curriculum__head h2 { margin-bottom: 28px; font-size: clamp(50px, 5vw, 78px); }
+    .accordion { border-top: 1px solid var(--line); }
+    .accordion__item { border-bottom: 1px solid var(--line); }
+    .accordion__button { display: grid; grid-template-columns: 82px 1fr 30px; gap: 16px; align-items: center; width: 100%; min-height: 96px; padding: 0; background: transparent; border: 0; text-align: left; cursor: pointer; }
+    .accordion__button span { color: var(--oxblood); font-size: 11px; font-weight: 700; }
+    .accordion__button strong { font-family: var(--serif); font-size: 20px; font-weight: 500; }
+    .accordion__button i { position: relative; width: 18px; height: 18px; }
+    .accordion__button i::before, .accordion__button i::after { position: absolute; top: 8px; left: 2px; width: 14px; border-top: 1px solid var(--ink); content: ""; }
+    .accordion__button i::after { transform: rotate(90deg); transition: transform .3s ease; }
+    .accordion__button[aria-expanded="true"] i::after { transform: rotate(0); }
+    .accordion__panel { padding: 0 46px 30px 98px; color: var(--muted); line-height: 2; }
+
+    .video { position: relative; min-height: 650px; overflow: hidden; color: var(--white); background: var(--night); }
+    .video::after { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(36,23,16,.86), rgba(36,23,16,.18)); content: ""; }
+    .video__content { position: absolute; z-index: 2; top: 50%; left: clamp(42px, 7vw, 112px); width: min(680px, 52vw); transform: translateY(-50%); }
+    .video__content h2 { margin-bottom: 38px; font-size: clamp(52px, 5.2vw, 82px); }
+    .video__control { position: relative; width: 94px; height: 94px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.7); border-radius: 50%; cursor: not-allowed; }
+    .video__control::after { position: absolute; top: 34px; left: 39px; width: 0; height: 0; border-top: 12px solid transparent; border-bottom: 12px solid transparent; border-left: 18px solid var(--white); content: ""; }
+    .video__status { position: absolute; z-index: 3; right: 24px; bottom: 22px; padding: 7px 11px; color: var(--night); background: var(--saffron); font-size: 10px; font-weight: 700; }
+
+    .audience { display: grid; grid-template-columns: .72fr 1.28fr; gap: 110px; padding: 148px clamp(42px, 7vw, 112px); background: var(--sand); }
+    .audience h2 { font-size: clamp(54px, 5.5vw, 88px); }
+    .audience__copy > p { margin-bottom: 38px; }
+    .audience__list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+    .audience__list li { display: grid; grid-template-columns: 20px 1fr; gap: 18px; align-items: center; min-height: 80px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .audience__list i { width: 7px; height: 7px; background: var(--saffron); border-radius: 50%; }
+
+    .schedule { padding: 144px clamp(42px, 7vw, 112px) 160px; }
+    .schedule__head { display: grid; grid-template-columns: 1fr .8fr; gap: 90px; align-items: end; margin-bottom: 64px; }
+    .schedule__head h2 { max-width: 10em; font-size: clamp(50px, 5vw, 78px); }
+    .schedule__grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+    .schedule__item { position: relative; min-height: 235px; padding: 36px 44px 36px 0; }
+    .schedule__item + .schedule__item { padding-left: 44px; border-left: 1px solid var(--line); }
+    .schedule__item h3 { margin: 0 0 38px; font-family: var(--serif); font-size: 27px; font-weight: 500; }
+    .schedule__item p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.9; }
+    .status { position: absolute; top: 38px; right: 28px; padding: 5px 9px; background: var(--saffron); font-size: 9px; font-weight: 700; }
+
+    .register { display: grid; grid-template-columns: 1fr 1fr; min-height: 600px; color: var(--white); background: var(--night); }
+    .register__copy { display: flex; flex-direction: column; justify-content: space-between; padding: 90px clamp(42px, 7vw, 112px); }
+    .register__copy h2 { margin-bottom: 26px; font-size: clamp(48px, 4.7vw, 76px); }
+    .register__image { position: relative; min-height: 600px; }
+    .register .primary { max-width: 520px; }
+
+    .prototype-note { display: flex; justify-content: space-between; gap: 30px; padding: 22px clamp(28px, 5.4vw, 84px); color: var(--white); background: #150e0a; font-size: 10px; letter-spacing: .12em; }
+    .prototype-note strong { color: var(--saffron); }
+
+    @media (max-width: 1099px) {
+      .status-bar { grid-template-columns: repeat(4, minmax(190px, 1fr)); overflow-x: auto; }
+      .status-bar > div { min-height: 54px; }
+      .hero { grid-template-columns: 1fr; }
+      .hero__visual { min-height: 610px; }
+      .hero__title { right: 7vw; bottom: 54px; }
+      .hero__copy { gap: 70px; padding: 76px 7vw; }
+      .chapters { grid-template-columns: repeat(8, minmax(138px, 1fr)); overflow-x: auto; padding: 0; }
+      .intro, .gallery-lab__head, .teacher, .curriculum, .audience, .schedule__head, .register { grid-template-columns: 1fr; }
+      .intro { gap: 54px; }
+      .gallery-lab__head { gap: 38px; }
+      .gallery-lab__controls { grid-template-columns: repeat(5, minmax(150px, 1fr)); overflow-x: auto; }
+      .teacher__portrait { min-height: 500px; }
+      .curriculum, .audience { gap: 64px; }
+      .register__image { min-height: 520px; }
+    }
+    @media (max-width: 767px) {
+      body { font-size: 16px; letter-spacing: .035em; }
+      .display { letter-spacing: .025em; }
+      .status-bar { grid-template-columns: repeat(4, minmax(168px, 1fr)); scrollbar-width: none; }
+      .status-bar::-webkit-scrollbar, .chapters::-webkit-scrollbar, .gallery-lab__controls::-webkit-scrollbar { display: none; }
+      .status-bar > div { padding: 8px 18px; }
+      .site-header { display: block; min-height: auto; padding: 18px max(20px, env(safe-area-inset-left)) 0 max(20px, env(safe-area-inset-right)); }
+      .logo img { width: 116px; }
+      .site-nav { gap: 28px; margin-top: 16px; overflow-x: auto; }
+      .site-nav a { display: grid; flex: 0 0 auto; place-items: center; min-height: 48px; }
+      .hero { min-height: 0; }
+      .hero__visual { min-height: 430px; }
+      .hero__visual::after { background: linear-gradient(0deg, rgba(57,38,24,.7), transparent 56%); }
+      .hero__title { right: 22px; bottom: 30px; left: 22px; max-width: none; font-size: clamp(48px, 14vw, 62px); }
+      .hero__copy { gap: 48px; padding: 48px 22px 54px; }
+      .hero__copy .lede { max-width: none; }
+      .hero__meta { grid-template-columns: 1fr; gap: 14px; }
+      .primary { min-height: 72px; padding: 0 22px; font-size: 17px; }
+      .chapters { top: 0; grid-template-columns: repeat(8, minmax(122px, 1fr)); scrollbar-width: none; }
+      .chapters a { min-height: 58px; }
+      .intro { gap: 34px; padding: 88px 22px 102px; }
+      .intro h2 { font-size: clamp(44px, 12vw, 56px); }
+      .intro__copy { padding-top: 0; }
+      .gallery-lab { padding: 86px 22px 104px; }
+      .gallery-lab__head { margin-bottom: 46px; }
+      .gallery-lab__head h2 { font-size: clamp(42px, 11.5vw, 54px); }
+      .gallery-lab__controls { grid-template-columns: repeat(5, minmax(142px, 1fr)); margin-right: -22px; margin-bottom: 56px; scrollbar-width: none; }
+      .gallery-lab__controls button { min-height: 64px; }
+      .gallery-mode__note { display: grid; gap: 8px; }
+      .photo:hover img { transform: none; }
+      .photo figcaption { position: static; max-width: none; padding: 15px 17px; background: var(--night); }
+
+      .collage { display: grid; min-height: 0; gap: 26px; }
+      .collage .photo:nth-child(n) { position: relative; inset: auto; width: 88%; height: auto; }
+      .collage .photo:nth-child(even) { margin-left: auto; }
+      .collage .photo img { height: 330px; }
+      .collage .photo:nth-child(3) img { height: 390px; }
+      .collage .photo:nth-child(4) img { height: 280px; }
+      .collage__statement { position: static; width: 88%; margin: -4px 0 8px auto; padding: 26px; font-size: 21px; }
+
+      .stage-map { gap: 66px; }
+      .stage-row { grid-template-columns: 1fr; gap: 28px; }
+      .stage-row__cards { display: grid; grid-template-columns: 1fr; gap: 36px; }
+      .stage-row:nth-child(n) .stage-card:nth-child(n) { grid-column: auto; margin: 0; }
+      .stage-card:nth-child(even) { width: 88%; margin-left: auto !important; }
+      .stage-card__image { height: 290px; }
+
+      .weave-row { grid-template-columns: 1fr; gap: 30px; padding: 54px 0; }
+      .weave-row:nth-child(even) .weave-row__image { order: initial; }
+      .weave-row__image { width: 90%; height: 330px; }
+      .weave-row:nth-child(even) .weave-row__image { margin-left: auto; }
+      .weave-row__copy h3 { font-size: 30px; }
+
+      .folio-chapter + .folio-chapter { margin-top: 86px; padding-top: 72px; }
+      .folio-chapter__head { grid-template-columns: 1fr; gap: 24px; margin-bottom: 44px; }
+      .folio-chapter__head h3 { font-size: 34px; }
+      .folio-grid { display: grid; grid-template-columns: 1fr; gap: 42px; }
+      .folio-card, .folio-card:nth-child(even) { grid-column: auto; width: 88%; margin: 0; }
+      .folio-card:nth-child(even) { margin-left: auto; }
+      .folio-card img { height: 270px; }
+      .folio-card:nth-child(even) img { height: 330px; }
+      .folio-card figcaption { grid-template-columns: 34px 1fr; gap: 12px; }
+
+      .method-dossier { gap: 72px; }
+      .dossier-lead { grid-template-columns: 1fr; gap: 44px; }
+      .dossier-lead__index { position: static; }
+      .dossier-lead__index h3 { font-size: 38px; }
+      .dossier-entry { grid-template-columns: 1fr; gap: 10px; padding: 30px 0; }
+      .dossier-gallery { grid-template-columns: 1fr; gap: 28px; }
+      .dossier-gallery__main { width: 90%; height: 390px; }
+      .dossier-gallery__side { gap: 34px; }
+      .dossier-gallery__side figure { width: 88%; margin-left: auto; }
+      .dossier-gallery__side img { height: 280px; }
+      .dossier-gallery__statement { width: 90%; padding: 24px; font-size: 21px; }
+
+      .teacher { min-height: 0; }
+      .teacher__portrait { min-height: 370px; }
+      .teacher__copy { padding: 72px 22px 84px; }
+      .teacher__copy h2 { font-size: 46px; }
+      .quote { min-height: 440px; padding: 72px 22px; }
+      .quote blockquote { font-size: clamp(32px, 9vw, 43px); }
+      .curriculum { gap: 46px; padding: 92px 22px 104px; }
+      .curriculum__head h2 { font-size: 46px; }
+      .accordion__button { grid-template-columns: 62px 1fr 24px; min-height: 96px; }
+      .accordion__button strong { font-size: 18px; }
+      .accordion__panel { padding: 0 0 28px 78px; }
+      .video { min-height: 560px; }
+      .video::after { background: linear-gradient(0deg, rgba(36,23,16,.92), rgba(36,23,16,.18)); }
+      .video__content { top: auto; right: 22px; bottom: 54px; left: 22px; width: auto; transform: none; }
+      .video__content h2 { margin-bottom: 30px; font-size: 45px; }
+      .video__control { width: 80px; height: 80px; }
+      .video__control::after { top: 28px; left: 33px; }
+      .video__status { top: 20px; right: 18px; bottom: auto; }
+      .audience { gap: 44px; padding: 92px 22px 104px; }
+      .audience h2 { font-size: 52px; }
+      .audience__list li { min-height: 88px; }
+      .schedule { padding: 92px 22px 108px; }
+      .schedule__head { gap: 30px; margin-bottom: 50px; }
+      .schedule__head h2 { font-size: 46px; }
+      .schedule__grid { grid-template-columns: 1fr; }
+      .schedule__item { min-height: 220px; padding: 32px 0; }
+      .schedule__item + .schedule__item { padding-left: 0; border-top: 1px solid var(--line); border-left: 0; }
+      .schedule__item h3 { max-width: 9em; }
+      .status { top: 34px; right: 0; }
+      .register { min-height: 0; }
+      .register__copy { min-height: 590px; padding: 76px 22px 58px; }
+      .register__copy h2 { font-size: 47px; }
+      .register__image { min-height: 440px; }
+      .prototype-note { display: grid; gap: 7px; padding: 22px 20px calc(22px + env(safe-area-inset-bottom)); line-height: 1.7; }
+    }
+    @media (max-width: 359px) {
+      .hero__title, .intro h2, .gallery-lab__head h2, .curriculum__head h2, .schedule__head h2, .register__copy h2 { font-size: 40px; }
+      .video__content h2 { font-size: 38px; }
+      .folio-card, .folio-card:nth-child(even), .stage-card:nth-child(even), .dossier-gallery__side figure { width: 94%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="status-bar" aria-label="課程摘要">
+      <div><strong>日式回春面部按摩</strong><span>三階段實體培訓</span></div>
+      <div class="active"><strong>第一階</strong><span>資訊待確認</span></div>
+      <div><strong>第二階</strong><span>尚未開放</span></div>
+      <div><strong>第三階</strong><span>尚未開放</span></div>
+    </div>
+    <header class="site-header">
+      <a class="logo" href="/" aria-label="普那生活空間首頁"><img src="../../public/assets/logo-main.png" alt="普那生活空間"></a>
+      <nav class="site-nav" aria-label="主要選單"><a href="/course">近期課程</a><a href="/course" aria-current="page">課程探索</a><a href="/article">文章分享</a><a href="/consultation">個案諮詢</a></nav>
+    </header>
+
+    <section class="hero" id="top">
+      <div class="hero__visual"><img src="../../public/images/home-banner.jpg" alt="午後光線照亮的身體工作空間"><span class="asset-label">舊站影像／設計示意</span><h1 class="hero__title display">日式回春<br>面部按摩</h1></div>
+      <div class="hero__copy"><div><p class="lede">以溫柔的碰觸，讓臉部與身體重新記得放鬆。從肩頸、面部到頭部，學習一套由內而外滋養自己的完整手法。</p><hr class="hero__rule"><ul class="hero__meta"><li><strong>授課形式</strong>實體培訓</li><li><strong>課程結構</strong>三階段</li><li><strong>每日時間</strong>待確認（舊站 09:30–18:30）</li><li><strong>招生狀態</strong>資訊待確認</li></ul></div><a class="primary" href="#schedule"><span>查看梯次與報名</span><i class="arrow" aria-hidden="true"></i></a></div>
+    </section>
+
+    <nav class="chapters" aria-label="頁內章節"><a href="#about" aria-current="location">課程介紹</a><a href="#gallery">學習片段</a><a href="#teacher">帶領者</a><a href="#curriculum">課程架構</a><a href="#video">課程影片</a><a href="#audience">適合對象</a><a href="#schedule">日期報名</a><a href="#register">報名狀態</a></nav>
+
+    <section class="intro" id="about"><h2 class="display">愈是溫柔，<br>愈能讓身體<br>鬆開。</h2><div class="intro__copy"><p class="lede">面部肌肉十分細緻敏感。這份工作不是矯正，而是透過輕彈、按壓與手指漫步，讓我們練習聽見身體。</p><p class="body-copy">課程融合穴位、傳統日式臉部護理與當代身心學。從肩頸的碰觸開始，撫慰日常蓄積的壓力，也在身體形成一份新的註記：我可以慢下來，也可以溫柔地接受自己。正式內容仍須由內容負責人核准。</p></div></section>
+
+    <section class="gallery-lab" id="gallery">
+      <div class="gallery-lab__head"><h2 class="display">從觀看，走向手感與細微變化。</h2><p class="body-copy">同一組課程影像可依內容目的選擇不同拓撲。預設使用 A2 編輯拼貼；其餘四款支援分階、長段落、條列與圖片說明，其中三款依參考圖轉化為更具章節感的響應式閱讀模式。<span class="gallery-lab__source">舊站影像／設計示意</span></p></div>
+      <div class="gallery-lab__controls" role="tablist" aria-label="多圖排版模式">
+        <button id="gallery-tab-collage" role="tab" aria-selected="true" aria-controls="gallery-panel-collage" data-gallery="collage">編輯拼貼</button>
+        <button id="gallery-tab-stages" role="tab" aria-selected="false" aria-controls="gallery-panel-stages" data-gallery="stages" tabindex="-1">分階圖譜</button>
+        <button id="gallery-tab-weave" role="tab" aria-selected="false" aria-controls="gallery-panel-weave" data-gallery="weave" tabindex="-1">交錯章節</button>
+        <button id="gallery-tab-folio" role="tab" aria-selected="false" aria-controls="gallery-panel-folio" data-gallery="folio" tabindex="-1">單元圖冊</button>
+        <button id="gallery-tab-dossier" role="tab" aria-selected="false" aria-controls="gallery-panel-dossier" data-gallery="dossier" tabindex="-1">方法檔案</button>
+      </div>
+
+      <div class="gallery-mode" id="gallery-panel-collage" role="tabpanel" aria-labelledby="gallery-tab-collage">
+        <div class="collage">
+          <figure class="photo"><img src="../../public/images/course-detail/facial-class.jpg" alt="接受臉部與肩頸按摩的示意畫面"><figcaption>大景建立觸碰的方向與課堂情境。</figcaption></figure>
+          <figure class="photo"><img src="../../public/images/course-detail/facial-portrait-4.jpg" alt="人物臉部局部特寫示意"><figcaption>靠近表情，觀察細微放鬆。</figcaption></figure>
+          <figure class="photo"><img src="../../public/images/course-detail/facial-portrait-3.jpg" alt="人物眼部局部特寫示意"><figcaption>以局部視線形成觀看停頓。</figcaption></figure>
+          <figure class="photo"><img src="../../public/images/course-detail/facial-portrait-7.jpg" alt="人物肖像局部特寫示意"><figcaption>直幅特寫承接完整個案的感受。</figcaption></figure>
+          <p class="collage__statement">觸碰不是矯正；是讓身體感覺自己被聽見。</p>
+        </div>
+        <div class="gallery-mode__note"><strong>A2｜編輯拼貼</strong><span>適合方法介紹、品牌形象與情緒建立。</span></div>
+      </div>
+
+      <div class="gallery-mode" id="gallery-panel-stages" role="tabpanel" aria-labelledby="gallery-tab-stages" hidden>
+        <div class="stage-map">
+          <section class="stage-row"><div class="stage-row__label"><strong>第一階</strong><span>OPENING</span></div><div class="stage-row__cards">
+            <article class="stage-card"><div class="stage-card__image"><img src="../../public/images/course-detail/facial-class.jpg" alt="肩頸觸碰練習示意"><h3>向恩典敞開</h3></div><p>從肩頸與呼吸開始，讓接受碰觸的人逐步安定。</p></article>
+            <article class="stage-card"><div class="stage-card__image"><img src="../../public/images/home-banner-2.jpg" alt="身體工作空間示意"><h3>紮根與理解</h3></div><p>辨認支持、力道與節奏之間的關係。</p></article>
+            <article class="stage-card"><div class="stage-card__image"><img src="../../public/images/course-detail/facial-portrait-4.jpg" alt="臉部觀察練習示意"><h3>伸展與接收</h3></div><p>從局部觀察身體兩側與表情的細微差異。</p></article>
+          </div></section>
+          <section class="stage-row"><div class="stage-row__label"><strong>第二階</strong><span>DEEPENING</span></div><div class="stage-row__cards">
+            <article class="stage-card"><div class="stage-card__image"><img src="../../public/images/home-banner.jpg" alt="按摩床與課程空間示意"><h3>骨盆與支撐</h3></div><p>把臉部、肩頸與身體中心視為完整系統。</p></article>
+            <article class="stage-card"><div class="stage-card__image"><img src="../../public/images/course-detail/facial-portrait-3.jpg" alt="眼部特寫觀察示意"><h3>核心</h3></div><p>練習在操作中回到自己的呼吸與重心。</p></article>
+            <article class="stage-card"><div class="stage-card__image"><img src="../../public/images/course-detail/facial-class.jpg" alt="按摩手法練習示意"><h3>挺立</h3></div><p>讓技巧不只正確，也能保持覺察與連續。</p></article>
+          </div></section>
+          <section class="stage-row"><div class="stage-row__label"><strong>第三階</strong><span>INTEGRATION</span></div><div class="stage-row__cards">
+            <article class="stage-card"><div class="stage-card__image"><img src="../../public/images/course-detail/facial-portrait-7.jpg" alt="臉部與頸部整合示意"><h3>頸部、喉嚨與面部</h3></div><p>整合局部技巧，回到完整個案的閱讀。</p></article>
+            <article class="stage-card"><div class="stage-card__image"><img src="../../public/images/course-detail/facial-portrait-1.jpg" alt="人物肖像整合示意"><h3>整合</h3></div><p>辨認上下、左右、內在與外在，完成一套可實踐的方法。</p></article>
+          </div></section>
+        </div>
+        <div class="gallery-mode__note"><strong>新模式｜分階圖譜</strong><span>適合課綱複雜、需要把案例或技法對應到階段的課程。</span></div>
+      </div>
+
+      <div class="gallery-mode" id="gallery-panel-weave" role="tabpanel" aria-labelledby="gallery-tab-weave" hidden>
+        <div class="chapter-weave">
+          <article class="weave-row"><div class="weave-row__image"><img src="../../public/images/course-detail/facial-class.jpg" alt="肩頸與臉部觸碰練習示意"></div><div class="weave-row__copy"><h3>初階｜身體與觸碰的方向</h3><p>先從呼吸、支持與界線開始，理解技巧發生之前，操作者如何安定自己，也如何讓接受碰觸的人保有選擇。</p><ul><li>辨認肩頸、臉部與頭部的支撐關係</li><li>練習手掌貼合、移動速度與壓力變化</li><li>在操作中觀察呼吸、表情與肌肉反應</li><li>建立清楚的開始、轉換與結束節奏</li></ul></div></article>
+          <article class="weave-row"><div class="weave-row__image"><img src="../../public/images/home-banner-2.jpg" alt="安靜的身體工作空間示意"></div><div class="weave-row__copy"><h3>進階｜把局部放回完整個案</h3><p>當手法逐漸熟悉，學習焦點從「做對步驟」移向「讀懂正在發生什麼」，並依個案狀態調整次序與停留時間。</p><ul><li>整合後頸、頭部、頭皮與臉部技巧</li><li>比較左右兩側張力與活動差異</li><li>辨認需要停留、轉換或減輕力道的訊號</li><li>以完整流程記錄觀察與操作選擇</li></ul></div></article>
+          <article class="weave-row"><div class="weave-row__image"><img src="../../public/images/course-detail/facial-portrait-4.jpg" alt="人物臉部局部觀察示意"></div><div class="weave-row__copy"><h3>整合｜讓技法成為一種覺察</h3><p>最後不是累積更多招式，而是能在關係中保持清楚：知道自己如何碰觸、對方如何回應，以及什麼時候應該慢下來。</p><ul><li>整合經絡、穴位與溫和指壓步驟</li><li>建立課前溝通、操作與課後回饋</li><li>尊重個別差異，不以固定效果作承諾</li><li>把所學帶回日常照顧或專業工作</li></ul></div></article>
+        </div>
+        <div class="gallery-mode__note"><strong>新模式｜交錯章節</strong><span>適合每個階段都有完整說明、條列與代表圖片的課程。</span></div>
+      </div>
+
+      <div class="gallery-mode" id="gallery-panel-folio" role="tabpanel" aria-labelledby="gallery-tab-folio" hidden>
+        <div class="unit-folio">
+          <section class="folio-chapter"><div class="folio-chapter__head"><h3>單元一｜建立觸碰的基礎語彙</h3><p>這個單元以觀看與反覆操作建立共同語言。圖片不只是成果展示，而是用來辨認手位、身體距離、視線方向與接受者反應；每一張都對應一個可被討論的學習重點。</p></div><div class="folio-grid">
+            <figure class="folio-card"><img src="../../public/images/course-detail/facial-class.jpg" alt="臉部與肩頸觸碰示意"><figcaption><strong>一</strong><span>先確認頸部支撐，再開始臉部操作；觀察接受者是否能維持自然呼吸。</span></figcaption></figure>
+            <figure class="folio-card"><img src="../../public/images/home-banner-2.jpg" alt="安靜課程空間示意"><figcaption><strong>二</strong><span>空間、光線與操作位置共同影響安全感，正式課堂需預留移動與休息範圍。</span></figcaption></figure>
+            <figure class="folio-card"><img src="../../public/images/course-detail/facial-portrait-3.jpg" alt="眼部局部觀察示意"><figcaption><strong>三</strong><span>由局部觀察表情與兩側差異，不急著判斷或修正。</span></figcaption></figure>
+            <figure class="folio-card"><img src="../../public/images/course-detail/facial-portrait-7.jpg" alt="人物肖像觀察示意"><figcaption><strong>四</strong><span>把局部訊號放回完整的人，讓技巧服務於當下的需要。</span></figcaption></figure>
+          </div></section>
+          <section class="folio-chapter"><div class="folio-chapter__head"><h3>單元二｜從固定步驟走向回應</h3><p>進階學習將規律與自由放在一起：先熟悉可重複的流程，再練習根據張力、呼吸與回饋調整。這不是任意改變，而是建立在清楚觀察、溝通與界線之上的選擇。</p></div><div class="folio-grid">
+            <figure class="folio-card"><img src="../../public/images/home-banner.jpg" alt="按摩床與課程環境示意"><figcaption><strong>一</strong><span>規劃完整流程與器材位置，讓操作者能保持穩定移動。</span></figcaption></figure>
+            <figure class="folio-card"><img src="../../public/images/course-detail/facial-portrait-1.jpg" alt="人物臉部特寫示意"><figcaption><strong>二</strong><span>透過課前與課後觀察，記錄感受變化而不宣稱固定成效。</span></figcaption></figure>
+          </div></section>
+        </div>
+        <div class="gallery-mode__note"><strong>新模式｜單元圖冊</strong><span>適合一段完整導言搭配多張操作圖、作品圖與長圖說。</span></div>
+      </div>
+
+      <div class="gallery-mode" id="gallery-panel-dossier" role="tabpanel" aria-labelledby="gallery-tab-dossier" hidden>
+        <div class="method-dossier">
+          <div class="dossier-lead"><div class="dossier-lead__index"><h3>方法不是清單，而是一連串有根據的選擇。</h3><p>將長篇課程內容整理成可掃讀的檔案：先看學習主題，再閱讀說明與細項，最後用圖片回到實際操作情境。</p></div><div class="dossier-entries">
+            <article class="dossier-entry"><strong>第一組</strong><div><h4>身體定位與支持</h4><p>理解操作者站位、床面高度與接受者支撐方式如何影響力道與連續性。</p><ul><li>肩頸、頭部與手臂的支撐位置</li><li>操作中重心轉移與手位銜接</li><li>呼吸變化與休息訊號</li></ul></div></article>
+            <article class="dossier-entry"><strong>第二組</strong><div><h4>表情、張力與節奏</h4><p>練習以觀察取代推測，從表情、肌肉回彈與口頭回饋調整操作。</p><ul><li>左右兩側差異與局部敏感度</li><li>速度、壓力及停留時間</li><li>開始、轉換與結束的清楚提示</li></ul></div></article>
+            <article class="dossier-entry"><strong>第三組</strong><div><h4>完整個案與界線</h4><p>把技巧放回溝通與同意之中，建立可重複、可說明也能因人調整的完整流程。</p><ul><li>課前需求確認與禁忌資訊</li><li>操作過程中的持續同意</li><li>課後回饋、記錄與自我照顧</li></ul></div></article>
+          </div></div>
+          <div class="dossier-gallery"><div class="dossier-gallery__main"><img src="../../public/images/course-detail/facial-class.jpg" alt="完整臉部與肩頸操作情境示意"></div><div class="dossier-gallery__side"><figure><img src="../../public/images/course-detail/facial-portrait-3.jpg" alt="眼部觀察示意"><figcaption>局部觀察：記錄差異，不急著賦予固定意義。</figcaption></figure><figure><img src="../../public/images/course-detail/facial-portrait-4.jpg" alt="臉部兩側觀察示意"><figcaption>雙側比較：讓次序與力道回應當下狀態。</figcaption></figure><div class="dossier-gallery__statement">技法提供路徑；覺察決定每一步如何發生。</div></div></div>
+        </div>
+        <div class="gallery-mode__note"><strong>新模式｜方法檔案</strong><span>適合內容密集、需要條列細項並保留大幅情境照片的培訓。</span></div>
+      </div>
+    </section>
+
+    <section class="teacher" id="teacher"><div class="teacher__portrait"><span>帶領者正式肖像待提供</span></div><div class="teacher__copy"><h2 class="display">威珀爾<br>Vipal Robert Cohen</h2><p class="lede">從心理學、靜心與身體工作出發，將日式面部按摩帶入跨文化的教學實踐。</p><p class="body-copy">本區保留長文空間，讓資格、方法來源與生命經歷可以被完整閱讀；肖像未核准前不以其他人物照片代替。姓名與經歷正式發布前仍須確認。</p></div></section>
+
+    <section class="quote"><blockquote>「當我們慢下來、靜下來，不是去矯正，而是陪伴與傾聽。」</blockquote><cite>內容結構示意・正式發布前須取得核准</cite></section>
+
+    <section class="curriculum" id="curriculum"><div class="curriculum__head"><h2 class="display">三階段，讓技巧成為一種覺察。</h2><p class="body-copy">每一階都能展開閱讀；預設只開啟第一階，避免長篇課綱一次淹沒讀者。</p></div><div class="accordion">
+      <div class="accordion__item"><button class="accordion__button" type="button" aria-expanded="true" aria-controls="course-panel-1"><span>第一階</span><strong>日式回春面部按摩初級班</strong><i aria-hidden="true"></i></button><div class="accordion__panel" id="course-panel-1">學習日本對健康和美麗的觀念、日式面部按摩技巧、頸前區按摩，以及手工淋巴引流技巧。</div></div>
+      <div class="accordion__item"><button class="accordion__button" type="button" aria-expanded="false" aria-controls="course-panel-2"><span>第二階</span><strong>高級班：整合完整個案</strong><i aria-hidden="true"></i></button><div class="accordion__panel" id="course-panel-2" hidden>深化面部按摩、後頸、頭部與頭皮技巧，並整合前兩階段，建立完整個案流程。</div></div>
+      <div class="accordion__item"><button class="accordion__button" type="button" aria-expanded="false" aria-controls="course-panel-3"><span>第三階</span><strong>除皺指壓與能量激活</strong><i aria-hidden="true"></i></button><div class="accordion__panel" id="course-panel-3" hidden>認識面部經絡、穴位與指壓步驟，以溫和方式支持臉部能量流動。</div></div>
+    </div></section>
+
+    <section class="video" id="video"><img src="../../public/images/course-detail/facial-class.jpg" alt="課程影片封面示意"><span class="asset-label">舊站影像／設計示意</span><div class="video__content"><h2 class="display">先看見碰觸的節奏，再決定是否走進課堂。</h2><button class="video__control" type="button" disabled aria-label="課程影片尚未上架"></button></div><span class="video__status">課程影片待上架</span></section>
+
+    <section class="audience" id="audience"><h2 class="display">這門課<br>適合誰</h2><div class="audience__copy"><p class="body-copy">不需要按摩基礎。課程以大量親手操練，支持你把所學帶回日常照顧或專業工作。</p><ul class="audience__list"><li><i aria-hidden="true"></i><span>對美與按摩感興趣，想學習完整手法的人</span></li><li><i aria-hidden="true"></i><span>希望深化觸碰品質的美容師與身體工作者</span></li><li><i aria-hidden="true"></i><span>想在照顧他人的同時，也練習與自己相處的人</span></li></ul></div></section>
+
+    <section class="schedule" id="schedule"><div class="schedule__head"><h2 class="display">把參與條件看清楚，再安心決定。</h2><p class="body-copy">日期、地點與時間取自舊站內容作版面示意；正式發布前需由內容負責人確認。</p></div><div class="schedule__grid"><article class="schedule__item"><h3>高雄・第一階</h3><span class="status">日期待確認</span><p>舊站時間 09:30–18:30・地點待確認<br>名額與費用待內容負責人確認。</p></article><article class="schedule__item"><h3>高雄・第二階</h3><span class="status">尚未開放</span><p>需完成第一階；日期、名額與報名狀態待發布。</p></article></div></section>
+
+    <section class="register" id="register"><div class="register__copy"><div><h2 class="display">為自己留下一段完整的學習時間。</h2><p class="body-copy" style="color:#d8c7b8">報名連結與本期招生資訊尚未核准，因此不顯示假價格、倒數或可點擊的報名連結。</p></div><button class="primary" type="button" disabled><span>報名資訊待確認</span><i class="arrow" aria-hidden="true"></i></button></div><div class="register__image"><img src="../../public/images/course-detail/facial-portrait-1.jpg" alt="人物臉部特寫，舊站影像設計示意"><span class="asset-label">舊站影像／設計示意</span></div></section>
+    <footer class="prototype-note"><strong>章節潮汐｜響應式整合稿</strong><span>依指定來源組合十個區塊；多圖區提供 A2、分階圖譜與三款長文模式，桌機與手機皆已完成。</span></footer>
+  </main>
+
+  <script>
+    const galleryTabs = [...document.querySelectorAll('[data-gallery]')];
+    const galleryPanels = [...document.querySelectorAll('.gallery-mode')];
+    function selectGallery(tab, focus = false) {
+      galleryTabs.forEach((item) => {
+        const active = item === tab;
+        item.setAttribute('aria-selected', String(active));
+        item.tabIndex = active ? 0 : -1;
+      });
+      galleryPanels.forEach((panel) => { panel.hidden = panel.id !== tab.getAttribute('aria-controls'); });
+      const url = new URL(location.href);
+      url.searchParams.set('gallery', tab.dataset.gallery);
+      history.replaceState(null, '', url);
+      if (focus) tab.focus();
+    }
+    galleryTabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => selectGallery(tab));
+      tab.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        let next = index;
+        if (event.key === 'ArrowRight') next = (index + 1) % galleryTabs.length;
+        if (event.key === 'ArrowLeft') next = (index - 1 + galleryTabs.length) % galleryTabs.length;
+        if (event.key === 'Home') next = 0;
+        if (event.key === 'End') next = galleryTabs.length - 1;
+        selectGallery(galleryTabs[next], true);
+      });
+    });
+    const requestedGallery = new URLSearchParams(location.search).get('gallery');
+    const requestedTab = galleryTabs.find((tab) => tab.dataset.gallery === requestedGallery);
+    if (requestedTab) selectGallery(requestedTab);
+
+    document.querySelectorAll('.accordion__button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const expanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', String(!expanded));
+        document.getElementById(button.getAttribute('aria-controls')).hidden = expanded;
+      });
+    });
+
+    const chapterLinks = [...document.querySelectorAll('.chapters a')];
+    const sections = chapterLinks.map((link) => document.querySelector(link.hash)).filter(Boolean);
+    const chapterObserver = new IntersectionObserver((entries) => {
+      const current = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!current) return;
+      chapterLinks.forEach((link) => link.setAttribute('aria-current', link.hash === `#${current.target.id}` ? 'location' : 'false'));
+    }, { rootMargin: '-12% 0px -70% 0px', threshold: [0, .2, .6] });
+    sections.forEach((section) => chapterObserver.observe(section));
+  </script>
+</body>
+</html>

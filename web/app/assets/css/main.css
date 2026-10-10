@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Noto Serif TC";
+  src: url("/fonts/NotoSerifTC-Variable.ttf") format("truetype");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --font-sans: "BIZ UDPGothic", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Noto Serif TC", "Songti TC", "PMingLiU", serif;

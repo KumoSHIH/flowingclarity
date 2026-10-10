@@ -2,7 +2,7 @@ import { mount } from '@vue/test-utils'
 import { defineComponent, ref } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import CourseOverview from '../../app/components/CourseOverview.vue'
-import CoursePage from '../../app/pages/course.vue'
+import CoursePage from '../../app/pages/course/index.vue'
 import { courseOverviewFixture } from '../../app/fixtures/courseOverview'
 
 const SiteHeaderStub = defineComponent({

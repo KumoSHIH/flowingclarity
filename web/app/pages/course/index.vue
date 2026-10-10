@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useSiteSettings } from '../composables/useSiteSettings';
+import { useSiteSettings } from '../../composables/useSiteSettings';
 import type {
   CourseOverviewApiResponse,
   CourseOverviewStatus,
