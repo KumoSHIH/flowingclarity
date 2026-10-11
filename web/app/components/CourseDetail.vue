@@ -24,22 +24,23 @@ const props = withDefaults(
 
 const emit = defineEmits<{ retry: [] }>();
 
-const chapterLinks = [
+const chapterLinks = computed(() => [
   { id: "introduction", label: "課程介紹" },
   { id: "gallery", label: "學習片段" },
-  { id: "teacher", label: "帶領者" },
+  ...(props.content?.teacher ? [{ id: "teacher", label: "帶領者" }] : []),
   { id: "curriculum", label: "課程架構" },
-  { id: "video", label: "課程影片" },
+  ...(props.content?.video ? [{ id: "video", label: "課程影片" }] : []),
   { id: "audience", label: "適合對象" },
   { id: "schedule", label: "課程梯次" },
   { id: "registration", label: "報名" },
-];
+]);
 
 const activeChapter = ref("introduction");
 const activeGalleryKey = ref("");
 const openCurriculumKeys = ref<string[]>([]);
 const observedSections = new Map<string, HTMLElement>();
 let sectionObserver: IntersectionObserver | undefined;
+let isMounted = false;
 
 const activeGallery = computed<CourseDetailGalleryMode | undefined>(() =>
   props.content?.gallery.modes.find(
@@ -83,6 +84,26 @@ const toggleCurriculum = (key: string) => {
     : [...openCurriculumKeys.value, key];
 };
 
+const refreshSectionObserver = async () => {
+  sectionObserver?.disconnect();
+  sectionObserver = undefined;
+  if (!isMounted || props.status !== "ready" || !props.content || typeof IntersectionObserver === "undefined") return;
+
+  await nextTick();
+  if (!isMounted || props.status !== "ready" || !props.content) return;
+
+  sectionObserver = new IntersectionObserver(
+    (entries) => {
+      const current = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((first, second) => second.intersectionRatio - first.intersectionRatio)[0];
+      if (current?.target.id) activeChapter.value = current.target.id;
+    },
+    { rootMargin: "-12% 0px -70% 0px", threshold: [0, 0.2, 0.6] },
+  );
+  observedSections.forEach((section) => sectionObserver?.observe(section));
+};
+
 watch(
   () => props.content,
   (content) => {
@@ -102,22 +123,21 @@ watch(
   { immediate: true },
 );
 
-onMounted(async () => {
-  if (props.status !== "ready" || !props.content || typeof IntersectionObserver === "undefined") return;
-  await nextTick();
-  sectionObserver = new IntersectionObserver(
-    (entries) => {
-      const current = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((first, second) => second.intersectionRatio - first.intersectionRatio)[0];
-      if (current?.target.id) activeChapter.value = current.target.id;
-    },
-    { rootMargin: "-12% 0px -70% 0px", threshold: [0, 0.2, 0.6] },
-  );
-  observedSections.forEach((section) => sectionObserver?.observe(section));
+watch(
+  [() => props.status, () => props.content],
+  () => refreshSectionObserver(),
+  { flush: "post" },
+);
+
+onMounted(() => {
+  isMounted = true;
+  refreshSectionObserver();
 });
 
-onBeforeUnmount(() => sectionObserver?.disconnect());
+onBeforeUnmount(() => {
+  isMounted = false;
+  sectionObserver?.disconnect();
+});
 </script>
 
 <template>

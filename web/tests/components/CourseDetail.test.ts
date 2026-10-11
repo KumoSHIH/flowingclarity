@@ -4,17 +4,24 @@ import CourseDetail from "../../app/components/CourseDetail.vue";
 import {
   courseDetailFixture,
   emptyCourseDetailFixture,
+  longCourseDetailFixture,
+  minimalCourseDetailFixture,
 } from "../../app/fixtures/courseDetail";
 
 const nuxtLinkStub = { template: "<a><slot /></a>" };
 
+const observe = vi.fn();
+const disconnect = vi.fn();
+
 class IntersectionObserverStub {
-  observe = vi.fn();
-  disconnect = vi.fn();
+  observe = observe;
+  disconnect = disconnect;
 }
 
 describe("CourseDetail", () => {
   beforeEach(() => {
+    observe.mockReset();
+    disconnect.mockReset();
     vi.stubGlobal("IntersectionObserver", IntersectionObserverStub);
     window.history.replaceState(null, "", "/course/japanese-facial-massage");
   });
@@ -38,6 +45,7 @@ describe("CourseDetail", () => {
     const wrapper = mount(CourseDetail, {
       props: { content: courseDetailFixture },
       global: { stubs: { NuxtLink: nuxtLinkStub } },
+      attachTo: document.body,
     });
     await wrapper.vm.$nextTick();
 
@@ -49,6 +57,54 @@ describe("CourseDetail", () => {
 
     await stageTab.trigger("keydown", { key: "ArrowRight" });
     expect(wrapper.get("#gallery-tab-weave").attributes("aria-selected")).toBe("true");
+
+    await wrapper.get("#gallery-tab-weave").trigger("keydown", { key: "End" });
+    expect(wrapper.get("#gallery-tab-dossier").attributes("aria-selected")).toBe("true");
+    expect(document.activeElement?.id).toBe("gallery-tab-dossier");
+
+    await wrapper.get("#gallery-tab-dossier").trigger("keydown", { key: "Home" });
+    expect(wrapper.get("#gallery-tab-collage").attributes("aria-selected")).toBe("true");
+
+    await wrapper.get("#gallery-tab-collage").trigger("keydown", { key: "ArrowLeft" });
+    expect(wrapper.get("#gallery-tab-dossier").attributes("aria-selected")).toBe("true");
+    wrapper.unmount();
+  });
+
+  it("only links to optional sections that are present", async () => {
+    const wrapper = mount(CourseDetail, {
+      props: { content: minimalCourseDetailFixture },
+      global: { stubs: { NuxtLink: nuxtLinkStub } },
+    });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("a[href='#teacher']").exists()).toBe(false);
+    expect(wrapper.find("a[href='#video']").exists()).toBe(false);
+    expect(wrapper.find("a[href='#curriculum']").exists()).toBe(true);
+  });
+
+  it("starts chapter tracking when loading content becomes ready", async () => {
+    const wrapper = mount(CourseDetail, {
+      props: { content: courseDetailFixture, status: "loading" },
+      global: { stubs: { NuxtLink: nuxtLinkStub } },
+    });
+    await wrapper.vm.$nextTick();
+    expect(observe).not.toHaveBeenCalled();
+
+    await wrapper.setProps({ status: "ready" });
+    await wrapper.vm.$nextTick();
+    expect(observe).toHaveBeenCalled();
+    expect(observe.mock.calls.map(([element]) => element.id)).toContain("introduction");
+  });
+
+  it("keeps long content and meaningful image alternatives in the document", async () => {
+    const wrapper = mount(CourseDetail, {
+      props: { content: longCourseDetailFixture },
+      global: { stubs: { NuxtLink: nuxtLinkStub } },
+    });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.findAll(".course-intro .body-copy")).toHaveLength(4);
+    expect(wrapper.findAll("img").every((item) => Boolean(item.attributes("alt")))).toBe(true);
   });
 
   it("toggles curriculum panels with their controlling buttons", async () => {

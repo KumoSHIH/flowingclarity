@@ -1,10 +1,10 @@
 # 課程內頁規格
 
-**規格狀態：** `frontend-ready`
+**規格狀態：** `ui-verified`
 
 **設計狀態：** A「章節潮汐」響應式 HTML 整合稿已完成；桌機單元圖冊錯位調整與五款手機多圖模式已有瀏覽器模擬驗證紀錄。
 
-**開發狀態：** 已完成型別化本機 fixture 驅動的 Nuxt 前端原型、正式動態路由與基本互動測試；尚未建立 Sanity 內頁內容模型、GROQ/API 或正式發布內容。
+**開發狀態：** 已完成型別化本機 fixture 驅動的 Nuxt 前端原型、正式動態路由、UI 行為修正及 Chrome 多尺寸驗收；尚未建立 Sanity 內頁內容模型、GROQ/API 或正式發布內容。
 
 **路由：** `/course/[slug]`
 
@@ -23,7 +23,7 @@
 | 內頁 API 與資料處理 | 未開發 | 以 slug 查詢已發布課程、關聯梯次與內容；排除草稿，處理缺漏資料 |
 | Vue 內容元件 | 前端原型完成 | `CourseDetail.vue` 已完成 Banner、介紹、五款多圖、帶領者、引言、課綱、影片、對象、梯次與報名區塊 |
 | 互動與響應式整合 | 前端原型完成 | 已完成章節定位、鍵盤可操作多圖 tabs、課綱展開、媒體／CTA 停用狀態與桌機／手機排版 |
-| 自動化與瀏覽器驗收 | 前端門檻完成 | 86 項 Vitest 通過，typecheck 與 production build 通過；Chrome 1440px／390px 全頁證據已重擷取，跨瀏覽器與真機仍待驗證 |
+| 自動化與瀏覽器驗收 | UI 驗證完成 | 89 項 Vitest、typecheck 與 production build 通過；Chrome 1440px／768px／390px、200% 模擬、鍵盤與 reduced motion 已驗證，跨瀏覽器與真機仍待發布前驗收 |
 | 正式內容與發布 | 待處理 | 核准內容與報名連結，完成內容部署、草稿隔離與公開讀取驗證 |
 
 ### 開發順序與驗收
@@ -36,7 +36,7 @@
 
 ### 本次流程狀態
 
-2026-10-10 已依 `$develop-feature` 從 `design-approved` 接續並完成本次指定的下一個流程 `build-ui-prototype`。課程總覽由 `app/pages/course.vue` 移至 `app/pages/course/index.vue`，網址與行為不變，避免與 `/course/[slug]` 檔案路由衝突。前端使用本機 fixtures，本階段未建立 Sanity schema、GROQ 或遠端內容。規格目前為 `frontend-ready`，下一階段是 `verify-ui-behavior`。
+2026-10-11 已依 `$develop-feature` 從 `frontend-ready` 接續並完成 `verify-ui-behavior`。已移除選填帶領者／影片缺席時的失效章節連結，並讓 loading 轉為 ready 後正確啟動章節位置追蹤；新增選填內容、長文、圖片替代文字、完整 tabs 鍵盤操作及延遲載入完成的回歸測試。規格目前為 `ui-verified`，下一階段是 `integrate-sanity-content`。
 
 ## 目標與受眾
 協助正在評估身心課程的訪客清楚取得課程資訊，在理解方法、帶領者、學習路徑與參與條件後，感受到安定與信任，並找到明確報名入口。
@@ -114,13 +114,14 @@
 - 2026-10-10：完成 Nuxt 前端原型與 `/course/[slug]` 路由。新增典型、長文、缺少選填欄位及空集合 fixtures；行為測試涵蓋五模式鍵盤切換、課綱展開、停用行動、空集合、錯誤重試及不存在課程。`npm run test -w web` 為 15 檔、86 項通過；`npm run typecheck -w web` 與 `npm run build -w web` 均成功。typecheck 仍輸出既有 `vue-router/volar/sfc-route-blocks` 匯出警告，build 仍輸出既有 sourcemap 與 runtime 字型路徑提示。
 - 2026-10-10：Chrome headless 以 1440px 與 390px 實際載入 `/course/japanese-facial-massage`，先捲動全頁載入 lazy images，再擷取精確到頁尾的完整頁證據至 `.impeccable/review/desktop.png`、`.impeccable/review/mobile.png`。已修正章節導覽黏附位置，使其避開 87px 固定 Header；Safari、Firefox 與真實 iOS／Android 尚未驗證。
 - 2026-10-10：最終完成審查要求的三項修正——桌機完整頁證據載入至頁尾、手機完整頁證據載入至頁尾、黏性章節導覽避開固定 Header——均已解決；再次審查結論為 `ship`。
+- 2026-10-11：`verify-ui-behavior` 完成。Chrome CDP 實測 1440×1000、768×1024、390×844 與 720×900／device scale 2 的 200% 模擬；各尺寸皆無水平溢位、維持單一 `h1` 與可見 tabpanel、章節錨點完整、課程內容圖片替代文字完整、課程頁操作目標不小於 44px，並確認 `prefers-reduced-motion: reduce` 生效。Home／End 可同步移動 tab 選取與鍵盤焦點；minimal fixture 不再顯示缺席的帶領者／影片連結，empty fixture 三項空狀態皆存在。完整頁證據位於 `.impeccable/review/course-detail-ui-verified/`。
+- 2026-10-11：Impeccable detector 為 0 項 anti-pattern；41 項 advisory 來自已核准頁面專屬字級與半透明色值，未視為阻擋問題。`npm run test -w web` 為 15 檔、89 項通過；`npm run typecheck -w web` 與 `npm run build -w web` 成功。typecheck 仍有既有 `vue-router/volar/sfc-route-blocks` 警告，build 仍有既有 sourcemap 與 runtime 字型路徑提示。
 
 ## 待處理與下一階段
 
-- 依 `$develop-feature` 進入 `verify-ui-behavior`；不需重做已完成的 HTML 設計原型或前端 fixture 原型。本次 build 階段的 Chrome 截圖與完成審查是原型交付門檻，不取代下一階段完整的 UI 行為驗證。
-- 正式 Sanity schema、GROQ/API、已發布內容查詢與草稿隔離仍待後續 `integrate-sanity-content` 開發。五款多圖目前保留為前端可切換模式，CMS 串接時須決定由編輯者單選版型或保留前台比較控制。
+- 依 `$develop-feature` 進入 `integrate-sanity-content`；正式 Sanity schema、GROQ/API、已發布內容查詢與草稿隔離仍待開發。五款多圖目前保留為前端可切換模式，CMS 串接時須決定由編輯者單選版型或保留前台比較控制。
 - 正式內容尚未核准；設計稿中的日期、地點、引言與人物內容只作舊站內容結構示意。
-- 正式前端完成後需補真實 iOS／Android 裝置，以及 Safari、Chrome、Firefox 的交叉驗證。
+- 發布前仍需補真實 iOS／Android 裝置，以及 Safari、Firefox 的交叉驗證；本階段只完成 Chrome headless 驗收。
 
 #### 筆記，不需要執行，可忽略
 - 使用 $develop-feature 從 web/docs/specs/course-detail.md 接續下一個流程
