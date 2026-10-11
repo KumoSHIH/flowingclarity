@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { courseDetailFixtures } from "../../fixtures/courseDetail";
 import { useSiteSettings } from "../../composables/useSiteSettings";
-import type { CourseDetailStatus } from "../../types/courseDetail";
+import type {
+  CourseDetailApiResponse,
+  CourseDetailStatus,
+} from "../../types/courseDetail";
 
 const route = useRoute();
 const { settings } = useSiteSettings();
@@ -11,10 +13,21 @@ const slug = computed(() => {
   const value = route.params.slug;
   return Array.isArray(value) ? value[0] ?? "" : String(value ?? "");
 });
-const content = computed(() => courseDetailFixtures[slug.value]);
-const status = computed<CourseDetailStatus>(() =>
-  content.value ? "ready" : "not-found",
+const {
+  data: response,
+  status: requestStatus,
+  refresh,
+} = useFetch<CourseDetailApiResponse>(
+  () => `/api/course-detail/${encodeURIComponent(slug.value)}`,
 );
+const content = computed(() => response.value?.content ?? undefined);
+const status = computed<CourseDetailStatus>(() => {
+  if (requestStatus.value === "pending") return "loading";
+  if (requestStatus.value === "error" || response.value?.state === "error")
+    return "error";
+  if (response.value?.state === "empty") return "not-found";
+  return response.value?.state === "ready" && content.value ? "ready" : "error";
+});
 
 useHead(() => ({
   title: content.value
@@ -30,7 +43,7 @@ useHead(() => ({
   <div class="course-detail-page mx-auto min-h-screen max-w-[1920px] overflow-clip font-sans">
     <SiteHeader always-visible :settings="settings" />
     <main>
-      <CourseDetail :content="content" :status="status" />
+      <CourseDetail :content="content" :status="status" @retry="refresh" />
     </main>
     <SiteFooter v-if="settings" :content="settings" :current-path="route.path" />
     <SiteFooterUnavailable v-else />

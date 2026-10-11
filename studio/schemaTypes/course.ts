@@ -2,6 +2,24 @@ import { defineField, defineType } from 'sanity'
 
 const courseSlugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
+interface CoursePublicationValue {
+  _id?: string
+  detailIsPublished?: boolean
+  detail?: unknown
+  image?: { asset?: { _ref?: string } }
+}
+
+export function validateCourseDetailPublication(value: unknown): true | string {
+  if (!value || typeof value !== 'object') return true
+  const course = value as CoursePublicationValue
+  if (course.detailIsPublished !== true) return true
+  const documentId = course._id?.replace(/^drafts\./, '')
+  if (documentId?.includes('.')) return '公開前台文件的 ID 不得包含句點。'
+  if (!course.image?.asset?._ref) return '公開課程內頁前必須設定代表圖。'
+  if (!course.detail) return '公開課程內頁前必須完成課程詳情內容。'
+  return true
+}
+
 export const course = defineType({
   name: 'course',
   title: '課程',
@@ -75,6 +93,18 @@ export const course = defineType({
       ],
     }),
     defineField({
+      name: 'detailIsPublished',
+      title: '公開課程內頁',
+      type: 'boolean',
+      description: '只有完成並核准詳情內容後才能開啟；未設定時視為關閉，不影響課程總覽的顯示設定。',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'detail',
+      title: '課程詳情',
+      type: 'courseDetailContent',
+    }),
+    defineField({
       name: 'order',
       title: '分類內順序',
       type: 'number',
@@ -109,11 +139,13 @@ export const course = defineType({
       category: 'category.name',
       media: 'image',
       published: 'isPublished',
+      detailPublished: 'detailIsPublished',
     },
-    prepare: ({ title, category, media, published }) => ({
+    prepare: ({ title, category, media, published, detailPublished }) => ({
       title,
-      subtitle: `${category ?? '未設定分類'} · ${published ? '公開' : '未公開'}`,
+      subtitle: `${category ?? '未設定分類'} · 總覽${published ? '公開' : '隱藏'} · 內頁${detailPublished ? '公開' : '隱藏'}`,
       media,
     }),
   },
+  validation: Rule => Rule.custom(validateCourseDetailPublication),
 })

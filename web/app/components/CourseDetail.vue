@@ -9,8 +9,9 @@ import {
   type ComponentPublicInstance,
 } from "vue";
 import type {
+  CourseDetailBodyBlock,
   CourseDetailContent,
-  CourseDetailGalleryMode,
+  CourseDetailGalleryLayout,
   CourseDetailStatus,
 } from "../types/courseDetail";
 
@@ -24,29 +25,44 @@ const props = withDefaults(
 
 const emit = defineEmits<{ retry: [] }>();
 
+const chapterLabels: Record<CourseDetailBodyBlock["type"], string> = {
+  introduction: "課程介紹",
+  gallery: "圖文內容",
+  teacher: "帶領者",
+  quote: "課程引言",
+  curriculum: "課程架構",
+  video: "課程影片",
+  audience: "適合對象",
+};
+const galleryLayoutLabels: Record<CourseDetailGalleryLayout, string> = {
+  collage: "編輯拼貼",
+  stages: "分階圖譜",
+  weave: "交錯章節",
+  folio: "單元圖冊",
+  dossier: "方法檔案",
+};
+
+const blockId = (key: string) => `content-${key}`;
+const curriculumPanelKey = (blockKey: string, unitKey: string) => `${blockKey}:${unitKey}`;
 const chapterLinks = computed(() => [
-  { id: "introduction", label: "課程介紹" },
-  { id: "gallery", label: "學習片段" },
-  ...(props.content?.teacher ? [{ id: "teacher", label: "帶領者" }] : []),
-  { id: "curriculum", label: "課程架構" },
-  ...(props.content?.video ? [{ id: "video", label: "課程影片" }] : []),
-  { id: "audience", label: "適合對象" },
+  ...(props.content?.body.map((block) => ({
+    id: blockId(block.key),
+    label: block.type === "gallery" ? block.title : chapterLabels[block.type],
+  })) ?? []),
   { id: "schedule", label: "課程梯次" },
   { id: "registration", label: "報名" },
 ]);
 
-const activeChapter = ref("introduction");
-const activeGalleryKey = ref("");
+const activeChapter = ref("");
 const openCurriculumKeys = ref<string[]>([]);
+const courseDetailRoot = ref<HTMLElement>();
+const chapterNav = ref<HTMLElement>();
 const observedSections = new Map<string, HTMLElement>();
-let sectionObserver: IntersectionObserver | undefined;
+const chapterAnchors = new Map<string, HTMLAnchorElement>();
 let isMounted = false;
-
-const activeGallery = computed<CourseDetailGalleryMode | undefined>(() =>
-  props.content?.gallery.modes.find(
-    (mode) => mode.key === activeGalleryKey.value,
-  ),
-);
+let scrollFrame: number | undefined;
+let pendingChapter = "";
+let pendingChapterUntil = 0;
 
 const setObservedSection = (
   element: Element | ComponentPublicInstance | null,
@@ -54,28 +70,15 @@ const setObservedSection = (
   if (element instanceof HTMLElement) observedSections.set(element.id, element);
 };
 
-const selectGallery = (key: string, focus = false) => {
-  activeGalleryKey.value = key;
-  if (typeof window !== "undefined") {
-    const url = new URL(window.location.href);
-    url.searchParams.set("gallery", key);
-    window.history.replaceState(null, "", url);
-  }
-  if (focus) {
-    nextTick(() => document.getElementById(`gallery-tab-${key}`)?.focus());
-  }
+const setChapterNav = (element: Element | ComponentPublicInstance | null) => {
+  if (element instanceof HTMLElement) chapterNav.value = element;
 };
 
-const handleGalleryKeydown = (event: KeyboardEvent, index: number) => {
-  const modes = props.content?.gallery.modes ?? [];
-  if (!modes.length || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
-  event.preventDefault();
-  let nextIndex = index;
-  if (event.key === "ArrowRight") nextIndex = (index + 1) % modes.length;
-  if (event.key === "ArrowLeft") nextIndex = (index - 1 + modes.length) % modes.length;
-  if (event.key === "Home") nextIndex = 0;
-  if (event.key === "End") nextIndex = modes.length - 1;
-  selectGallery(modes[nextIndex]?.key ?? modes[0]!.key, true);
+const setChapterAnchor = (
+  id: string,
+  element: Element | ComponentPublicInstance | null,
+) => {
+  if (element instanceof HTMLAnchorElement) chapterAnchors.set(id, element);
 };
 
 const toggleCurriculum = (key: string) => {
@@ -84,64 +87,131 @@ const toggleCurriculum = (key: string) => {
     : [...openCurriculumKeys.value, key];
 };
 
-const refreshSectionObserver = async () => {
-  sectionObserver?.disconnect();
-  sectionObserver = undefined;
-  if (!isMounted || props.status !== "ready" || !props.content || typeof IntersectionObserver === "undefined") return;
+const prefersReducedMotion = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
 
+const chapterActivationTop = () => {
+  const headerHeight = Number.parseFloat(
+    getComputedStyle(courseDetailRoot.value ?? document.documentElement)
+      .getPropertyValue("--home-header-height"),
+  ) || 87;
+  const navHeight = chapterNav.value?.getBoundingClientRect().height || 68;
+  return headerHeight + navHeight + 16;
+};
+
+const scrollActiveChapterIntoView = async (id: string) => {
   await nextTick();
+  const nav = chapterNav.value;
+  const anchor = chapterAnchors.get(id);
+  if (!nav || !anchor || typeof nav.scrollTo !== "function") return;
+
+  const gutter = 12;
+  const anchorLeft = anchor.offsetLeft;
+  const anchorRight = anchorLeft + anchor.offsetWidth;
+  const visibleLeft = nav.scrollLeft + gutter;
+  const visibleRight = nav.scrollLeft + nav.clientWidth - gutter;
+  if (anchorLeft >= visibleLeft && anchorRight <= visibleRight) return;
+
+  nav.scrollTo({
+    left: Math.max(0, anchorLeft - ((nav.clientWidth - anchor.offsetWidth) / 2)),
+    behavior: prefersReducedMotion() ? "auto" : "smooth",
+  });
+};
+
+const syncActiveChapter = () => {
+  scrollFrame = undefined;
   if (!isMounted || props.status !== "ready" || !props.content) return;
 
-  sectionObserver = new IntersectionObserver(
-    (entries) => {
-      const current = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((first, second) => second.intersectionRatio - first.intersectionRatio)[0];
-      if (current?.target.id) activeChapter.value = current.target.id;
-    },
-    { rootMargin: "-12% 0px -70% 0px", threshold: [0, 0.2, 0.6] },
-  );
-  observedSections.forEach((section) => sectionObserver?.observe(section));
+  const now = Date.now();
+  if (pendingChapter && now < pendingChapterUntil) {
+    activeChapter.value = pendingChapter;
+    return;
+  }
+  pendingChapter = "";
+
+  const sections = chapterLinks.value
+    .map(({ id }) => observedSections.get(id))
+    .filter((section): section is HTMLElement => Boolean(section));
+  if (!sections.length) return;
+
+  const activationTop = chapterActivationTop();
+  const isAtPageEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+  const current = isAtPageEnd
+    ? sections.at(-1)
+    : [...sections].reverse().find(section => section.getBoundingClientRect().top <= activationTop + 1) ?? sections[0];
+  if (current) activeChapter.value = current.id;
+};
+
+const scheduleChapterSync = () => {
+  if (scrollFrame !== undefined) return;
+  scrollFrame = window.requestAnimationFrame(syncActiveChapter);
+};
+
+const releasePendingChapter = () => {
+  pendingChapter = "";
+  scheduleChapterSync();
+};
+
+const selectChapter = (id: string) => {
+  const section = observedSections.get(id);
+  if (!section) return;
+
+  pendingChapter = id;
+  pendingChapterUntil = Date.now() + 1800;
+  activeChapter.value = id;
+  if (window.location.hash !== `#${id}`) window.history.pushState(null, "", `#${id}`);
+  const top = window.scrollY + section.getBoundingClientRect().top - chapterActivationTop();
+  window.scrollTo({
+    top: Math.max(0, top),
+    behavior: prefersReducedMotion() ? "auto" : "smooth",
+  });
 };
 
 watch(
   () => props.content,
   (content) => {
     if (!content) return;
-    const requestedGallery =
-      typeof window === "undefined"
-        ? undefined
-        : new URLSearchParams(window.location.search).get("gallery");
-    activeGalleryKey.value =
-      content.gallery.modes.find((mode) => mode.key === requestedGallery)?.key ??
-      content.gallery.modes[0]?.key ??
-      "";
-    openCurriculumKeys.value = content.curriculum.units[0]?.key
-      ? [content.curriculum.units[0].key]
-      : [];
+    activeChapter.value = content.body[0] ? blockId(content.body[0].key) : "schedule";
+    openCurriculumKeys.value = content.body.flatMap((block) =>
+      block.type === "curriculum" && block.units[0]
+        ? [curriculumPanelKey(block.key, block.units[0].key)]
+        : [],
+    );
   },
   { immediate: true },
 );
 
 watch(
   [() => props.status, () => props.content],
-  () => refreshSectionObserver(),
+  async () => {
+    await nextTick();
+    scheduleChapterSync();
+  },
   { flush: "post" },
 );
 
+watch(activeChapter, id => scrollActiveChapterIntoView(id));
+
 onMounted(() => {
   isMounted = true;
-  refreshSectionObserver();
+  window.addEventListener("scroll", scheduleChapterSync, { passive: true });
+  window.addEventListener("resize", scheduleChapterSync, { passive: true });
+  window.addEventListener("wheel", releasePendingChapter, { passive: true });
+  window.addEventListener("touchstart", releasePendingChapter, { passive: true });
+  scheduleChapterSync();
 });
 
 onBeforeUnmount(() => {
   isMounted = false;
-  sectionObserver?.disconnect();
+  window.removeEventListener("scroll", scheduleChapterSync);
+  window.removeEventListener("resize", scheduleChapterSync);
+  window.removeEventListener("wheel", releasePendingChapter);
+  window.removeEventListener("touchstart", releasePendingChapter);
+  if (scrollFrame !== undefined) window.cancelAnimationFrame(scrollFrame);
 });
 </script>
 
 <template>
-  <div class="course-detail" :aria-busy="status === 'loading'">
+  <div ref="courseDetailRoot" class="course-detail" :aria-busy="status === 'loading'">
     <section v-if="status === 'loading'" class="course-detail-state" aria-live="polite">
       <div class="course-detail-state__lines" aria-hidden="true"><span /><span /><span /></div>
       <h1>正在整理課程內容</h1>
@@ -161,7 +231,7 @@ onBeforeUnmount(() => {
     </section>
 
     <template v-else>
-      <aside class="course-detail__notice">{{ content.notice }}</aside>
+      <aside v-if="content.notice" class="course-detail__notice">{{ content.notice }}</aside>
 
       <section class="course-hero">
         <div class="course-hero__visual">
@@ -195,130 +265,148 @@ onBeforeUnmount(() => {
         </div>
       </section>
 
-      <nav class="course-chapters" aria-label="課程頁面章節">
+      <nav :ref="setChapterNav" class="course-chapters" aria-label="課程頁面章節">
         <a
           v-for="chapter in chapterLinks"
           :key="chapter.id"
+          :ref="element => setChapterAnchor(chapter.id, element)"
           :href="`#${chapter.id}`"
           :aria-current="activeChapter === chapter.id ? 'location' : undefined"
-          @click="activeChapter = chapter.id"
+          @click.prevent="selectChapter(chapter.id)"
         >{{ chapter.label }}</a>
       </nav>
 
-      <section id="introduction" :ref="setObservedSection" class="course-intro">
-        <h2>{{ content.introduction.title }}</h2>
-        <div>
-          <p class="lede">{{ content.introduction.lead }}</p>
-          <p v-for="paragraph in content.introduction.paragraphs" :key="paragraph" class="body-copy">{{ paragraph }}</p>
-        </div>
-      </section>
-
-      <section id="gallery" :ref="setObservedSection" class="course-gallery">
-        <header>
-          <h2>{{ content.gallery.title }}</h2>
-          <p class="body-copy">{{ content.gallery.description }}</p>
-        </header>
-
-        <template v-if="content.gallery.modes.length">
-          <div class="gallery-tabs" role="tablist" aria-label="多圖內容呈現方式">
-            <button
-              v-for="(mode, index) in content.gallery.modes"
-              :id="`gallery-tab-${mode.key}`"
-              :key="mode.key"
-              type="button"
-              role="tab"
-              :aria-selected="activeGalleryKey === mode.key"
-              :aria-controls="`gallery-panel-${mode.key}`"
-              :tabindex="activeGalleryKey === mode.key ? 0 : -1"
-              @click="selectGallery(mode.key)"
-              @keydown="handleGalleryKeydown($event, index)"
-            >{{ mode.label }}</button>
+      <template v-for="block in content.body" :key="block.key">
+        <section
+          v-if="block.type === 'introduction'"
+          :id="blockId(block.key)"
+          :ref="setObservedSection"
+          class="course-intro"
+        >
+          <h2>{{ block.title }}</h2>
+          <div>
+            <p class="lede preserve-lines">{{ block.lead }}</p>
+            <p v-for="paragraph in block.paragraphs" :key="paragraph" class="body-copy preserve-lines">{{ paragraph }}</p>
           </div>
+        </section>
 
-          <div
-            v-if="activeGallery"
-            :id="`gallery-panel-${activeGallery.key}`"
-            :class="['gallery-panel', `gallery-panel--${activeGallery.layout}`]"
-            role="tabpanel"
-            :aria-labelledby="`gallery-tab-${activeGallery.key}`"
-          >
-            <article v-for="(item, index) in activeGallery.items" :key="item.key" class="gallery-item">
+        <section
+          v-else-if="block.type === 'gallery'"
+          :id="blockId(block.key)"
+          :ref="setObservedSection"
+          class="course-gallery"
+        >
+          <header>
+            <h2>{{ block.title }}</h2>
+            <p class="body-copy preserve-lines">{{ block.description }}</p>
+          </header>
+          <div v-if="block.items.length" :class="['gallery-panel', `gallery-panel--${block.layout}`]">
+            <article v-for="(item, index) in block.items" :key="item.key" class="gallery-item">
               <figure>
                 <img :src="item.image.src" :alt="item.image.alt" width="900" height="680" loading="lazy">
-                <figcaption v-if="activeGallery.layout === 'collage'">{{ item.description }}</figcaption>
+                <figcaption v-if="block.layout === 'collage'" class="preserve-lines">{{ item.description }}</figcaption>
               </figure>
-              <div v-if="activeGallery.layout !== 'collage'" class="gallery-item__copy">
+              <div v-if="block.layout !== 'collage'" class="gallery-item__copy">
                 <span v-if="item.group">{{ item.group }}</span>
                 <h3>{{ item.title }}</h3>
-                <p>{{ item.description }}</p>
+                <p class="preserve-lines">{{ item.description }}</p>
                 <ul v-if="item.points?.length">
                   <li v-for="point in item.points" :key="point">{{ point }}</li>
                 </ul>
-                <strong v-if="activeGallery.layout === 'folio'" aria-hidden="true">{{ index + 1 }}</strong>
+                <strong v-if="block.layout === 'folio'" aria-hidden="true">{{ index + 1 }}</strong>
               </div>
             </article>
-            <blockquote v-if="activeGallery.statement">{{ activeGallery.statement }}</blockquote>
-            <footer><strong>{{ activeGallery.label }}</strong><span>{{ activeGallery.note }}</span></footer>
+            <blockquote v-if="block.statement" class="preserve-lines">{{ block.statement }}</blockquote>
+            <footer><strong>{{ galleryLayoutLabels[block.layout] }}</strong><span>{{ block.note }}</span></footer>
           </div>
-        </template>
-        <p v-else class="inline-empty">多圖內容仍在整理，其他課程資訊可繼續閱讀。</p>
-      </section>
+          <p v-if="!block.items.length" class="inline-empty">圖文內容仍在整理，其他課程資訊可繼續閱讀。</p>
+        </section>
 
-      <section v-if="content.teacher" id="teacher" :ref="setObservedSection" class="course-teacher">
-        <div class="course-teacher__portrait">
-          <img v-if="content.teacher.image" :src="content.teacher.image.src" :alt="content.teacher.image.alt">
-          <span v-else>帶領者正式肖像待提供</span>
-        </div>
-        <div class="course-teacher__copy">
-          <h2>{{ content.teacher.name }}<small v-if="content.teacher.englishName">{{ content.teacher.englishName }}</small></h2>
-          <p class="lede">{{ content.teacher.lead }}</p>
-          <p class="body-copy">{{ content.teacher.biography }}</p>
-        </div>
-      </section>
+        <section
+          v-else-if="block.type === 'teacher'"
+          :id="blockId(block.key)"
+          :ref="setObservedSection"
+          class="course-teacher"
+        >
+          <div class="course-teacher__portrait">
+            <img v-if="block.image" :src="block.image.src" :alt="block.image.alt">
+            <span v-else>帶領者正式肖像待提供</span>
+          </div>
+          <div class="course-teacher__copy">
+            <h2>{{ block.name }}<small v-if="block.englishName">{{ block.englishName }}</small></h2>
+            <p class="lede preserve-lines">{{ block.lead }}</p>
+            <p class="body-copy preserve-lines">{{ block.biography }}</p>
+          </div>
+        </section>
 
-      <section v-if="content.quote" class="course-quote">
-        <blockquote>「{{ content.quote.text }}」</blockquote>
-        <cite>{{ content.quote.attribution }}</cite>
-      </section>
+        <section
+          v-else-if="block.type === 'quote'"
+          :id="blockId(block.key)"
+          :ref="setObservedSection"
+          class="course-quote"
+        >
+          <blockquote class="preserve-lines">「{{ block.text }}」</blockquote>
+          <cite>{{ block.attribution }}</cite>
+        </section>
 
-      <section id="curriculum" :ref="setObservedSection" class="course-curriculum">
-        <header><h2>{{ content.curriculum.title }}</h2><p class="body-copy">{{ content.curriculum.description }}</p></header>
-        <div v-if="content.curriculum.units.length" class="curriculum-list">
-          <article v-for="unit in content.curriculum.units" :key="unit.key">
-            <button
-              type="button"
-              :aria-expanded="openCurriculumKeys.includes(unit.key)"
-              :aria-controls="`curriculum-panel-${unit.key}`"
-              @click="toggleCurriculum(unit.key)"
-            >
-              <span>{{ unit.stage }}</span><strong>{{ unit.title }}</strong><i aria-hidden="true" />
-            </button>
-            <div v-show="openCurriculumKeys.includes(unit.key)" :id="`curriculum-panel-${unit.key}`" class="curriculum-panel">{{ unit.description }}</div>
-          </article>
-        </div>
-        <p v-else class="inline-empty">詳細課綱仍在整理中。</p>
-      </section>
+        <section
+          v-else-if="block.type === 'curriculum'"
+          :id="blockId(block.key)"
+          :ref="setObservedSection"
+          class="course-curriculum"
+        >
+          <header><h2>{{ block.title }}</h2><p class="body-copy preserve-lines">{{ block.description }}</p></header>
+          <div v-if="block.units.length" class="curriculum-list">
+            <article v-for="unit in block.units" :key="unit.key">
+              <button
+                type="button"
+                :aria-expanded="openCurriculumKeys.includes(curriculumPanelKey(block.key, unit.key))"
+                :aria-controls="`curriculum-panel-${block.key}-${unit.key}`"
+                @click="toggleCurriculum(curriculumPanelKey(block.key, unit.key))"
+              >
+                <span>{{ unit.stage }}</span><strong>{{ unit.title }}</strong><i aria-hidden="true" />
+              </button>
+              <div
+                v-show="openCurriculumKeys.includes(curriculumPanelKey(block.key, unit.key))"
+                :id="`curriculum-panel-${block.key}-${unit.key}`"
+                class="curriculum-panel preserve-lines"
+              >{{ unit.description }}</div>
+            </article>
+          </div>
+          <p v-else class="inline-empty">詳細課綱仍在整理中。</p>
+        </section>
 
-      <section v-if="content.video" id="video" :ref="setObservedSection" class="course-video">
-        <img :src="content.video.image.src" :alt="content.video.image.alt" loading="lazy">
-        <span v-if="content.video.image.label" class="asset-label">{{ content.video.image.label }}</span>
-        <div><h2>{{ content.video.title }}</h2>
-          <a v-if="content.video.url" class="video-control" :href="content.video.url" aria-label="播放課程影片"><i aria-hidden="true" /></a>
-          <button v-else class="video-control" type="button" disabled :aria-label="content.video.statusLabel"><i aria-hidden="true" /></button>
-        </div>
-        <strong>{{ content.video.statusLabel }}</strong>
-      </section>
+        <section
+          v-else-if="block.type === 'video'"
+          :id="blockId(block.key)"
+          :ref="setObservedSection"
+          class="course-video"
+        >
+          <img :src="block.image.src" :alt="block.image.alt" loading="lazy">
+          <span v-if="block.image.label" class="asset-label">{{ block.image.label }}</span>
+          <div><h2>{{ block.title }}</h2>
+            <a v-if="block.url" class="video-control" :href="block.url" aria-label="播放課程影片"><i aria-hidden="true" /></a>
+            <button v-else class="video-control" type="button" disabled :aria-label="block.statusLabel"><i aria-hidden="true" /></button>
+          </div>
+          <strong>{{ block.statusLabel }}</strong>
+        </section>
 
-      <section id="audience" :ref="setObservedSection" class="course-audience">
-        <h2>{{ content.audience.title }}</h2>
-        <div><p class="body-copy">{{ content.audience.description }}</p>
-          <ul v-if="content.audience.items.length"><li v-for="item in content.audience.items" :key="item"><i aria-hidden="true" />{{ item }}</li></ul>
-          <p v-else class="inline-empty">適合對象資訊仍在整理中。</p>
-        </div>
-      </section>
+        <section
+          v-else-if="block.type === 'audience'"
+          :id="blockId(block.key)"
+          :ref="setObservedSection"
+          class="course-audience"
+        >
+          <h2>{{ block.title }}</h2>
+          <div><p class="body-copy preserve-lines">{{ block.description }}</p>
+            <ul v-if="block.items.length"><li v-for="item in block.items" :key="item"><i aria-hidden="true" />{{ item }}</li></ul>
+            <p v-else class="inline-empty">適合對象資訊仍在整理中。</p>
+          </div>
+        </section>
+      </template>
 
       <section id="schedule" :ref="setObservedSection" class="course-schedule">
-        <header><h2>{{ content.schedule.title }}</h2><p class="body-copy">{{ content.schedule.description }}</p></header>
+        <header><h2>{{ content.schedule.title }}</h2><p class="body-copy preserve-lines">{{ content.schedule.description }}</p></header>
         <div v-if="content.schedule.sessions.length" class="schedule-grid">
           <article v-for="session in content.schedule.sessions" :key="session.key">
             <h3>{{ session.title }}</h3><strong>{{ session.status }}</strong>
@@ -329,7 +417,7 @@ onBeforeUnmount(() => {
       </section>
 
       <section id="registration" :ref="setObservedSection" class="course-registration">
-        <div><h2>{{ content.registration.title }}</h2><p>{{ content.registration.description }}</p>
+        <div><h2>{{ content.registration.title }}</h2><p class="preserve-lines">{{ content.registration.description }}</p>
           <a v-if="content.registration.actionUrl" class="primary-action" :href="content.registration.actionUrl"><span>{{ content.registration.actionLabel }}</span><i aria-hidden="true" /></a>
           <button v-else class="primary-action" type="button" disabled><span>{{ content.registration.actionLabel }}</span><i aria-hidden="true" /></button>
         </div>
@@ -340,9 +428,11 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-.course-detail { --line: #cec3b5; --local-muted: #696158; color: var(--color-ink); background: var(--color-paper); line-height: 1.9; letter-spacing: .045em; }
+.course-detail { --chapter-height: 68px; --line: #cec3b5; --local-muted: #696158; color: var(--color-ink); background: var(--color-paper); line-height: 1.9; letter-spacing: .045em; }
+.course-detail :is(section[id^="content-"], #schedule, #registration) { scroll-margin-top: calc(var(--home-header-height) + var(--chapter-height) + 16px); }
 .course-detail :is(h1, h2, h3, blockquote) { margin: 0; font-family: var(--font-display); font-weight: 400; line-height: 1.25; text-wrap: balance; }
 .course-detail img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.preserve-lines { white-space: pre-line; }
 .course-detail__notice { min-height: 52px; padding: 14px clamp(22px, 5.4vw, 84px); color: var(--color-warm-white); background: var(--color-night); font-size: 11px; letter-spacing: .12em; }
 .body-copy { max-width: 70ch; margin: 0; color: var(--local-muted); line-height: 2; }
 .lede { margin: 0; font-size: clamp(17px, 1.35vw, 21px); line-height: 1.9; }
@@ -363,7 +453,7 @@ onBeforeUnmount(() => {
 .primary-action:disabled { color: #dfd5ca; background: #8a6153; cursor: not-allowed; }
 .primary-action i { position: relative; width: 34px; border-top: 1px solid currentColor; }
 .primary-action i::after { position: absolute; top: -5px; right: 0; width: 9px; height: 9px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; transform: rotate(45deg); content: ""; }
-.course-chapters { position: sticky; z-index: 20; top: var(--home-header-height); display: grid; grid-template-columns: repeat(8, 1fr); padding: 0 clamp(28px, 5.4vw, 84px); overflow-x: auto; background: rgb(248 245 239 / 96%); border-bottom: 1px solid var(--line); backdrop-filter: blur(10px); scrollbar-width: thin; }
+.course-chapters { position: sticky; z-index: 20; top: var(--home-header-height); display: grid; grid-auto-columns: minmax(150px, 1fr); grid-auto-flow: column; padding: 0 clamp(28px, 5.4vw, 84px); overflow-x: auto; background: rgb(248 245 239 / 96%); border-bottom: 1px solid var(--line); backdrop-filter: blur(10px); scrollbar-width: thin; }
 .course-chapters a { display: grid; min-height: 68px; place-items: center; border-right: 1px solid var(--line); color: inherit; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-decoration: none; white-space: nowrap; }
 .course-chapters a:first-child { border-left: 1px solid var(--line); }
 .course-chapters a[aria-current="location"] { background: var(--color-saffron); }
@@ -374,9 +464,6 @@ onBeforeUnmount(() => {
 .course-gallery { padding: 136px clamp(42px, 7vw, 112px) 160px; background: var(--color-sand); }
 .course-gallery > header, .course-schedule > header { display: grid; grid-template-columns: 1fr .9fr; gap: 90px; align-items: end; margin-bottom: 70px; }
 .course-gallery h2, .course-schedule h2, .course-curriculum h2 { font-size: clamp(50px, 5vw, 78px); }
-.gallery-tabs { display: grid; grid-template-columns: repeat(5, minmax(150px, 1fr)); margin-bottom: 74px; overflow-x: auto; border-block: 1px solid var(--color-ink); scrollbar-width: thin; }
-.gallery-tabs button { min-height: 74px; padding: 12px 15px; border: 0; border-right: 1px solid var(--line); color: inherit; background: transparent; font-weight: 700; letter-spacing: .1em; cursor: pointer; white-space: nowrap; }
-.gallery-tabs button[aria-selected="true"] { color: var(--color-paper); background: var(--color-oxblood); }
 .gallery-panel { display: grid; gap: 0; }
 .gallery-panel footer { display: flex; justify-content: space-between; gap: 40px; margin-top: 38px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 12px; }
 .gallery-panel footer span { color: var(--local-muted); }
@@ -482,13 +569,12 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 767px) {
-  .course-detail { letter-spacing: .035em; }.course-detail__notice { padding-inline: 22px; }
-  .course-hero { min-height: 0; }.course-hero__visual { min-height: 430px; }.course-hero__visual::after { background: linear-gradient(0deg, rgb(57 38 24 / 70%), transparent 56%); }
-  .course-hero h1 { right: 22px; bottom: 30px; left: 22px; max-width: none; font-size: clamp(48px, 14vw, 62px); }.course-hero__copy { gap: 48px; padding: 48px 22px 54px; }.course-hero dl { grid-template-columns: 1fr; }
+  .course-detail { --chapter-height: 58px; letter-spacing: .035em; }.course-detail__notice { padding-inline: 22px; }
+  .course-hero { width: 100%; min-width: 0; max-width: 100vw; min-height: 0; overflow: hidden; }.course-hero__visual { width: 100vw; min-width: 0; max-width: 100vw; min-height: 430px; }.course-hero__visual::after { background: linear-gradient(0deg, rgb(57 38 24 / 70%), transparent 56%); }
+  .course-hero h1 { right: auto; bottom: 30px; left: 22px; width: calc(100vw - 44px); max-width: none; overflow-wrap: anywhere; font-size: clamp(36px, 9.5vw, 44px); letter-spacing: 0; text-wrap: wrap; word-break: break-all; }.course-hero__copy { box-sizing: border-box; gap: 48px; width: 100vw; min-width: 0; max-width: 100vw; padding: 48px 22px 54px; overflow-wrap: anywhere; }.course-hero dl { grid-template-columns: 1fr; }
   .primary-action { min-height: 72px; padding: 0 22px; font-size: 17px; }.course-chapters { grid-template-columns: repeat(8, minmax(122px, 1fr)); scrollbar-width: none; }.course-chapters a { min-height: 58px; }
   .course-intro { gap: 34px; padding: 88px 22px 102px; }.course-intro h2, .course-audience h2 { font-size: clamp(44px, 12vw, 56px); }
   .course-gallery { padding: 86px 22px 104px; }.course-gallery > header { margin-bottom: 46px; }.course-gallery h2, .course-schedule h2, .course-curriculum h2 { font-size: clamp(42px, 11.5vw, 54px); }
-  .gallery-tabs { margin-right: -22px; margin-bottom: 56px; scrollbar-width: none; }.gallery-tabs button { min-height: 64px; }
   .gallery-panel footer { display: grid; gap: 8px; }
   .gallery-panel--collage { display: grid; min-height: 0; gap: 26px; }.gallery-panel--collage .gallery-item:nth-child(n) { position: relative; inset: auto; width: 88%; height: auto; }.gallery-panel--collage .gallery-item:nth-child(even) { margin-left: auto; }.gallery-panel--collage .gallery-item figure { height: 330px; }.gallery-panel--collage .gallery-item:nth-child(3) figure { height: 390px; }.gallery-panel--collage blockquote { position: static; width: 88%; margin-left: auto; padding: 26px; font-size: 21px; }.gallery-panel--collage footer { position: static; }
   .gallery-item figcaption { position: static; max-width: none; padding: 15px 17px; }

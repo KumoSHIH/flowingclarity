@@ -11,7 +11,31 @@ interface CourseStageValue {
   dateRanges?: CourseDateRangeValue[]
 }
 
+interface CourseRunPublicationValue {
+  _id?: string
+  isPublished?: boolean
+  registrationStatus?: string
+  registrationUrl?: string
+}
+
 const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/
+
+export function validateCourseRunPublication(value: unknown): true | string {
+  if (!value || typeof value !== 'object') return true
+  const run = value as CourseRunPublicationValue
+  if (run.isPublished !== true) return true
+  const documentId = run._id?.replace(/^drafts\./, '')
+  if (documentId?.includes('.')) return '公開前台文件的 ID 不得包含句點。'
+  if (run.registrationStatus === 'open') {
+    try {
+      const url = new URL(run.registrationUrl ?? '')
+      if (url.protocol !== 'https:' || !url.hostname) throw new Error('invalid URL')
+    } catch {
+      return '開放報名的公開梯次必須設定 HTTPS 報名網址。'
+    }
+  }
+  return true
+}
 
 function isIsoDate(value: unknown): value is string {
   if (typeof value !== 'string' || !isoDatePattern.test(value)) return false
@@ -164,6 +188,54 @@ export const courseRun = defineType({
       validation: Rule => Rule.required(),
     }),
     defineField({
+      name: 'city',
+      title: '城市或上課方式',
+      type: 'string',
+      description: '例如「高雄」或「線上」；未確認時請留空。',
+      validation: Rule => Rule.min(2).max(30),
+    }),
+    defineField({
+      name: 'venue',
+      title: '地點',
+      type: 'string',
+      description: '只填寫已確認且可公開的地點。',
+      validation: Rule => Rule.min(2).max(80),
+    }),
+    defineField({
+      name: 'timeLabel',
+      title: '上課時間說明',
+      type: 'string',
+      description: '例如「每日 09:30–18:30」。',
+      validation: Rule => Rule.min(2).max(80),
+    }),
+    defineField({
+      name: 'capacityLabel',
+      title: '名額說明',
+      type: 'string',
+      validation: Rule => Rule.min(2).max(40),
+    }),
+    defineField({
+      name: 'feeLabel',
+      title: '費用說明',
+      type: 'string',
+      description: '只填寫已核准的公開費用。',
+      validation: Rule => Rule.min(2).max(60),
+    }),
+    defineField({
+      name: 'registrationUrl',
+      title: '報名網址',
+      type: 'url',
+      description: '只有狀態為「開放報名」時，前台才會顯示這個連結。',
+      validation: Rule => Rule.uri({ scheme: ['https'] }),
+    }),
+    defineField({
+      name: 'notes',
+      title: '參與條件與補充',
+      type: 'array',
+      of: [defineArrayMember({ type: 'string', validation: Rule => Rule.required().max(120) })],
+      validation: Rule => Rule.max(8),
+    }),
+    defineField({
       name: 'stages',
       title: '課程階段',
       type: 'array',
@@ -178,4 +250,5 @@ export const courseRun = defineType({
       subtitle: `${course ?? '未設定課程'} · ${status ?? '未設定狀態'}`,
     }),
   },
+  validation: Rule => Rule.custom(validateCourseRunPublication),
 })
