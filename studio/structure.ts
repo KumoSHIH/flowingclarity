@@ -1,6 +1,7 @@
 import type { StructureResolver } from 'sanity/structure'
 import { courseCategoryDefinitions } from './schemaTypes/courseCategory.ts'
 import { siteSettingsId } from './schemaTypes/siteSettings.ts'
+import { eventsPageId } from './schemaTypes/eventsPage.ts'
 
 const courseCategories = Object.values(courseCategoryDefinitions)
 
@@ -69,5 +70,25 @@ export const structure: StructureResolver = (S) =>
             .title('課程梯次')
             .apiVersion('2026-03-01')
             .filter('_type == "courseRun"'),
+        ),
+      S.divider(),
+      S.listItem()
+        .id('events-page')
+        .title('活動總覽頁')
+        .child(
+          S.document()
+            .id(eventsPageId)
+            .schemaType('eventsPage')
+            .documentId(eventsPageId),
+        ),
+      S.listItem()
+        .id('events')
+        .title('活動')
+        .child(
+          S.documentList()
+            .id('events')
+            .title('活動')
+            .apiVersion('2026-03-01')
+            .filter('_type == "event"'),
         ),
     ])

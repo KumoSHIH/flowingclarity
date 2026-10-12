@@ -1,13 +1,32 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useSiteSettings } from '../../composables/useSiteSettings'
-import { eventOverviewFixture } from '../../fixtures/events'
-import type { EventView } from '#shared/types/event'
-import { normalizeEventPage, normalizeEventView } from '#shared/utils/events'
+import type {
+  EventOverviewApiResponse,
+  EventOverviewStatus,
+  EventView,
+} from '#shared/types/event'
+import {
+  emptyEventOverviewContent,
+  normalizeEventPage,
+  normalizeEventView,
+} from '#shared/utils/events'
 
 const route = useRoute()
 const router = useRouter()
 const { settings } = useSiteSettings()
+const {
+  data: response,
+  status: requestStatus,
+  refresh,
+} = useFetch<EventOverviewApiResponse>('/api/events')
+
+const content = computed(() => response.value?.content ?? emptyEventOverviewContent)
+const overviewStatus = computed<EventOverviewStatus>(() => {
+  if (requestStatus.value === 'pending') return 'loading'
+  if (requestStatus.value === 'error' || response.value?.state === 'error') return 'error'
+  return 'ready'
+})
 
 const activeView = computed(() => normalizeEventView(route.query.view))
 const activePage = computed(() => normalizeEventPage(route.query.page))
@@ -38,11 +57,13 @@ useHead({ title: '近期活動｜Flowing Clarity' })
 
     <main>
       <EventOverview
-        :content="eventOverviewFixture"
+        :content="content"
+        :status="overviewStatus"
         :view="activeView"
         :page="activePage"
         @navigate="navigate"
         @normalize="normalize"
+        @retry="refresh"
       />
     </main>
 

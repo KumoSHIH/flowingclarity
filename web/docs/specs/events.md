@@ -1,6 +1,6 @@
 # 近期活動總覽規格
 
-**狀態：** ui-verified
+**狀態：** cms-integrated
 **路由：** `/events`  
 **頁面模式：** Persuade；協助訪客比較近期可參與的短期活動並採取下一步  
 **設計依據：** [`course.md`](course.md)、[`DESIGN.md`](../../DESIGN.md)、目前 `CourseOverview.vue` 的 30%／70% 雙域節奏，以及已核准的 [「月份長譜」首屏稿](../../.impeccable/mocks/decision/events-monthly-score.webp)；活動頁延續字體尺度、左右分區、色系與 1023px 響應式斷點，但不複製課程分類錨點或光片互動
@@ -147,11 +147,20 @@
 ## 依賴、待決事項與下一階段
 
 - 正式活動名稱、摘要、日期、場地、圖片、報名網址與過去活動保存範圍皆待內容負責人提供；現有首頁 fixture 不可發布。
-- CMS 實作前需確認「活動為獨立文件、可選關聯一門課程」的資料關係，以及混合活動是否為實際需求；若不需要 hybrid，應從列舉移除，不保留無用途選項。
+- 本階段依內容契約將活動建為獨立文件，並提供 0 或 1 門已公開課程的 reference；這是目前實作採用的資料關係，若內容團隊需要一對多關聯，須先更新規格與遷移既有文件。
+- `hybrid` 依已核准內容契約保留；內容團隊仍需確認是否有實際混合活動，若確認不需要，後續應同步移除 schema、型別與顯示文案。
 - 正式外部報名表單與開新分頁策略尚未確認；設計階段須同時涵蓋有／無報名入口，不得以假 URL 驗收。
 - 活動列表已保留 `/events/{slug}` 詳情入口，但活動詳情頁尚未製作；建立動態路由、詳情內容契約與未找到狀態屬後續階段。
-- `verify-ui-behavior` 已完成；下一階段為 `integrate-sanity-content`。開始資料整合前仍須確認活動文件與課程的關聯方式，以及是否保留 `hybrid` 參與形式。
-- 本階段未建立 Sanity schema、GROQ 或正式內容；原型仍只使用明確標示的 fixture，不可視為可發布活動。
+- `integrate-sanity-content` 已完成；下一階段為 `validate-content-flow`，需在取得具體授權後部署 schema、建立測試內容並驗證 published perspective 的公開讀取。
+- 本階段未部署 schema、未修改遠端 dataset，也未建立正式內容；因此尚不能將任何活動視為已發布。
+
+## CMS 整合記錄
+
+2026-10-12 完成 `integrate-sanity-content`。Studio 新增固定 ID `events-page` 的活動總覽單例與 `event` 集合；活動欄位依內容語意建模，包含時間、參與方式、地點、選填圖片、報名狀態、安全 HTTPS 網址、單一課程 reference、保存設定與同時段排序。公開 validation 會拒絕含句點的文件 ID、反向時間、缺少實體／混合城市及不安全報名網址；同一開始時間的 `order` 不可重複。
+
+`/api/events` 只以 published perspective 查詢 `isPublished == true` 的活動，經獨立轉換層檢查頁面契約、日期、slug、列舉、圖片與關聯課程後才交給前端；無效活動文件會被排除，缺少頁面單例回傳 empty，查詢或頁面契約失敗則回傳 error。`/events` 已改用此 API，保留既有 loading、完全空與重新載入狀態，不再引用活動 fixture 作為正式內容或失敗 fallback。
+
+本機驗證結果：web 完整測試 21 個檔案、126 項通過；Studio 測試 16 項通過；web 與 Studio typecheck、build 均通過，`git diff --check` 通過。web typecheck 仍輸出既有 `vue-router/volar` 子路徑解析警告，web build 仍有既有 sourcemap 與字型執行期解析警告，皆未造成失敗。遠端 schema 部署、dataset 寫入、published API 與真實內容流程尚未執行。
 
 ## UI 行為驗證記錄
 
@@ -179,4 +188,4 @@
 
 
 #### 筆記，不需要執行，可忽略
-- 使用 $develop-feature 從 web/docs/specs/events.md 接續下一個流程
+- 使用 develop-feature/SKILL.md 從 web/docs/specs/events.md 接續下一個流程

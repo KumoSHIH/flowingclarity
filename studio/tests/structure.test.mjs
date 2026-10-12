@@ -3,7 +3,7 @@ import { test } from 'node:test'
 import { createStructureBuilder } from 'sanity/structure'
 import { structure } from '../structure.ts'
 
-test('the Studio structure exposes singletons, fixed categories and course collections', () => {
+test('the Studio structure exposes singletons and content collections', () => {
   const S = createStructureBuilder({
     source: {
       projectId: 'test-project-id',
@@ -33,4 +33,8 @@ test('the Studio structure exposes singletons, fixed categories and course colle
   )
   assert.equal(root.items[4].id, 'courses')
   assert.equal(root.items[5].id, 'course-runs')
+  assert.equal(root.items[7].id, 'events-page')
+  assert.equal(root.items[7].child.options.id, 'events-page')
+  assert.equal(root.items[7].child.options.type, 'eventsPage')
+  assert.equal(root.items[8].id, 'events')
 })

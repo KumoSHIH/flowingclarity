@@ -50,6 +50,10 @@ export interface EventOverviewContent {
   events: EventOverviewItem[]
 }
 
+export type EventOverviewApiResponse =
+  | { state: 'ready', content: EventOverviewContent }
+  | { state: 'empty' | 'error', content: null }
+
 export type EffectiveEventStatus = Exclude<
   EventRegistrationStatus,
   'cancelled' | 'completed'
