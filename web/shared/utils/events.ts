@@ -9,6 +9,7 @@ import type {
 
 export const EVENTS_PAGE_SIZE = 8
 export const EVENTS_TIMEZONE = 'Asia/Taipei'
+export type PaginationItem = number | 'ellipsis'
 
 function timestamp(value: string): number | null {
   const parsed = Date.parse(value)
@@ -101,6 +102,23 @@ export function paginateEvents(
   }
 }
 
+export function getPaginationItems(
+  currentPage: number,
+  totalPages: number,
+): PaginationItem[] {
+  const safeTotal = Math.max(1, Math.floor(totalPages))
+  const safeCurrent = Math.min(Math.max(1, Math.floor(currentPage)), safeTotal)
+
+  if (safeTotal <= 5) {
+    return Array.from({ length: safeTotal }, (_, index) => index + 1)
+  }
+  if (safeCurrent <= 3) return [1, 2, 3, 'ellipsis', safeTotal]
+  if (safeCurrent >= safeTotal - 2) {
+    return [1, 'ellipsis', safeTotal - 2, safeTotal - 1, safeTotal]
+  }
+  return [1, 'ellipsis', safeCurrent, 'ellipsis', safeTotal]
+}
+
 export function normalizeEventView(value: unknown): EventView {
   const candidate = Array.isArray(value) ? value[0] : value
   return candidate === 'past' ? 'past' : 'upcoming'
@@ -117,6 +135,10 @@ export function normalizeEventPage(value: unknown): number {
 export function getEventsPath(view: EventView, page = 1): string {
   const query = new URLSearchParams({ view, page: String(Math.max(1, page)) })
   return `/events?${query.toString()}`
+}
+
+export function getEventDetailPath(slug: string): string {
+  return `/events/${encodeURIComponent(slug)}`
 }
 
 export function isSafeRegistrationUrl(value?: string): boolean {

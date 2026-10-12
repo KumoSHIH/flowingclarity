@@ -46,6 +46,8 @@
   --button-primary-icon-size: 22px;
   --button-primary-tracking: 0.1em;
   --button-primary-transition: 220ms ease;
+  --directory-filter-font-size: 16px;
+  --directory-filter-count-size: 12px;
   --control-focus-width: 2px;
   --control-focus-offset: 6px;
 }
@@ -102,6 +104,14 @@
     width: var(--button-primary-icon-size);
     height: var(--button-primary-icon-size);
     flex: 0 0 auto;
+  }
+
+  .directory-filter__link {
+    font-size: var(--directory-filter-font-size);
+  }
+
+  .directory-filter__count {
+    font-size: var(--directory-filter-count-size);
   }
 }
 

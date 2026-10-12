@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest'
 import type { EventOverviewItem } from '../../shared/types/event'
 import {
   deriveEventCollections,
+  getEventDetailPath,
   getEventsPath,
+  getPaginationItems,
   isSafeRegistrationUrl,
   normalizeEventPage,
   normalizeEventView,
@@ -80,6 +82,15 @@ describe('event overview helpers', () => {
     expect(normalizeEventPage('-2')).toBe(1)
     expect(normalizeEventPage('3')).toBe(3)
     expect(getEventsPath('past', 2)).toBe('/events?view=past&page=2')
+    expect(getEventDetailPath('two-day-workshop')).toBe('/events/two-day-workshop')
+    expect(getEventDetailPath('活動 01')).toBe('/events/%E6%B4%BB%E5%8B%95%2001')
+  })
+
+  it('shows every short pagination page and compacts longer ranges around the current page', () => {
+    expect(getPaginationItems(2, 3)).toEqual([1, 2, 3])
+    expect(getPaginationItems(1, 8)).toEqual([1, 2, 3, 'ellipsis', 8])
+    expect(getPaginationItems(4, 8)).toEqual([1, 'ellipsis', 4, 'ellipsis', 8])
+    expect(getPaginationItems(8, 8)).toEqual([1, 'ellipsis', 6, 7, 8])
   })
 
   it('accepts only HTTPS registration destinations', () => {

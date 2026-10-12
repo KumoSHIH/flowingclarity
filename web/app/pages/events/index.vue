@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useSiteSettings } from '../../composables/useSiteSettings'
 import { eventOverviewFixture } from '../../fixtures/events'
 import type { EventView } from '#shared/types/event'
@@ -19,6 +19,15 @@ function navigate(view: EventView, page: number) {
 function normalize(view: EventView, page: number) {
   return router.replace({ path: '/events', query: { view, page: String(page) } })
 }
+
+watch(
+  () => [route.query.view, route.query.page, activeView.value, activePage.value] as const,
+  ([rawView, rawPage, view, page]) => {
+    if (rawView === view && rawPage === String(page)) return
+    void normalize(view, page)
+  },
+  { immediate: true },
+)
 
 useHead({ title: '近期活動｜Flowing Clarity' })
 </script>

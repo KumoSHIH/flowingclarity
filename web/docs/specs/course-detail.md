@@ -142,4 +142,3 @@
 
 #### 筆記，不需要執行，可忽略
 - 使用 $develop-feature 從 web/docs/specs/course-detail.md 接續下一個流程
-- 品質標準以 awwwards、webby awards、FWA 獲得獎項的程度為目標，透過自我檢查，反覆自行提升品質，直到達到該品質標準為止。

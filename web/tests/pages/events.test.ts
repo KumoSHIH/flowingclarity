@@ -11,7 +11,9 @@ const SiteHeaderStub = defineComponent({
 })
 
 describe('event overview', () => {
-  it('renders the selected view, counts, status rules, and compact pagination', () => {
+  afterEach(() => vi.useRealTimers())
+
+  it('renders the selected view, counts, status rules, and page links', () => {
     const wrapper = mount(EventOverview, {
       props: {
         content: eventOverviewFixture,
@@ -25,10 +27,18 @@ describe('event overview', () => {
     expect(wrapper.get('#upcoming-events-title').text()).toBe('近期活動')
     expect(wrapper.findAll('.event-row')).toHaveLength(8)
     expect(wrapper.get('aside nav a[aria-current="page"]').text()).toContain('近期活動')
-    expect(wrapper.find('.event-pagination').text()).toContain('1 / 2')
+    expect(wrapper.findAll('.event-pagination__page').map(item => item.text())).toEqual(['1', '2'])
+    expect(wrapper.get('.event-pagination__page[aria-current="page"]').text()).toBe('1')
+    expect(wrapper.get('.event-pagination__pages a').attributes('href')).toBe('/events?view=upcoming&page=2')
+    expect(wrapper.text()).not.toContain('近期活動第 1 頁，共 10 筆。')
     expect(wrapper.text()).toContain('名額已滿')
     expect(wrapper.text()).toContain('報名已截止')
     expect(wrapper.findAll('a[rel="noopener noreferrer"]')).toHaveLength(5)
+    expect(wrapper.get('.event-row__copy').element.tagName).toBe('A')
+    expect(wrapper.get('.event-row__copy').attributes('href')).toBe('/events/prototype-event-01')
+    expect(wrapper.get('.event-row__copy').attributes('target')).toBeUndefined()
+    expect(wrapper.get('.event-row__action a').attributes('href')).toBe('https://example.com/register/01')
+    expect(wrapper.get('.event-row__action a').attributes('target')).toBe('_blank')
     expect(wrapper.get('.event-row__date-item').findAll('span')).toHaveLength(2)
     expect(wrapper.get('.event-row__weekday').text()).toBe('(週六)')
     expect(wrapper.get('.event-row').find('.event-row__date-separator').exists()).toBe(false)
@@ -58,6 +68,125 @@ describe('event overview', () => {
     expect(pastLink.attributes('href')).toBe('/events?view=past&page=1')
     await pastLink.trigger('click')
     expect(wrapper.emitted('navigate')).toEqual([['past', 1]])
+  })
+
+  it('updates compact page links around the controlled current page', async () => {
+    const source = eventOverviewFixture.events[0]!
+    const content = {
+      ...eventOverviewFixture,
+      events: Array.from({ length: 48 }, (_, index) => ({
+        ...source,
+        id: `pagination-${index + 1}`,
+        slug: `pagination-${index + 1}`,
+        order: index + 1,
+      })),
+    }
+    const wrapper = mount(EventOverview, {
+      props: {
+        content,
+        now: '2026-10-12T09:00:00+08:00',
+        view: 'upcoming',
+        page: 1,
+      },
+    })
+
+    expect(wrapper.get('.event-pagination__pages').text()).toBe('123…6')
+    await wrapper.get('.event-pagination__page[aria-label="近期活動第 3 頁"]').trigger('click')
+    expect(wrapper.emitted('navigate')).toContainEqual(['upcoming', 3])
+
+    await wrapper.setProps({ page: 4 })
+    expect(wrapper.get('.event-pagination__pages').text()).toBe('1…456')
+    expect(wrapper.get('.event-pagination__page[aria-current="page"]').text()).toBe('4')
+  })
+
+  it('normalizes an out-of-range page and focuses the collection after paging', async () => {
+    const wrapper = mount(EventOverview, {
+      attachTo: document.body,
+      props: {
+        content: eventOverviewFixture,
+        now: '2026-10-12T09:00:00+08:00',
+        view: 'upcoming',
+        page: 99,
+      },
+    })
+
+    expect(wrapper.emitted('normalize')).toEqual([['upcoming', 2]])
+
+    await wrapper.setProps({ page: 2 })
+    await wrapper.vm.$nextTick()
+    expect(document.activeElement).toBe(wrapper.get('#upcoming-events-title').element)
+
+    wrapper.unmount()
+  })
+
+  it('updates registration and collection state across live time boundaries', async () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-10-12T09:00:00+08:00'))
+    const source = eventOverviewFixture.events[0]!
+    const content = {
+      ...eventOverviewFixture,
+      events: [{
+        ...source,
+        startAt: '2026-10-12T09:00:01+08:00',
+        endAt: '2026-10-12T09:00:02+08:00',
+      }],
+    }
+    const wrapper = mount(EventOverview, { props: { content } })
+
+    expect(wrapper.get('.event-row__status').text()).toBe('名額尚餘')
+    expect(wrapper.find('.event-row__action > a').exists()).toBe(true)
+
+    await vi.advanceTimersByTimeAsync(1_050)
+    expect(wrapper.get('.event-row__status').text()).toBe('報名已截止')
+    expect(wrapper.find('.event-row__action > a').exists()).toBe(false)
+
+    await vi.advanceTimersByTimeAsync(1_000)
+    expect(wrapper.find('.event-row').exists()).toBe(false)
+    expect(wrapper.text()).toContain(eventOverviewFixture.emptyMessage)
+
+    wrapper.unmount()
+  })
+
+  it('keeps past-only and long valid content available without false actions', () => {
+    const source = eventOverviewFixture.events[0]!
+    const longTitle = '長標題活動'.repeat(8).slice(0, 40)
+    const longSummary = '這是用來驗證長摘要仍可完整閱讀的內容。'.repeat(6).slice(0, 100)
+    const longVenue = '可公開顯示的活動場地資訊'.repeat(7).slice(0, 80)
+    const content = {
+      ...eventOverviewFixture,
+      events: [{
+        ...source,
+        title: longTitle,
+        summary: longSummary,
+        venue: longVenue,
+        registrationStatus: 'closed' as const,
+        registrationUrl: undefined,
+        startAt: '2026-10-10T10:00:00+08:00',
+        endAt: '2026-10-10T17:00:00+08:00',
+      }],
+    }
+
+    const upcoming = mount(EventOverview, {
+      props: {
+        content,
+        now: '2026-10-12T09:00:00+08:00',
+        view: 'upcoming',
+      },
+    })
+    expect(upcoming.find('.event-row').exists()).toBe(false)
+    expect(upcoming.get('a[href="/events?view=past&page=1"]').text()).toContain('1')
+
+    const past = mount(EventOverview, {
+      props: {
+        content,
+        now: '2026-10-12T09:00:00+08:00',
+        view: 'past',
+      },
+    })
+    expect(past.text()).toContain(longTitle)
+    expect(past.text()).toContain(longSummary)
+    expect(past.text()).toContain(longVenue)
+    expect(past.find('.event-row__action').exists()).toBe(false)
   })
 
   it('shows only archived rows in the past view and paginates them newest first', () => {
@@ -134,6 +263,26 @@ describe('events page', () => {
     expect(push).toHaveBeenCalledWith({
       path: '/events',
       query: { view: 'past', page: '1' },
+    })
+  })
+
+  it('replaces invalid query values with the canonical default URL', async () => {
+    route.query = { view: 'unknown', page: '-4' }
+
+    mount(EventsPage, {
+      global: {
+        stubs: {
+          SiteHeader: SiteHeaderStub,
+          SiteFooter: true,
+          SiteFooterUnavailable: true,
+          EventOverview,
+        },
+      },
+    })
+
+    expect(replace).toHaveBeenCalledWith({
+      path: '/events',
+      query: { view: 'upcoming', page: '1' },
     })
   })
 })

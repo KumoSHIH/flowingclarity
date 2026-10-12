@@ -8,10 +8,13 @@ import type {
 } from '#shared/types/event'
 import {
   deriveEventCollections,
+  getEventDetailPath,
   getEventsPath,
+  getPaginationItems,
   isSafeRegistrationUrl,
   paginateEvents,
 } from '#shared/utils/events'
+import DirectoryIntro from './DirectoryIntro.vue'
 
 const props = withDefaults(defineProps<{
   content: EventOverviewContent
@@ -61,6 +64,10 @@ const hasAnyEvents = computed(() => (
 ))
 const activeEvents = computed(() => collections.value[props.view])
 const pagination = computed(() => paginateEvents(activeEvents.value, props.page))
+const paginationItems = computed(() => getPaginationItems(
+  pagination.value.currentPage,
+  pagination.value.totalPages,
+))
 const activeHeading = computed(() => props.view === 'upcoming'
   ? props.content.upcomingHeading
   : props.content.pastHeading)
@@ -255,33 +262,41 @@ onBeforeUnmount(() => {
 <template>
   <div class="event-directory" :aria-busy="status === 'loading'">
     <aside class="event-directory__index">
-      <div>
-        <h1>{{ content.pageTitle }}</h1>
-        <p class="event-directory__intro">{{ content.intro }}</p>
-      </div>
+      <DirectoryIntro
+        :title="content.pageTitle"
+        :description="content.intro"
+      />
 
       <nav v-if="status === 'ready'" aria-label="活動檢視">
         <ul>
           <li>
             <a
+              class="directory-filter__link"
               :href="getEventsPath('upcoming', 1)"
               :aria-current="view === 'upcoming' ? 'page' : undefined"
               @click="navigate($event, 'upcoming', 1)"
             >
               <span>{{ content.upcomingHeading }}</span>
-              <span v-if="hasAnyEvents" class="event-directory__count">
+              <span
+                v-if="hasAnyEvents"
+                class="event-directory__count directory-filter__count"
+              >
                 {{ collections.upcoming.length }}
               </span>
             </a>
           </li>
           <li>
             <a
+              class="directory-filter__link"
               :href="getEventsPath('past', 1)"
               :aria-current="view === 'past' ? 'page' : undefined"
               @click="navigate($event, 'past', 1)"
             >
               <span>{{ content.pastHeading }}</span>
-              <span v-if="hasAnyEvents" class="event-directory__count">
+              <span
+                v-if="hasAnyEvents"
+                class="event-directory__count directory-filter__count"
+              >
                 {{ collections.past.length }}
               </span>
             </a>
@@ -365,7 +380,11 @@ onBeforeUnmount(() => {
                   </span>
                 </div>
 
-                <div class="event-row__copy">
+                <a
+                  class="event-row__copy"
+                  :href="getEventDetailPath(item.slug)"
+                  :aria-label="`查看活動：${item.title}`"
+                >
                   <p class="event-row__type">{{ item.eventType }}</p>
                   <h4>{{ item.title }}</h4>
                   <p class="event-row__meta">
@@ -374,7 +393,7 @@ onBeforeUnmount(() => {
                     <span>{{ formatTimeRange(item) }}</span>
                   </p>
                   <p class="event-row__summary">{{ item.summary }}</p>
-                </div>
+                </a>
 
                 <div v-if="view === 'upcoming'" class="event-row__action">
                   <span class="event-row__status">{{ statusLabel(item) }}</span>
@@ -409,12 +428,34 @@ onBeforeUnmount(() => {
             <a
               v-else
               :href="getEventsPath(view, pagination.currentPage - 1)"
+              class="event-pagination__step"
               rel="prev"
               @click="navigate($event, view, pagination.currentPage - 1)"
             >上一頁</a>
-            <span aria-current="page">
-              {{ pagination.currentPage }} / {{ pagination.totalPages }}
-            </span>
+            <ol class="event-pagination__pages">
+              <li
+                v-for="(item, index) in paginationItems"
+                :key="item === 'ellipsis' ? `ellipsis-${index}` : item"
+              >
+                <span
+                  v-if="item === 'ellipsis'"
+                  class="event-pagination__ellipsis"
+                  aria-hidden="true"
+                >…</span>
+                <span
+                  v-else-if="item === pagination.currentPage"
+                  class="event-pagination__page"
+                  aria-current="page"
+                >{{ item }}</span>
+                <a
+                  v-else
+                  :href="getEventsPath(view, item)"
+                  class="event-pagination__page"
+                  :aria-label="`${activeHeading}第 ${item} 頁`"
+                  @click="navigate($event, view, item)"
+                >{{ item }}</a>
+              </li>
+            </ol>
             <button
               v-if="pagination.currentPage === pagination.totalPages"
               type="button"
@@ -423,15 +464,12 @@ onBeforeUnmount(() => {
             <a
               v-else
               :href="getEventsPath(view, pagination.currentPage + 1)"
+              class="event-pagination__step"
               rel="next"
               @click="navigate($event, view, pagination.currentPage + 1)"
             >下一頁</a>
           </nav>
         </template>
-
-        <p class="sr-only">
-          {{ activeHeading }}第 {{ pagination.currentPage }} 頁，共 {{ pagination.totalItems }} 筆。
-        </p>
       </section>
     </div>
   </div>
@@ -439,6 +477,10 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .event-directory {
+  --event-text-muted: color-mix(in srgb, var(--color-muted) 80%, var(--color-ink));
+  --event-text-clay: color-mix(in srgb, var(--color-clay) 80%, var(--color-ink));
+  --event-action: color-mix(in srgb, var(--color-persimmon) 75%, var(--color-ink));
+  --event-action-hover: color-mix(in srgb, var(--color-persimmon) 65%, var(--color-ink));
   display: grid;
   grid-template-columns: minmax(300px, 30%) minmax(0, 70%);
   align-items: start;
@@ -460,23 +502,6 @@ onBeforeUnmount(() => {
   scrollbar-width: thin;
 }
 
-.event-directory__index h1 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(46px, 4.8vw, 76px);
-  font-weight: 400;
-  line-height: 1.28;
-  letter-spacing: 0.04em;
-}
-
-.event-directory__intro {
-  max-width: 12em;
-  margin: 28px 0 0;
-  font-size: clamp(17px, 1.4vw, 22px);
-  line-height: 1.8;
-  letter-spacing: 0.08em;
-}
-
 .event-directory__index nav {
   margin-top: auto;
 }
@@ -495,10 +520,9 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   gap: 24px;
   padding: 0 20px;
-  color: var(--color-muted);
+  color: var(--event-text-muted);
   border-top: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
   text-decoration: none;
-  font-size: clamp(17px, 1.35vw, 21px);
   letter-spacing: 0.07em;
   transition: color 180ms ease, background 180ms ease;
 }
@@ -528,7 +552,6 @@ onBeforeUnmount(() => {
 .event-directory__count {
   flex: 0 0 auto;
   font-family: var(--font-display);
-  font-size: 20px;
   font-variant-numeric: tabular-nums;
   font-weight: 400;
 }
@@ -558,7 +581,6 @@ onBeforeUnmount(() => {
   align-items: baseline;
   gap: 40px;
   padding-bottom: 32px;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 30%, transparent);
 }
 
 .event-collection__heading h2 {
@@ -573,7 +595,7 @@ onBeforeUnmount(() => {
 .event-collection__heading p {
   max-width: 28em;
   margin: 0;
-  color: var(--color-muted);
+  color: var(--event-text-muted);
   font-size: 14px;
   line-height: 1.9;
   letter-spacing: 0.08em;
@@ -618,6 +640,10 @@ onBeforeUnmount(() => {
   border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 16%, transparent);
 }
 
+.event-month .event-row:last-child {
+  border-bottom: 0;
+}
+
 .event-row--multi-day {
   grid-template-columns: minmax(150px, 0.9fr) minmax(0, 3fr) minmax(140px, 0.85fr);
 }
@@ -625,7 +651,7 @@ onBeforeUnmount(() => {
 .event-row__date {
   display: flex;
   flex-direction: column;
-  color: var(--color-muted);
+  color: var(--event-text-muted);
   font-size: 12px;
   letter-spacing: 0.08em;
   white-space: nowrap;
@@ -657,11 +683,16 @@ onBeforeUnmount(() => {
 
 .event-row__type {
   margin: 0 0 4px;
-  color: var(--color-clay);
+  color: var(--event-text-clay);
   font-size: 12px;
   font-weight: 600;
   line-height: 1.7;
   letter-spacing: 0.18em;
+}
+
+.event-row__copy {
+  color: inherit;
+  text-decoration: none;
 }
 
 .event-row__copy h4 {
@@ -672,6 +703,16 @@ onBeforeUnmount(() => {
   line-height: 1.45;
   letter-spacing: 0.04em;
   overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 7px;
+  transition: color 180ms ease, text-decoration-color 180ms ease;
+}
+
+.event-row__copy:is(:hover, :focus-visible) h4 {
+  color: var(--color-clay);
+  text-decoration-color: currentColor;
 }
 
 .event-row__meta {
@@ -679,7 +720,7 @@ onBeforeUnmount(() => {
   flex-wrap: wrap;
   gap: 4px 18px;
   margin: 6px 0 0;
-  color: var(--color-muted);
+  color: var(--event-text-muted);
   font-size: 12px;
   line-height: 1.7;
   letter-spacing: 0.06em;
@@ -700,7 +741,7 @@ onBeforeUnmount(() => {
 }
 
 .event-row__status {
-  color: var(--color-clay);
+  color: var(--event-text-clay);
   font-size: 12px;
   font-weight: 600;
   line-height: 1.7;
@@ -716,7 +757,7 @@ onBeforeUnmount(() => {
   gap: 18px;
   padding: 0 20px;
   color: var(--color-warm-white);
-  background: var(--color-persimmon);
+  background: var(--event-action);
   text-decoration: none;
   font-size: 15px;
   letter-spacing: 0.1em;
@@ -724,7 +765,7 @@ onBeforeUnmount(() => {
 }
 
 .event-row__action > a:not(.event-row__course-link):hover {
-  background: var(--button-primary-hover);
+  background: var(--event-action-hover);
 }
 
 .event-row__action svg {
@@ -749,18 +790,16 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: minmax(80px, 1fr) auto minmax(80px, 1fr);
   align-items: center;
-  gap: clamp(20px, 4vw, 64px);
-  max-width: 520px;
+  gap: clamp(18px, 3vw, 40px);
+  max-width: 620px;
   margin: 64px auto 0;
-  padding-top: 28px;
-  border-top: 1px solid color-mix(in srgb, var(--color-ink) 22%, transparent);
   font-size: 14px;
   letter-spacing: 0.08em;
   text-align: center;
 }
 
-.event-pagination a,
-.event-pagination button {
+.event-pagination__step,
+.event-pagination > button {
   min-height: 48px;
   align-content: center;
   padding: 0;
@@ -774,10 +813,40 @@ onBeforeUnmount(() => {
   cursor: pointer;
 }
 
-.event-pagination button:disabled {
+.event-pagination > button:disabled {
   color: color-mix(in srgb, var(--color-muted) 48%, var(--color-paper));
   text-decoration: none;
   cursor: default;
+}
+
+.event-pagination__pages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.event-pagination__page,
+.event-pagination__ellipsis {
+  display: grid;
+  min-width: 44px;
+  min-height: 44px;
+  place-items: center;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+}
+
+.event-pagination__page[aria-current="page"] {
+  border-bottom: 1px solid var(--color-clay);
+  font-weight: 700;
+}
+
+.event-pagination__pages a:hover {
+  color: var(--color-clay);
 }
 
 .event-pagination > :first-child {
@@ -891,10 +960,6 @@ onBeforeUnmount(() => {
     min-height: 0;
     padding: 72px clamp(28px, 7vw, 72px) 48px;
     overflow: visible;
-  }
-
-  .event-directory__index h1 {
-    font-size: clamp(44px, 10vw, 64px);
   }
 
   .event-directory__index nav {
@@ -1016,13 +1081,35 @@ onBeforeUnmount(() => {
   }
 
   .event-pagination {
-    gap: 14px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px 24px;
+  }
+
+  .event-pagination__pages {
+    grid-row: 1;
+    grid-column: 1 / -1;
+  }
+
+  .event-pagination > :first-child {
+    grid-row: 2;
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .event-pagination > :last-child {
+    grid-row: 2;
+    grid-column: 2;
+    justify-self: end;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .event-directory__index a,
-  .event-row__action > a {
+  .event-row__copy h4 {
+    transition: none;
+  }
+
+  .event-row__action > a:not(.event-row__course-link) {
     transition: none;
   }
 }

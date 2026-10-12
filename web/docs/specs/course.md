@@ -181,3 +181,8 @@ stages:
 - 各階段是否可獨立報名須在建立正式梯次前確認；此決定影響 stage 與 run 的切分，但不阻擋總覽 CMS 串接。
 - `validate-content-flow` 已完成 production schema 部署、公開 ID migration、草稿／published 隔離、匿名公開讀取、瀏覽器呈現及測試資料清除；狀態維持 `verified`。舊 `courseCategory.*` reference 已確認為 0，文件本身留待獨立清理變更。
 - 已核准的原始方向記錄於 [`web/.impeccable/surfaces/app-pages-course-vue.md`](../../.impeccable/surfaces/app-pages-course-vue.md)；目前 Vue 實作及本規格記錄其後續手動調整。
+- 課程與活動總覽左欄的頁面標題及導讀共用 `DirectoryIntro.vue`；桌面維持 12em 閱讀寬度，1023px 以下取消最大寬度，避免手機導讀過早換行。分類導覽仍由課程頁自行管理。
+
+## 共用左欄導讀調整記錄
+
+2026-10-12 將課程與活動總覽重複的頁面標題、導讀標記及響應式樣式抽成 `DirectoryIntro.vue`。課程分類與活動檢視切換仍由各自頁面維護。Chromium 於 1440px 確認兩頁導讀維持約 12em（242px），390px 時 `max-width` 為 `none` 並完整使用 327px 可用寬度，兩頁皆無水平溢位。`npm run test -w web` 通過 20 個測試檔、117 項測試；typecheck、build 與 Impeccable layout detector 均通過。

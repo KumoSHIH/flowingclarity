@@ -13,6 +13,7 @@ import type {
   CourseOverviewStatus,
 } from "../../shared/types/course";
 import { getCoursePath } from "../utils/courseRoutes";
+import DirectoryIntro from "./DirectoryIntro.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -107,15 +108,16 @@ onBeforeUnmount(() => categoryObserver?.disconnect());
     :aria-busy="status === 'loading'"
   >
     <aside class="course-directory__index">
-      <div>
-        <h1>{{ content.pageTitle }}</h1>
-        <p class="course-directory__prompt">{{ content.directoryPrompt }}</p>
-      </div>
+      <DirectoryIntro
+        :title="content.pageTitle"
+        :description="content.directoryPrompt"
+      />
 
       <nav v-if="status === 'ready' && hasCourses" aria-label="課程分類">
         <ol>
           <li v-for="category in orderedCategories" :key="category.key">
             <a
+              class="directory-filter__link"
               :href="`#${category.slug}`"
               :aria-current="
                 activeCategorySlug === category.slug ? 'location' : undefined
@@ -123,7 +125,7 @@ onBeforeUnmount(() => categoryObserver?.disconnect());
               @click="activeCategorySlug = category.slug"
             >
               <span>{{ category.name }}</span>
-              <span class="course-directory__count">
+              <span class="course-directory__count directory-filter__count">
                 {{ category.courses.length }} 門
               </span>
             </a>
@@ -255,23 +257,6 @@ onBeforeUnmount(() => categoryObserver?.disconnect());
   scrollbar-width: thin;
 }
 
-.course-directory__index h1 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(46px, 4.8vw, 76px);
-  font-weight: 400;
-  line-height: 1.28;
-  letter-spacing: 0.04em;
-}
-
-.course-directory__prompt {
-  max-width: 12em;
-  margin: 28px 0 0;
-  font-size: clamp(17px, 1.4vw, 22px);
-  line-height: 1.8;
-  letter-spacing: 0.08em;
-}
-
 .course-directory__index ol {
   padding: 0;
   margin: 0;
@@ -308,7 +293,6 @@ onBeforeUnmount(() => categoryObserver?.disconnect());
   display: flex;
   align-items: center;
   gap: 9px;
-  font-size: 12px;
   white-space: nowrap;
 }
 
@@ -569,10 +553,6 @@ onBeforeUnmount(() => categoryObserver?.disconnect());
     height: auto;
     padding: 72px clamp(28px, 7vw, 72px) 48px;
     overflow: visible;
-  }
-
-  .course-directory__index h1 {
-    font-size: clamp(44px, 10vw, 64px);
   }
 
   .course-group {
