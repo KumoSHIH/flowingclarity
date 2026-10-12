@@ -1,0 +1,91 @@
+{
+  "environment": {
+    "dataset": "production",
+    "timezone": "Asia/Taipei",
+    "window": "2026-10-12 19:35-19:44"
+  },
+  "schemaDeploy": {
+    "deployed": 1,
+    "total": 1
+  },
+  "baseline": {
+    "pageDocuments": 0,
+    "eventDocuments": 0,
+    "draftDocuments": 0
+  },
+  "draftIsolation": {
+    "pageDrafts": 1,
+    "eventDrafts": 48,
+    "anonymousPage": null,
+    "anonymousEvents": 0
+  },
+  "schemaValidation": {
+    "validDocuments": 62,
+    "errorDocuments": 0,
+    "errors": 0
+  },
+  "published": {
+    "pageDocuments": 1,
+    "eventDocuments": 48,
+    "visibleUpcoming": 45,
+    "visiblePast": 2,
+    "cancelledExcluded": 1,
+    "safeRegistrationLinks": 1,
+    "longContent": {
+      "title": 40,
+      "summary": 100,
+      "venue": 80
+    }
+  },
+  "rendered": {
+    "h1": 1,
+    "upcomingPage1Rows": 8,
+    "upcomingPage6Rows": 5,
+    "pastRows": 2,
+    "pastActions": 0,
+    "prototypeNotice": false,
+    "widths": [1440, 390]
+  },
+  "updateLifecycle": {
+    "draftHiddenUntilPublish": true,
+    "publishedUpdateVisibleAnonymously": true,
+    "localApiReadPublishedUpdate": true
+  },
+  "cleanup": {
+    "activeDocumentsDeleted": 49,
+    "targetIdsChecked": 98,
+    "remainingAuthenticated": 0,
+    "remainingAnonymous": 0,
+    "localApiState": "empty"
+  },
+  "studioInspection": {
+    "window": "2026-10-12 20:20-20:30",
+    "authenticated": true,
+    "pageFieldGuidance": true,
+    "eventPreview": true,
+    "inlineValidation": true,
+    "publishBlockedForInvalidDraft": true,
+    "invalidDraftRemoved": true,
+    "remainingValidationIds": 0,
+    "existingEventModified": false
+  },
+  "pageDraftRecovery": {
+    "window": "2026-10-12 20:41",
+    "draftId": "drafts.events-page",
+    "draftCreated": true,
+    "publishedPageExists": false,
+    "studioFormEditable": true,
+    "eventValidationDocumentsRemaining": 0
+  },
+  "schemaUpdate": {
+    "window": "2026-10-12 20:53",
+    "pastIntroRemoved": true,
+    "emptyMessageMinimum": 3,
+    "deployed": 1,
+    "total": 1,
+    "dataset": "production"
+  },
+  "unverified": [
+    "Physical touch device and screen reader"
+  ]
+}

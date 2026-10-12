@@ -30,7 +30,6 @@ export const eventOverviewFixture: EventOverviewContent = {
   intro: '從短期工作坊與說明會開始，依自己的時間與需要，找到適合參與的練習。',
   upcomingHeading: '近期活動',
   pastHeading: '過去活動',
-  pastIntro: '依結束日期由近到遠整理曾經舉辦的活動。',
   emptyMessage: '目前沒有已發布的近期活動；可以切換至過去活動查看歷史紀錄。',
   prototypeNotice: '本頁活動、日期、地點與報名網址皆為前端示意資料。',
   events: [

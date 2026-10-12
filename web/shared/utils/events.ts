@@ -132,10 +132,9 @@ export function parseEventOverview(value: unknown): EventOverviewContent | null 
   const intro = textInRange(value.page.intro, 20, 100)
   const upcomingHeading = textInRange(value.page.upcomingHeading, 2, 12)
   const pastHeading = textInRange(value.page.pastHeading, 2, 12)
-  const pastIntro = optionalText(value.page.pastIntro, 10, 80)
-  const emptyMessage = textInRange(value.page.emptyMessage, 12, 80)
+  const emptyMessage = textInRange(value.page.emptyMessage, 3, 80)
   if (!pageTitle || !intro || !upcomingHeading || !pastHeading
-    || pastIntro === null || !emptyMessage) return null
+    || !emptyMessage) return null
 
   const seenIds = new Set<string>()
   const seenSlugs = new Set<string>()
@@ -153,7 +152,6 @@ export function parseEventOverview(value: unknown): EventOverviewContent | null 
     intro,
     upcomingHeading,
     pastHeading,
-    pastIntro,
     emptyMessage,
     events,
   }

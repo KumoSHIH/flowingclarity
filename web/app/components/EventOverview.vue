@@ -71,7 +71,6 @@ const paginationItems = computed(() => getPaginationItems(
 const activeHeading = computed(() => props.view === 'upcoming'
   ? props.content.upcomingHeading
   : props.content.pastHeading)
-const activeIntro = computed(() => props.view === 'past' ? props.content.pastIntro : undefined)
 
 interface MonthGroup {
   key: string
@@ -336,7 +335,6 @@ onBeforeUnmount(() => {
           >
             {{ activeHeading }}
           </h2>
-          <p v-if="activeIntro">{{ activeIntro }}</p>
         </header>
 
         <div v-if="pagination.totalItems === 0" class="event-collection__empty">
@@ -577,9 +575,6 @@ onBeforeUnmount(() => {
 }
 
 .event-collection__heading {
-  display: flex;
-  align-items: baseline;
-  gap: 40px;
   padding-bottom: 32px;
 }
 
@@ -590,15 +585,6 @@ onBeforeUnmount(() => {
   font-weight: 400;
   line-height: 1.05;
   letter-spacing: 0.05em;
-}
-
-.event-collection__heading p {
-  max-width: 28em;
-  margin: 0;
-  color: var(--event-text-muted);
-  font-size: 14px;
-  line-height: 1.9;
-  letter-spacing: 0.08em;
 }
 
 .event-month {
@@ -977,12 +963,6 @@ onBeforeUnmount(() => {
   .event-collection {
     min-height: auto;
     padding-block: 80px;
-  }
-
-  .event-collection__heading {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 20px;
   }
 
   .event-collection__heading h2 {

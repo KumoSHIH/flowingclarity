@@ -44,7 +44,6 @@ export interface EventOverviewContent {
   intro: string
   upcomingHeading: string
   pastHeading: string
-  pastIntro?: string
   emptyMessage: string
   prototypeNotice?: string
   events: EventOverviewItem[]

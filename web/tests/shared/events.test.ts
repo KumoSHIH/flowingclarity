@@ -40,7 +40,6 @@ describe('event overview helpers', () => {
         intro: '從短期工作坊與說明會開始，依自己的時間與需要，找到適合參與的練習。',
         upcomingHeading: '近期活動',
         pastHeading: '過去活動',
-        pastIntro: '依結束日期由近到遠整理曾經舉辦的活動。',
         emptyMessage: '目前沒有已發布的近期活動；可以切換至過去活動查看歷史紀錄。',
       },
       events: [
@@ -67,6 +66,22 @@ describe('event overview helpers', () => {
 
   it('rejects an invalid page content contract', () => {
     expect(parseEventOverview({ page: { pageTitle: '' }, events: [] })).toBeNull()
+  })
+
+  it('accepts a three-character empty message and rejects a shorter value', () => {
+    const page = {
+      pageTitle: '近期活動',
+      intro: '從短期工作坊與說明會開始，依自己的時間與需要，找到適合參與的練習。',
+      upcomingHeading: '近期活動',
+      pastHeading: '過去活動',
+      emptyMessage: '無活動',
+    }
+
+    expect(parseEventOverview({ page, events: [] })).not.toBeNull()
+    expect(parseEventOverview({
+      page: { ...page, emptyMessage: '目前' },
+      events: [],
+    })).toBeNull()
   })
 
   it('closes registration at the start boundary and archives at the end boundary', () => {

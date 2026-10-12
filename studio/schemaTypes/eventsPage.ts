@@ -38,19 +38,12 @@ export const eventsPage = defineType({
       validation: Rule => Rule.required().min(2).max(12),
     }),
     defineField({
-      name: 'pastIntro',
-      title: '過去活動說明',
-      type: 'text',
-      rows: 2,
-      validation: Rule => Rule.min(10).max(80),
-    }),
-    defineField({
       name: 'emptyMessage',
       title: '近期活動空狀態',
       type: 'text',
       rows: 2,
       description: '不要承諾尚未確認的活動日期。',
-      validation: Rule => Rule.required().min(12).max(80),
+      validation: Rule => Rule.required().min(3).max(80),
     }),
   ],
   preview: {

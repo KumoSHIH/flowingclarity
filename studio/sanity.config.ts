@@ -18,7 +18,7 @@ export default defineConfig({
     structureTool({ structure }),
   ],
   document: {
-    actions: (prev, context) => context.schemaType === 'siteSettings'
+    actions: (prev, context) => ['siteSettings', 'eventsPage'].includes(context.schemaType)
       ? prev.filter(action => !['duplicate', 'delete', 'unpublish'].includes(action.action ?? ''))
       : prev,
     newDocumentOptions: (prev, { creationContext }) =>
@@ -28,6 +28,7 @@ export default defineConfig({
             'courseOverviewPage',
             'courseCategory',
             'siteSettings',
+            'eventsPage',
           ].includes(templateId))
         : prev,
   },

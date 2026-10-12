@@ -8,7 +8,6 @@ export const eventsQuery = `{
     intro,
     upcomingHeading,
     pastHeading,
-    pastIntro,
     emptyMessage
   },
   "events": *[_type == "event" && isPublished == true]{

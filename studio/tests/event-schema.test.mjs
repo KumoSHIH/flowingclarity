@@ -11,7 +11,6 @@ test('event schemas expose semantic content fields and public-safe singleton id'
     'intro',
     'upcomingHeading',
     'pastHeading',
-    'pastIntro',
     'emptyMessage',
   ])
   assert.deepEqual(event.fields.map(({ name }) => name), [

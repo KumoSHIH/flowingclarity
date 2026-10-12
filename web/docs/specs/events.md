@@ -1,6 +1,6 @@
 # 近期活動總覽規格
 
-**狀態：** cms-integrated
+**狀態：** verified
 **路由：** `/events`  
 **頁面模式：** Persuade；協助訪客比較近期可參與的短期活動並採取下一步  
 **設計依據：** [`course.md`](course.md)、[`DESIGN.md`](../../DESIGN.md)、目前 `CourseOverview.vue` 的 30%／70% 雙域節奏，以及已核准的 [「月份長譜」首屏稿](../../.impeccable/mocks/decision/events-monthly-score.webp)；活動頁延續字體尺度、左右分區、色系與 1023px 響應式斷點，但不複製課程分類錨點或光片互動
@@ -51,8 +51,7 @@
 | `intro` | 說明此頁用途的短文，純文字 | 必填，20–100 字 | 編輯者／Sanity page singleton |
 | `upcomingHeading` | 近期集合標題 | 必填，2–12 字 | 編輯者／Sanity page singleton |
 | `pastHeading` | 過去集合標題 | 必填，2–12 字 | 編輯者／Sanity page singleton |
-| `pastIntro` | 過去活動的選填說明 | 選填，10–80 字 | 編輯者／Sanity page singleton |
-| `emptyMessage` | 完全沒有近期活動時的說明 | 必填，12–80 字；不得承諾未確認日期 | 編輯者／Sanity page singleton |
+| `emptyMessage` | 完全沒有近期活動時的說明 | 必填，3–80 字；不得承諾未確認日期 | 編輯者／Sanity page singleton |
 | `events` | 已發布活動集合 | 可為 0；近期典型 1–6、需支援至少 48；過去可持續增加 | 系統／Sanity query |
 | `pageSize` | 每個集合單頁筆數 | 固定為 8；前端設定，不存入 CMS | 系統／前端常數 |
 
@@ -151,8 +150,8 @@
 - `hybrid` 依已核准內容契約保留；內容團隊仍需確認是否有實際混合活動，若確認不需要，後續應同步移除 schema、型別與顯示文案。
 - 正式外部報名表單與開新分頁策略尚未確認；設計階段須同時涵蓋有／無報名入口，不得以假 URL 驗收。
 - 活動列表已保留 `/events/{slug}` 詳情入口，但活動詳情頁尚未製作；建立動態路由、詳情內容契約與未找到狀態屬後續階段。
-- `integrate-sanity-content` 已完成；下一階段為 `validate-content-flow`，需在取得具體授權後部署 schema、建立測試內容並驗證 published perspective 的公開讀取。
-- 本階段未部署 schema、未修改遠端 dataset，也未建立正式內容；因此尚不能將任何活動視為已發布。
+- `validate-content-flow` 已完成自動檢查、production schema 部署、隔離測試文件的草稿／發布／更新／匿名讀取與清理，以及登入 Studio 的欄位說明、preview 與 inline validation 檢查；規格狀態已更新為 `verified`。
+- production 已部署活動 schema，且全部 `event-validation-20261012-*` 活動驗收文件皆已清除。2026-10-12 20:24 於 Studio 另看到一筆既有「活動測試」；該文件不是驗收腳本建立，驗收期間未修改或刪除。20:41 已重新建立空白、未發布的 `drafts.events-page`，讓內容負責人可直接編輯；正式頁面文案仍待填寫與發布。
 
 ## CMS 整合記錄
 
@@ -160,7 +159,25 @@
 
 `/api/events` 只以 published perspective 查詢 `isPublished == true` 的活動，經獨立轉換層檢查頁面契約、日期、slug、列舉、圖片與關聯課程後才交給前端；無效活動文件會被排除，缺少頁面單例回傳 empty，查詢或頁面契約失敗則回傳 error。`/events` 已改用此 API，保留既有 loading、完全空與重新載入狀態，不再引用活動 fixture 作為正式內容或失敗 fallback。
 
-本機驗證結果：web 完整測試 21 個檔案、126 項通過；Studio 測試 16 項通過；web 與 Studio typecheck、build 均通過，`git diff --check` 通過。web typecheck 仍輸出既有 `vue-router/volar` 子路徑解析警告，web build 仍有既有 sourcemap 與字型執行期解析警告，皆未造成失敗。遠端 schema 部署、dataset 寫入、published API 與真實內容流程尚未執行。
+本機驗證結果：web 完整測試 21 個檔案、126 項通過；Studio 測試 16 項通過；web 與 Studio typecheck、build 均通過，`git diff --check` 通過。web typecheck 仍輸出既有 `vue-router/volar` 子路徑解析警告，web build 仍有既有 sourcemap 與字型執行期解析警告，皆未造成失敗。production schema 與內容流結果記錄於下節。
+
+## 內容流程驗收記錄
+
+2026-10-12 19:35–19:44（Asia/Taipei）在 production dataset 完成可回復驗收。基線為活動頁 0、活動 0、草稿 0；部署 schema 1/1 成功。建立 `events-page` 草稿與 48 筆 `events-validation-20261012-*` 活動草稿後，登入查詢可見 49 份草稿，匿名 published 查詢仍為頁面不存在、活動 0。遠端 schema validation 檢查 62 份文件，結果為 62 valid、0 errors。
+
+首次發布後，匿名 Data API 可讀固定 ID `events-page` 與 48 筆公開活動；長內容邊界為標題 40 字、摘要 100 字、場地 80 字，並包含 1 筆取消狀態及 1 個安全 HTTPS 報名入口。本機 API 回傳 `ready` 與 48 筆資料；前台推導近期 45、過去 2，取消活動不顯示，近期第 1 頁 8 筆、第 6 頁 5 筆，過去集合沒有報名 action。1440px 與 390px 的近期／過去畫面未見裁切或重疊，證據見 [活動內容流驗收](../design/review/events-content-flow/README.md)。
+
+更新草稿建立後，匿名查詢仍顯示舊公開版本；再次發布後才顯示更新標記，本機 API 亦讀到新版。完成後刪除當時存在的 49 份測試文件，並核對全部 98 個 published／draft 目標 ID；登入與匿名查詢均為 0，本機 API 回到 `empty`。
+
+20:20–20:30 再以既有登入工作階段開啟本機 Studio，確認「活動總覽頁」欄位名稱與說明、活動清單 preview，以及新活動表單的欄位說明。清單中既有「活動測試」的 preview 正確包含代表圖、標題與由開始時間／報名狀態／公開狀態組成的副標；該文件不是驗收腳本建立，未做任何修改。
+
+另建立未發布且可辨識的 `drafts.event-validation-20261012-invalid` 隔離草稿，確認標題、slug、活動形式與摘要顯示 inline validation，發布按鈕停用；日期倒置、城市、報名狀態與 HTTPS 規則另由 Studio 測試覆蓋。檢查後只精準刪除該草稿，最終 authenticated inspect 顯示全部 validation ID 為 0。自動檢查與實際編輯／發布生命週期皆已完成，依 `validate-content-flow` 將狀態更新為 `verified`。實體觸控裝置與螢幕閱讀器仍屬 UI 驗證限制，不記錄為已完成。
+
+20:41 因已刪除的 `events-page` 無法從 Draft 視角還原，新增 `seed-page-draft` 安全階段；此階段先確認 published 與 draft 皆不存在，再只建立 `_id` 為 `drafts.events-page`、`_type` 為 `eventsPage` 的空白草稿。authenticated inspect 顯示僅有該草稿、沒有 published 頁面，Studio 亦確認刪除提示消失且欄位可編輯；公開網站不受影響。
+
+依內容編輯需求，移除未使用的「過去活動說明」欄位；Studio schema、GROQ 查詢、共享型別、前台解析器、元件與 fixture 均不再讀取或顯示 `pastIntro`。既有 Sanity 文件若保留該欄位亦會被忽略，不執行破壞性的遠端資料清除。「近期活動空狀態」維持必填 3–80 字，並保留 3 字通過、2 字拒絕的回歸測試。
+
+2026-10-12 20:53 將上述 schema 更新部署至 production，結果為 1/1 成功；`sanity schema list` 確認 `_.schemas.default` 對應 `default` workspace 與 `production` dataset。
 
 ## UI 行為驗證記錄
 
