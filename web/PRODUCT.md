@@ -38,11 +38,12 @@ Sanity 為正式內容管理方式。課程分類與授課形式如下：
 ### 目前實作
 
 - 技術架構為 Nuxt 4、Vue 3、TypeScript 與 Tailwind CSS 4。
-- 全站設定已完成 Sanity 單例、遠端 schema、published-only 查詢及前台串接：Header、hero-menu、Footer 共用五項導覽；Header Logo 與 Footer Logo 在同一文件內獨立設定。2026-10-08 已驗證草稿隔離、匿名發布讀取、三處同步及完整還原；目前公開文件未設定 Footer Logo，因此顯示品牌文字備援。Studio 尚無部署 hostname，且四個目的頁尚未建立，仍是發布門檻。
+- 全站設定已完成 Sanity 單例、遠端 schema、published-only 查詢及前台串接：Header、hero-menu、Footer 共用五項導覽；Header Logo 與 Footer Logo 在同一文件內獨立設定。2026-10-08 已驗證草稿隔離、匿名發布讀取、三處同步及完整還原；目前公開文件未設定 Footer Logo，因此顯示品牌文字備援。Studio 尚無部署 hostname，且三個目的頁尚未建立，仍是發布門檻。
 - 首頁包含品牌介紹、活動、課程與聯絡區塊，內容仍為示範資料；課程區塊尚未提供報名連結。
 - Banner 從 Sanity 讀取已發布的大標題、敘述、按鈕文字及按鈕連結；內容不完整或讀取失敗時使用本機示範內容。玫瑰底圖、課程分類與動畫由前端維護。
 - `/course` 已完成 Sanity 課程總覽、固定分類、課程與梯次 schema、伺服器查詢及 production 內容流驗收；遠端 schema 已部署，公開分類 ID migration 已完成。頁面不再以 fixture 作為主要資料，目前 production 有 1 門初步課程，其餘正式內容仍待內容負責人審核與發布。
 - `/course/[slug]` 已完成響應式前端、Sanity 整合與 production 內容流驗收：包含獨立詳情公開開關、published-only slug API、共用資料契約、可排序內容編排與可重複的五款圖文版型、公開梯次及安全報名連結。遠端 schema 已部署，草稿隔離、兩次發布、匿名讀取、1440px／390px 完整頁及測試內容清除均已驗證；正式內容仍待核准。
+- `/events` 已完成 fixture 驅動的前端原型：左側可切換近期／過去活動，右側以月份長譜呈現目前集合，支援每頁 8 筆、URL query、自動截止、結束後歸檔，以及 loading／empty／error 狀態。此階段尚未串接 Sanity，頁面活動內容皆為明確標示的示範資料。
 - Production 正式內容矩陣目前覆蓋 1／6 門；其餘五門缺少核准摘要與 slug，選填代表圖若使用則需替代文字。舊 `courseCategory.*` reference 已確認為 0，舊文件尚未刪除。
 
 ### 待確認事項
