@@ -1,0 +1,58 @@
+export const sanityEventDetail = {
+  title: '身體覺察一日工作坊',
+  slug: 'body-awareness-day',
+  summary: '透過溫和的觀察與練習，理解自己如何回應身體的感受與節奏。',
+  startAt: '2027-11-07T02:00:00Z',
+  endAt: '2027-11-07T09:00:00Z',
+  scheduleNote: '10:00–17:00',
+  deliveryMode: 'inPerson',
+  city: '高雄',
+  venue: '活動地點',
+  image: {
+    src: 'https://cdn.sanity.io/images/test/production/event.jpg',
+    alt: '活動練習空間',
+    hotspot: { x: 0.5, y: 0.4 },
+  },
+  registrationStatus: 'open',
+  registrationUrl: 'https://forms.example.com/event',
+  isPublished: true,
+  detailIsPublished: true,
+  detail: {
+    intro: '這場活動從安定自己的注意力開始，透過說明、示範與練習，讓參與者依自己的節奏理解當下經驗。',
+    feeLabel: '費用待確認',
+    registrationNote: '報名後將收到後續說明。',
+    seoTitle: '身體覺察一日工作坊｜Flowing Clarity',
+    seoDescription: '了解身體覺察工作坊的活動內容、時間與參與方式。',
+    body: [
+      {
+        key: 'intro-copy',
+        type: 'eventDetailText',
+        title: '課程介紹',
+        paragraphs: ['活動會從說明與個人觀察開始，再逐步進入實作與整理。'],
+      },
+      {
+        key: 'facilitator',
+        type: 'eventDetailFacilitator',
+        name: '王小明',
+        role: '活動帶領者',
+        biography: '帶領者會清楚說明練習方式與界線，並保留提問、休息與調整的空間。',
+      },
+      {
+        key: 'agenda',
+        type: 'eventDetailAgenda',
+        title: '這一天，會怎麼進行',
+        description: '從抵達與說明開始，再進入示範、練習與共同整理。',
+        items: [
+          { key: 'arrival', timeLabel: '10:00', title: '抵達與說明', description: '理解活動的參與方式與練習界線。' },
+          { key: 'practice', timeLabel: '13:30', title: '示範與練習', description: '按照自己的狀態調整參與程度。' },
+        ],
+      },
+      {
+        key: 'stories',
+        type: 'sharedTestimonialBlock',
+        title: '學員心得分享',
+        items: [{ text: '完整說明讓我可以按照自己的狀態練習，也清楚知道什麼時候可以停下來。', sharerName: '分享者 A' }],
+      },
+    ],
+  },
+}

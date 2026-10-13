@@ -31,7 +31,7 @@ Sanity／伺服器內部查詢項目可含 `_key`、`text`、`sharerName` 與 `c
 
 ## 下一階段
 
-活動詳情前端原型已完成實機畫面與行為驗證；下一步新增共用 Studio schema、GROQ 投影、parser 與兩頁內容編排器選項。共享前端型別與 Vue 元件原型已建立；課程詳情已是 production schema，任何新增都必須另跑既有課程文件相容性驗證。
+活動詳情已完成 Studio schema、GROQ 投影、parser 與 published-only API 整合；`sharedTestimonialBlock` 可在活動內頁編排中重複加入，未確認公開同意的心得會阻擋內頁發布驗證，前台查詢也只投影已同意項目。課程詳情仍未接入此 schema 與 renderer；既有 production 課程文件的相容性必須在該階段另行驗證。
 
 ## 驗證紀錄
 

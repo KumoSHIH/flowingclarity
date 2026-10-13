@@ -55,6 +55,7 @@ describe('event detail component', () => {
     expect(wrapper.findAll('.event-detail__fact')).toHaveLength(4)
     expect(wrapper.findAll('.event-detail__agenda li')).toHaveLength(3)
     expect(wrapper.findAll('h2').map(item => item.text())).toEqual([
+      '活動介紹',
       '課程介紹',
       '帶領者介紹',
       '這一天，會怎麼進行',
@@ -94,11 +95,13 @@ describe('event detail component', () => {
 
 describe('event detail page', () => {
   const useHeadMock = vi.fn()
+  let apiResponse = ref({ state: 'ready', content } as const)
 
   beforeEach(() => {
     useHeadMock.mockClear()
     vi.stubGlobal('useHead', useHeadMock)
-    vi.stubGlobal('useFetch', () => ({ data: ref(undefined), status: ref('success') }))
+    apiResponse = ref({ state: 'ready', content } as const)
+    vi.stubGlobal('useFetch', () => ({ data: apiResponse, status: ref('success'), refresh: vi.fn() }))
   })
 
   afterEach(() => vi.unstubAllGlobals())
@@ -120,18 +123,21 @@ describe('event detail page', () => {
     })
   }
 
-  it('uses the fixture route as a noindex frontend prototype', () => {
+  it('renders published API content and uses its SEO metadata', () => {
     const wrapper = mountPage('prototype-event-01')
     expect(wrapper.get('[data-site-header]').attributes('data-always-visible')).toBeDefined()
     expect(wrapper.get('[data-detail]').attributes('data-status')).toBe('ready')
     expect(wrapper.get('[data-detail]').attributes('data-title')).toBe('身體覺察一日工作坊')
 
     const headFactory = useHeadMock.mock.calls[0]?.[0] as () => { meta: Array<{ name: string, content: string }> }
-    expect(headFactory().meta).toContainEqual({ name: 'robots', content: 'noindex' })
+    expect(headFactory().meta).toContainEqual({ name: 'description', content: content.hero.summary })
   })
 
-  it('maps unknown and cancelled fixture slugs to not-found', () => {
-    expect(mountPage('missing-event').get('[data-detail]').attributes('data-status')).toBe('not-found')
-    expect(mountPage('prototype-event-20').get('[data-detail]').attributes('data-status')).toBe('not-found')
+  it('maps an empty API response to not-found without fixture fallback', () => {
+    apiResponse.value = { state: 'empty', content: null }
+    const wrapper = mountPage('missing-event')
+    expect(wrapper.get('[data-detail]').attributes('data-status')).toBe('not-found')
+    const headFactory = useHeadMock.mock.calls[0]?.[0] as () => { meta: Array<{ name: string, content: string }> }
+    expect(headFactory().meta).toContainEqual({ name: 'robots', content: 'noindex' })
   })
 })

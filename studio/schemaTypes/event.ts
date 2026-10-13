@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { validatePublishedTestimonials } from './eventDetail.ts'
 
 const eventSlugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
@@ -21,6 +22,8 @@ interface EventPublicationValue {
   city?: string
   registrationUrl?: string
   isPublished?: boolean
+  detailIsPublished?: boolean
+  detail?: unknown
 }
 
 export function validateEventPublication(value: unknown): true | string {
@@ -41,6 +44,20 @@ export function validateEventPublication(value: unknown): true | string {
   }
   if (event.registrationUrl && !isHttpsUrl(event.registrationUrl)) {
     return '公開活動的報名網址必須是有效 HTTPS 網址。'
+  }
+  if (event.detailIsPublished === true && !event.detail) {
+    return '公開活動內頁前必須完成活動詳情內容。'
+  }
+  if (event.detailIsPublished === true && event.detail && typeof event.detail === 'object') {
+    const body = (event.detail as { body?: unknown }).body
+    if (Array.isArray(body)) {
+      for (const block of body) {
+        if (block && typeof block === 'object' && (block as { _type?: string })._type === 'sharedTestimonialBlock') {
+          const result = validatePublishedTestimonials(block)
+          if (result !== true) return result
+        }
+      }
+    }
   }
   return true
 }
@@ -147,6 +164,14 @@ export const event = defineType({
         }),
       ],
     }),
+    defineField({
+      name: 'detailIsPublished',
+      title: '公開活動詳情頁',
+      type: 'boolean',
+      description: '與活動總覽的公開開關分開；內頁內容尚未完成時請保持關閉。',
+      initialValue: false,
+    }),
+    defineField({ name: 'detail', title: '活動詳情內容', type: 'eventDetailContent' }),
     defineField({
       name: 'registrationStatus',
       title: '報名狀態',

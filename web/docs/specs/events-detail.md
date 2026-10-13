@@ -2,7 +2,7 @@
 
 ## 目標與範圍
 
-`/events/[slug]` 協助已從活動總覽進入的訪客，在同一頁理解活動內容、確認時間／地點／費用與報名狀態，再前往外部表單。頁面採 Persuade 模式，但不得虛構成效、師資資格、價格或名額。目前已完成 `ui-verified`：建立 Vue 路由、共用心得元件、fixture 與明確頁面狀態，並通過桌機／手機實機檢查；Sanity schema、GROQ、正式 API 與可用報名連結仍不在本階段範圍。
+`/events/[slug]` 協助已從活動總覽進入的訪客，在同一頁理解活動內容、確認時間／地點／費用與報名狀態，再前往外部表單。頁面採 Persuade 模式，但不得虛構成效、師資資格、價格或名額。目前已完成 `cms-integrated`：前端保留已驗證的固定邊欄版型，並改由 published-only Sanity API 提供內容；未查到、格式無效或讀取失敗時不會回退到示範資料。
 
 舊網站只用來辨認可能欄位：標題、摘要、介紹、主視覺、帶領者、日期、時段流程、費用與報名入口；舊文案、圖片、順序及樣式均不沿用。設計稿使用明確標示的示意內容，不能視為發布素材。
 
@@ -61,7 +61,7 @@
 
 ## 目前狀態與下一階段
 
-- 目前狀態：`ui-verified`。
+- 目前狀態：`cms-integrated`。
 - 已完成：舊頁欄位盤點、資料契約、共用元件邊界、前三輪歷史紀錄、第四輪三款互動原型、B「固定邊欄」選案精修，以及 `/events/[slug]` fixture 路由、詳情元件、共用心得元件與 ready／loading／error／not-found 狀態。
 - 已驗證：2026-10-13 以 Chrome 檢查第四輪三案的 320、390、768、1023、1024 與 1440 寬度。18 組均無水平溢位、只有一個可見 `h1`、標題與 Banner 圖片位於 viewport 內、自託管字體載入，且非停用操作項目最小高度為 48px；真實 `ArrowRight` 鍵可同步移動 tab 選取與焦點。另檢查六張完整頁面截圖。
 - 品質檢查：Impeccable detector 第四輪執行一次；已修正概念說明文字對比。首輪畫面檢查修正 B 的平板圖片比例及焦點證據；選案後再移除帶領者照片與深色背景、縮短章節間距，並重拍 18 組驗證證據。頁面專屬展示字級與構圖不提升為全站 token，`DESIGN.md` 維持不變。
@@ -70,9 +70,11 @@
 - 前端實作驗證：2026-10-13 以 Chrome 檢查 1440×1000、390×844 與 320×720。三組 `scrollWidth` 均等於 `clientWidth`；皆只有一個可見 `h1`、4 筆活動資訊、3 筆流程、2 則心得、0 張心得圖片及 0 個啟用報名連結。桌機為 grid／sticky，手機為 block／static；內容標題為 38px／32px，介紹與心得正文均為 16px，操作高度 76px。完整頁與數值證據位於 `.impeccable/review/event-detail-frontend-prototype/`。
 - 自動驗證：活動詳情新增 6 項行為測試；全站 22 個測試檔、133 項測試通過，`nuxt typecheck` 與 production build 完成。typecheck 仍輸出既有 `vue-router/volar/sfc-route-blocks` 套件相容性警告，但命令成功結束。
 - 品質檢測：Impeccable detector 執行一次，只回報本頁已核准且刻意保留的頁面專屬字級；依既有決策不修改 `DESIGN.md`。
-- 待處理：下一階段為 Sanity 詳情欄位、published-only API、parser 與 production 內容流驗收。課程詳情尚未接入心得元件。
-- 未執行：正式素材審核、Sanity schema 部署、遠端內容寫入、Safari／Firefox、實體觸控裝置與螢幕閱讀器驗收。
+- CMS 整合：2026-10-13 在既有 `event` 集合新增獨立 `detailIsPublished` 與語意化詳情物件。內容編排支援文字、帶領者、流程、心得、清單、引言與單／雙圖；心得需有公開同意才能通過內頁發布驗證。GROQ 同時要求總覽與詳情公開，server API 使用 `published` perspective 與安全轉換層；活動開始後自動移除報名操作，只有開放報名且 HTTPS 網址有效時才輸出連結。
+- CMS 自動驗證：Web 24 個測試檔、140 項測試全數通過；Studio 17 項 schema／structure 測試通過。Web 與 Studio typecheck、production build 均完成。Web typecheck 仍輸出既有 `vue-router/volar/sfc-route-blocks` 套件相容性警告，但命令成功結束；Web build 仍有既有 sourcemap 與字體 runtime resolve 警告。
+- 待處理：下一階段為 `validate-content-flow`，需部署 schema、建立明確標示的測試活動，驗證草稿隔離、兩次發布、匿名讀取、前台狀態與完整還原。課程詳情尚未接入共用心得 schema 與 renderer。
+- 未執行：Sanity schema 部署、遠端 dataset 寫入、production 內容流驗收、正式素材審核、Safari／Firefox、實體觸控裝置與螢幕閱讀器驗收。
 
 
 #### 筆記，不需要執行，可忽略
-- 使用 `web/.agents/skills/develop-feature/SKILL.md` 從 `docs/specs/events-detail.md` 接續下一個流程
+- 使用 `$develop-feature` 從 `docs/specs/events-detail.md` 接續下一個流程

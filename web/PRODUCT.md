@@ -44,7 +44,7 @@ Sanity 為正式內容管理方式。課程分類與授課形式如下：
 - `/course` 已完成 Sanity 課程總覽、固定分類、課程與梯次 schema、伺服器查詢及 production 內容流驗收；遠端 schema 已部署，公開分類 ID migration 已完成。頁面不再以 fixture 作為主要資料，目前 production 有 1 門初步課程，其餘正式內容仍待內容負責人審核與發布。
 - `/course/[slug]` 已完成響應式前端、Sanity 整合與 production 內容流驗收：包含獨立詳情公開開關、published-only slug API、共用資料契約、可排序內容編排與可重複的五款圖文版型、公開梯次及安全報名連結。遠端 schema 已部署，草稿隔離、兩次發布、匿名讀取、1440px／390px 完整頁及測試內容清除均已驗證；正式內容仍待核准。
 - `/events` 已完成 fixture 驅動的前端原型：左側可切換近期／過去活動，右側以月份長譜呈現目前集合，支援每頁 8 筆、URL query、自動截止、結束後歸檔，以及 loading／empty／error 狀態。此階段尚未串接 Sanity，頁面活動內容皆為明確標示的示範資料。
-- `/events/[slug]` 已建立 `noindex` 的 fixture 前端原型：採固定活動資訊邊欄與單一閱讀欄，包含課程介紹、純文字帶領者、可重複流程、共用長文心得及明確頁面狀態。報名按鈕維持停用；Sanity、正式 API 與課程詳情心得整合尚未進行。
+- `/events/[slug]` 已完成前端與本機 Sanity 整合：沿用固定活動資訊邊欄與單一閱讀欄，並新增獨立詳情公開開關、可排序語意區塊、心得公開同意驗證、published-only slug API 與安全 parser。報名連結只在狀態開放、活動未開始且 HTTPS 網址有效時啟用。遠端 schema 尚未部署，production 內容流尚未驗收；課程詳情也尚未接入共用心得 schema。
 - Production 正式內容矩陣目前覆蓋 1／6 門；其餘五門缺少核准摘要與 slug，選填代表圖若使用則需替代文字。舊 `courseCategory.*` reference 已確認為 0，舊文件尚未刪除。
 
 ### 待確認事項

@@ -1,5 +1,8 @@
 export type {
   EventDetailAgendaItem,
+  EventDetailApiResponse,
+  EventDetailApiState,
+  EventDetailBodyBlock,
   EventDetailContent,
   EventDetailStatus,
   SharedTestimonialItem,

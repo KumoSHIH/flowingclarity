@@ -36,7 +36,6 @@ const emit = defineEmits<{ retry: [] }>()
     <template v-else>
       <header class="event-detail__hero">
         <div class="event-detail__hero-copy">
-          <p v-if="content.prototypeNotice" class="event-detail__notice">{{ content.prototypeNotice }}</p>
           <h1>{{ content.hero.title }}</h1>
           <p class="event-detail__summary">{{ content.hero.summary }}</p>
         </div>
@@ -79,40 +78,73 @@ const emit = defineEmits<{ retry: [] }>()
 
         <div class="event-detail__content">
           <section class="event-detail__section">
-            <h2>{{ content.introduction.title }}</h2>
-            <p v-for="paragraph in content.introduction.paragraphs" :key="paragraph">{{ paragraph }}</p>
+            <h2>活動介紹</h2>
+            <p>{{ content.intro }}</p>
           </section>
 
-          <section class="event-detail__section">
-            <h2>{{ content.facilitator.title }}</h2>
-            <p class="event-detail__facilitator-name">
-              {{ content.facilitator.name }}
-              <span v-if="content.facilitator.role">{{ content.facilitator.role }}</span>
-            </p>
-            <p>{{ content.facilitator.biography }}</p>
-          </section>
+          <template v-for="block in content.body" :key="block.key">
+            <section v-if="block.type === 'text'" class="event-detail__section">
+              <h2>{{ block.title }}</h2>
+              <p v-for="paragraph in block.paragraphs" :key="paragraph">{{ paragraph }}</p>
+            </section>
 
-          <section class="event-detail__section">
-            <h2>{{ content.agenda.title }}</h2>
-            <p>{{ content.agenda.description }}</p>
-            <ol class="event-detail__agenda">
-              <li v-for="item in content.agenda.items" :key="item.key">
-                <time v-if="item.dateTime" :datetime="item.dateTime">{{ item.timeLabel }}</time>
-                <span v-else class="event-detail__agenda-time">{{ item.timeLabel }}</span>
-                <div>
-                  <h3>{{ item.title }}</h3>
-                  <p v-if="item.description">{{ item.description }}</p>
-                </div>
-              </li>
-            </ol>
-          </section>
+            <section v-else-if="block.type === 'facilitator'" class="event-detail__section">
+              <h2>帶領者介紹</h2>
+              <p class="event-detail__facilitator-name">
+                {{ block.name }}
+                <span v-if="block.role">{{ block.role }}</span>
+              </p>
+              <p>{{ block.biography }}</p>
+            </section>
 
-          <SharedTestimonials
-            v-if="content.testimonials"
-            id="event-testimonials"
-            :title="content.testimonials.title"
-            :items="content.testimonials.items"
-          />
+            <section v-else-if="block.type === 'agenda'" class="event-detail__section">
+              <h2>{{ block.title }}</h2>
+              <p>{{ block.description }}</p>
+              <ol class="event-detail__agenda">
+                <li v-for="item in block.items" :key="item.key">
+                  <time v-if="item.dateTime" :datetime="item.dateTime">{{ item.timeLabel }}</time>
+                  <span v-else class="event-detail__agenda-time">{{ item.timeLabel }}</span>
+                  <div>
+                    <h3>{{ item.title }}</h3>
+                    <p v-if="item.description">{{ item.description }}</p>
+                  </div>
+                </li>
+              </ol>
+            </section>
+
+            <SharedTestimonials
+              v-else-if="block.type === 'testimonials'"
+              :id="`event-testimonials-${block.key}`"
+              :title="block.title"
+              :items="block.items"
+            />
+
+            <section v-else-if="block.type === 'list'" class="event-detail__section">
+              <h2>{{ block.title }}</h2>
+              <ul class="event-detail__list">
+                <li v-for="item in block.items" :key="item">{{ item }}</li>
+              </ul>
+            </section>
+
+            <blockquote v-else-if="block.type === 'quote'" class="event-detail__quote">
+              <p>{{ block.text }}</p>
+              <cite v-if="block.attribution">{{ block.attribution }}</cite>
+            </blockquote>
+
+            <section v-else-if="block.type === 'media'" class="event-detail__section">
+              <h2 v-if="block.title">{{ block.title }}</h2>
+              <div class="event-detail__media" :class="{ 'event-detail__media--pair': block.items.length === 2 }">
+                <figure v-for="item in block.items" :key="item.key">
+                  <img
+                    :src="item.image.src"
+                    :alt="item.image.alt"
+                    :style="item.image.objectPosition ? { objectPosition: item.image.objectPosition } : undefined"
+                  >
+                  <figcaption v-if="item.caption">{{ item.caption }}</figcaption>
+                </figure>
+              </div>
+            </section>
+          </template>
         </div>
       </div>
     </template>
@@ -142,7 +174,6 @@ const emit = defineEmits<{ retry: [] }>()
 }
 
 .event-detail__hero-copy { min-width: 0; }
-.event-detail__notice { margin: 0 0 24px; color: #745142; font-size: 14px; line-height: 1.8; }
 .event-detail__hero h1 { max-width: 11em; margin: 0; font-family: var(--font-display); font-size: clamp(44px, 4.8vw, 72px); font-weight: 400; line-height: 1.22; letter-spacing: 0.025em; text-wrap: balance; }
 .event-detail__summary { max-width: 42em; margin: 30px 0 0; color: #625a51; font-size: 17px; line-height: 2; letter-spacing: 0.035em; white-space: pre-line; }
 .event-detail__hero-media { min-height: 360px; margin: 0; }
@@ -174,6 +205,15 @@ const emit = defineEmits<{ retry: [] }>()
 .event-detail__agenda time, .event-detail__agenda-time { color: #745142; font-size: 14px; font-weight: 700; letter-spacing: 0.06em; }
 .event-detail__agenda h3 { margin: 0 0 8px; font-family: var(--font-display); font-size: 22px; font-weight: 400; line-height: 1.5; }
 .event-detail__agenda p { margin: 0; color: #625a51; font-size: 16px; line-height: 1.9; }
+.event-detail__list { max-width: 68ch; padding-left: 1.2em; margin: 0; color: #625a51; font-size: 16px; line-height: 2.1; }
+.event-detail__quote { padding: 72px clamp(48px, 7vw, 104px); margin: 0; border-bottom: 1px solid rgb(56 52 46 / 24%); }
+.event-detail__quote p { max-width: 28em; margin: 0; font-family: var(--font-display); font-size: 28px; line-height: 1.7; }
+.event-detail__quote cite { display: block; margin-top: 20px; color: #745142; font-size: 14px; font-style: normal; }
+.event-detail__media { display: grid; gap: 20px; }
+.event-detail__media--pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.event-detail__media figure { margin: 0; }
+.event-detail__media img { display: block; width: 100%; max-height: 640px; object-fit: cover; }
+.event-detail__media figcaption { margin-top: 10px; color: #745142; font-size: 14px; line-height: 1.7; }
 
 .event-detail__state { display: grid; min-height: 64vh; place-content: center; justify-items: start; gap: 18px; padding: 80px 24px; }
 .event-detail__state h1 { margin: 0; font-family: var(--font-display); font-size: 42px; font-weight: 400; }
@@ -195,11 +235,13 @@ const emit = defineEmits<{ retry: [] }>()
   .event-detail__fact:nth-child(odd) { border-right: 1px solid rgb(56 52 46 / 24%); }
   .event-detail__action-wrap { grid-column: 1 / -1; padding: 24px; }
   .event-detail__section { padding: 64px 24px; }
+  .event-detail__quote { padding: 64px 24px; }
   .event-detail__section h2 { font-size: 32px; }
   .event-detail__agenda li { grid-template-columns: 88px minmax(0, 1fr); gap: 20px; }
 }
 
 @media (max-width: 560px) {
+  .event-detail__media--pair { grid-template-columns: 1fr; }
   .event-detail__facts-inner { grid-template-columns: 1fr; }
   .event-detail__fact:nth-child(odd) { border-right: 0; }
   .event-detail__action-wrap { grid-column: auto; }
