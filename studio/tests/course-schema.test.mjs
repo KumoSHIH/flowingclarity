@@ -67,7 +67,6 @@ test('course content types are registered with their required semantic fields', 
     'deliveryModes',
     'summary',
     'image',
-    'detailIsPublished',
     'detail',
     'order',
     'isPublished',
@@ -130,21 +129,23 @@ test('course detail body supports ordered mixed blocks and requires core content
 })
 
 test('course detail publication requires a public-safe id, image and complete detail object', () => {
-  const detailPublishedField = course.fields.find(({ name }) => name === 'detailIsPublished')
-  assert.equal(detailPublishedField.initialValue, false)
-  assert.equal(detailPublishedField.validation, undefined)
-
   const valid = {
     _id: 'course-japanese-facial-massage',
-    detailIsPublished: true,
+    isPublished: true,
     image: { asset: { _ref: 'image-asset' } },
     detail: { introduction: {} },
   }
   assert.equal(validateCourseDetailPublication(valid), true)
   assert.equal(validateCourseDetailPublication({ ...valid, _id: 'course.detail' }), '公開前台文件的 ID 不得包含句點。')
-  assert.equal(validateCourseDetailPublication({ ...valid, image: undefined }), '公開課程內頁前必須設定代表圖。')
-  assert.equal(validateCourseDetailPublication({ ...valid, detail: undefined }), '公開課程內頁前必須完成課程詳情內容。')
-  assert.equal(validateCourseDetailPublication({ detailIsPublished: false }), true)
+  assert.deepEqual(validateCourseDetailPublication({ ...valid, image: undefined }), {
+    message: '公開課程前，請設定「代表圖」。',
+    path: ['image'],
+  })
+  assert.deepEqual(validateCourseDetailPublication({ ...valid, detail: undefined }), {
+    message: '公開課程前，請完成「課程詳情」。',
+    path: ['detail'],
+  })
+  assert.equal(validateCourseDetailPublication({ isPublished: false }), true)
 })
 
 test('fixed course category identity cannot drift from the confirmed product structure', () => {

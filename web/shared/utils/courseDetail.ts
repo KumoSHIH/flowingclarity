@@ -282,7 +282,7 @@ function parseBodyBlock(value: unknown): CourseDetailBodyBlock | null {
 export function parseCourseDetail(value: unknown, expectedSlug?: string): CourseDetailContent | null {
   if (!isRecord(value) || !isRecord(value.course) || !Array.isArray(value.runs)) return null
   const course = value.course
-  if (course.isPublished !== true || course.detailIsPublished !== true || !isRecord(course.detail)) return null
+  if (course.isPublished !== true || !isRecord(course.detail)) return null
 
   const title = textInRange(course.title, 2, 40)
   const slug = textInRange(course.slug, 1, 60)

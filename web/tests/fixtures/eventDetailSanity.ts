@@ -16,7 +16,6 @@ export const sanityEventDetail = {
   registrationStatus: 'open',
   registrationUrl: 'https://forms.example.com/event',
   isPublished: true,
-  detailIsPublished: true,
   detail: {
     intro: '這場活動從安定自己的注意力開始，透過說明、示範與練習，讓參與者依自己的節奏理解當下經驗。',
     feeLabel: '費用待確認',

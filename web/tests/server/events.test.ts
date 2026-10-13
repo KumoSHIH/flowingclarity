@@ -59,7 +59,8 @@ describe('events API', () => {
       }),
     })
     expect(eventsQuery).toContain('_type == "event" && isPublished == true')
-    expect(eventsQuery).toContain('relatedCourse->detailIsPublished == true')
+    expect(eventsQuery).toContain('relatedCourse->isPublished == true')
+    expect(eventsQuery).not.toContain('detailIsPublished')
     expect(eventsQuery).not.toContain('pastIntro')
     expect(eventsQuery).not.toContain('prototypeNotice')
     expect(vi.mocked(createClient).mock.calls[0]?.[0]).toMatchObject({

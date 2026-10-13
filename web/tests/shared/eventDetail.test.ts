@@ -35,7 +35,8 @@ describe('event detail parser', () => {
   })
 
   it('rejects unpublished, incomplete, mismatched and invalid content', () => {
-    expect(parseEventDetail({ ...sanityEventDetail, detailIsPublished: false })).toBeNull()
+    expect(parseEventDetail({ ...sanityEventDetail, isPublished: false })).toBeNull()
+    expect(parseEventDetail({ ...sanityEventDetail, detail: undefined })).toBeNull()
     expect(parseEventDetail(sanityEventDetail, 'different-slug')).toBeNull()
 
     const invalidBody = structuredClone(sanityEventDetail)

@@ -179,7 +179,7 @@ const actionLabels: Record<EventRegistrationStatus, string> = {
 }
 
 export function parseEventDetail(value: unknown, expectedSlug?: string, nowValue: Date | string | number = Date.now()): EventDetailContent | null {
-  if (!isRecord(value) || value.isPublished !== true || value.detailIsPublished !== true || !isRecord(value.detail)) return null
+  if (!isRecord(value) || value.isPublished !== true || !isRecord(value.detail)) return null
   const title = textInRange(value.title, 2, 40)
   const slug = textInRange(value.slug, 1, 60)
   const summary = textInRange(value.summary, 20, 100)

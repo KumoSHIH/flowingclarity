@@ -63,19 +63,9 @@ export const sharedTestimonialItem = defineType({
   fields: [
     defineField({ name: 'text', title: '心得內容', type: 'text', rows: 8, description: multilineDescription, validation: Rule => Rule.required().min(20).max(2000) }),
     defineField({ name: 'sharerName', title: '分享者名稱', type: 'string', validation: Rule => Rule.required().min(2).max(60) }),
-    defineField({ name: 'consentConfirmed', title: '已確認公開同意', type: 'boolean', initialValue: false, validation: Rule => Rule.required() }),
   ],
   preview: { select: { title: 'sharerName', subtitle: 'text' } },
 })
-
-export function validatePublishedTestimonials(value: unknown): true | string {
-  if (!value || typeof value !== 'object') return true
-  const items = (value as { items?: unknown }).items
-  if (!Array.isArray(items)) return true
-  return items.every(item => item && typeof item === 'object' && (item as { consentConfirmed?: boolean }).consentConfirmed === true)
-    ? true
-    : '所有心得都必須確認公開同意。'
-}
 
 export const sharedTestimonialBlock = defineType({
   name: 'sharedTestimonialBlock',

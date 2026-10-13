@@ -21,8 +21,8 @@
 | 桌機與手機設計原型 | 已完成原型 | 響應式 HTML 與截圖已存在；不是正式 Vue 元件 |
 | 課程總覽與基礎資料 | 已沿用 | 內頁延伸既有 `course` 與 `courseRun`，梯次日期、地點、形式與報名狀態不重複儲存 |
 | 正式內頁路由 | 本機整合完成 | `/course/[slug]` 改由內頁 API 取得資料，提供載入、錯誤、重試與不存在／未公開狀態；不再以 fixture 作正式資料來源 |
-| 內頁內容模型與型別 | 已完成 | Studio 詳情 schema、`detailIsPublished` 獨立公開開關、欄位驗證與共用前後端型別已部署；內容編排可混合排序，圖文版型可重複新增並各自選型 |
-| 內頁 API 與資料處理 | 已完成 | 依 slug 查詢已發布且開啟詳情公開的課程與公開梯次，固定使用 published perspective；解析器兼容 GROQ 回傳的 Sanity schema 型別名，並拒絕不完整內容、危險連結與不合法梯次 |
+| 內頁內容模型與型別 | 已完成 | Studio 詳情 schema、單一 `isPublished` 公開開關、欄位驗證與共用前後端型別已部署；公開前必須有代表圖及完整詳情，內容編排可混合排序，圖文版型可重複新增並各自選型 |
+| 內頁 API 與資料處理 | 已完成 | 依 slug 查詢已發布課程與公開梯次，固定使用 published perspective；解析器兼容 GROQ 回傳的 Sanity schema 型別名，並拒絕不完整內容、危險連結與不合法梯次 |
 | Vue 內容元件 | 已完成 | `CourseDetail.vue` 依 CMS 陣列順序渲染介紹、五款可重複圖文版型、帶領者、引言、課綱、影片與對象；Banner、梯次及報名維持固定位置 |
 | 互動與響應式整合 | 已完成 | 章節導覽依內容編排動態產生，以實際固定列高度精準定位並在捲動時更新 active；手機作用中錨點會自動水平移入畫面。另已完成課綱展開、媒體／CTA 停用狀態、後台多行文字換行保留及桌機／手機排版；正式頁不再顯示版型比較 tabs |
 | 自動化與瀏覽器驗收 | 已完成 | Web 104 項與 Studio 14 項測試、兩端 typecheck 及 production build 通過；Chrome CDP 以 1440px 與 390px 完成真實內容完整頁及錨點追蹤驗收 |
@@ -61,7 +61,7 @@
 | cmp-curriculum | 階段、單元、標題與內容，可展開 | 建議；支援 1–12 單元 | 編輯者／Sanity block content |
 | cmp-schedule | 城市、日期、時間、地點、名額與狀態 | 報名時必要；不得顯示未確認資料 | 編輯者／Sanity course document |
 | cmp-video | YouTube 播放器與封面 | 非必要；需標題與封面替代文字 | 編輯者／Sanity block content |
-| cmp-testimonial | 純文字學員心得與分享者名稱 | 非必要；可重複新增，僅使用已核准且確認公開同意的內容 | 編輯者／Sanity shared block content |
+| cmp-testimonial | 純文字學員心得與分享者名稱 | 非必要；可重複新增，僅使用已核准公開的內容 | 編輯者／Sanity shared block content |
 | cmp-swiper | 圖文輪播 | 非必要；桌面最多三則、手機一則 | 編輯者／Sanity block content |
 | cmp-related-articles | 相關文章輪播 | 非必要；桌面三則、平板兩則、手機一則 | Sanity references |
 
@@ -104,7 +104,7 @@
 
 ### 學員心得分享規劃
 
-學員心得將改用活動詳情與課程詳情共用的 `sharedTestimonialBlock`，加入現有 `courseDetailContent.body` 可排序陣列；每頁可自由新增區塊，每區 1–12 筆並可拖曳排序。前台每筆只顯示心得文字與分享者名稱，後台另以不公開的 `consentConfirmed` 阻擋未確認內容發布。欄位、驗證、GROQ 與三款桌機設計見 [學員心得分享共用元件規格](shared-testimonials.md)。共用 Vue 元件原型已隨活動詳情建立，但 production schema、課程 parser 與 body renderer 尚未接入此 type；現有 `courseDetailQuote` 仍是課程引言，不得拿來儲存學員心得。
+學員心得將改用活動詳情與課程詳情共用的 `sharedTestimonialBlock`，加入現有 `courseDetailContent.body` 可排序陣列；每頁可自由新增區塊，每區 1–12 筆並可拖曳排序。前台每筆只顯示心得文字與分享者名稱；內容負責人在輸入 CMS 前完成公開授權與文案核准，不另設逐筆同意開關。欄位、驗證、GROQ 與三款桌機設計見 [學員心得分享共用元件規格](shared-testimonials.md)。共用 Vue 元件原型已隨活動詳情建立，但 production schema、課程 parser 與 body renderer 尚未接入此 type；現有 `courseDetailQuote` 仍是課程引言，不得拿來儲存學員心得。
 - 行動版維持資料與 DOM 相同順序，觸控目標至少 44px，所有互動須支援鍵盤與 reduced motion。
 
 ## 驗證紀錄
@@ -128,13 +128,14 @@
 - 2026-10-10：最終完成審查要求的三項修正——桌機完整頁證據載入至頁尾、手機完整頁證據載入至頁尾、黏性章節導覽避開固定 Header——均已解決；再次審查結論為 `ship`。
 - 2026-10-11：`verify-ui-behavior` 完成。Chrome CDP 實測 1440×1000、768×1024、390×844 與 720×900／device scale 2 的 200% 模擬；各尺寸皆無水平溢位、維持單一 `h1` 與可見 tabpanel、章節錨點完整、課程內容圖片替代文字完整、課程頁操作目標不小於 44px，並確認 `prefers-reduced-motion: reduce` 生效。Home／End 可同步移動 tab 選取與鍵盤焦點；minimal fixture 不再顯示缺席的帶領者／影片連結，empty fixture 三項空狀態皆存在。完整頁證據位於 `.impeccable/review/course-detail-ui-verified/`。
 - 2026-10-11：Impeccable detector 為 0 項 anti-pattern；41 項 advisory 來自已核准頁面專屬字級與半透明色值，未視為阻擋問題。`npm run test -w web` 為 15 檔、89 項通過；`npm run typecheck -w web` 與 `npm run build -w web` 成功。typecheck 仍有既有 `vue-router/volar/sfc-route-blocks` 警告，build 仍有既有 sourcemap 與 runtime 字型路徑提示。
-- 2026-10-11：`integrate-sanity-content` 完成。新增 12 個詳情物件 schema，延伸 `course` 與 `courseRun`，以獨立 `detailIsPublished` 防止總覽公開時連帶曝光未完成內頁；API 只查詢 published 且已開啟詳情公開的同 slug 課程與公開梯次。伺服器解析器驗證圖片替代文字、內容長度、YouTube／HTTPS 連結及梯次資料，選填區塊不完整時不輸出。
+- 2026-10-11：`integrate-sanity-content` 完成。新增 12 個詳情物件 schema，延伸 `course` 與 `courseRun`；API 依 slug 查詢 published 課程與公開梯次。伺服器解析器驗證圖片替代文字、內容長度、YouTube／HTTPS 連結及梯次資料，選填區塊不完整時不輸出。原始版本曾分開控制總覽與內頁公開，已由 2026-10-13 的單一開關決策取代。
 - 2026-10-11：`npm run test -w web` 為 17 檔、100 項通過；`npm run test -w studio` 為 13 項通過；`npm run typecheck -w web`、`npm run typecheck -w studio`、`npm run build -w web` 與以測試用環境值執行的 `npm run build -w studio` 均成功。Web typecheck 仍輸出既有 `vue-router/volar/sfc-route-blocks` 警告，Web build 仍輸出既有 sourcemap 與 runtime 字型路徑提示。本階段未部署 schema、未寫入 dataset，也未建立或發布遠端內容。
 - 2026-10-11：依人工測試回饋將單一圖文版型改為可排序內容編排器。Studio 可重複新增五款圖文版型，與介紹、帶領者、引言、課綱、影片及適合對象自由排序；前台、GROQ 與解析器保留此順序。回歸測試確認五款版型可同頁混用、內容順序一致、核心區塊缺漏會被阻擋。`npm run test -w web` 為 17 檔、101 項通過，`npm run test -w studio` 為 14 項通過，兩端 typecheck 與 production build 成功；Impeccable detector 為 0 項 anti-pattern，41 項 advisory 皆為既有頁面專屬字級與色值。畫面檢查工具本次無法啟動，混排頁面的人工瀏覽器驗收尚未執行。
 - 2026-10-11：`validate-content-flow` 唯讀盤點完成。`npx sanity debug` 確認登入憑證存在，工作區為 project `hnypuj6l`／dataset `production`；匿名 `published` Data API 請求成功，公開資料計數為課程總覽 1、課程詳情 0、課程梯次 0。未部署 schema、未修改 dataset，也未建立或發布測試內容。
 - 2026-10-11：`validate-content-flow` 完成。production schema 部署成功；隔離課程與梯次依序完成草稿不可見、首次發布可見、更新草稿不影響公開版、再次發布同步新標題與 11 個區塊順序，五款圖文版型可同頁混排，HTTPS 報名連結可用。真實 GROQ 投影揭露 schema 型別名差異，解析器已正規化並加入回歸測試。全 dataset schema 驗證最終為 16 份有效、0 錯誤。
 - 2026-10-11：Chrome CDP 以 1440×1000 與 390×844 載入 production 測試內容；兩者皆為單一 `h1`、11 個內容區塊與五種 gallery layout，圖片替代文字缺漏為 0，最小操作高度分別為 68px／58px。390px 實測 `innerWidth`、`scrollWidth`、`bodyWidth` 均為 390px，標題右界 368px。完整頁證據位於 `.impeccable/review/course-detail-content-flow/`。
 - 2026-10-11：最終回歸為 Web 17 檔、102 項與 Studio 14 項測試通過，兩端 typecheck 與 production build 成功。四個隔離驗收 ID 已清除；登入查詢為空陣列，匿名計數回復公開總覽 1、公開詳情 0、公開梯次 0、驗收文件 0。
+- 2026-10-13：依使用者決策移除第二個詳情公開開關。課程只保留 `isPublished`；公開前 Studio 必須驗證代表圖與完整詳情，總覽、詳情 API 及活動的關聯課程皆共用相同公開狀態。新版 production schema 已部署，published 與 draft 文件中的舊欄位均已清除。
 - 2026-10-11：依後台人工測試回饋，所有課程詳情 `text` 欄位加入「可按 Enter 換行，前台會保留段落」提示，前台以 `white-space: pre-line` 保留簡介、完整介紹、圖文說明、引言、課綱、適合對象、梯次及報名說明的換行。已部署更新 schema；`rebalancing` 真實內容於 1440px／390px 各有 15 個換行保留元素，其中 5 個含編輯者換行，兩尺寸皆無水平溢位。Web 17 檔、103 項與 Studio 14 項測試、兩端 typecheck 及 production build 通過；證據位於 `.impeccable/review/course-detail-line-breaks/`。
 - 2026-10-11：修正章節錨點偏移與 active 誤判。點擊改以固定 Header、章節列實際高度及 16px 間距計算目標，平滑捲動期間維持使用者選取；一般捲動以固定列下方的章節邊界判定，手機作用中項目會自動水平置入可視範圍。Chrome CDP 實測 1440px／390px 點擊定位誤差分別約 0.22px／0.44px，後續垂直捲動皆切換至正確章節，手機錨點列水平移動 354px 且 active 完整可見。Web 17 檔、104 項測試、typecheck 與 production build 通過；Impeccable detector 為 0 項 anti-pattern，證據位於 `.impeccable/review/course-detail-anchor-tracking/`。
 - 2026-10-13：新增學員心得共用元件規劃與三款桌機候選稿。Chrome 於 1280px、1440px 檢查六組畫面，皆無水平溢位；C 案方向鍵切換可同步選取、焦點與內容。此階段未修改 production schema、查詢、Vue 元件或測試，手機版待選案後設計。

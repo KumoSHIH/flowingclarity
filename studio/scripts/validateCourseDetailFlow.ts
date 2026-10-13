@@ -91,7 +91,6 @@ const draftCourse = {
   deliveryModes: ['inPerson'],
   summary: '這是完成後會清除的課程內頁流程測試，用來確認草稿、發布、排序與安全連結行為。',
   image: image('課程內頁內容流程測試使用的既有課程圖片'),
-  detailIsPublished: true,
   detail: {
     _type: 'courseDetailContent',
     notice: '這是內容流程驗證文件，完成後會清除。',

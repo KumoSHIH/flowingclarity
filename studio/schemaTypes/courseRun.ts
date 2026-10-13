@@ -1,4 +1,4 @@
-import { defineArrayMember, defineField, defineType } from 'sanity'
+import { defineArrayMember, defineField, defineType, type ValidationError } from 'sanity'
 
 interface CourseDateRangeValue {
   startDate?: string
@@ -20,7 +20,7 @@ interface CourseRunPublicationValue {
 
 const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/
 
-export function validateCourseRunPublication(value: unknown): true | string {
+export function validateCourseRunPublication(value: unknown): true | string | ValidationError {
   if (!value || typeof value !== 'object') return true
   const run = value as CourseRunPublicationValue
   if (run.isPublished !== true) return true
@@ -31,7 +31,10 @@ export function validateCourseRunPublication(value: unknown): true | string {
       const url = new URL(run.registrationUrl ?? '')
       if (url.protocol !== 'https:' || !url.hostname) throw new Error('invalid URL')
     } catch {
-      return '開放報名的公開梯次必須設定 HTTPS 報名網址。'
+      return {
+        message: '此梯次已設為「開放報名」；公開前請填寫有效的 HTTPS 報名網址。',
+        path: ['registrationUrl'],
+      }
     }
   }
   return true

@@ -2,7 +2,6 @@ export const courseDetailQuery = `{
   "course": *[
     _type == "course" &&
     isPublished == true &&
-    detailIsPublished == true &&
     slug.current == $slug
   ][0]{
     title,
@@ -10,7 +9,6 @@ export const courseDetailQuery = `{
     deliveryModes,
     summary,
     isPublished,
-    detailIsPublished,
     image{
       "src": asset->url,
       alt,

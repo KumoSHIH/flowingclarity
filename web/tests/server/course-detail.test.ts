@@ -23,7 +23,7 @@ describe('course detail API', () => {
     vi.mocked(createClient).mockClear()
   })
 
-  it('queries only explicitly published detail content and returns transformed data', async () => {
+  it('queries published courses and returns transformed detail data', async () => {
     fetchMock.mockResolvedValue(structuredClone(sanityCourseDetail))
 
     expect(await getCourseDetail({} as never)).toMatchObject({
@@ -31,7 +31,7 @@ describe('course detail API', () => {
       content: { slug: 'japanese-facial-massage' },
     })
     expect(courseDetailQuery).toContain('isPublished == true')
-    expect(courseDetailQuery).toContain('detailIsPublished == true')
+    expect(courseDetailQuery).not.toContain('detailIsPublished')
     expect(courseDetailQuery).toContain('slug.current == $slug')
     expect(fetchMock).toHaveBeenCalledWith(courseDetailQuery, { slug: 'japanese-facial-massage' })
     expect(vi.mocked(createClient).mock.calls[0]?.[0]).toMatchObject({

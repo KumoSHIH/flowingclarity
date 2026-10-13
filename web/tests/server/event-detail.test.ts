@@ -20,13 +20,14 @@ describe('event detail API', () => {
     vi.mocked(createClient).mockClear()
   })
 
-  it('queries only explicitly published detail content and returns transformed data', async () => {
+  it('queries published events and returns transformed detail data', async () => {
     fetchMock.mockResolvedValue(structuredClone(sanityEventDetail))
     expect(await getEventDetail({} as never)).toMatchObject({ state: 'ready', content: { slug: 'body-awareness-day' } })
     expect(eventDetailQuery).toContain('isPublished == true')
-    expect(eventDetailQuery).toContain('detailIsPublished == true')
+    expect(eventDetailQuery).not.toContain('detailIsPublished')
     expect(eventDetailQuery).toContain('slug.current == $slug')
-    expect(eventDetailQuery).toContain('items[consentConfirmed == true]')
+    expect(eventDetailQuery).toContain('items[]{text, sharerName}')
+    expect(eventDetailQuery).not.toContain('consentConfirmed')
     expect(fetchMock).toHaveBeenCalledWith(eventDetailQuery, { slug: 'body-awareness-day' })
     expect(vi.mocked(createClient).mock.calls[0]?.[0]).toMatchObject({ perspective: 'published', useCdn: false })
   })

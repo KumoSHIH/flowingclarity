@@ -1,5 +1,4 @@
-import { defineField, defineType } from 'sanity'
-import { validatePublishedTestimonials } from './eventDetail.ts'
+import { defineField, defineType, type Path, type ValidationError } from 'sanity'
 
 const eventSlugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
@@ -22,42 +21,34 @@ interface EventPublicationValue {
   city?: string
   registrationUrl?: string
   isPublished?: boolean
-  detailIsPublished?: boolean
   detail?: unknown
 }
 
-export function validateEventPublication(value: unknown): true | string {
+function fieldError(message: string, path: Path): ValidationError {
+  return { message, path }
+}
+
+export function validateEventPublication(value: unknown): true | string | ValidationError | ValidationError[] {
   if (!value || typeof value !== 'object') return true
   const event = value as EventPublicationValue
   if (event.startAt && event.endAt) {
     const startAt = Date.parse(event.startAt)
     const endAt = Date.parse(event.endAt)
     if (!Number.isFinite(startAt) || !Number.isFinite(endAt) || endAt <= startAt) {
-      return '活動的結束時間必須晚於開始時間。'
+      return fieldError('結束時間必須晚於開始時間；請檢查活動的起訖時間。', ['endAt'])
     }
   }
   if (event.isPublished !== true) return true
   const documentId = event._id?.replace(/^drafts\./, '')
   if (documentId?.includes('.')) return '公開前台文件的 ID 不得包含句點。'
   if ((event.deliveryMode === 'inPerson' || event.deliveryMode === 'hybrid') && !event.city?.trim()) {
-    return '實體或混合活動必須設定城市。'
+    return fieldError('實體或混合活動公開前，請填寫城市或線上標示。', ['city'])
   }
   if (event.registrationUrl && !isHttpsUrl(event.registrationUrl)) {
-    return '公開活動的報名網址必須是有效 HTTPS 網址。'
+    return fieldError('公開活動的報名網址必須是有效的 HTTPS 網址。', ['registrationUrl'])
   }
-  if (event.detailIsPublished === true && !event.detail) {
-    return '公開活動內頁前必須完成活動詳情內容。'
-  }
-  if (event.detailIsPublished === true && event.detail && typeof event.detail === 'object') {
-    const body = (event.detail as { body?: unknown }).body
-    if (Array.isArray(body)) {
-      for (const block of body) {
-        if (block && typeof block === 'object' && (block as { _type?: string })._type === 'sharedTestimonialBlock') {
-          const result = validatePublishedTestimonials(block)
-          if (result !== true) return result
-        }
-      }
-    }
+  if (!event.detail) {
+    return fieldError('公開活動前，請完成「活動詳情內容」。', ['detail'])
   }
   return true
 }
@@ -164,13 +155,6 @@ export const event = defineType({
         }),
       ],
     }),
-    defineField({
-      name: 'detailIsPublished',
-      title: '公開活動詳情頁',
-      type: 'boolean',
-      description: '與活動總覽的公開開關分開；內頁內容尚未完成時請保持關閉。',
-      initialValue: false,
-    }),
     defineField({ name: 'detail', title: '活動詳情內容', type: 'eventDetailContent' }),
     defineField({
       name: 'registrationStatus',
@@ -209,7 +193,7 @@ export const event = defineType({
       to: [{ type: 'course' }],
       options: {
         disableNew: true,
-        filter: 'isPublished == true && detailIsPublished == true',
+        filter: 'isPublished == true',
       },
     }),
     defineField({

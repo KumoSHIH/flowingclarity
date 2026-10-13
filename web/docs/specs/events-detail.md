@@ -2,13 +2,13 @@
 
 ## 目標與範圍
 
-`/events/[slug]` 協助已從活動總覽進入的訪客，在同一頁理解活動內容、確認時間／地點／費用與報名狀態，再前往外部表單。頁面採 Persuade 模式，但不得虛構成效、師資資格、價格或名額。目前已完成 `cms-integrated`：前端保留已驗證的固定邊欄版型，並改由 published-only Sanity API 提供內容；未查到、格式無效或讀取失敗時不會回退到示範資料。
+`/events/[slug]` 協助已從活動總覽進入的訪客，在同一頁理解活動內容、確認時間／地點／費用與報名狀態，再前往外部表單。頁面採 Persuade 模式，但不得虛構成效、師資資格、價格或名額。目前狀態為 `verified`：前端保留已驗證的固定邊欄版型，並由 published-only Sanity API 提供內容；未查到、格式無效或讀取失敗時不會回退到示範資料。
 
 舊網站只用來辨認可能欄位：標題、摘要、介紹、主視覺、帶領者、日期、時段流程、費用與報名入口；舊文案、圖片、順序及樣式均不沿用。設計稿使用明確標示的示意內容，不能視為發布素材。
 
 ## 內容契約
 
-既有活動總覽欄位繼續作為共用事實來源：`title`、`slug`、`eventType`、`summary`、`startAt`、`endAt`、`timezone`、`scheduleNote`、`deliveryMode`、`city`、`venue`、`image`、`registrationStatus`、`registrationUrl`、`relatedCourse`、`archiveVisible` 與公開開關。詳情頁另需獨立 `detailIsPublished`，避免活動出現在總覽時連帶公開未完成的內頁。
+既有活動總覽欄位繼續作為共用事實來源：`title`、`slug`、`eventType`、`summary`、`startAt`、`endAt`、`timezone`、`scheduleNote`、`deliveryMode`、`city`、`venue`、`image`、`registrationStatus`、`registrationUrl`、`relatedCourse`、`archiveVisible` 與 `isPublished`。活動總覽與詳情頁共用這個公開開關；詳情未完成時不得將活動設為公開。
 
 建議新增詳情欄位：
 
@@ -55,13 +55,13 @@
 
 桌面可採分欄、sticky 摘要或跨欄流程；`<= 1023px` 必須依語意順序回到單欄，`320–390px` 不得水平捲動。正文約 65–75ch，操作目標至少 44×44px，焦點在 paper、sand、night 與 persimmon 表面均需可見。支援 ready、loading、error、not-found、open、scheduled、full、closed、cancelled、completed、缺圖、缺帶領者、缺流程與長內容；reduced-motion 下移除平滑捲動與位移。
 
-學員心得採 `sharedTestimonialBlock`，詳細後台欄位、發布同意與桌機三款比較見 [學員心得分享共用元件規格](shared-testimonials.md)。桌機已選定內容頁內嵌單欄長文，手機首版已完成 390px／320px 模擬；尚未納入活動詳情 schema。
+學員心得採 `sharedTestimonialBlock`，詳細後台欄位與桌機三款比較見 [學員心得分享共用元件規格](shared-testimonials.md)。桌機已選定內容頁內嵌單欄長文，手機首版已完成 390px／320px 模擬；目前已納入活動詳情 schema、查詢、parser 與 production 內容流驗收。
 
 考量心得可能為長文，已確認採單欄連續閱讀，作為 B「固定邊欄」右側內容欄中的可排序區塊。接續課程介紹、帶領者與流程的桌機情境稿位於 `docs/design/student-testimonial-in-context.html`；前台不顯示版型說明文字，內容區大標統一縮小為 38px。
 
-## 目前狀態與下一階段
+## 目前狀態與後續工作
 
-- 目前狀態：`cms-integrated`。
+- 目前狀態：`verified`。
 - 已完成：舊頁欄位盤點、資料契約、共用元件邊界、前三輪歷史紀錄、第四輪三款互動原型、B「固定邊欄」選案精修，以及 `/events/[slug]` fixture 路由、詳情元件、共用心得元件與 ready／loading／error／not-found 狀態。
 - 已驗證：2026-10-13 以 Chrome 檢查第四輪三案的 320、390、768、1023、1024 與 1440 寬度。18 組均無水平溢位、只有一個可見 `h1`、標題與 Banner 圖片位於 viewport 內、自託管字體載入，且非停用操作項目最小高度為 48px；真實 `ArrowRight` 鍵可同步移動 tab 選取與焦點。另檢查六張完整頁面截圖。
 - 品質檢查：Impeccable detector 第四輪執行一次；已修正概念說明文字對比。首輪畫面檢查修正 B 的平板圖片比例及焦點證據；選案後再移除帶領者照片與深色背景、縮短章節間距，並重拍 18 組驗證證據。頁面專屬展示字級與構圖不提升為全站 token，`DESIGN.md` 維持不變。
@@ -70,10 +70,17 @@
 - 前端實作驗證：2026-10-13 以 Chrome 檢查 1440×1000、390×844 與 320×720。三組 `scrollWidth` 均等於 `clientWidth`；皆只有一個可見 `h1`、4 筆活動資訊、3 筆流程、2 則心得、0 張心得圖片及 0 個啟用報名連結。桌機為 grid／sticky，手機為 block／static；內容標題為 38px／32px，介紹與心得正文均為 16px，操作高度 76px。完整頁與數值證據位於 `.impeccable/review/event-detail-frontend-prototype/`。
 - 自動驗證：活動詳情新增 6 項行為測試；全站 22 個測試檔、133 項測試通過，`nuxt typecheck` 與 production build 完成。typecheck 仍輸出既有 `vue-router/volar/sfc-route-blocks` 套件相容性警告，但命令成功結束。
 - 品質檢測：Impeccable detector 執行一次，只回報本頁已核准且刻意保留的頁面專屬字級；依既有決策不修改 `DESIGN.md`。
-- CMS 整合：2026-10-13 在既有 `event` 集合新增獨立 `detailIsPublished` 與語意化詳情物件。內容編排支援文字、帶領者、流程、心得、清單、引言與單／雙圖；心得需有公開同意才能通過內頁發布驗證。GROQ 同時要求總覽與詳情公開，server API 使用 `published` perspective 與安全轉換層；活動開始後自動移除報名操作，只有開放報名且 HTTPS 網址有效時才輸出連結。
+- CMS 整合：2026-10-13 在既有 `event` 集合新增語意化詳情物件。內容編排支援文字、帶領者、流程、心得、清單、引言與單／雙圖。GROQ 以單一 `isPublished` 控制總覽與詳情，server API 使用 `published` perspective 與安全轉換層；活動開始後自動移除報名操作，只有開放報名且 HTTPS 網址有效時才輸出連結。
 - CMS 自動驗證：Web 24 個測試檔、140 項測試全數通過；Studio 17 項 schema／structure 測試通過。Web 與 Studio typecheck、production build 均完成。Web typecheck 仍輸出既有 `vue-router/volar/sfc-route-blocks` 套件相容性警告，但命令成功結束；Web build 仍有既有 sourcemap 與字體 runtime resolve 警告。
-- 待處理：下一階段為 `validate-content-flow`，需部署 schema、建立明確標示的測試活動，驗證草稿隔離、兩次發布、匿名讀取、前台狀態與完整還原。課程詳情尚未接入共用心得 schema 與 renderer。
-- 未執行：Sanity schema 部署、遠端 dataset 寫入、production 內容流驗收、正式素材審核、Safari／Firefox、實體觸控裝置與螢幕閱讀器驗收。
+- Production 內容流驗收：2026-10-13 18:37–18:50（Asia/Taipei）完成 production schema 1/1 部署。以明確標示的測試活動驗證初始草稿隔離、首次發布、完整更新草稿隔離、再次發布、匿名 Data API、published-only 本機 API、圖片 asset 解參照、區塊排序與安全報名連結。
+- Production 畫面驗收：完整發布版於 Chrome headless 以 1440×1000、390×844 與加長 viewport 檢查，未見水平溢位、遮擋或裁切；證據位於 `docs/design/review/events-detail-content-flow/`。瀏覽器控制程序無法啟動，因此未以該程序重複互動量測。
+- 還原與資料健康：驗收用 published／draft 文件均已刪除，匿名 Data API 與本機 API 分別回到查無內容與 `empty`。production 文件驗證為 15 valid、0 errors；另有 2 項既有且與本功能無關的 `eventsPage.pastIntro`、`homeBanner.slides` stale-field warnings。
+- 公開設定簡化：2026-10-13 依使用者決策移除第二個詳情公開開關。活動只保留 `isPublished`；公開時 Studio 同步要求完整詳情，總覽、詳情 API 及關聯課程篩選均使用相同公開狀態。production schema 已部署，published 與 draft 文件中的舊欄位均已清除。
+- 資料健康：改善驗證定位並移除舊心得同意欄位後，production 最終檢查為 14 valid、0 errors、2 warnings。剩餘兩項為既有 `eventsPage.pastIntro`、`homeBanner.slides` stale-field warnings，與活動草稿發布無關。
+- Studio 簡化：2026-10-13 依使用者決策移除逐筆心得公開同意欄位與相關發布驗證，內容負責人在輸入 CMS 前完成公開授權。活動起訖時間、城市、報名網址、詳情，以及課程代表圖、詳情與梯次報名網址仍以可點擊提示定位到對應欄位。
+- 視覺調整：移除桌機 `.event-detail__facts` 的右框線；平板／手機既有資訊項目分隔與底線維持不變。production preview 可啟動且 build 通過；本次瀏覽器控制程序因本機 sandbox 錯誤無法啟動，因此未新增畫面截圖。
+- 待處理：正式活動素材審核與發布；課程詳情尚未接入共用心得 schema 與 renderer。
+- 未執行：Safari／Firefox、實體觸控裝置與螢幕閱讀器驗收。
 
 
 #### 筆記，不需要執行，可忽略

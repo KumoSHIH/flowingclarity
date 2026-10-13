@@ -12,7 +12,6 @@ export const sanityCourseDetail = {
     summary: '從觸碰、呼吸與細微觀察開始，學習一套能回到完整個案的面部按摩方法。',
     image: image('hero', '日式臉部按摩課堂操作'),
     isPublished: true,
-    detailIsPublished: true,
     detail: {
       englishTitle: 'Japanese Facial Massage',
       body: [

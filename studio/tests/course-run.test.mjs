@@ -37,17 +37,23 @@ test('requires an HTTPS registration target before an open run can be public', (
     registrationStatus: 'open',
     registrationUrl: 'https://forms.example.com/course',
   }), true)
-  assert.equal(validateCourseRunPublication({
+  assert.deepEqual(validateCourseRunPublication({
     _id: 'course-run-spring',
     isPublished: true,
     registrationStatus: 'open',
-  }), '開放報名的公開梯次必須設定 HTTPS 報名網址。')
-  assert.equal(validateCourseRunPublication({
+  }), {
+    message: '此梯次已設為「開放報名」；公開前請填寫有效的 HTTPS 報名網址。',
+    path: ['registrationUrl'],
+  })
+  assert.deepEqual(validateCourseRunPublication({
     _id: 'course-run-spring',
     isPublished: true,
     registrationStatus: 'open',
     registrationUrl: 'javascript:alert(1)',
-  }), '開放報名的公開梯次必須設定 HTTPS 報名網址。')
+  }), {
+    message: '此梯次已設為「開放報名」；公開前請填寫有效的 HTTPS 報名網址。',
+    path: ['registrationUrl'],
+  })
   assert.equal(validateCourseRunPublication({
     _id: 'course.run.spring',
     isPublished: true,

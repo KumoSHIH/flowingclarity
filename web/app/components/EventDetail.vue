@@ -180,7 +180,7 @@ const emit = defineEmits<{ retry: [] }>()
 .event-detail__hero-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
 .event-detail__layout { display: grid; grid-template-columns: minmax(300px, 31%) minmax(0, 1fr); width: min(100%, 1500px); margin: 0 auto; }
-.event-detail__facts { background: var(--color-sand); border-right: 1px solid rgb(56 52 46 / 24%); }
+.event-detail__facts { background: var(--color-sand); }
 .event-detail__facts-inner { position: sticky; top: 87px; }
 .event-detail__facts dl { margin: 0; }
 .event-detail__fact { padding: 26px clamp(28px, 3.2vw, 50px); border-bottom: 1px solid rgb(56 52 46 / 24%); }
@@ -229,7 +229,7 @@ const emit = defineEmits<{ retry: [] }>()
   .event-detail__summary { font-size: 16px; }
   .event-detail__hero-media { min-height: 280px; }
   .event-detail__layout { display: block; }
-  .event-detail__facts { border-right: 0; border-bottom: 1px solid rgb(56 52 46 / 24%); }
+  .event-detail__facts { border-bottom: 1px solid rgb(56 52 46 / 24%); }
   .event-detail__facts-inner { position: static; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .event-detail__fact { padding: 22px 24px; }
   .event-detail__fact:nth-child(odd) { border-right: 1px solid rgb(56 52 46 / 24%); }

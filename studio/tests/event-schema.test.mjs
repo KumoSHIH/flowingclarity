@@ -1,8 +1,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { event, validateEventPublication } from '../schemaTypes/event.ts'
-import { eventDetailContent, validatePublishedTestimonials } from '../schemaTypes/eventDetail.ts'
-import { validateEventDetailBody } from '../schemaTypes/eventDetail.ts'
+import { eventDetailContent, sharedTestimonialItem, validateEventDetailBody } from '../schemaTypes/eventDetail.ts'
 import { eventsPage, eventsPageId } from '../schemaTypes/eventsPage.ts'
 
 test('event schemas expose semantic content fields and public-safe singleton id', () => {
@@ -27,7 +26,6 @@ test('event schemas expose semantic content fields and public-safe singleton id'
     'city',
     'venue',
     'image',
-    'detailIsPublished',
     'detail',
     'registrationStatus',
     'registrationUrl',
@@ -37,10 +35,10 @@ test('event schemas expose semantic content fields and public-safe singleton id'
     'isPublished',
   ])
   assert.equal(event.fields.find(({ name }) => name === 'relatedCourse').options.filter,
-    'isPublished == true && detailIsPublished == true')
+    'isPublished == true')
 })
 
-test('event detail supports ordered semantic blocks and consent-gated testimonials', () => {
+test('event detail supports ordered semantic blocks and text-only testimonials', () => {
   assert.deepEqual(eventDetailContent.fields.map(({ name }) => name), [
     'intro', 'body', 'feeLabel', 'registrationNote', 'seoTitle', 'seoDescription',
   ])
@@ -50,8 +48,7 @@ test('event detail supports ordered semantic blocks and consent-gated testimonia
   )
   assert.equal(validateEventDetailBody([{ _type: 'eventDetailFacilitator' }, { _type: 'eventDetailAgenda' }]), true)
   assert.match(validateEventDetailBody([{ _type: 'eventDetailAgenda' }]), /帶領者/)
-  assert.equal(validatePublishedTestimonials({ items: [{ consentConfirmed: true }] }), true)
-  assert.match(validatePublishedTestimonials({ items: [{ consentConfirmed: false }] }), /同意/)
+  assert.deepEqual(sharedTestimonialItem.fields.map(({ name }) => name), ['text', 'sharerName'])
 })
 
 test('published events require safe ids, ordered dates, location and HTTPS registration URLs', () => {
@@ -63,23 +60,21 @@ test('published events require safe ids, ordered dates, location and HTTPS regis
     city: '高雄',
     registrationUrl: 'https://forms.example.com/event',
     isPublished: true,
+    detail: {},
   }
   assert.equal(validateEventPublication(valid), true)
-  assert.equal(validateEventPublication({ ...valid, detailIsPublished: true, detail: {} }), true)
-  assert.match(validateEventPublication({ ...valid, detailIsPublished: true }), /詳情內容/)
-  assert.match(validateEventPublication({
-    ...valid,
-    detailIsPublished: true,
-    detail: { body: [{ _type: 'sharedTestimonialBlock', items: [{ consentConfirmed: false }] }] },
-  }), /同意/)
+  assert.deepEqual(validateEventPublication({ ...valid, detail: undefined }), {
+    message: '公開活動前，請完成「活動詳情內容」。',
+    path: ['detail'],
+  })
   assert.match(validateEventPublication({ ...valid, _id: 'event.body' }), /不得包含句點/)
-  assert.match(validateEventPublication({ ...valid, endAt: valid.startAt }), /晚於開始時間/)
+  assert.match(validateEventPublication({ ...valid, endAt: valid.startAt }).message, /晚於開始時間/)
   assert.match(validateEventPublication({
     isPublished: false,
     startAt: valid.startAt,
     endAt: valid.startAt,
-  }), /晚於開始時間/)
-  assert.match(validateEventPublication({ ...valid, city: '' }), /必須設定城市/)
-  assert.match(validateEventPublication({ ...valid, registrationUrl: 'http://example.com' }), /HTTPS/)
+  }).message, /晚於開始時間/)
+  assert.match(validateEventPublication({ ...valid, city: '' }).message, /城市/)
+  assert.match(validateEventPublication({ ...valid, registrationUrl: 'http://example.com' }).message, /HTTPS/)
   assert.equal(validateEventPublication({ isPublished: false }), true)
 })

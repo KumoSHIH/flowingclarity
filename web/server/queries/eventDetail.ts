@@ -1,7 +1,6 @@
 export const eventDetailQuery = `*[
   _type == "event" &&
   isPublished == true &&
-  detailIsPublished == true &&
   slug.current == $slug
 ][0]{
   title,
@@ -21,7 +20,6 @@ export const eventDetailQuery = `*[
   registrationStatus,
   registrationUrl,
   isPublished,
-  detailIsPublished,
   detail{
     intro,
     feeLabel,
@@ -40,7 +38,7 @@ export const eventDetailQuery = `*[
       },
       _type == "sharedTestimonialBlock" => {
         title,
-        items[consentConfirmed == true]{text, sharerName}
+        items[]{text, sharerName}
       },
       _type == "eventDetailList" => {kind, title, items},
       _type == "eventDetailQuote" => {text, attribution},

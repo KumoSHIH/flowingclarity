@@ -100,7 +100,7 @@ describe('course detail parser', () => {
 
   it('rejects hidden, malformed or mismatched course content', () => {
     const hidden = structuredClone(sanityCourseDetail)
-    hidden.course.detailIsPublished = false
+    hidden.course.isPublished = false
     expect(parseCourseDetail(hidden)).toBeNull()
 
     const malformed = structuredClone(sanityCourseDetail)

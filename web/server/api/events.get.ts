@@ -30,7 +30,7 @@ export const eventsQuery = `{
     registrationStatus,
     registrationUrl,
     "relatedCourseSlug": select(
-      relatedCourse->isPublished == true && relatedCourse->detailIsPublished == true
+      relatedCourse->isPublished == true
         => relatedCourse->slug.current
     ),
     archiveVisible,
