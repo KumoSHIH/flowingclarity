@@ -61,7 +61,7 @@
 | cmp-curriculum | 階段、單元、標題與內容，可展開 | 建議；支援 1–12 單元 | 編輯者／Sanity block content |
 | cmp-schedule | 城市、日期、時間、地點、名額與狀態 | 報名時必要；不得顯示未確認資料 | 編輯者／Sanity course document |
 | cmp-video | YouTube 播放器與封面 | 非必要；需標題與封面替代文字 | 編輯者／Sanity block content |
-| cmp-testimonial | 學員分享輪播 | 非必要；僅使用已核准內容 | 編輯者／Sanity block content |
+| cmp-testimonial | 純文字學員心得與分享者名稱 | 非必要；可重複新增，僅使用已核准且確認公開同意的內容 | 編輯者／Sanity shared block content |
 | cmp-swiper | 圖文輪播 | 非必要；桌面最多三則、手機一則 | 編輯者／Sanity block content |
 | cmp-related-articles | 相關文章輪播 | 非必要；桌面三則、平板兩則、手機一則 | Sanity references |
 
@@ -101,6 +101,10 @@
 - 頁面必須只有一個 `h1`；內容模組依序使用 `h2`、`h3`。
 - 報名 CTA 只連往已確認外部表單；若尚未開放，顯示明確狀態而不是失效連結。
 - 課程日期、費用、名額、地點、師資資格、學員分享與成效文字均需由內容負責人核准。
+
+### 學員心得分享規劃
+
+學員心得將改用活動詳情與課程詳情共用的 `sharedTestimonialBlock`，加入現有 `courseDetailContent.body` 可排序陣列；每頁可自由新增區塊，每區 1–12 筆並可拖曳排序。前台每筆只顯示心得文字與分享者名稱，後台另以不公開的 `consentConfirmed` 阻擋未確認內容發布。欄位、驗證、GROQ 與三款桌機設計見 [學員心得分享共用元件規格](shared-testimonials.md)。共用 Vue 元件原型已隨活動詳情建立，但 production schema、課程 parser 與 body renderer 尚未接入此 type；現有 `courseDetailQuote` 仍是課程引言，不得拿來儲存學員心得。
 - 行動版維持資料與 DOM 相同順序，觸控目標至少 44px，所有互動須支援鍵盤與 reduced motion。
 
 ## 驗證紀錄
@@ -133,12 +137,14 @@
 - 2026-10-11：最終回歸為 Web 17 檔、102 項與 Studio 14 項測試通過，兩端 typecheck 與 production build 成功。四個隔離驗收 ID 已清除；登入查詢為空陣列，匿名計數回復公開總覽 1、公開詳情 0、公開梯次 0、驗收文件 0。
 - 2026-10-11：依後台人工測試回饋，所有課程詳情 `text` 欄位加入「可按 Enter 換行，前台會保留段落」提示，前台以 `white-space: pre-line` 保留簡介、完整介紹、圖文說明、引言、課綱、適合對象、梯次及報名說明的換行。已部署更新 schema；`rebalancing` 真實內容於 1440px／390px 各有 15 個換行保留元素，其中 5 個含編輯者換行，兩尺寸皆無水平溢位。Web 17 檔、103 項與 Studio 14 項測試、兩端 typecheck 及 production build 通過；證據位於 `.impeccable/review/course-detail-line-breaks/`。
 - 2026-10-11：修正章節錨點偏移與 active 誤判。點擊改以固定 Header、章節列實際高度及 16px 間距計算目標，平滑捲動期間維持使用者選取；一般捲動以固定列下方的章節邊界判定，手機作用中項目會自動水平置入可視範圍。Chrome CDP 實測 1440px／390px 點擊定位誤差分別約 0.22px／0.44px，後續垂直捲動皆切換至正確章節，手機錨點列水平移動 354px 且 active 完整可見。Web 17 檔、104 項測試、typecheck 與 production build 通過；Impeccable detector 為 0 項 anti-pattern，證據位於 `.impeccable/review/course-detail-anchor-tracking/`。
+- 2026-10-13：新增學員心得共用元件規劃與三款桌機候選稿。Chrome 於 1280px、1440px 檢查六組畫面，皆無水平溢位；C 案方向鍵切換可同步選取、焦點與內容。此階段未修改 production schema、查詢、Vue 元件或測試，手機版待選案後設計。
 
 ## 待處理與下一階段
 
 - 待加入麵包屑
 - 延後項目：待多門課程完成後台資料建置後，集中檢查長短內容、不同區塊組合與缺省資料的呈現，再決定是否調整前台樣式或新增、拆分 Studio 欄位；目前不阻擋下一個單元。
+- 新增規劃：學員心得桌機與手機版型已確認，共享型別與 Vue 元件原型已建立；下一步新增共用 schema、GROQ／查詢、parser、課程 body renderer，並執行 production 回歸與可復原內容流驗收。完成前不得記為已在課程詳情上線。
 - 發布前仍需補真實 iOS／Android 裝置，以及 Safari、Firefox 的交叉驗證；本階段只完成 Chrome headless 驗收。
 
 #### 筆記，不需要執行，可忽略
-- 使用 $develop-feature 從 web/docs/specs/course-detail.md 接續下一個流程
+- 使用 `web/.agents/skills/develop-feature/SKILL.md` 從 web/docs/specs/course-detail.md 接續下一個流程

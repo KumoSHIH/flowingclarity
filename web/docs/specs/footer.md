@@ -157,3 +157,6 @@ Sanity 驗證須阻止缺少品牌名稱、5 項已確認導覽或版權文字�
 - [x] 保留手動 CSS，更新設計文件；背景統一引用 bark 主色 token。
 - [x] `site-footer__brand` 改為導向 `/` 的首頁連結，收束句維持連結外文字。
 - [ ] 純 saffron 互動文字在 bark 背景的對比或非色彩提示仍待視覺核准。
+
+#### 筆記，不需要執行，可忽略
+- 使用 `web/.agents/skills/develop-feature/SKILL.md` 從 web/docs/specs/footer.md 接續下一個流程

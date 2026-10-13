@@ -186,3 +186,6 @@ stages:
 ## 共用左欄導讀調整記錄
 
 2026-10-12 將課程與活動總覽重複的頁面標題、導讀標記及響應式樣式抽成 `DirectoryIntro.vue`。課程分類與活動檢視切換仍由各自頁面維護。Chromium 於 1440px 確認兩頁導讀維持約 12em（242px），390px 時 `max-width` 為 `none` 並完整使用 327px 可用寬度，兩頁皆無水平溢位。`npm run test -w web` 通過 20 個測試檔、117 項測試；typecheck、build 與 Impeccable layout detector 均通過。
+
+#### 筆記，不需要執行，可忽略
+- 使用 `web/.agents/skills/develop-feature/SKILL.md` 從 `docs/specs/course` 接續下一個流程

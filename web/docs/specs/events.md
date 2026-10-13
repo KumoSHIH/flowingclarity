@@ -205,4 +205,4 @@
 
 
 #### 筆記，不需要執行，可忽略
-- 使用 develop-feature/SKILL.md 從 web/docs/specs/events.md 接續下一個流程
+- 使用 `web/.agents/skills/develop-feature/SKILL.md` 從 web/docs/specs/events.md 接續下一個流程

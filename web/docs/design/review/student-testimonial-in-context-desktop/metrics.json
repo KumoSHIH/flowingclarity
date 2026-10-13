@@ -1,0 +1,101 @@
+[
+  {
+    "label": "desktop-1440",
+    "innerWidth": 1440,
+    "scrollWidth": 1429,
+    "overflowX": false,
+    "fullHeight": 2444,
+    "h1Count": 1,
+    "testimonialHeadingCount": 1,
+    "testimonialCount": 2,
+    "testimonialNames": 2,
+    "testimonialImages": 0,
+    "contentHeadingSizes": [
+      "38px",
+      "38px",
+      "38px",
+      "38px"
+    ],
+    "contentBodySize": "16px",
+    "testimonialBodySizes": [
+      "16px",
+      "16px"
+    ],
+    "hasFrontEndGuidance": false,
+    "title": {
+      "left": 543.78125,
+      "right": 1075.78125,
+      "top": 1668.09375,
+      "bottom": 1721.28125
+    },
+    "buttonHeight": 76,
+    "fontLoaded": true,
+    "maxQuoteWidth": 780
+  },
+  {
+    "label": "mobile-390",
+    "innerWidth": 390,
+    "scrollWidth": 379,
+    "overflowX": false,
+    "fullHeight": 3296,
+    "h1Count": 1,
+    "testimonialHeadingCount": 1,
+    "testimonialCount": 2,
+    "testimonialNames": 2,
+    "testimonialImages": 0,
+    "contentHeadingSizes": [
+      "32px",
+      "32px",
+      "32px",
+      "32px"
+    ],
+    "contentBodySize": "16px",
+    "testimonialBodySizes": [
+      "16px",
+      "16px"
+    ],
+    "hasFrontEndGuidance": false,
+    "title": {
+      "left": 24,
+      "right": 355,
+      "top": 2428.65625,
+      "bottom": 2473.453125
+    },
+    "buttonHeight": 76,
+    "fontLoaded": true,
+    "maxQuoteWidth": 331
+  },
+  {
+    "label": "mobile-320",
+    "innerWidth": 320,
+    "scrollWidth": 320,
+    "overflowX": false,
+    "fullHeight": 3543,
+    "h1Count": 1,
+    "testimonialHeadingCount": 1,
+    "testimonialCount": 2,
+    "testimonialNames": 2,
+    "testimonialImages": 0,
+    "contentHeadingSizes": [
+      "32px",
+      "32px",
+      "32px",
+      "32px"
+    ],
+    "contentBodySize": "16px",
+    "testimonialBodySizes": [
+      "16px",
+      "16px"
+    ],
+    "hasFrontEndGuidance": false,
+    "title": {
+      "left": 24,
+      "right": 296,
+      "top": 2540.640625,
+      "bottom": 2585.4375
+    },
+    "buttonHeight": 76,
+    "fontLoaded": true,
+    "maxQuoteWidth": 272
+  }
+]

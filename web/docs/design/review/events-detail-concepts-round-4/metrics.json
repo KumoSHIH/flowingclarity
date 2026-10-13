@@ -1,0 +1,550 @@
+{
+  "metrics": [
+    {
+      "concept": "a",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1429,
+      "innerWidth": 1440,
+      "h1Visible": 1,
+      "title": {
+        "left": 86.390625,
+        "right": 814.703125,
+        "top": 373.765625,
+        "bottom": 458.09375
+      },
+      "media": {
+        "left": 915.5,
+        "right": 1342.609375,
+        "width": 427.109375,
+        "height": 456
+      },
+      "minControlHeight": 48,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 3668
+    },
+    {
+      "concept": "a",
+      "viewport": [
+        1024,
+        900
+      ],
+      "scrollWidth": 1013,
+      "innerWidth": 1024,
+      "h1Visible": 1,
+      "title": {
+        "left": 61.4375,
+        "right": 602.109375,
+        "top": 383.515625,
+        "bottom": 443.484375
+      },
+      "media": {
+        "left": 666.734375,
+        "right": 951.5625,
+        "width": 284.828125,
+        "height": 517.6875
+      },
+      "minControlHeight": 48,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 3593
+    },
+    {
+      "concept": "a",
+      "viewport": [
+        1023,
+        900
+      ],
+      "scrollWidth": 1012,
+      "innerWidth": 1023,
+      "h1Visible": 1,
+      "title": {
+        "left": 24,
+        "right": 564.140625,
+        "top": 252,
+        "bottom": 311.90625
+      },
+      "media": {
+        "left": 24,
+        "right": 988,
+        "width": 964,
+        "height": 602.5
+      },
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 5688
+    },
+    {
+      "concept": "a",
+      "viewport": [
+        768,
+        900
+      ],
+      "scrollWidth": 757,
+      "innerWidth": 768,
+      "h1Visible": 1,
+      "title": {
+        "left": 24,
+        "right": 508,
+        "top": 252,
+        "bottom": 305.671875
+      },
+      "media": {
+        "left": 24,
+        "right": 733,
+        "width": 709,
+        "height": 443.125
+      },
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 4870
+    },
+    {
+      "concept": "a",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 379,
+      "innerWidth": 390,
+      "h1Visible": 1,
+      "title": {
+        "left": 24,
+        "right": 355,
+        "top": 252,
+        "bottom": 354.46875
+      },
+      "media": {
+        "left": 24,
+        "right": 355,
+        "width": 331,
+        "height": 220
+      },
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 4476
+    },
+    {
+      "concept": "a",
+      "viewport": [
+        320,
+        720
+      ],
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "h1Visible": 1,
+      "title": {
+        "left": 24,
+        "right": 296,
+        "top": 252,
+        "bottom": 354.46875
+      },
+      "media": {
+        "left": 24,
+        "right": 296,
+        "width": 272,
+        "height": 220
+      },
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 4522
+    },
+    {
+      "concept": "b",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1429,
+      "innerWidth": 1440,
+      "h1Visible": 1,
+      "title": {
+        "left": 86.390625,
+        "right": 846.703125,
+        "top": 373.765625,
+        "bottom": 458.09375
+      },
+      "media": {
+        "left": 990.875,
+        "right": 1342.609375,
+        "width": 351.734375,
+        "height": 439.65625
+      },
+      "minControlHeight": 48,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 3286
+    },
+    {
+      "concept": "b",
+      "viewport": [
+        1024,
+        900
+      ],
+      "scrollWidth": 1013,
+      "innerWidth": 1024,
+      "h1Visible": 1,
+      "title": {
+        "left": 61.4375,
+        "right": 602.109375,
+        "top": 383.515625,
+        "bottom": 443.484375
+      },
+      "media": {
+        "left": 666.734375,
+        "right": 951.5625,
+        "width": 284.828125,
+        "height": 356.03125
+      },
+      "minControlHeight": 48,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 2934
+    },
+    {
+      "concept": "b",
+      "viewport": [
+        1023,
+        900
+      ],
+      "scrollWidth": 1012,
+      "innerWidth": 1023,
+      "h1Visible": 1,
+      "title": {
+        "left": 24,
+        "right": 564.140625,
+        "top": 252,
+        "bottom": 311.90625
+      },
+      "media": {
+        "left": 24,
+        "right": 988,
+        "width": 964,
+        "height": 602.5
+      },
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 3830
+    },
+    {
+      "concept": "b",
+      "viewport": [
+        768,
+        900
+      ],
+      "scrollWidth": 757,
+      "innerWidth": 768,
+      "h1Visible": 1,
+      "title": {
+        "left": 24,
+        "right": 508,
+        "top": 252,
+        "bottom": 305.671875
+      },
+      "media": {
+        "left": 24,
+        "right": 733,
+        "width": 709,
+        "height": 443.125
+      },
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 3503
+    },
+    {
+      "concept": "b",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 379,
+      "innerWidth": 390,
+      "h1Visible": 1,
+      "title": {
+        "left": 24,
+        "right": 355,
+        "top": 252,
+        "bottom": 354.46875
+      },
+      "media": {
+        "left": 24,
+        "right": 355,
+        "width": 331,
+        "height": 220
+      },
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 3882
+    },
+    {
+      "concept": "b",
+      "viewport": [
+        320,
+        720
+      ],
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "h1Visible": 1,
+      "title": {
+        "left": 24,
+        "right": 296,
+        "top": 252,
+        "bottom": 354.46875
+      },
+      "media": {
+        "left": 24,
+        "right": 296,
+        "width": 272,
+        "height": 220
+      },
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 3914
+    },
+    {
+      "concept": "c",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1429,
+      "innerWidth": 1440,
+      "h1Visible": 1,
+      "title": {
+        "left": 86.390625,
+        "right": 617.875,
+        "top": 331.609375,
+        "bottom": 500.265625
+      },
+      "media": {
+        "left": 718.671875,
+        "right": 1342.609375,
+        "width": 623.9375,
+        "height": 389.953125
+      },
+      "minControlHeight": 48,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 3809
+    },
+    {
+      "concept": "c",
+      "viewport": [
+        1024,
+        900
+      ],
+      "scrollWidth": 1013,
+      "innerWidth": 1024,
+      "h1Visible": 1,
+      "title": {
+        "left": 61.4375,
+        "right": 602.109375,
+        "top": 383.515625,
+        "bottom": 443.484375
+      },
+      "media": {
+        "left": 666.734375,
+        "right": 951.5625,
+        "width": 284.828125,
+        "height": 310
+      },
+      "minControlHeight": 48,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 3723
+    },
+    {
+      "concept": "c",
+      "viewport": [
+        1023,
+        900
+      ],
+      "scrollWidth": 1012,
+      "innerWidth": 1023,
+      "h1Visible": 1,
+      "title": {
+        "left": 24,
+        "right": 564.140625,
+        "top": 252,
+        "bottom": 311.90625
+      },
+      "media": {
+        "left": 24,
+        "right": 988,
+        "width": 964,
+        "height": 602.5
+      },
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 5674
+    },
+    {
+      "concept": "c",
+      "viewport": [
+        768,
+        900
+      ],
+      "scrollWidth": 757,
+      "innerWidth": 768,
+      "h1Visible": 1,
+      "title": {
+        "left": 24,
+        "right": 508,
+        "top": 252,
+        "bottom": 305.671875
+      },
+      "media": {
+        "left": 24,
+        "right": 733,
+        "width": 709,
+        "height": 443.125
+      },
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 4856
+    },
+    {
+      "concept": "c",
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 379,
+      "innerWidth": 390,
+      "h1Visible": 1,
+      "title": {
+        "left": 24,
+        "right": 355,
+        "top": 252,
+        "bottom": 354.46875
+      },
+      "media": {
+        "left": 24,
+        "right": 355,
+        "width": 331,
+        "height": 220
+      },
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 4462
+    },
+    {
+      "concept": "c",
+      "viewport": [
+        320,
+        720
+      ],
+      "scrollWidth": 320,
+      "innerWidth": 320,
+      "h1Visible": 1,
+      "title": {
+        "left": 24,
+        "right": 296,
+        "top": 252,
+        "bottom": 354.46875
+      },
+      "media": {
+        "left": 24,
+        "right": 296,
+        "width": 272,
+        "height": 220
+      },
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "scheduleItems": 3,
+      "hasCourseIntro": true,
+      "hasFacilitator": true,
+      "hasRegistration": true,
+      "detailActions": 1,
+      "fullHeight": 4508
+    }
+  ],
+  "keyboard": {
+    "selected": "tab-b",
+    "focused": "tab-b",
+    "outline": "rgb(247, 246, 244) solid 3px",
+    "boxShadow": "rgb(56, 52, 46) 0px 0px 0px 6px"
+  }
+}

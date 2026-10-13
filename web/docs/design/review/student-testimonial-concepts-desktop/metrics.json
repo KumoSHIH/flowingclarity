@@ -1,0 +1,167 @@
+{
+  "metrics": [
+    {
+      "concept": "a",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "innerWidth": 1440,
+      "scrollWidth": 1429,
+      "overflowX": false,
+      "fullHeight": 1665,
+      "visibleH1": 1,
+      "visibleH2": 1,
+      "title": {
+        "left": 100.796875,
+        "right": 430.515625,
+        "top": 294,
+        "bottom": 446.03125
+      },
+      "blockquotesInPanel": 3,
+      "visibleBlockquotes": 3,
+      "namesInPanel": 3,
+      "imagesInPanel": 0,
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "activeConcept": "concept-tab-a"
+    },
+    {
+      "concept": "a",
+      "viewport": [
+        1280,
+        900
+      ],
+      "innerWidth": 1280,
+      "scrollWidth": 1269,
+      "overflowX": false,
+      "fullHeight": 1600,
+      "visibleH1": 1,
+      "visibleH2": 1,
+      "title": {
+        "left": 89.59375,
+        "right": 382.3125,
+        "top": 294,
+        "bottom": 429.15625
+      },
+      "blockquotesInPanel": 3,
+      "visibleBlockquotes": 3,
+      "namesInPanel": 3,
+      "imagesInPanel": 0,
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "activeConcept": "concept-tab-a"
+    },
+    {
+      "concept": "b",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "innerWidth": 1440,
+      "scrollWidth": 1429,
+      "overflowX": false,
+      "fullHeight": 1359,
+      "visibleH1": 1,
+      "visibleH2": 1,
+      "title": {
+        "left": 100.796875,
+        "right": 556.546875,
+        "top": 288,
+        "bottom": 364.015625
+      },
+      "blockquotesInPanel": 3,
+      "visibleBlockquotes": 3,
+      "namesInPanel": 3,
+      "imagesInPanel": 0,
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "activeConcept": "concept-tab-b"
+    },
+    {
+      "concept": "b",
+      "viewport": [
+        1280,
+        900
+      ],
+      "innerWidth": 1280,
+      "scrollWidth": 1269,
+      "overflowX": false,
+      "fullHeight": 1350,
+      "visibleH1": 1,
+      "visibleH2": 1,
+      "title": {
+        "left": 89.59375,
+        "right": 490.3125,
+        "top": 288,
+        "bottom": 355.578125
+      },
+      "blockquotesInPanel": 3,
+      "visibleBlockquotes": 3,
+      "namesInPanel": 3,
+      "imagesInPanel": 0,
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "activeConcept": "concept-tab-b"
+    },
+    {
+      "concept": "c",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "innerWidth": 1440,
+      "scrollWidth": 1429,
+      "overflowX": false,
+      "fullHeight": 1044,
+      "visibleH1": 1,
+      "visibleH2": 1,
+      "title": {
+        "left": 72,
+        "right": 343.546875,
+        "top": 274,
+        "bottom": 403.21875
+      },
+      "blockquotesInPanel": 3,
+      "visibleBlockquotes": 1,
+      "namesInPanel": 3,
+      "imagesInPanel": 0,
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "activeConcept": "concept-tab-c"
+    },
+    {
+      "concept": "c",
+      "viewport": [
+        1280,
+        900
+      ],
+      "innerWidth": 1280,
+      "scrollWidth": 1269,
+      "overflowX": false,
+      "fullHeight": 1044,
+      "visibleH1": 1,
+      "visibleH2": 1,
+      "title": {
+        "left": 64,
+        "right": 304.90625,
+        "top": 274,
+        "bottom": 388.875
+      },
+      "blockquotesInPanel": 3,
+      "visibleBlockquotes": 1,
+      "namesInPanel": 3,
+      "imagesInPanel": 0,
+      "minControlHeight": 54,
+      "fontLoaded": true,
+      "activeConcept": "concept-tab-c"
+    }
+  ],
+  "keyboard": {
+    "selected": "voice-tab-b",
+    "focused": "voice-tab-b",
+    "visiblePanel": "voice-b",
+    "outline": "rgb(247, 246, 244) solid 3px",
+    "boxShadow": "rgb(56, 52, 46) 0px 0px 0px 6px"
+  }
+}

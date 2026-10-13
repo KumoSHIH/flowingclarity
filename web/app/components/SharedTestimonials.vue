@@ -1,0 +1,93 @@
+<script setup lang="ts">
+import type { SharedTestimonialItem } from '#shared/types/eventDetail'
+
+defineProps<{
+  title?: string
+  items: SharedTestimonialItem[]
+}>()
+</script>
+
+<template>
+  <section v-if="items.length" class="shared-testimonials" :aria-labelledby="`${$attrs.id ?? 'testimonials'}-title`">
+    <h2 :id="`${$attrs.id ?? 'testimonials'}-title`">{{ title ?? '學員心得分享' }}</h2>
+    <div class="shared-testimonials__list">
+      <blockquote v-for="(item, index) in items" :key="`${item.sharerName}-${index}`">
+        <p>{{ item.text }}</p>
+        <cite>{{ item.sharerName }}</cite>
+      </blockquote>
+    </div>
+  </section>
+</template>
+
+<style scoped>
+.shared-testimonials {
+  padding: 90px clamp(48px, 7vw, 104px) 100px;
+  border-bottom: 1px solid rgb(56 52 46 / 24%);
+}
+
+.shared-testimonials > h2 {
+  max-width: 14em;
+  padding-bottom: 34px;
+  margin: 0;
+  border-bottom: 1px solid var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
+.shared-testimonials__list {
+  max-width: 780px;
+}
+
+blockquote {
+  padding: 54px 0 58px;
+  margin: 0;
+  border-bottom: 1px solid rgb(56 52 46 / 24%);
+}
+
+blockquote p {
+  max-width: 68ch;
+  margin: 0;
+  color: #625a51;
+  font-size: 16px;
+  line-height: 2.1;
+  letter-spacing: 0.025em;
+  white-space: pre-line;
+}
+
+cite {
+  display: block;
+  margin-top: 26px;
+  color: #745142;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+cite::before {
+  display: inline-block;
+  width: 28px;
+  margin-right: 12px;
+  border-top: 1px solid currentcolor;
+  vertical-align: middle;
+  content: "";
+}
+
+@media (max-width: 1023px) {
+  .shared-testimonials {
+    padding: 72px 24px 80px;
+  }
+
+  .shared-testimonials > h2 {
+    font-size: 32px;
+  }
+
+  blockquote {
+    padding: 42px 0 46px;
+  }
+}
+</style>
+

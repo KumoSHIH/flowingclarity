@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>學員心得分享｜活動詳情內容接續示意</title>
+  <style>
+    @font-face { font-family: "Noto Serif TC"; src: url("../../public/fonts/NotoSerifTC-Variable.ttf") format("truetype"); font-weight: 200 900; font-display: swap; }
+    :root {
+      --paper: #f8f5ef; --sand: #e8dfd2; --ink: #38342e; --muted: #625a51; --clay-text: #745142;
+      --saffron: #f8bf4c; --night: #241710; --bark: #766254; --persimmon: #df5b35; --warm-white: #f7f6f4;
+      --line: rgb(56 52 46 / 24%); --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+      --sans: "BIZ UDPGothic", "Noto Sans TC", "PingFang TC", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { min-width: 1180px; background: var(--night); scrollbar-color: var(--clay-text) var(--paper); scrollbar-width: thin; }
+    body { min-width: 1180px; margin: 0; color: var(--ink); background: var(--night); font-family: var(--sans); }
+    h1, h2, h3, p, blockquote, ol { margin-top: 0; }
+    ::selection { color: var(--warm-white); background: var(--persimmon); }
+    :focus-visible { outline: 3px solid var(--warm-white); outline-offset: 2px; box-shadow: 0 0 0 6px var(--ink); }
+
+    .prototype { width: min(100%, 1920px); margin: 0 auto; background: var(--paper); }
+    .page-context { padding: 52px clamp(52px, 7vw, 116px) 48px; background: var(--paper); border-bottom: 1px solid var(--line); }
+    .page-context h1 { max-width: 14em; margin-bottom: 14px; font-family: var(--serif); font-size: 40px; font-weight: 400; line-height: 1.35; }
+    .page-context p { max-width: 72ch; margin-bottom: 0; color: var(--muted); font-size: 16px; line-height: 2; }
+
+    .rail-layout { display: grid; grid-template-columns: minmax(300px, 31%) minmax(0, 1fr); width: min(100%, 1500px); margin: 0 auto; }
+    .facts { align-self: stretch; background: var(--sand); border-right: 1px solid var(--line); }
+    .facts__inner { position: sticky; top: 0; }
+    .fact { padding: 26px clamp(28px, 3.2vw, 50px); border-bottom: 1px solid var(--line); }
+    .fact strong { display: block; margin-bottom: 8px; color: var(--clay-text); font-size: 14px; letter-spacing: .08em; }
+    .fact span, .fact time { font-family: var(--serif); font-size: 20px; line-height: 1.55; }
+    .action-wrap { padding: 34px clamp(28px, 3.2vw, 50px); }
+    .action { display: flex; min-height: 76px; align-items: center; justify-content: space-between; gap: 24px; width: 100%; padding: 0 28px; color: var(--night); background: var(--persimmon); border: 0; font: inherit; font-weight: 700; }
+    .action::after { width: 25px; border-top: 1px solid currentColor; content: ""; }
+    .action-wrap small { display: block; margin-top: 12px; color: var(--clay-text); font-size: 14px; line-height: 1.7; }
+
+    .reading-column { min-width: 0; background: var(--paper); }
+    .content-section { padding: 76px clamp(48px, 7vw, 104px); border-bottom: 1px solid var(--line); }
+    .content-section__inner { width: min(100%, 780px); }
+    .content-section h2 { max-width: 14em; margin-bottom: 22px; font-family: var(--serif); font-size: 38px; font-weight: 400; line-height: 1.4; letter-spacing: .02em; }
+    .content-copy { max-width: 68ch; margin-bottom: 0; color: var(--muted); font-size: 16px; line-height: 2.1; letter-spacing: .025em; }
+    .content-copy + .content-copy { margin-top: 18px; }
+    .facilitator-name { margin-bottom: 16px; font-family: var(--serif); font-size: 24px; }
+    .facilitator-name span { display: block; margin-top: 7px; color: var(--clay-text); font-family: var(--sans); font-size: 14px; letter-spacing: .08em; }
+
+    .schedule-list { padding: 0; margin: 38px 0 0; border-top: 1px solid var(--ink); list-style: none; }
+    .schedule-list li { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 30px; padding: 28px 0; border-bottom: 1px solid var(--line); }
+    .schedule-list time { color: var(--clay-text); font-size: 14px; font-weight: 700; letter-spacing: .06em; }
+    .schedule-list h3 { margin-bottom: 8px; font-family: var(--serif); font-size: 22px; font-weight: 400; line-height: 1.5; }
+    .schedule-list p { margin-bottom: 0; color: var(--muted); font-size: 16px; line-height: 1.9; }
+
+    .testimonials { padding-top: 90px; padding-bottom: 100px; background: var(--paper); }
+    .testimonials__intro { padding-bottom: 34px; border-bottom: 1px solid var(--ink); }
+    .testimonials__intro h2 { margin-bottom: 0; }
+    .testimonial { padding: 54px 0 58px; margin: 0; border-bottom: 1px solid var(--line); }
+    .testimonial p { max-width: 68ch; margin-bottom: 0; color: var(--muted); font-family: var(--sans); font-size: 16px; font-weight: 400; line-height: 2.1; letter-spacing: .025em; }
+    .testimonial cite { display: block; margin-top: 26px; color: var(--clay-text); font-size: 14px; font-style: normal; font-weight: 700; letter-spacing: .08em; }
+    .testimonial cite::before { display: inline-block; width: 28px; margin-right: 12px; border-top: 1px solid currentColor; vertical-align: middle; content: ""; }
+
+    @media (max-width: 1023px) {
+      html, body { min-width: 320px; }
+      .page-context { padding: 44px 24px 40px; }
+      .page-context h1 { font-size: 34px; }
+      .page-context p { font-size: 15px; }
+      .rail-layout { display: block; }
+      .facts { border-right: 0; border-bottom: 1px solid var(--line); }
+      .facts__inner { position: static; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .fact { padding: 22px 24px; }
+      .fact:nth-child(odd) { border-right: 1px solid var(--line); }
+      .action-wrap { grid-column: 1 / -1; padding: 24px; }
+      .content-section { padding: 64px 24px; }
+      .content-section__inner { width: 100%; }
+      .content-section h2 { font-size: 32px; }
+      .schedule-list li { grid-template-columns: 88px minmax(0, 1fr); gap: 20px; }
+      .testimonials { padding-top: 72px; padding-bottom: 80px; }
+      .testimonial { padding: 42px 0 46px; }
+    }
+    @media (max-width: 560px) {
+      .facts__inner { grid-template-columns: 1fr; }
+      .fact:nth-child(odd) { border-right: 0; }
+      .action-wrap { grid-column: auto; }
+      .schedule-list li { grid-template-columns: 1fr; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="prototype">
+    <header class="page-context">
+      <h1>頭薦骨訓練說明體驗會</h1>
+      <p>從活動說明、個人觀察到實際練習，依循自己的速度感受與整理；過程中可以隨時停下、提問或調整參與方式。</p>
+    </header>
+
+    <div class="rail-layout">
+      <aside class="facts" aria-label="活動資訊與報名">
+        <div class="facts__inner">
+          <div class="fact"><strong>日期</strong><time datetime="2026-11-14">2026 年 11 月 14 日</time></div>
+          <div class="fact"><strong>時間</strong><span>10:00–17:00</span></div>
+          <div class="fact"><strong>地點</strong><span>台北・場地待確認</span></div>
+          <div class="fact"><strong>費用</strong><span>正式費用待確認</span></div>
+          <div class="action-wrap"><button class="action" type="button">前往報名</button><small>報名連結尚未開放</small></div>
+        </div>
+      </aside>
+
+      <div class="reading-column">
+        <section class="content-section">
+          <div class="content-section__inner">
+            <h2>課程介紹</h2>
+            <p class="content-copy">活動將說明練習如何進行、參與者會接觸哪些方法，以及過程中可以如何依自己的狀態停留、調整或休息。</p>
+            <p class="content-copy">活動會從說明與個人觀察逐步進入實作和整理；每一段都會保留停頓與提問的空間，參與者可依當下狀態調整投入程度。</p>
+          </div>
+        </section>
+
+        <section class="content-section">
+          <div class="content-section__inner">
+            <h2>帶領者介紹</h2>
+            <p class="facilitator-name">帶領者姓名待確認<span>活動帶領者</span></p>
+            <p class="content-copy">帶領者將說明活動的進行方式與練習界線，並在每個階段保留提問與調整的空間。完整經歷將於資料確認後更新。</p>
+          </div>
+        </section>
+
+        <section class="content-section">
+          <div class="content-section__inner">
+            <h2>這一天，會怎麼進行</h2>
+            <p class="content-copy">一天會從抵達、活動說明與個人觀察開始，再進入示範、練習與共同整理；正式時段依活動公告為準。</p>
+            <ol class="schedule-list">
+              <li><time datetime="2026-11-14T10:00:00+08:00">10:00</time><div><h3>抵達、說明與個人觀察</h3><p>理解參與方式與界線，從自己的呼吸與重量開始。</p></div></li>
+              <li><time datetime="2026-11-14T13:30:00+08:00">13:30</time><div><h3>示範與兩人練習</h3><p>依活動設計進行實作，過程可按自身狀態調整參與程度。</p></div></li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="content-section testimonials" aria-labelledby="testimonials-title">
+          <div class="content-section__inner">
+            <header class="testimonials__intro"><h2 id="testimonials-title">學員心得分享</h2></header>
+
+            <blockquote class="testimonial">
+              <p>這段練習讓我第一次注意到，原來自己在面對不熟悉的感受時，總會急著替它找到答案。帶領者沒有要求我們立刻說明發生了什麼，而是留了一段很安靜的時間，讓每個人可以按照自己的速度觀察。對我來說，最有幫助的不是得到一個結論，而是開始知道什麼時候需要停一下，也比較能辨認自己是否真的準備好繼續。</p>
+              <cite>示意分享者 A</cite>
+            </blockquote>
+
+            <blockquote class="testimonial">
+              <p>活動的說明很具體，從練習方式、彼此的界線，到過程中可以選擇暫停或調整，都有清楚交代。我原本擔心自己跟不上其他人的速度，實際參與後才發現，每一段都保留了提問與整理的空間。這樣的安排讓我不需要勉強完成所有步驟，也能好好理解自己正在經驗的內容。</p>
+              <cite>示意分享者 B</cite>
+            </blockquote>
+          </div>
+        </section>
+      </div>
+    </div>
+
+  </main>
+</body>
+</html>

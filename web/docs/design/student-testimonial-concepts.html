@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>學員心得分享｜桌機元件三款設計稿</title>
+  <style>
+    @font-face { font-family: "Noto Serif TC"; src: url("../../public/fonts/NotoSerifTC-Variable.ttf") format("truetype"); font-weight: 200 900; font-display: swap; }
+    :root {
+      --paper: #f8f5ef; --sand: #e8dfd2; --ink: #38342e; --muted: #625a51; --clay: #a46b54; --clay-text: #745142;
+      --saffron: #f8bf4c; --night: #241710; --bark: #766254; --warm-white: #f7f6f4; --line: rgb(56 52 46 / 24%);
+      --edge: clamp(52px, 7vw, 116px); --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+      --sans: "BIZ UDPGothic", "Noto Sans TC", "PingFang TC", sans-serif; --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+    * { box-sizing: border-box; }
+    html { min-width: 1180px; overflow-x: auto; background: var(--night); }
+    body { min-width: 1180px; margin: 0; color: var(--ink); background: var(--night); font-family: var(--sans); }
+    button { color: inherit; font: inherit; cursor: pointer; }
+    h1, h2, p, blockquote { margin-top: 0; }
+    ::selection { color: var(--warm-white); background: var(--clay); }
+    :focus-visible { outline: 3px solid var(--warm-white); outline-offset: 2px; box-shadow: 0 0 0 6px var(--ink); }
+    * { scrollbar-color: var(--clay) var(--paper); scrollbar-width: thin; }
+
+    .prototype { width: min(100%, 1920px); margin: 0 auto; background: var(--paper); }
+    .switcher { position: sticky; z-index: 20; top: 0; display: grid; min-height: 78px; grid-template-columns: auto minmax(600px, 760px); align-items: center; justify-content: space-between; gap: 40px; padding: 12px var(--edge); color: var(--warm-white); background: var(--night); }
+    .switcher > div > strong { display: block; font-family: var(--serif); font-size: 16px; font-weight: 400; }
+    .switcher > div > small { display: block; margin-top: 3px; color: #ded1c6; font-size: 14px; letter-spacing: .06em; }
+    .tabs { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .tab { min-height: 54px; padding: 0 20px; color: #ded1c6; background: transparent; border: 0; border-left: 1px solid rgb(247 246 244 / 22%); text-align: left; }
+    .tab:last-child { border-right: 1px solid rgb(247 246 244 / 22%); }
+    .tab[aria-selected="true"] { color: var(--ink); background: var(--saffron); }
+    .tab span { display: block; font-family: var(--serif); font-size: 14px; }
+    .tab small { display: block; margin-top: 2px; font-size: 14px; }
+    .concept[hidden] { display: none; }
+
+    .context { display: flex; min-height: 92px; align-items: center; justify-content: space-between; gap: 40px; padding: 20px var(--edge); background: var(--paper); border-bottom: 1px solid var(--line); }
+    .context h1 { margin: 0; font-family: var(--serif); font-size: 24px; font-weight: 400; }
+    .context p { max-width: 640px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.8; text-align: right; }
+    .concept-body { min-height: 900px; }
+    .component-title { margin-bottom: 0; font-family: var(--serif); font-size: clamp(44px, 4vw, 62px); font-weight: 400; line-height: 1.32; letter-spacing: .02em; text-wrap: balance; }
+    .testimonial-text { margin: 0; font-family: var(--serif); font-weight: 400; line-height: 1.75; letter-spacing: .025em; }
+    .testimonial-name { display: block; margin-top: 24px; color: var(--clay-text); font-size: 14px; font-style: normal; font-weight: 700; letter-spacing: .08em; }
+    .testimonial-name::before { display: inline-block; width: 26px; margin-right: 12px; border-top: 1px solid currentColor; vertical-align: middle; content: ""; }
+    .concept-note { display: flex; justify-content: space-between; gap: 40px; padding: 20px var(--edge); color: var(--warm-white); background: var(--bark); font-size: 14px; line-height: 1.7; }
+    .concept-note span:last-child { max-width: 62em; color: #f0e8e0; text-align: right; }
+
+    /* A — 連續長卷 */
+    .scroll-testimonials { display: grid; grid-template-columns: minmax(230px, .7fr) minmax(0, 1.6fr); gap: clamp(80px, 10vw, 180px); padding: 124px var(--edge) 144px; background: var(--paper); }
+    .scroll-testimonials__heading { position: sticky; top: 112px; align-self: start; }
+    .scroll-testimonials__heading p { max-width: 24em; margin: 28px 0 0; color: var(--muted); font-size: 14px; line-height: 2; }
+    .scroll-testimonials__list { border-top: 1px solid var(--ink); }
+    .scroll-testimonial { padding: 62px 0 68px; border-bottom: 1px solid var(--line); }
+    .scroll-testimonial .testimonial-text { max-width: 27em; font-size: clamp(28px, 2.6vw, 40px); }
+    .scroll-testimonial:nth-child(even) { padding-left: clamp(70px, 8vw, 130px); }
+
+    /* B — 雙欄書頁 */
+    .spread-testimonials { padding: 118px var(--edge) 142px; background: var(--sand); }
+    .spread-testimonials__heading { display: grid; grid-template-columns: minmax(300px, .8fr) minmax(420px, 1.2fr); align-items: end; gap: 88px; padding-bottom: 56px; border-bottom: 1px solid var(--ink); }
+    .spread-testimonials__heading p { max-width: 42em; margin: 0 0 6px; color: var(--muted); font-size: 14px; line-height: 2; }
+    .spread-testimonials__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .spread-testimonial { min-height: 390px; padding: 58px clamp(42px, 5vw, 82px) 64px 0; border-bottom: 1px solid var(--line); }
+    .spread-testimonial:nth-child(even) { padding-right: 0; padding-left: clamp(42px, 5vw, 82px); border-left: 1px solid var(--line); }
+    .spread-testimonial .testimonial-text { max-width: 21em; font-size: clamp(25px, 2.1vw, 34px); }
+    .spread-testimonial:last-child:nth-child(odd) { grid-column: 1 / -1; min-height: 310px; padding-right: 18%; }
+    .spread-testimonial:last-child:nth-child(odd) .testimonial-text { max-width: 28em; }
+
+    /* C — 姓名索引 */
+    .indexed-testimonials { display: grid; min-height: 810px; grid-template-columns: minmax(280px, .72fr) minmax(0, 1.75fr); background: var(--paper); }
+    .indexed-testimonials__index { display: flex; flex-direction: column; justify-content: space-between; padding: 104px clamp(38px, 5vw, 76px); background: var(--sand); border-right: 1px solid var(--line); }
+    .indexed-testimonials__index .component-title { font-size: clamp(40px, 3.4vw, 54px); }
+    .voice-tabs { display: grid; margin-top: 70px; border-top: 1px solid var(--ink); }
+    .voice-tab { display: grid; min-height: 70px; align-items: center; padding: 0; color: var(--muted); background: transparent; border: 0; border-bottom: 1px solid var(--line); font-size: 14px; font-weight: 700; letter-spacing: .08em; text-align: left; }
+    .voice-tab[aria-selected="true"] { color: var(--ink); }
+    .voice-tab[aria-selected="true"]::after { width: 40px; border-top: 1px solid var(--clay-text); content: ""; }
+    .indexed-testimonials__index > small { color: var(--clay-text); font-size: 14px; line-height: 1.8; }
+    .voice-panels { position: relative; display: grid; min-height: 810px; place-items: center; padding: 96px clamp(72px, 9vw, 156px); overflow: hidden; }
+    .voice-panels::after { position: absolute; right: -56px; bottom: -130px; width: 370px; height: 520px; opacity: .16; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 370 520'%3E%3Cg fill='none' stroke='%23a46b54'%3E%3Cpath d='M359 10C251 98 337 179 237 253s70 131-38 204-4 44-81 62'/%3E%3Cpath d='M370 70c-87 64-26 127-110 201s61 121-43 192-8 40-74 56'/%3E%3Cpath d='M370 142c-61 42-10 96-79 166s55 111-41 181-11 26-57 31'/%3E%3C/g%3E%3C/svg%3E") center / contain no-repeat; pointer-events: none; content: ""; }
+    .voice-panel { position: relative; z-index: 1; width: min(100%, 880px); }
+    .voice-panel[hidden] { display: none; }
+    .voice-panel .testimonial-text { max-width: 22em; font-size: clamp(34px, 3.6vw, 56px); line-height: 1.6; }
+    .voice-panel .testimonial-name { margin-top: 38px; }
+    .voice-panel:not([hidden]) { animation: voice-reveal 620ms var(--ease) both; }
+    @keyframes voice-reveal { from { opacity: .01; clip-path: inset(0 0 100% 0); transform: translateY(18px); } to { opacity: 1; clip-path: inset(0); transform: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="prototype">
+    <section class="switcher" aria-label="學員心得分享桌機設計稿切換">
+      <div><strong>共用元件・學員心得分享</strong><small>桌機版型決策稿｜活動詳情・課程詳情共用</small></div>
+      <div class="tabs" role="tablist" aria-label="選擇桌機設計方向">
+        <button class="tab" id="concept-tab-a" role="tab" aria-selected="true" aria-controls="concept-a" tabindex="0"><span>A 連續長卷</span><small>依序閱讀</small></button>
+        <button class="tab" id="concept-tab-b" role="tab" aria-selected="false" aria-controls="concept-b" tabindex="-1"><span>B 雙欄書頁</span><small>並列比較</small></button>
+        <button class="tab" id="concept-tab-c" role="tab" aria-selected="false" aria-controls="concept-c" tabindex="-1"><span>C 姓名索引</span><small>單則聚焦</small></button>
+      </div>
+    </section>
+
+    <section class="context"><h1>學員心得分享</h1><p>以下皆為版型示意，非真實學員引言。前台每則只顯示心得文字與分享者名稱；本階段僅設計桌機版。</p></section>
+
+    <article class="concept" id="concept-a" role="tabpanel" aria-labelledby="concept-tab-a">
+      <div class="concept-body scroll-testimonials">
+        <header class="scroll-testimonials__heading"><h2 class="component-title">學員心得<br>分享</h2><p>讓每一段聲音保有完整呼吸，不用卡片、評分或照片替心得製造份量。</p></header>
+        <div class="scroll-testimonials__list">
+          <blockquote class="scroll-testimonial"><p class="testimonial-text">練習裡最有幫助的，是有人提醒我可以慢一點，不必急著把每一個感受說清楚。</p><cite class="testimonial-name">示意分享者 A</cite></blockquote>
+          <blockquote class="scroll-testimonial"><p class="testimonial-text">我喜歡課程保留了提問與停頓的時間，讓不同速度的人都能找到自己的參與方式。</p><cite class="testimonial-name">示意分享者 B</cite></blockquote>
+          <blockquote class="scroll-testimonial"><p class="testimonial-text">內容被說明得很具體，也清楚提醒我們可以依當下狀態調整，不需要勉強完成所有練習。</p><cite class="testimonial-name">示意分享者 C</cite></blockquote>
+        </div>
+      </div>
+      <footer class="concept-note"><span>A「連續長卷」・最忠實保留每一則文字的閱讀完整性</span><span>適合 1–6 則心得；新增後依後台順序自然向下延伸，沒有輪播與隱藏內容。</span></footer>
+    </article>
+
+    <article class="concept" id="concept-b" role="tabpanel" aria-labelledby="concept-tab-b" hidden>
+      <div class="concept-body spread-testimonials">
+        <header class="spread-testimonials__heading"><h2 class="component-title">學員心得分享</h2><p>以書頁跨欄容納不同長度的文字。內容仍依 DOM 順序閱讀，雙欄只負責桌機版的視覺節奏。</p></header>
+        <div class="spread-testimonials__grid">
+          <blockquote class="spread-testimonial"><p class="testimonial-text">練習裡最有幫助的，是有人提醒我可以慢一點，不必急著把每一個感受說清楚。</p><cite class="testimonial-name">示意分享者 A</cite></blockquote>
+          <blockquote class="spread-testimonial"><p class="testimonial-text">我喜歡課程保留了提問與停頓的時間，讓不同速度的人都能找到自己的參與方式。</p><cite class="testimonial-name">示意分享者 B</cite></blockquote>
+          <blockquote class="spread-testimonial"><p class="testimonial-text">內容被說明得很具體，也清楚提醒我們可以依當下狀態調整，不需要勉強完成所有練習。</p><cite class="testimonial-name">示意分享者 C</cite></blockquote>
+        </div>
+      </div>
+      <footer class="concept-note"><span>B「雙欄書頁」・在同一視窗看見多個聲音</span><span>適合 2–5 則長度接近的心得；奇數最後一則跨欄收束，不使用等高卡片。</span></footer>
+    </article>
+
+    <article class="concept" id="concept-c" role="tabpanel" aria-labelledby="concept-tab-c" hidden>
+      <div class="concept-body indexed-testimonials">
+        <aside class="indexed-testimonials__index"><div><h2 class="component-title">學員心得分享</h2><div class="voice-tabs" role="tablist" aria-label="選擇分享者"><button class="voice-tab" id="voice-tab-a" role="tab" aria-selected="true" aria-controls="voice-a" tabindex="0">示意分享者 A</button><button class="voice-tab" id="voice-tab-b" role="tab" aria-selected="false" aria-controls="voice-b" tabindex="-1">示意分享者 B</button><button class="voice-tab" id="voice-tab-c" role="tab" aria-selected="false" aria-controls="voice-c" tabindex="-1">示意分享者 C</button></div></div><small>鍵盤可使用方向鍵、Home 與 End 切換。新增心得時，姓名索引與面板由同一筆資料產生。</small></aside>
+        <div class="voice-panels"><blockquote class="voice-panel" id="voice-a" role="tabpanel" aria-labelledby="voice-tab-a"><p class="testimonial-text">練習裡最有幫助的，是有人提醒我可以慢一點，不必急著把每一個感受說清楚。</p><cite class="testimonial-name">示意分享者 A</cite></blockquote><blockquote class="voice-panel" id="voice-b" role="tabpanel" aria-labelledby="voice-tab-b" hidden><p class="testimonial-text">我喜歡課程保留了提問與停頓的時間，讓不同速度的人都能找到自己的參與方式。</p><cite class="testimonial-name">示意分享者 B</cite></blockquote><blockquote class="voice-panel" id="voice-c" role="tabpanel" aria-labelledby="voice-tab-c" hidden><p class="testimonial-text">內容被說明得很具體，也清楚提醒我們可以依當下狀態調整，不需要勉強完成所有練習。</p><cite class="testimonial-name">示意分享者 C</cite></blockquote></div>
+      </div>
+      <footer class="concept-note"><span>C「姓名索引」・一次只聚焦一段聲音</span><span>適合 4–12 則心得；資訊量最穩定，但需要切換操作，手機版型需待方向確定後另行設計。</span></footer>
+    </article>
+  </main>
+
+  <script>
+    const conceptTabs = [...document.querySelectorAll('.switcher [role="tab"]')]
+    const concepts = [...document.querySelectorAll('.concept')]
+    function activateConcept(tab, moveFocus = true) {
+      conceptTabs.forEach(item => { const active = item === tab; item.setAttribute('aria-selected', String(active)); item.tabIndex = active ? 0 : -1 })
+      concepts.forEach(panel => { panel.hidden = panel.id !== tab.getAttribute('aria-controls') })
+      if (moveFocus) tab.focus()
+      window.scrollTo(0, 0)
+    }
+    conceptTabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activateConcept(tab, false))
+      tab.addEventListener('keydown', event => {
+        let next = index
+        if (event.key === 'ArrowRight') next = (index + 1) % conceptTabs.length
+        else if (event.key === 'ArrowLeft') next = (index - 1 + conceptTabs.length) % conceptTabs.length
+        else if (event.key === 'Home') next = 0
+        else if (event.key === 'End') next = conceptTabs.length - 1
+        else return
+        event.preventDefault(); activateConcept(conceptTabs[next])
+      })
+    })
+    const voiceTabs = [...document.querySelectorAll('.voice-tab')]
+    const voicePanels = [...document.querySelectorAll('.voice-panel')]
+    function activateVoice(tab, moveFocus = true) {
+      voiceTabs.forEach(item => { const active = item === tab; item.setAttribute('aria-selected', String(active)); item.tabIndex = active ? 0 : -1 })
+      voicePanels.forEach(panel => { panel.hidden = panel.id !== tab.getAttribute('aria-controls') })
+      if (moveFocus) tab.focus()
+    }
+    voiceTabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activateVoice(tab, false))
+      tab.addEventListener('keydown', event => {
+        let next = index
+        if (event.key === 'ArrowDown' || event.key === 'ArrowRight') next = (index + 1) % voiceTabs.length
+        else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') next = (index - 1 + voiceTabs.length) % voiceTabs.length
+        else if (event.key === 'Home') next = 0
+        else if (event.key === 'End') next = voiceTabs.length - 1
+        else return
+        event.preventDefault(); activateVoice(voiceTabs[next])
+      })
+    })
+    const initial = new URLSearchParams(location.search).get('concept')
+    const initialTab = conceptTabs.find(tab => tab.getAttribute('aria-controls') === `concept-${initial}`)
+    if (initialTab) activateConcept(initialTab, false)
+  </script>
+</body>
+</html>
