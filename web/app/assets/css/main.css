@@ -48,6 +48,12 @@
   --button-primary-transition: 220ms ease;
   --directory-filter-font-size: 16px;
   --directory-filter-count-size: 12px;
+  --detail-hero-title-size: clamp(44px, 4.8vw, 72px);
+  --detail-summary-size: 17px;
+  --detail-section-title-size: 38px;
+  --detail-body-size: 16px;
+  --detail-rail-row-padding: 26px clamp(28px, 3.2vw, 50px);
+  --detail-rail-action-padding: 34px clamp(28px, 3.2vw, 50px);
   --control-focus-width: 2px;
   --control-focus-offset: 6px;
 }
@@ -121,6 +127,11 @@
     --lead-text-size: 14px;
     --button-primary-size: 16px;
     --button-primary-padding: 24px;
+    --detail-hero-title-size: 42px;
+    --detail-summary-size: 16px;
+    --detail-section-title-size: 32px;
+    --detail-rail-row-padding: 22px 24px;
+    --detail-rail-action-padding: 24px;
   }
 }
 

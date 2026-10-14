@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>個案諮詢詳情｜三款桌機設計方向</title>
+  <style>
+    @font-face {
+      font-family: "Noto Serif TC";
+      src: url("../../public/fonts/NotoSerifTC-Variable.ttf") format("truetype");
+      font-weight: 200 900;
+      font-display: swap;
+    }
+
+    :root {
+      --paper: #f8f5ef;
+      --sand: #e8dfd2;
+      --ink: #38342e;
+      --muted: #625a51;
+      --clay: #a46b54;
+      --clay-text: #745142;
+      --saffron: #f8bf4c;
+      --oxblood: #392618;
+      --night: #241710;
+      --film: #352319;
+      --bark: #766254;
+      --persimmon: #df5b35;
+      --warm-white: #f7f6f4;
+      --warm-muted: #d8c7b8;
+      --line: rgb(56 52 46 / 24%);
+      --line-light: rgb(247 246 244 / 24%);
+      --edge: clamp(44px, 6vw, 116px);
+      --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+      --sans: "BIZ UDPGothic", "Noto Sans TC", "PingFang TC", sans-serif;
+      --chooser: 72px;
+      --header: 87px;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 1180px; overflow-x: hidden; scroll-behavior: smooth; background: var(--night); }
+    body { margin: 0; overflow-x: hidden; color: var(--ink); background: var(--night); font-family: var(--sans); }
+    button, a { color: inherit; font: inherit; }
+    button { cursor: pointer; }
+    h1, h2, h3, p, ul, ol, figure { margin-top: 0; }
+    img { display: block; max-width: 100%; }
+    ::selection { color: var(--warm-white); background: var(--persimmon); }
+    :focus-visible { outline: 3px solid var(--saffron); outline-offset: 4px; box-shadow: 0 0 0 7px var(--night); }
+    * { scrollbar-color: var(--clay) var(--paper); scrollbar-width: thin; }
+
+    .prototype { width: min(100%, 1920px); min-height: 100vh; margin: 0 auto; background: var(--paper); }
+    .prototype-switcher {
+      position: sticky;
+      z-index: 100;
+      top: 0;
+      display: grid;
+      min-height: var(--chooser);
+      grid-template-columns: auto minmax(720px, 880px);
+      align-items: center;
+      justify-content: space-between;
+      gap: 36px;
+      padding: 10px 86px;
+      color: var(--warm-white);
+      background: var(--night);
+      border-bottom: 1px solid var(--line-light);
+    }
+    .prototype-switcher p { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .08em; white-space: nowrap; }
+    .tabs { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .tab {
+      min-height: 50px;
+      padding: 0 18px;
+      color: var(--warm-muted);
+      background: transparent;
+      border: 0;
+      border-left: 1px solid var(--line-light);
+      text-align: left;
+    }
+    .tab:last-child { border-right: 1px solid var(--line-light); }
+    .tab[aria-selected="true"] { color: var(--ink); background: var(--saffron); }
+    .tab strong { display: block; font-family: var(--serif); font-size: 14px; font-weight: 600; }
+    .tab small { display: block; margin-top: 2px; font-size: 11px; letter-spacing: .04em; }
+
+    .concept[hidden] { display: none; }
+    .concept { min-height: calc(100vh - var(--chooser)); background: var(--paper); }
+    .concept:not([hidden]) .concept-stage { animation: concept-reveal 720ms var(--ease) both; }
+    @keyframes concept-reveal {
+      from { opacity: .15; clip-path: inset(0 0 9% 0); transform: translateY(18px); }
+      to { opacity: 1; clip-path: inset(0); transform: none; }
+    }
+
+    .site-header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      height: var(--header);
+      align-items: center;
+      justify-content: space-between;
+      gap: 36px;
+      padding: 0 var(--edge);
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: inline-flex; min-height: 48px; align-items: center; text-decoration: none; }
+    .brand img { width: auto; height: 58px; object-fit: contain; }
+    .site-nav { display: flex; align-items: center; gap: clamp(22px, 3vw, 46px); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+    .site-nav a { display: inline-flex; min-height: 48px; align-items: center; text-decoration: none; }
+    .site-nav a[aria-current="page"] { border-bottom: 1px solid currentColor; }
+
+    .back-link {
+      display: inline-flex;
+      min-height: 48px;
+      align-items: center;
+      gap: 12px;
+      color: var(--clay-text);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-decoration: none;
+    }
+    .back-link::before { width: 28px; border-top: 1px solid currentColor; content: ""; }
+    .portrait { position: relative; overflow: hidden; background: var(--sand); }
+    .portrait img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.76) sepia(.08); }
+    .portrait figcaption {
+      position: absolute;
+      right: 14px;
+      bottom: 12px;
+      padding: 6px 8px;
+      color: var(--warm-white);
+      background: rgb(36 23 16 / 78%);
+      font-size: 11px;
+      letter-spacing: .06em;
+    }
+    .person-name { max-width: 11em; margin: 0; font-family: var(--serif); font-size: clamp(44px, 4.8vw, 72px); font-weight: 400; line-height: 1.22; letter-spacing: .025em; text-wrap: balance; }
+    .english-name { margin: 16px 0 0; color: var(--clay-text); font-size: 13px; font-weight: 700; letter-spacing: .16em; }
+    .summary { max-width: 42em; margin: 30px 0 0; color: var(--muted); font-size: 17px; line-height: 2; letter-spacing: .035em; }
+    .section-title { max-width: 14em; margin-bottom: 22px; font-family: var(--serif); font-size: 38px; font-weight: 400; line-height: 1.4; letter-spacing: .02em; text-wrap: balance; }
+    .body-copy { max-width: 68ch; margin-bottom: 0; color: var(--muted); font-size: 16px; line-height: 2.1; letter-spacing: .025em; white-space: pre-line; }
+    .body-copy + .body-copy { margin-top: 18px; }
+    .experience-list, .method-list, .fact-list { padding: 0; margin: 0; list-style: none; }
+    .experience-list li { padding: 22px 0; border-bottom: 1px solid var(--line); font-family: var(--serif); font-size: 16px; line-height: 1.7; }
+    .experience-list li:first-child { border-top: 1px solid var(--ink); }
+    .fact-label { display: block; margin-bottom: 10px; color: var(--clay-text); font-size: 11px; font-weight: 700; letter-spacing: .15em; }
+    .fact-value { margin: 0; font-family: var(--serif); font-size: 22px; line-height: 1.55; }
+    .method-list { display: flex; flex-wrap: wrap; gap: 10px 18px; }
+    .method-list li { position: relative; padding-left: 16px; line-height: 1.8; }
+    .method-list li::before { position: absolute; top: .82em; left: 0; width: 5px; height: 5px; background: var(--saffron); border-radius: 50%; content: ""; }
+    .contact-action {
+      display: inline-flex;
+      min-height: 80px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      padding: 0 34px;
+      color: var(--warm-white);
+      background: var(--persimmon);
+      text-decoration: none;
+      transition: background 220ms ease, transform 220ms var(--ease);
+    }
+    .contact-action:hover { background: #c94f34; transform: translateY(-3px); }
+    .contact-action svg { width: 28px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+
+    .concept-note { display: flex; justify-content: space-between; gap: 40px; padding: 20px var(--edge); color: var(--warm-muted); background: var(--bark); font-size: 12px; line-height: 1.75; }
+    .concept-note strong { color: var(--warm-white); }
+    .concept-note span:last-child { max-width: 70em; text-align: right; }
+    .site-footer { display: flex; min-height: 210px; align-items: end; justify-content: space-between; gap: 48px; padding: 54px var(--edge); color: var(--warm-white); background: var(--bark); border-top: 1px solid var(--line-light); }
+    .site-footer strong { font-family: var(--serif); font-size: 25px; font-weight: 500; letter-spacing: .05em; }
+    .site-footer p { max-width: 42em; margin: 0; color: #eee2d7; font-size: 12px; line-height: 1.8; text-align: right; }
+
+    /* A — 感知剖面 */
+    .sectional-hero { display: grid; min-height: 750px; grid-template-columns: minmax(330px, 31%) minmax(460px, 45%) minmax(280px, 24%); }
+    .sectional-person { display: flex; min-width: 0; flex-direction: column; padding: 46px 0 16px 86px; background: var(--sand); }
+    .sectional-person .back-link { margin-right: 40px; }
+    .sectional-person .portrait { flex: 1; min-height: 500px; margin-top: 34px; }
+    .sectional-person .portrait img { object-position: 58% center; }
+    .sectional-story { display: flex; min-width: 0; flex-direction: column; justify-content: center; padding: 80px clamp(54px, 5vw, 92px); background: var(--paper); }
+    .sectional-story .person-name { font-size: clamp(44px, 4.8vw, 72px); }
+    .sectional-facts { display: flex; flex-direction: column; justify-content: center; padding: 70px clamp(32px, 3.5vw, 58px); color: var(--warm-white); background: var(--oxblood); }
+    .sectional-facts .fact-list { border-top: 1px solid var(--line-light); }
+    .sectional-facts .fact-list > li { padding: 28px 0; border-bottom: 1px solid var(--line-light); }
+    .sectional-facts .fact-label { color: var(--saffron); }
+    .sectional-facts .fact-value { color: var(--warm-white); font-size: 19px; }
+    .sectional-facts .method-list { display: block; }
+    .sectional-facts .method-list li { padding: 6px 0 6px 16px; }
+    .sectional-facts .contact-action { margin-top: 42px; }
+    .sectional-content { display: grid; grid-template-columns: minmax(340px, 31%) minmax(0, 1fr); }
+    .sectional-index { padding: 100px var(--edge); background: var(--sand); }
+    .sectional-index p { max-width: 20em; margin: 0; color: var(--muted); line-height: 2; }
+    .sectional-index .index-mark { display: block; width: 76px; height: 76px; margin: 52px 0 0; background: var(--saffron); border-radius: 50%; }
+    .sectional-reading { padding: 112px max(var(--edge), calc((100vw - 1280px) / 2)); background: var(--paper); }
+    .sectional-reading > section { max-width: 760px; }
+    .sectional-reading > section + section { padding-top: 96px; margin-top: 96px; border-top: 1px solid var(--line); }
+
+    /* B — 人物長卷 */
+    .scroll-hero { position: relative; display: grid; min-height: 760px; grid-template-columns: minmax(0, 56%) minmax(420px, 44%); overflow: hidden; }
+    .scroll-hero::before {
+      position: absolute;
+      z-index: 2;
+      right: 38%;
+      bottom: 54px;
+      width: 124px;
+      height: 124px;
+      background: var(--saffron);
+      border-radius: 50%;
+      content: "";
+    }
+    .scroll-copy { position: relative; z-index: 3; display: flex; min-width: 0; flex-direction: column; justify-content: center; padding: 72px clamp(70px, 8vw, 132px) 82px var(--edge); background: var(--paper); }
+    .scroll-copy .back-link { position: absolute; top: 42px; left: var(--edge); }
+    .scroll-copy .summary { max-width: 32em; }
+    .scroll-portrait { min-height: 760px; margin: 0; }
+    .scroll-portrait img { object-position: 58% center; }
+    .scroll-intro { display: grid; grid-template-columns: minmax(320px, 39%) minmax(0, 1fr); padding: 0 86px; background: var(--sand); }
+    .scroll-quote { display: flex; align-items: end; padding: 108px clamp(50px, 5vw, 88px) 108px 0; }
+    .scroll-quote p { margin: 0; font-family: var(--serif); font-size: clamp(31px, 3.2vw, 48px); line-height: 1.5; letter-spacing: .03em; }
+    .scroll-intro__copy { padding: 116px 0 120px 86px; border-left: 1px solid var(--line); }
+    .scroll-intro__copy > div { max-width: 710px; }
+    .scroll-experience { padding: 124px 86px; color: var(--warm-white); background: var(--film); }
+    .scroll-experience__inner { display: grid; grid-template-columns: minmax(300px, .72fr) minmax(0, 1fr); gap: clamp(70px, 10vw, 160px); width: min(100%, 1360px); margin: 0 auto; }
+    .scroll-experience .section-title { color: var(--warm-white); }
+    .scroll-experience .experience-list li { color: #eee2d7; border-color: var(--line-light); }
+    .scroll-experience .experience-list li:first-child { border-color: var(--warm-white); }
+    .scroll-service { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); background: var(--paper); }
+    .scroll-service > section { min-height: 360px; padding: 90px 86px; }
+    .scroll-service > section + section { background: var(--sand); border-left: 1px solid var(--line); }
+    .scroll-contact { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 60px; padding: 72px var(--edge); color: var(--warm-white); background: var(--oxblood); }
+    .scroll-contact h2 { max-width: 12em; margin: 0; font-family: var(--serif); font-size: clamp(38px, 4vw, 62px); font-weight: 400; line-height: 1.3; }
+
+    /* C — 靜謐檔案 */
+    .dossier-hero { display: grid; min-height: 690px; grid-template-columns: minmax(0, 1fr) minmax(360px, 32%); background: var(--paper); }
+    .dossier-copy { display: flex; flex-direction: column; justify-content: space-between; min-width: 0; padding: 42px var(--edge) 70px; }
+    .dossier-copy__main { padding-top: 84px; }
+    .dossier-copy .person-name { max-width: 8em; }
+    .dossier-summary-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(230px, .5fr); gap: 60px; align-items: end; margin-top: 72px; padding-top: 30px; border-top: 1px solid var(--ink); }
+    .dossier-summary-grid .summary { margin: 0; }
+    .dossier-summary-grid .fact-value { font-size: 18px; }
+    .dossier-portrait { min-height: 690px; margin: 0; }
+    .dossier-portrait img { object-position: 60% center; filter: saturate(.5) sepia(.12); }
+    .dossier-layout { display: grid; grid-template-columns: minmax(300px, 28%) minmax(0, 1fr); border-top: 1px solid var(--line); }
+    .dossier-aside { padding: 88px clamp(42px, 4vw, 68px) 96px var(--edge); background: var(--sand); }
+    .dossier-aside__sticky { position: sticky; top: calc(var(--chooser) + 36px); }
+    .dossier-aside .fact-list > li { padding: 24px 0; border-bottom: 1px solid var(--line); }
+    .dossier-aside .method-list { display: block; }
+    .dossier-aside .method-list li { padding-top: 5px; padding-bottom: 5px; }
+    .dossier-aside .contact-action { width: 100%; margin-top: 38px; }
+    .dossier-reading { padding: 112px var(--edge); }
+    .dossier-reading__inner { max-width: 860px; margin: 0 auto; }
+    .dossier-reading section + section { padding-top: 94px; margin-top: 94px; border-top: 1px solid var(--line); }
+    .dossier-reading .experience-list { display: block; border-top: 1px solid var(--ink); }
+    .dossier-reading .experience-list li { min-height: 0; padding: 22px 0; border-top: 0; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="prototype">
+    <section class="prototype-switcher" aria-label="個案諮詢詳情設計稿切換">
+      <p>個案諮詢詳情・桌機三案</p>
+      <div class="tabs" role="tablist" aria-label="選擇設計方向">
+        <button class="tab" id="tab-a" role="tab" aria-selected="false" aria-controls="concept-a" tabindex="-1"><strong>A 感知剖面</strong><small>人物、敘事、決策並置</small></button>
+        <button class="tab" id="tab-b" role="tab" aria-selected="false" aria-controls="concept-b" tabindex="-1"><strong>B 人物長卷</strong><small>影像與章節建立信任</small></button>
+        <button class="tab" id="tab-c" role="tab" aria-selected="true" aria-controls="concept-c"><strong>C 靜謐檔案</strong><small>已選定・經歷採 A 長列</small></button>
+      </div>
+    </section>
+
+    <article class="concept concept--sectional" id="concept-a" role="tabpanel" aria-labelledby="tab-a" hidden>
+      <header class="site-header">
+        <a class="brand" href="#concept-a" aria-label="Flowing Clarity 首頁"><img src="../../public/assets/logo-main.png" alt="Flowing Clarity"></a>
+        <nav class="site-nav" aria-label="主要導覽"><a href="#">關於我們</a><a href="#">課程資訊</a><a href="#">近期活動</a><a href="#" aria-current="page">個案諮詢</a><a href="#">聯絡我們</a></nav>
+      </header>
+      <div class="concept-stage">
+        <section class="sectional-hero" aria-labelledby="name-a">
+          <div class="sectional-person">
+            <a class="back-link" href="#">返回執行師名錄</a>
+            <figure class="portrait"><img src="../../public/images/course-detail/facial-portrait-4.jpg" alt="排版示意人物肖像，非正式執行師"><figcaption>排版示意影像</figcaption></figure>
+          </div>
+          <div class="sectional-story">
+            <h1 class="person-name" id="name-a">林若安</h1>
+            <p class="english-name">AN LIN</p>
+            <p class="summary">陪伴人重新感受身體的界線與節奏，在安靜、穩定的接觸裡，找到可以呼吸與停留的位置。</p>
+          </div>
+          <aside class="sectional-facts" aria-label="服務與聯繫資訊">
+            <ul class="fact-list">
+              <li><span class="fact-label">服務地點</span><p class="fact-value">高雄市・預約後提供據點資訊</p></li>
+              <li><span class="fact-label">服務方法</span><ul class="method-list"><li>身心再平衡按摩</li><li>生物動能頭薦骨</li><li>日式臉部按摩</li></ul></li>
+            </ul>
+            <a class="contact-action" href="#contact-a"><span>透過 LINE 聯繫</span><svg viewBox="0 0 28 20" aria-hidden="true"><path d="M0 10h25M18 3l7 7-7 7"/></svg></a>
+          </aside>
+        </section>
+        <div class="sectional-content">
+          <aside class="sectional-index"><h2 class="section-title">把注意力<br>帶回身體</h2><p>這一案讓人物、故事與聯繫資訊同時成立。訪客閱讀長文時，不會失去服務條件與下一步。</p><span class="index-mark" aria-hidden="true"></span></aside>
+          <div class="sectional-reading">
+            <section aria-labelledby="about-a"><h2 class="section-title" id="about-a">關於執行師</h2><p class="body-copy">乘著覺察如歸，照顧案主如同照顧自己的家人。寧靜的碰觸，讓案主有回到自己內在歸屬感的空間，才可釋放當下生活緊湊、工作壓力與身體累積的緊繃。</p><p class="body-copy">這段內容為排版示意，用來呈現一至六段介紹文字的閱讀節奏，不代表正式服務說明或療效承諾。</p></section>
+            <section aria-labelledby="experience-a"><h2 class="section-title" id="experience-a">經歷</h2><ul class="experience-list"><li>身心再平衡按摩相關訓練與持續進修</li><li>生物動能頭薦骨學習與個案實作</li><li>日式臉部按摩服務經驗</li><li>身體覺察與陪伴工作坊協作</li></ul></section>
+          </div>
+        </div>
+        <footer class="concept-note" id="contact-a"><span><strong>A 感知剖面</strong>・決策資訊常駐</span><span>優勢是邊讀邊核對；實作需處理三欄在中型桌機的收斂，以及長方法名稱的換行。</span></footer>
+      </div>
+    </article>
+
+    <article class="concept concept--scroll" id="concept-b" role="tabpanel" aria-labelledby="tab-b" hidden>
+      <header class="site-header">
+        <a class="brand" href="#concept-b" aria-label="Flowing Clarity 首頁"><img src="../../public/assets/logo-main.png" alt="Flowing Clarity"></a>
+        <nav class="site-nav" aria-label="主要導覽"><a href="#">關於我們</a><a href="#">課程資訊</a><a href="#">近期活動</a><a href="#" aria-current="page">個案諮詢</a><a href="#">聯絡我們</a></nav>
+      </header>
+      <div class="concept-stage">
+        <section class="scroll-hero" aria-labelledby="name-b">
+          <div class="scroll-copy"><a class="back-link" href="#">返回執行師名錄</a><h1 class="person-name" id="name-b">林若安</h1><p class="english-name">AN LIN</p><p class="summary">陪伴人重新感受身體的界線與節奏，在安靜、穩定的接觸裡，找到可以呼吸與停留的位置。</p></div>
+          <figure class="portrait scroll-portrait"><img src="../../public/images/course-detail/facial-portrait-4.jpg" alt="排版示意人物肖像，非正式執行師"><figcaption>排版示意影像</figcaption></figure>
+        </section>
+        <section class="scroll-intro" aria-labelledby="about-b">
+          <div class="scroll-quote"><p>讓身體不用急著變好，先有一個可以被聽見的位置。</p></div>
+          <div class="scroll-intro__copy"><div><h2 class="section-title" id="about-b">關於執行師</h2><p class="body-copy">乘著覺察如歸，照顧案主如同照顧自己的家人。寧靜的碰觸，讓案主有回到自己內在歸屬感的空間，才可釋放當下生活緊湊、工作壓力與身體累積的緊繃。</p><p class="body-copy">這段內容為排版示意，用來測試較長的人物敘事與段落換行，不代表正式服務說明或療效承諾。</p></div></div>
+        </section>
+        <section class="scroll-experience" aria-labelledby="experience-b"><div class="scroll-experience__inner"><div><h2 class="section-title" id="experience-b">經歷與持續學習</h2><p class="body-copy" style="color:#ded1c6">人物長卷把經歷獨立成深色章節，讓專業資訊在情緒敘事之後清楚落地。</p></div><ul class="experience-list"><li>身心再平衡按摩相關訓練與持續進修</li><li>生物動能頭薦骨學習與個案實作</li><li>日式臉部按摩服務經驗</li><li>身體覺察與陪伴工作坊協作</li></ul></div></section>
+        <div class="scroll-service">
+          <section aria-labelledby="location-b"><h2 class="section-title" id="location-b">服務地點</h2><p class="fact-value">高雄市</p><p class="body-copy">實際據點於預約確認後提供；概念稿不展示完整私人地址。</p></section>
+          <section aria-labelledby="methods-b"><h2 class="section-title" id="methods-b">服務方法</h2><ul class="method-list"><li>身心再平衡按摩</li><li>生物動能頭薦骨</li><li>日式臉部按摩</li></ul></section>
+        </div>
+        <section class="scroll-contact" id="contact-b" aria-labelledby="contact-title-b"><h2 id="contact-title-b">想進一步了解，從一段對話開始。</h2><a class="contact-action" href="#contact-b"><span>透過 LINE 聯繫</span><svg viewBox="0 0 28 20" aria-hidden="true"><path d="M0 10h25M18 3l7 7-7 7"/></svg></a></section>
+        <footer class="concept-note"><span><strong>B 人物長卷</strong>・情緒與信任優先</span><span>優勢是人物感最強、適合高品質正式肖像；實作依賴影像授權與裁切品質，無圖狀態需另設同等有力的排版。</span></footer>
+      </div>
+    </article>
+
+    <article class="concept concept--dossier" id="concept-c" role="tabpanel" aria-labelledby="tab-c">
+      <header class="site-header">
+        <a class="brand" href="#concept-c" aria-label="Flowing Clarity 首頁"><img src="../../public/assets/logo-main.png" alt="Flowing Clarity"></a>
+        <nav class="site-nav" aria-label="主要導覽"><a href="#">關於我們</a><a href="#">課程資訊</a><a href="#">近期活動</a><a href="#" aria-current="page">個案諮詢</a><a href="#">聯絡我們</a></nav>
+      </header>
+      <div class="concept-stage">
+        <section class="dossier-hero" aria-labelledby="name-c">
+          <div class="dossier-copy"><a class="back-link" href="#">返回執行師名錄</a><div class="dossier-copy__main"><h1 class="person-name" id="name-c">林若安</h1><p class="english-name">AN LIN</p><div class="dossier-summary-grid"><p class="summary">陪伴人重新感受身體的界線與節奏，在安靜、穩定的接觸裡，找到可以呼吸與停留的位置。</p><div><span class="fact-label">公開服務地區</span><p class="fact-value">南部・高雄市</p></div></div></div></div>
+          <figure class="portrait dossier-portrait"><img src="../../public/images/course-detail/facial-portrait-4.jpg" alt="排版示意人物肖像，非正式執行師"><figcaption>排版示意影像</figcaption></figure>
+        </section>
+        <div class="dossier-layout">
+          <aside class="dossier-aside" aria-label="服務與聯繫資訊"><div class="dossier-aside__sticky"><ul class="fact-list"><li><span class="fact-label">服務地點</span><p class="fact-value">高雄市</p><p class="body-copy">預約後提供據點資訊</p></li><li><span class="fact-label">服務方法</span><ul class="method-list"><li>身心再平衡按摩</li><li>生物動能頭薦骨</li><li>日式臉部按摩</li></ul></li></ul><a class="contact-action" href="#contact-c"><span>透過 LINE 聯繫</span><svg viewBox="0 0 28 20" aria-hidden="true"><path d="M0 10h25M18 3l7 7-7 7"/></svg></a></div></aside>
+          <div class="dossier-reading"><div class="dossier-reading__inner"><section aria-labelledby="about-c"><h2 class="section-title" id="about-c">關於執行師</h2><p class="body-copy">乘著覺察如歸，照顧案主如同照顧自己的家人。寧靜的碰觸，讓案主有回到自己內在歸屬感的空間，才可釋放當下生活緊湊、工作壓力與身體累積的緊繃。</p><p class="body-copy">這段內容為排版示意，用來呈現一至六段介紹文字的閱讀節奏，不代表正式服務說明或療效承諾。</p></section><section aria-labelledby="experience-c"><h2 class="section-title" id="experience-c">經歷</h2><ul class="experience-list"><li>身心再平衡按摩相關訓練與持續進修</li><li>生物動能頭薦骨學習與個案實作</li><li>日式臉部按摩服務經驗</li><li>身體覺察與陪伴工作坊協作</li></ul></section></div></div>
+        </div>
+        <footer class="concept-note" id="contact-c"><span><strong>C 靜謐檔案</strong>・資訊辨識優先</span><span>優勢是內容掃讀與長經歷擴充最穩定；人物情緒較收斂，需要靠精準字級、留白與正式肖像維持溫度。</span></footer>
+      </div>
+    </article>
+  </main>
+
+  <script>
+    const tabs = [...document.querySelectorAll('[role="tab"]')]
+    const panels = [...document.querySelectorAll('[role="tabpanel"]')]
+
+    function activateTab(tab, moveFocus = true) {
+      tabs.forEach((item) => {
+        const selected = item === tab
+        item.setAttribute('aria-selected', String(selected))
+        item.tabIndex = selected ? 0 : -1
+      })
+      panels.forEach((panel) => { panel.hidden = panel.id !== tab.getAttribute('aria-controls') })
+      if (moveFocus) tab.focus()
+      window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activateTab(tab, false))
+      tab.addEventListener('keydown', (event) => {
+        let targetIndex = index
+        if (event.key === 'ArrowRight') targetIndex = (index + 1) % tabs.length
+        if (event.key === 'ArrowLeft') targetIndex = (index - 1 + tabs.length) % tabs.length
+        if (event.key === 'Home') targetIndex = 0
+        if (event.key === 'End') targetIndex = tabs.length - 1
+        if (targetIndex === index) return
+        event.preventDefault()
+        activateTab(tabs[targetIndex])
+      })
+    })
+
+    const requestedConcept = new URLSearchParams(window.location.search).get('concept')
+    const requestedTab = tabs.find((tab) => tab.id === `tab-${requestedConcept}`)
+    if (requestedTab) activateTab(requestedTab, false)
+
+    if (new URLSearchParams(window.location.search).get('keyboard') === '1') {
+      tabs[0].focus()
+      tabs[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }))
+    }
+
+    if (new URLSearchParams(window.location.search).get('audit') === '1') {
+      document.fonts.ready.then(() => {
+        const visible = (element) => element.getClientRects().length > 0
+        const controls = [...document.querySelectorAll('a, button')].filter(visible)
+        const report = {
+          concept: requestedConcept || 'c',
+          innerWidth: window.innerWidth,
+          clientWidth: document.documentElement.clientWidth,
+          scrollWidth: document.documentElement.scrollWidth,
+          visibleH1: [...document.querySelectorAll('h1')].filter(visible).length,
+          visiblePanels: panels.filter(visible).length,
+          fontLoaded: document.fonts.check('16px "Noto Serif TC"'),
+          imageAltMissing: [...document.querySelectorAll('img')].filter((image) => visible(image) && !image.hasAttribute('alt')).length,
+          minControlHeight: Math.min(...controls.map((control) => Math.round(control.getBoundingClientRect().height))),
+          selectedTab: tabs.find((tab) => tab.getAttribute('aria-selected') === 'true')?.id,
+          focusedElement: document.activeElement?.id,
+        }
+        const output = document.createElement('pre')
+        output.id = 'audit-output'
+        output.textContent = JSON.stringify(report)
+        document.body.append(output)
+      })
+    }
+  </script>
+</body>
+</html>

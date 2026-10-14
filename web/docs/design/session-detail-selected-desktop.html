@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>個案諮詢詳情｜C 案圖片排法</title>
+  <style>
+    @font-face {
+      font-family: "Noto Serif TC";
+      src: url("../../public/fonts/NotoSerifTC-Variable.ttf") format("truetype");
+      font-weight: 200 900;
+      font-display: swap;
+    }
+
+    :root {
+      --paper: #f8f5ef;
+      --sand: #e8dfd2;
+      --ink: #38342e;
+      --muted: #625a51;
+      --clay-text: #745142;
+      --saffron: #f8bf4c;
+      --night: #241710;
+      --bark: #766254;
+      --persimmon: #df5b35;
+      --warm-white: #f7f6f4;
+      --warm-muted: #d8c7b8;
+      --line: rgb(56 52 46 / 24%);
+      --line-light: rgb(247 246 244 / 24%);
+      --edge: clamp(44px, 6vw, 116px);
+      --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+      --sans: "BIZ UDPGothic", "Noto Sans TC", "PingFang TC", sans-serif;
+      --chooser: 72px;
+      --header: 87px;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { overflow-x: hidden; scroll-behavior: smooth; background: var(--night); }
+    body { margin: 0; overflow-x: hidden; color: var(--ink); background: var(--paper); font-family: var(--sans); }
+    button, a { color: inherit; font: inherit; }
+    button { cursor: pointer; }
+    h1, h2, h3, p, ul, figure { margin-top: 0; }
+    img { display: block; max-width: 100%; }
+    ::selection { color: var(--warm-white); background: var(--persimmon); }
+    :focus-visible { outline: 3px solid var(--saffron); outline-offset: 4px; box-shadow: 0 0 0 7px var(--night); }
+    * { scrollbar-color: var(--clay-text) var(--paper); scrollbar-width: thin; }
+
+    .prototype { width: min(100%, 1920px); min-height: 100vh; margin: 0 auto; background: var(--paper); }
+    .variant-switcher {
+      position: sticky;
+      z-index: 100;
+      top: 0;
+      display: grid;
+      min-height: var(--chooser);
+      grid-template-columns: auto minmax(760px, 900px);
+      align-items: center;
+      justify-content: space-between;
+      gap: 36px;
+      padding: 10px 86px;
+      color: var(--warm-white);
+      background: var(--night);
+      border-bottom: 1px solid var(--line-light);
+    }
+    .variant-switcher p { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .08em; white-space: nowrap; }
+    .variants { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .variant {
+      min-height: 50px;
+      padding: 0 18px;
+      color: var(--warm-muted);
+      background: transparent;
+      border: 0;
+      border-left: 1px solid var(--line-light);
+      text-align: left;
+    }
+    .variant:last-child { border-right: 1px solid var(--line-light); }
+    .variant[aria-pressed="true"] { color: var(--ink); background: var(--saffron); }
+    .variant strong { display: block; font-family: var(--serif); font-size: 14px; font-weight: 600; }
+    .variant small { display: block; margin-top: 2px; font-size: 11px; letter-spacing: .04em; }
+
+    .site-header {
+      display: flex;
+      height: var(--header);
+      align-items: center;
+      justify-content: space-between;
+      gap: 36px;
+      padding: 0 var(--edge);
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: inline-flex; min-height: 48px; align-items: center; text-decoration: none; }
+    .brand img { width: auto; height: 58px; object-fit: contain; }
+    .site-nav { display: flex; align-items: center; gap: clamp(22px, 3vw, 46px); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+    .site-nav a { display: inline-flex; min-height: 48px; align-items: center; text-decoration: none; }
+    .site-nav a[aria-current="page"] { border-bottom: 1px solid currentColor; }
+
+    .profile { background: var(--paper); }
+    .back-link { display: inline-flex; min-height: 48px; align-items: center; gap: 12px; color: var(--clay-text); font-size: 12px; font-weight: 700; letter-spacing: .1em; text-decoration: none; }
+    .back-link::before { width: 28px; border-top: 1px solid currentColor; content: ""; }
+
+    .profile-hero { display: grid; min-height: 620px; grid-template-columns: minmax(0, 1fr) minmax(380px, 34%); background: var(--paper); transition: grid-template-columns 420ms var(--ease); }
+    .profile-copy { display: flex; flex-direction: column; justify-content: space-between; min-width: 0; padding: 42px var(--edge) 70px; }
+    .profile-copy__main { padding-top: 66px; }
+    .profile-copy h1 { max-width: 11em; margin: 0; font-family: var(--serif); font-size: clamp(44px, 4.8vw, 72px); font-weight: 400; line-height: 1.22; letter-spacing: .025em; text-wrap: balance; }
+    .english-name { margin: 14px 0 0; color: var(--clay-text); font-size: 14px; font-weight: 700; letter-spacing: .14em; }
+    .summary-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(210px, .45fr); gap: 54px; align-items: end; margin-top: 58px; padding-top: 28px; border-top: 1px solid var(--ink); }
+    .summary { max-width: 42em; margin: 0; color: var(--muted); font-size: 17px; line-height: 2; letter-spacing: .035em; }
+    .fact-label { display: block; margin-bottom: 8px; color: var(--clay-text); font-size: 14px; font-weight: 700; letter-spacing: .08em; }
+    .fact-value { margin: 0; font-family: var(--serif); font-size: 20px; line-height: 1.55; }
+
+    .hero-media-stage { display: grid; min-width: 0; place-items: center; padding: 54px; background: var(--sand); }
+    .portrait { position: relative; width: 260px; margin: 0; overflow: hidden; background: var(--paper); }
+    .portrait img { width: auto; max-width: 100%; height: auto; aspect-ratio: 3 / 4; margin: 0 auto; object-fit: cover; object-position: 58% center; filter: saturate(.55) sepia(.12); }
+    .portrait figcaption { padding-top: 10px; color: var(--clay-text); font-size: 11px; line-height: 1.6; letter-spacing: .05em; }
+
+    .profile-layout { display: grid; grid-template-columns: minmax(300px, 31%) minmax(0, 1fr); border-top: 1px solid var(--line); }
+    .profile-aside { background: var(--sand); }
+    .profile-aside__sticky { position: sticky; top: calc(var(--chooser) + 36px); }
+    .fact-list, .method-list, .contact-list, .experience-list { padding: 0; margin: 0; list-style: none; }
+    .fact-list > li { padding: 26px clamp(28px, 3.2vw, 50px); border-bottom: 1px solid var(--line); }
+    .body-copy { max-width: 68ch; margin: 0; color: var(--muted); font-size: 16px; line-height: 2.1; letter-spacing: .025em; white-space: pre-line; }
+    .body-copy + .body-copy { margin-top: 18px; }
+    .method-list li { position: relative; padding: 5px 0 5px 16px; line-height: 1.8; }
+    .method-list li::before { position: absolute; top: .85em; left: 0; width: 5px; height: 5px; background: var(--saffron); border-radius: 50%; content: ""; }
+    .contact-block { padding: 34px clamp(28px, 3.2vw, 50px); }
+    .contact-heading { margin: 0 0 12px; font-family: var(--serif); font-size: 24px; font-weight: 400; line-height: 1.5; }
+    .contact-list li:first-child { border-top: 1px solid var(--ink); }
+    .contact-list li { border-bottom: 1px solid var(--line); }
+    .contact-list a, .contact-list span {
+      display: flex;
+      min-height: 52px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 10px 0;
+      font-size: 14px;
+      line-height: 1.5;
+      text-decoration: none;
+    }
+    .contact-list a::after { width: 18px; border-top: 1px solid currentColor; content: ""; }
+    .contact-list small { display: block; color: var(--clay-text); font-size: 12px; }
+    .contact-primary { display: inline-flex; min-height: 76px; width: 100%; align-items: center; justify-content: space-between; gap: 24px; margin-top: 28px; padding: 0 28px; color: var(--warm-white); background: var(--persimmon); font-size: 19px; font-weight: 700; text-decoration: none; }
+    .contact-primary::after { width: 24px; border-top: 1px solid currentColor; content: ""; }
+
+    .profile-content { min-width: 0; padding: 76px clamp(48px, 7vw, 104px); }
+    .profile-content__inner { max-width: 860px; margin: 0 auto; }
+    .profile-section + .profile-section { margin-top: 76px; }
+    .profile-section h2 { max-width: 14em; margin: 0 0 22px; font-family: var(--serif); font-size: 38px; font-weight: 400; line-height: 1.4; letter-spacing: .02em; }
+    .experience-list { border-top: 1px solid var(--ink); }
+    .experience-list li { padding: 22px 0; border-bottom: 1px solid var(--line); font-family: var(--serif); font-size: 16px; line-height: 1.7; }
+    .inline-portrait { display: none; width: 220px; margin: 0; }
+    .inline-portrait img { width: auto; max-width: 100%; height: auto; aspect-ratio: 3 / 4; margin: 0 auto; object-fit: cover; object-position: 58% center; filter: saturate(.55) sepia(.12); }
+    .inline-portrait figcaption { padding-top: 10px; color: var(--clay-text); font-size: 11px; line-height: 1.6; }
+
+    .profile.layout-companion .profile-hero { grid-template-columns: minmax(0, 1fr) minmax(260px, 25%); }
+    .profile.layout-companion .hero-media-stage { align-items: end; justify-items: start; padding: 64px 48px 70px 0; background: var(--paper); }
+    .profile.layout-companion .portrait { width: 190px; }
+
+    .profile.layout-inline .profile-hero { grid-template-columns: 1fr; }
+    .profile.layout-inline .hero-media-stage { display: none; }
+    .profile.layout-inline .profile-copy { min-height: 590px; }
+    .profile.layout-inline .about-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 52px; align-items: start; }
+    .profile.layout-inline .inline-portrait { display: block; }
+    .profile.without-portrait .profile-hero { grid-template-columns: 1fr; }
+
+    .variant-note { display: flex; justify-content: space-between; gap: 40px; padding: 20px var(--edge); color: var(--warm-muted); background: var(--bark); font-size: 12px; line-height: 1.75; }
+    .variant-note strong { color: var(--warm-white); }
+    .variant-note span:last-child { max-width: 72em; text-align: right; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+
+    @media (max-width: 1023px) {
+      .variant-switcher { position: static; grid-template-columns: 1fr; gap: 8px; padding: 14px 24px; }
+      .variants { overflow-x: auto; }
+      .variant { min-width: 210px; }
+      .site-header { padding: 0 24px; }
+      .profile-hero, .profile.layout-companion .profile-hero, .profile.layout-inline .profile-hero { grid-template-columns: 1fr; min-height: auto; }
+      .profile-copy, .profile.layout-inline .profile-copy { min-height: 0; padding: 34px 24px 68px; }
+      .profile-copy__main { padding-top: 64px; }
+      .profile-copy h1 { font-size: 42px; }
+      .summary-grid { grid-template-columns: 1fr; gap: 24px; margin-top: 38px; }
+      .summary { font-size: 16px; }
+      .hero-media-stage, .profile.layout-companion .hero-media-stage { display: grid; min-height: 340px; align-items: center; justify-items: center; padding: 48px 24px; background: var(--sand); }
+      .portrait, .profile.layout-companion .portrait { width: min(220px, 70vw); }
+      .profile.layout-inline .hero-media-stage { display: none; }
+      .profile-layout { display: block; }
+      .profile-aside__sticky { position: static; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .fact-list { display: contents; }
+      .fact-list > li { padding: 22px 24px; }
+      .fact-list > li:nth-child(odd) { border-right: 1px solid var(--line); }
+      .contact-block { grid-column: 1 / -1; padding: 24px; }
+      .profile-content { padding: 64px 24px; }
+      .profile-section + .profile-section { margin-top: 64px; }
+      .profile-section h2 { font-size: 32px; }
+      .profile.layout-inline .about-layout { grid-template-columns: 180px minmax(0, 1fr); gap: 32px; }
+      .variant-note { padding: 20px 24px; }
+    }
+
+    @media (max-width: 560px) {
+      .site-nav { display: none; }
+      .brand img { height: 50px; }
+      .profile-aside__sticky { grid-template-columns: 1fr; }
+      .fact-list > li:nth-child(odd) { border-right: 0; }
+      .contact-block { grid-column: auto; }
+      .profile.layout-inline .about-layout { grid-template-columns: 1fr; }
+      .variant-note { display: block; }
+      .variant-note span:last-child { display: block; margin-top: 8px; text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <main class="prototype">
+    <section class="variant-switcher" aria-label="C 案小尺寸圖片排法切換">
+      <p>C 靜謐檔案・小圖排法</p>
+      <div class="variants" aria-label="選擇圖片排法">
+        <button class="variant" type="button" data-layout="frame" aria-pressed="true"><strong>C1 原尺寸裱框</strong><small>砂色留白承接小圖</small></button>
+        <button class="variant" type="button" data-layout="companion" aria-pressed="false"><strong>C2 姓名旁肖像</strong><small>縮小首屏影像比重</small></button>
+        <button class="variant" type="button" data-layout="inline" aria-pressed="false"><strong>C3 章節插圖</strong><small>首屏純文字、圖片下移</small></button>
+      </div>
+    </section>
+
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="Flowing Clarity 首頁"><img src="../../public/assets/logo-main.png" alt="Flowing Clarity"></a>
+      <nav class="site-nav" aria-label="主要導覽"><a href="#">關於我們</a><a href="#">課程資訊</a><a href="#">近期活動</a><a href="#" aria-current="page">個案諮詢</a><a href="#">聯絡我們</a></nav>
+    </header>
+
+    <article class="profile layout-frame" data-active-layout="frame">
+      <section class="profile-hero" aria-labelledby="profile-name">
+        <div class="profile-copy">
+          <a class="back-link" href="#">返回執行師名錄</a>
+          <div class="profile-copy__main">
+            <h1 id="profile-name">林若安</h1>
+            <p class="english-name">AN LIN</p>
+            <div class="summary-grid"><p class="summary">陪伴人重新感受身體的界線與節奏，在安靜、穩定的接觸裡，找到可以呼吸與停留的位置。</p><div><span class="fact-label">公開服務地區</span><p class="fact-value">南部・高雄市</p></div></div>
+          </div>
+        </div>
+        <div class="hero-media-stage">
+          <figure class="portrait"><img src="../../public/images/course-detail/facial-portrait-4.jpg" alt="排版示意人物肖像，非正式執行師"><figcaption>以原圖尺寸示意小尺寸素材，不強制放大填滿欄位</figcaption></figure>
+        </div>
+      </section>
+
+      <div class="profile-layout">
+        <aside class="profile-aside" aria-label="服務與聯繫資訊">
+          <div class="profile-aside__sticky">
+            <ul class="fact-list">
+              <li><span class="fact-label">服務地點</span><p class="fact-value">高雄市</p><p class="body-copy">公開層級：城市與地點名稱；完整地址不公開</p></li>
+              <li><span class="fact-label">服務方法</span><ul class="method-list"><li>身心再平衡按摩</li><li>生物動能頭薦骨</li><li>日式臉部按摩</li></ul></li>
+            </ul>
+            <div class="contact-block">
+              <h2 class="contact-heading">聯繫方式</h2>
+              <ul class="contact-list">
+                <li><a href="#"><span>電話<small>07-000-0000</small></span></a></li>
+                <li><span><span>LINE ID<small>@flowing-demo</small></span></span></li>
+                <li><a href="#"><span>Facebook<small>執行師公開頁面</small></span></a></li>
+                <li><a href="#"><span>LINE 官方連結<small>開啟外部服務</small></span></a></li>
+              </ul>
+              <a class="contact-primary" href="#">前往預約表單</a>
+            </div>
+          </div>
+        </aside>
+
+        <div class="profile-content">
+          <div class="profile-content__inner">
+            <section class="profile-section about-layout" aria-labelledby="about-title">
+              <figure class="inline-portrait"><img src="../../public/images/course-detail/facial-portrait-4.jpg" alt="排版示意人物肖像，非正式執行師"><figcaption>圖片作為正文插圖，不影響首屏成立</figcaption></figure>
+              <div><h2 id="about-title">關於執行師</h2><p class="body-copy">乘著覺察如歸，照顧案主如同照顧自己的家人。寧靜的碰觸，讓案主有回到自己內在歸屬感的空間，才可釋放當下生活緊湊、工作壓力與身體累積的緊繃。</p><p class="body-copy">這段內容為排版示意，用來呈現一至六段介紹文字的閱讀節奏，不代表正式服務說明或療效承諾。</p></div>
+            </section>
+            <section class="profile-section" aria-labelledby="experience-title"><h2 id="experience-title">經歷</h2><ul class="experience-list"><li>身心再平衡按摩相關訓練與持續進修</li><li>生物動能頭薦骨學習與個案實作</li><li>日式臉部按摩服務經驗</li><li>身體覺察與陪伴工作坊協作</li></ul></section>
+          </div>
+        </div>
+      </div>
+      <footer class="variant-note"><span><strong>C 靜謐檔案</strong>・經歷採 A 單欄長列</span><span id="variant-description">C1 以砂色留白承接 260px 肖像，最能保留 C 的首屏結構，也不要求小圖放大滿版。</span></footer>
+    </article>
+  </main>
+
+  <script>
+    const profile = document.querySelector('.profile')
+    const buttons = [...document.querySelectorAll('.variant')]
+    const description = document.querySelector('#variant-description')
+    const descriptions = {
+      frame: 'C1 以砂色留白承接 260px 肖像，最能保留 C 的首屏結構，也不要求小圖放大滿版。',
+      companion: 'C2 把肖像縮到 190px 並靠近姓名區，人物感較親近，但首屏資訊密度會稍高。',
+      inline: 'C3 讓首屏完全以文字成立，圖片移到「關於執行師」旁，最適合尺寸很小或品質不一的素材。',
+    }
+
+    function activate(layout, moveFocus = false) {
+      profile.className = `profile layout-${layout}`
+      profile.dataset.activeLayout = layout
+      buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.layout === layout)))
+      description.textContent = descriptions[layout]
+      if (moveFocus) buttons.find((button) => button.dataset.layout === layout)?.focus()
+    }
+
+    buttons.forEach((button, index) => {
+      button.addEventListener('click', () => activate(button.dataset.layout))
+      button.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
+        event.preventDefault()
+        let next = index
+        if (event.key === 'ArrowRight') next = (index + 1) % buttons.length
+        if (event.key === 'ArrowLeft') next = (index - 1 + buttons.length) % buttons.length
+        if (event.key === 'Home') next = 0
+        if (event.key === 'End') next = buttons.length - 1
+        activate(buttons[next].dataset.layout, true)
+      })
+    })
+
+    const params = new URLSearchParams(window.location.search)
+    const requested = params.get('image')
+    if (requested && descriptions[requested]) activate(requested)
+    if (params.get('booking') === 'none') document.querySelector('.contact-primary')?.remove()
+    if (params.get('portrait') === 'none') {
+      profile.classList.add('without-portrait')
+      document.querySelector('.hero-media-stage')?.remove()
+      document.querySelector('.inline-portrait')?.remove()
+    }
+    if (params.get('keyboard') === '1') {
+      buttons[0].focus()
+      buttons[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }))
+    }
+    if (params.get('audit') === '1') {
+      document.fonts.ready.then(() => {
+        const visible = (element) => element.getClientRects().length > 0
+        const controls = [...document.querySelectorAll('a, button')].filter(visible)
+        const report = {
+          layout: profile.dataset.activeLayout,
+          innerWidth: window.innerWidth,
+          clientWidth: document.documentElement.clientWidth,
+          scrollWidth: document.documentElement.scrollWidth,
+          visibleH1: [...document.querySelectorAll('h1')].filter(visible).length,
+          fontLoaded: document.fonts.check('16px "Noto Serif TC"'),
+          imageAltMissing: [...document.querySelectorAll('img')].filter((image) => visible(image) && !image.hasAttribute('alt')).length,
+          portraitCount: document.querySelectorAll('.portrait, .inline-portrait').length,
+          minControlHeight: Math.min(...controls.map((control) => Math.round(control.getBoundingClientRect().height))),
+          asideBorderRight: getComputedStyle(document.querySelector('.profile-aside')).borderRightWidth,
+          sectionTitleSize: getComputedStyle(document.querySelector('.profile-section h2')).fontSize,
+          bodySize: getComputedStyle(document.querySelector('.body-copy')).fontSize,
+          bookingActionCount: document.querySelectorAll('.contact-primary').length,
+          selectedVariant: buttons.find((button) => button.getAttribute('aria-pressed') === 'true')?.dataset.layout,
+          focusedVariant: document.activeElement?.dataset.layout,
+        }
+        const output = document.createElement('pre')
+        output.id = 'audit-output'
+        output.textContent = JSON.stringify(report)
+        document.body.append(output)
+      })
+    }
+  </script>
+</body>
+</html>

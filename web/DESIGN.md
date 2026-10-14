@@ -40,6 +40,30 @@ typography:
     fontWeight: 600
     lineHeight: 1.7
     letterSpacing: "0.18em"
+  detailHero:
+    fontFamily: '"Noto Serif TC", "Songti TC", "PMingLiU", serif'
+    fontSize: "clamp(44px, 4.8vw, 72px)"
+    fontWeight: 400
+    lineHeight: 1.22
+    letterSpacing: "0.025em"
+  detailSummary:
+    fontFamily: '"BIZ UDPGothic", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif'
+    fontSize: "17px"
+    fontWeight: 400
+    lineHeight: 2
+    letterSpacing: "0.035em"
+  detailSection:
+    fontFamily: '"Noto Serif TC", "Songti TC", "PMingLiU", serif'
+    fontSize: "38px"
+    fontWeight: 400
+    lineHeight: 1.4
+    letterSpacing: "0.02em"
+  detailBody:
+    fontFamily: '"BIZ UDPGothic", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif'
+    fontSize: "16px"
+    fontWeight: 400
+    lineHeight: 2.1
+    letterSpacing: "0.025em"
 components:
   button-primary:
     backgroundColor: "{colors.persimmon}"
@@ -81,9 +105,15 @@ components:
 
 **The Quiet Rhythm Rule.** 中文標題不使用全大寫效果；以留白、換行與字距建立節奏，避免額外裝飾字型。
 
+**The Detail Continuity Rule.** 活動、課程、執行師等內容詳情頁共用同一組閱讀字級：桌機 `h1` 為 `clamp(44px, 4.8vw, 72px)`、摘要 `17px / 2`、章節 `h2` 為 `38px / 1.4`、正文 `16px / 2.1` 且最寬約 `68ch`；不大於 `1023px` 時 `h1` 為 `42px`、摘要 `16px`、`h2` 為 `32px`，正文維持 `16px`。新內容詳情頁直接沿用此契約，不另創相近字級。
+
 ## Layout
 
 頁面最大寬度為 `1920px`，主要內容左右留白使用 `clamp(28px, 6vw, 116px)`，區塊垂直間距以 `112–176px` 為主。桌面首頁首屏採 65%／35% 地圖與敘事雙欄，1024–1250px 改為 60%／40%；不大於 1023px 時改成單欄，固定導覽高度為 `87px`。內容圖片維持明確比例並允許自然裁切。
+
+內容詳情頁的桌機固定左側欄以底色、留白與內部分隔建立層級，不使用 `border-right`；不大於 `1023px` 回到單欄後，可保留區塊底線與項目內部分隔。此規則適用於所有採 fixed／sticky facts rail 的相似頁面。
+
+**The Detail Rail Rule.** 相似詳情頁的 facts rail 必須共用 `/events/[slug]` 的節奏：桌機資料列為 `26px clamp(28px, 3.2vw, 50px)`，操作區為 `34px clamp(28px, 3.2vw, 50px)`；`<= 1023px` 資料列為 `22px 24px`、操作區為 `24px`。資料列使用底部分隔，桌機側欄本身無右框線。閱讀內容的連續 `profile-section` 不以 `border-top` 或額外 `padding-top` 切段，只使用章節間距維持節奏。
 
 ## Elevation & Depth
 

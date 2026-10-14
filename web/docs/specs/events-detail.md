@@ -41,6 +41,10 @@
 
 共用 CSS 只定義 `.detail-*` 的排版、字級角色、1px 分隔線、焦點與狀態；各頁以 modifier 或 CSS custom properties 決定構圖。沿用 `main.css` 的 paper、sand、ink、clay、saffron、persimmon、night、字體與控制項 token，不把三款決策稿的特殊構圖升格為全站規則。
 
+活動、課程、執行師等內容詳情頁依 [`DESIGN.md`](../../DESIGN.md) 共用閱讀字級：桌機 `h1` 為 `clamp(44px, 4.8vw, 72px)`、摘要 `17px / 2`、章節 `h2` 為 `38px / 1.4`、正文 `16px / 2.1` 且最寬約 `68ch`；`<= 1023px` 時依序為 `42px`、`16px`、`32px`、`16px`。桌機 fixed／sticky facts rail 不使用 `border-right`，只以表面色、留白及欄內分隔建立層級；單欄斷點仍可保留底線與項目分隔。
+
+相似詳情元件也沿用同一 rail spacing：桌機資料列 `26px clamp(28px, 3.2vw, 50px)`、操作區 `34px clamp(28px, 3.2vw, 50px)`；`<= 1023px` 資料列 `22px 24px`、操作區 `24px`。連續閱讀章節可依內容使用 margin 分段，不以 `border-top` 或額外 `padding-top` 重複切割視覺。
+
 ## 三款設計方向
 
 前三輪不再是完整實作候選。第四輪只繼承第三輪 B「留白書頁」的 Banner 語言與「這一天，會怎麼進行」流程元件：展示標題最大值由 96px 降為 72px，主視覺改成選填的獨立圖片欄，不使用滿版背景。三案都移除原本的口號式結尾，並把課程介紹、帶領者、日期、時間、地點、費用及單一報名行動放回主要內容路徑。
@@ -64,12 +68,12 @@
 - 目前狀態：`verified`。
 - 已完成：舊頁欄位盤點、資料契約、共用元件邊界、前三輪歷史紀錄、第四輪三款互動原型、B「固定邊欄」選案精修，以及 `/events/[slug]` fixture 路由、詳情元件、共用心得元件與 ready／loading／error／not-found 狀態。
 - 已驗證：2026-10-13 以 Chrome 檢查第四輪三案的 320、390、768、1023、1024 與 1440 寬度。18 組均無水平溢位、只有一個可見 `h1`、標題與 Banner 圖片位於 viewport 內、自託管字體載入，且非停用操作項目最小高度為 48px；真實 `ArrowRight` 鍵可同步移動 tab 選取與焦點。另檢查六張完整頁面截圖。
-- 品質檢查：Impeccable detector 第四輪執行一次；已修正概念說明文字對比。首輪畫面檢查修正 B 的平板圖片比例及焦點證據；選案後再移除帶領者照片與深色背景、縮短章節間距，並重拍 18 組驗證證據。頁面專屬展示字級與構圖不提升為全站 token，`DESIGN.md` 維持不變。
+- 品質檢查：Impeccable detector 第四輪執行一次；已修正概念說明文字對比。首輪畫面檢查修正 B 的平板圖片比例及焦點證據；選案後再移除帶領者照片與深色背景、縮短章節間距，並重拍 18 組驗證證據。2026-10-14 起，既有實作字級已提升為全站內容詳情頁共用契約並記錄於 `DESIGN.md`。
 - 心得元件驗證：2026-10-13 以 Chrome 檢查 A／B／C 的 1280px、1440px 桌機畫面；六組均無水平溢位，C 案方向鍵、焦點與內容切換同步。證據位於 `docs/design/review/student-testimonial-concepts-desktop/`；桌機最終選用內容頁內嵌單欄長文，並已建立 Vue 共用元件原型。
 - 長文接續示意：2026-10-13 以 Chrome 於 1440px 驗證 B「固定邊欄」的內嵌單欄心得，無水平溢位，兩則長文與名稱完整，心得區不含圖片；完整頁證據位於 `docs/design/review/student-testimonial-in-context-desktop/`。
 - 前端實作驗證：2026-10-13 以 Chrome 檢查 1440×1000、390×844 與 320×720。三組 `scrollWidth` 均等於 `clientWidth`；皆只有一個可見 `h1`、4 筆活動資訊、3 筆流程、2 則心得、0 張心得圖片及 0 個啟用報名連結。桌機為 grid／sticky，手機為 block／static；內容標題為 38px／32px，介紹與心得正文均為 16px，操作高度 76px。完整頁與數值證據位於 `.impeccable/review/event-detail-frontend-prototype/`。
 - 自動驗證：活動詳情新增 6 項行為測試；全站 22 個測試檔、133 項測試通過，`nuxt typecheck` 與 production build 完成。typecheck 仍輸出既有 `vue-router/volar/sfc-route-blocks` 套件相容性警告，但命令成功結束。
-- 品質檢測：Impeccable detector 執行一次，只回報本頁已核准且刻意保留的頁面專屬字級；依既有決策不修改 `DESIGN.md`。
+- 品質檢測：Impeccable detector 執行一次，當時只回報本頁已核准字級；該字級已於 2026-10-14 納入全站內容詳情頁共用契約。
 - CMS 整合：2026-10-13 在既有 `event` 集合新增語意化詳情物件。內容編排支援文字、帶領者、流程、心得、清單、引言與單／雙圖。GROQ 以單一 `isPublished` 控制總覽與詳情，server API 使用 `published` perspective 與安全轉換層；活動開始後自動移除報名操作，只有開放報名且 HTTPS 網址有效時才輸出連結。
 - CMS 自動驗證：Web 24 個測試檔、140 項測試全數通過；Studio 17 項 schema／structure 測試通過。Web 與 Studio typecheck、production build 均完成。Web typecheck 仍輸出既有 `vue-router/volar/sfc-route-blocks` 套件相容性警告，但命令成功結束；Web build 仍有既有 sourcemap 與字體 runtime resolve 警告。
 - Production 內容流驗收：2026-10-13 18:37–18:50（Asia/Taipei）完成 production schema 1/1 部署。以明確標示的測試活動驗證初始草稿隔離、首次發布、完整更新草稿隔離、再次發布、匿名 Data API、published-only 本機 API、圖片 asset 解參照、區塊排序與安全報名連結。
@@ -78,7 +82,7 @@
 - 公開設定簡化：2026-10-13 依使用者決策移除第二個詳情公開開關。活動只保留 `isPublished`；公開時 Studio 同步要求完整詳情，總覽、詳情 API 及關聯課程篩選均使用相同公開狀態。production schema 已部署，published 與 draft 文件中的舊欄位均已清除。
 - 資料健康：改善驗證定位並移除舊心得同意欄位後，production 最終檢查為 14 valid、0 errors、2 warnings。剩餘兩項為既有 `eventsPage.pastIntro`、`homeBanner.slides` stale-field warnings，與活動草稿發布無關。
 - Studio 簡化：2026-10-13 依使用者決策移除逐筆心得公開同意欄位與相關發布驗證，內容負責人在輸入 CMS 前完成公開授權。活動起訖時間、城市、報名網址、詳情，以及課程代表圖、詳情與梯次報名網址仍以可點擊提示定位到對應欄位。
-- 視覺調整：移除桌機 `.event-detail__facts` 的右框線；平板／手機既有資訊項目分隔與底線維持不變。production preview 可啟動且 build 通過；本次瀏覽器控制程序因本機 sandbox 錯誤無法啟動，因此未新增畫面截圖。
+- 視覺調整：移除桌機 `.event-detail__facts` 的右框線；平板／手機既有資訊項目分隔與底線維持不變。2026-10-14 起此行為列為相似內容詳情頁共用規則。production preview 可啟動且 build 通過；本次瀏覽器控制程序因本機 sandbox 錯誤無法啟動，因此未新增畫面截圖。
 - 待處理：正式活動素材審核與發布；課程詳情尚未接入共用心得 schema 與 renderer。
 - 未執行：Safari／Firefox、實體觸控裝置與螢幕閱讀器驗收。
 
