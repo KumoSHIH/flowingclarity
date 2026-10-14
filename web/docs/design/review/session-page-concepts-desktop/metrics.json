@@ -1,0 +1,71 @@
+[
+  {
+    "panel": "a",
+    "innerWidth": 1440,
+    "scrollWidth": 1429,
+    "scrollHeight": 1217,
+    "visibleH1": 1,
+    "visibleRows": 5,
+    "visiblePortraits": 0,
+    "loadedSerif": true,
+    "minimumControlHeight": 44,
+    "asidePosition": "sticky",
+    "initialCount": "符合條件 12 位・第 1 頁",
+    "behavior": {
+      "filtered": {
+        "count": "符合條件 3 位・第 1 頁",
+        "rows": 3,
+        "paginationHidden": true
+      },
+      "afterClearAndPageTwo": "符合條件 12 位・第 2 頁",
+      "pageTwoRows": 5,
+      "currentPage": "2"
+    }
+  },
+  {
+    "panel": "b",
+    "innerWidth": 1440,
+    "scrollWidth": 1429,
+    "scrollHeight": 1408,
+    "visibleH1": 1,
+    "visibleRows": 5,
+    "visiblePortraits": 0,
+    "loadedSerif": true,
+    "minimumControlHeight": 44,
+    "asidePosition": "sticky",
+    "initialCount": "符合條件 12 位・第 1 頁",
+    "behavior": {
+      "filtered": {
+        "count": "符合條件 3 位・第 1 頁",
+        "rows": 3,
+        "paginationHidden": true
+      },
+      "afterClearAndPageTwo": "符合條件 12 位・第 2 頁",
+      "pageTwoRows": 5,
+      "currentPage": "2"
+    }
+  },
+  {
+    "panel": "c",
+    "innerWidth": 1440,
+    "scrollWidth": 1429,
+    "scrollHeight": 1257,
+    "visibleH1": 1,
+    "visibleRows": 5,
+    "visiblePortraits": 0,
+    "loadedSerif": true,
+    "minimumControlHeight": 44,
+    "asidePosition": "sticky",
+    "initialCount": "符合條件 12 位・第 1 頁",
+    "behavior": {
+      "filtered": {
+        "count": "符合條件 3 位・第 1 頁",
+        "rows": 3,
+        "paginationHidden": true
+      },
+      "afterClearAndPageTwo": "符合條件 12 位・第 2 頁",
+      "pageTwoRows": 5,
+      "currentPage": "2"
+    }
+  }
+]

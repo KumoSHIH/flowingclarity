@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>個案諮詢總覽｜三款桌機設計方向</title>
+  <style>
+    @font-face {
+      font-family: "Noto Serif TC";
+      src: url("../../public/fonts/NotoSerifTC-Variable.ttf") format("truetype");
+      font-weight: 200 900;
+      font-display: swap;
+    }
+
+    :root {
+      --paper: #f8f5ef;
+      --sand: #e8dfd2;
+      --ink: #38342e;
+      --muted: #625a51;
+      --clay: #a46b54;
+      --clay-dark: #745142;
+      --saffron: #f8bf4c;
+      --oxblood: #392618;
+      --night: #241710;
+      --film: #352319;
+      --bark: #766254;
+      --persimmon: #df5b35;
+      --warm-white: #f7f6f4;
+      --line: rgb(56 52 46 / 24%);
+      --line-light: rgb(247 246 244 / 24%);
+      --edge: clamp(44px, 5.6vw, 92px);
+      --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+      --sans: "BIZ UDPGothic", "Noto Sans TC", "PingFang TC", sans-serif;
+      --chooser: 72px;
+      --header: 87px;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 1180px; background: var(--night); scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font-family: var(--sans); }
+    button, a { color: inherit; font: inherit; }
+    button { cursor: pointer; }
+    h1, h2, h3, p, ul, ol, fieldset { margin-top: 0; }
+    img { display: block; max-width: 100%; }
+    ::selection { color: var(--warm-white); background: var(--persimmon); }
+    :focus-visible { outline: 2px solid var(--clay); outline-offset: 5px; }
+    * { scrollbar-color: var(--clay) var(--paper); scrollbar-width: thin; }
+
+    .prototype {
+      width: min(100%, 1920px);
+      min-height: 100vh;
+      margin: 0 auto;
+      background: transparent;
+    }
+
+    .prototype-switcher {
+      position: sticky;
+      z-index: 100;
+      top: 0;
+      display: grid;
+      min-height: var(--chooser);
+      grid-template-columns: auto minmax(660px, 820px);
+      align-items: center;
+      justify-content: space-between;
+      gap: 36px;
+      padding: 12px var(--edge);
+      color: var(--warm-white);
+      background: var(--night);
+      border-bottom: 1px solid var(--line-light);
+    }
+
+    .prototype-switcher p { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .045em; }
+    .tabs { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .tab {
+      min-height: 48px;
+      padding: 0 18px;
+      color: #ded1c6;
+      background: transparent;
+      border: 0;
+      border-left: 1px solid var(--line-light);
+      text-align: left;
+    }
+    .tab:last-child { border-right: 1px solid var(--line-light); }
+    .tab[aria-selected="true"] { color: var(--ink); background: var(--saffron); }
+    .tab strong { display: block; font-family: var(--serif); font-size: 14px; font-weight: 600; }
+    .tab small { display: block; margin-top: 2px; font-size: 11px; letter-spacing: .05em; }
+
+    .site-header {
+      display: flex;
+      height: var(--header);
+      align-items: center;
+      justify-content: space-between;
+      gap: 36px;
+      padding: 0 var(--edge);
+      background: var(--paper);
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: inline-flex; min-height: 48px; align-items: center; }
+    .brand img { width: auto; height: 58px; object-fit: contain; }
+    .site-nav { display: flex; align-items: center; gap: clamp(22px, 3vw, 46px); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+    .site-nav a { display: inline-flex; min-height: 48px; align-items: center; text-decoration: none; }
+    .site-nav a[aria-current="page"] { border-bottom: 1px solid currentColor; }
+
+    .concept[hidden] { display: none; }
+    .concept { min-height: calc(100vh - var(--chooser) - var(--header)); }
+    .concept:not([hidden]) .directory__main { animation: reveal 620ms var(--ease) both; }
+    @keyframes reveal {
+      from { clip-path: inset(0 0 8% 0); opacity: .35; transform: translateY(14px); }
+      to { clip-path: inset(0); opacity: 1; transform: none; }
+    }
+
+    .directory { display: grid; min-height: calc(100vh - var(--chooser) - var(--header)); grid-template-columns: minmax(340px, 30%) minmax(0, 70%); }
+    .directory__aside {
+      position: sticky;
+      top: calc(var(--chooser) + var(--header));
+      align-self: start;
+      height: calc(100vh - var(--chooser) - var(--header));
+      overflow: auto;
+      padding: 64px clamp(38px, 4.3vw, 72px) 52px var(--edge);
+      background: var(--sand);
+      border-right: 1px solid var(--line);
+    }
+    .directory__aside h1 {
+      max-width: 6em;
+      margin-bottom: 22px;
+      font-family: var(--serif);
+      font-size: clamp(48px, 4.2vw, 66px);
+      font-weight: 400;
+      line-height: 1.18;
+      letter-spacing: .035em;
+      text-wrap: balance;
+    }
+    .directory__intro { max-width: 20em; margin-bottom: 42px; color: var(--muted); font-size: 14px; line-height: 1.9; letter-spacing: .045em; }
+    .filter-group { min-width: 0; padding: 0; margin: 0 0 30px; border: 0; }
+    .filter-group legend { width: 100%; padding: 0 0 11px; margin-bottom: 6px; border-bottom: 1px solid var(--line); color: var(--clay-dark); font-size: 11px; font-weight: 700; letter-spacing: .16em; }
+    .filters { display: flex; flex-wrap: wrap; gap: 6px 8px; }
+    .filter {
+      position: relative;
+      min-height: 44px;
+      padding: 6px 10px;
+      color: var(--ink);
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid transparent;
+      line-height: 1.5;
+      text-align: left;
+    }
+    .filter::before { position: absolute; top: 18px; left: 0; width: 5px; height: 5px; background: var(--clay); border-radius: 50%; content: ""; opacity: 0; }
+    .filter[aria-pressed="true"] { padding-left: 14px; border-color: var(--ink); font-weight: 700; }
+    .filter[aria-pressed="true"]::before { opacity: 1; }
+    .clear-filter { min-height: 44px; padding: 0; color: var(--clay-dark); background: transparent; border: 0; border-bottom: 1px solid currentColor; font-size: 12px; letter-spacing: .07em; }
+    .directory__main { min-width: 0; }
+    .results-head { display: flex; min-height: 154px; align-items: end; justify-content: space-between; gap: 36px; padding: 52px var(--edge) 30px clamp(52px, 5vw, 84px); border-bottom: 1px solid var(--line); }
+    .results-head h2 { margin-bottom: 0; font-family: var(--serif); font-size: clamp(30px, 2.7vw, 42px); font-weight: 400; letter-spacing: .035em; }
+    .results-count { margin: 0; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; letter-spacing: .1em; }
+    .practitioner-list { padding: 0; margin: 0; list-style: none; }
+    .practitioner[hidden] { display: none; }
+    .practitioner a { color: inherit; text-decoration: none; }
+    .name { font-family: var(--serif); font-weight: 500; line-height: 1.25; letter-spacing: .035em; }
+    .english-name { color: var(--muted); font-family: var(--sans); font-size: .62em; font-weight: 500; letter-spacing: .03em; }
+    .method-list { padding: 0; margin: 0; list-style: none; }
+    .arrow { position: relative; width: 30px; height: 20px; flex: 0 0 30px; }
+    .arrow::before { position: absolute; top: 10px; left: 0; width: 27px; border-top: 1.5px solid currentColor; content: ""; }
+    .arrow::after { position: absolute; top: 6px; right: 1px; width: 8px; height: 8px; border-top: 1.5px solid currentColor; border-right: 1.5px solid currentColor; transform: rotate(45deg); content: ""; }
+
+    .pagination { display: flex; align-items: center; justify-content: center; gap: 22px; min-height: 132px; padding: 30px var(--edge); border-top: 1px solid var(--line); }
+    .pagination[hidden] { display: none; }
+    .pagination button { min-width: 44px; min-height: 44px; padding: 0 10px; background: transparent; border: 0; }
+    .pagination button[disabled] { color: #9b9185; cursor: not-allowed; }
+    .pagination .page[aria-current="page"] { color: var(--paper); background: var(--ink); }
+
+    .concept-note { display: flex; justify-content: space-between; gap: 40px; padding: 18px var(--edge); color: #ded1c6; background: var(--bark); font-size: 12px; line-height: 1.7; }
+    .concept-note strong { color: var(--warm-white); }
+    .concept-note span:last-child { max-width: 65em; text-align: right; }
+
+    /* A — 經緯名錄 */
+    .concept--coordinates .directory__aside { background: var(--sand); }
+    .concept--coordinates .filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+    .concept--coordinates .filter { width: 100%; padding-right: 0; border-bottom-color: var(--line); }
+    .concept--coordinates .filter[aria-pressed="true"] { color: var(--oxblood); border-bottom-color: var(--oxblood); }
+    .concept--coordinates .practitioner {
+      border-bottom: 1px solid var(--line);
+      transition: background 220ms ease;
+    }
+    .concept--coordinates .practitioner:hover { background: #f0e9df; }
+    .concept--coordinates .practitioner > a {
+      display: grid;
+      min-height: 142px;
+      grid-template-columns: minmax(230px, .9fr) minmax(120px, .45fr) minmax(260px, 1.25fr) 42px;
+      align-items: center;
+      gap: 30px;
+      padding: 26px var(--edge) 26px clamp(52px, 5vw, 84px);
+    }
+    .concept--coordinates .name { font-size: clamp(27px, 2vw, 34px); }
+    .concept--coordinates .english-name { display: block; margin-top: 8px; }
+    .concept--coordinates .regions { color: var(--clay-dark); font-size: 12px; font-weight: 700; letter-spacing: .12em; }
+    .concept--coordinates .method-list { display: flex; flex-wrap: wrap; gap: 4px 15px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .concept--coordinates .method-list li { position: relative; padding-left: 12px; }
+    .concept--coordinates .method-list li::before { position: absolute; top: .72em; left: 0; width: 4px; height: 4px; background: var(--saffron); border-radius: 50%; content: ""; }
+    .concept--coordinates .practitioner:hover .arrow { color: var(--persimmon); transform: translateX(5px); transition: transform 220ms var(--ease); }
+
+    /* B — 名帖長卷 */
+    .concept--scroll .directory__aside { color: var(--warm-white); background: var(--oxblood); border-color: var(--line-light); }
+    .concept--scroll .directory__aside h1 { color: var(--warm-white); }
+    .concept--scroll .directory__intro { color: #ded1c6; }
+    .concept--scroll .filter-group legend { color: var(--saffron); border-color: var(--line-light); }
+    .concept--scroll .filter { color: var(--warm-white); }
+    .concept--scroll .filter[aria-pressed="true"] { border-color: var(--saffron); }
+    .concept--scroll .filter::before { background: var(--saffron); }
+    .concept--scroll .clear-filter { color: #eadbd0; }
+    .concept--scroll .results-head { min-height: 180px; align-items: center; padding-top: 38px; padding-bottom: 38px; }
+    .concept--scroll .practitioner { padding: 0 clamp(30px, 3.8vw, 64px); }
+    .concept--scroll .practitioner > a {
+      position: relative;
+      display: grid;
+      min-height: 176px;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, .72fr) 44px;
+      align-items: center;
+      gap: 36px;
+      padding: 30px clamp(22px, 2vw, 34px);
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+    .concept--scroll .practitioner > a::before { position: absolute; inset: auto 0 0; height: 0; background: var(--sand); content: ""; transition: height 340ms var(--ease); }
+    .concept--scroll .practitioner > a:hover::before { height: 100%; }
+    .concept--scroll .practitioner > a > * { position: relative; z-index: 1; }
+    .concept--scroll .name { font-size: clamp(39px, 3.3vw, 54px); font-weight: 400; }
+    .concept--scroll .english-name { display: inline; margin-left: 12px; }
+    .concept--scroll .regions { display: block; margin-bottom: 12px; color: var(--clay-dark); font-size: 11px; font-weight: 700; letter-spacing: .13em; }
+    .concept--scroll .method-list { display: flex; flex-wrap: wrap; gap: 5px 16px; color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .concept--scroll .method-list li + li::before { margin-right: 16px; color: var(--clay); content: "／"; }
+    .concept--scroll .practitioner:hover .name { color: var(--oxblood); }
+
+    /* C — 層疊索引 */
+    .concept--layers .directory__aside { background: var(--paper); }
+    .concept--layers .directory__aside::after {
+      display: block;
+      width: 74px;
+      height: 74px;
+      margin-top: 36px;
+      background: var(--saffron);
+      border-radius: 50%;
+      content: "";
+    }
+    .concept--layers .directory__main { padding: 0 8px; color: var(--warm-white); background: var(--film); }
+    .concept--layers .results-head { border-color: var(--line-light); }
+    .concept--layers .results-head h2 { color: var(--warm-white); }
+    .concept--layers .results-count { color: #d8c7b8; }
+    .concept--layers .practitioner { border-bottom: 1px solid var(--line-light); }
+    .concept--layers .practitioner > a {
+      display: grid;
+      min-height: 150px;
+      grid-template-columns: 112px minmax(260px, .82fr) minmax(280px, 1fr) 44px;
+      align-items: stretch;
+      gap: 0;
+      padding: 0 var(--edge) 0 clamp(52px, 5vw, 84px);
+    }
+    .concept--layers .region-plane { display: flex; align-items: center; color: var(--saffron); border-right: 1px solid var(--line-light); font-size: 11px; font-weight: 700; letter-spacing: .15em; }
+    .concept--layers .name-block { display: flex; flex-direction: column; justify-content: center; padding: 26px 34px; }
+    .concept--layers .name { color: var(--warm-white); font-size: clamp(28px, 2.2vw, 36px); }
+    .concept--layers .english-name { display: block; margin-top: 7px; color: #d8c7b8; }
+    .concept--layers .method-list { display: flex; flex-wrap: wrap; align-content: center; gap: 9px; padding: 24px 22px; }
+    .concept--layers .method-list li { padding: 7px 10px; color: #eadbd0; border: 1px solid var(--line-light); font-size: 12px; line-height: 1.45; }
+    .concept--layers .arrow { align-self: center; }
+    .concept--layers .practitioner > a { transition: color 220ms ease, background 220ms ease; }
+    .concept--layers .practitioner > a:hover { color: var(--ink); background: var(--saffron); }
+    .concept--layers .practitioner > a:hover .name,
+    .concept--layers .practitioner > a:hover .english-name,
+    .concept--layers .practitioner > a:hover .region-plane,
+    .concept--layers .practitioner > a:hover .method-list li { color: var(--ink); }
+    .concept--layers .practitioner > a:hover .region-plane,
+    .concept--layers .practitioner > a:hover .method-list li { border-color: rgb(56 52 46 / 45%); }
+    .concept--layers .pagination { border-color: var(--line-light); }
+    .concept--layers .pagination .page[aria-current="page"] { color: var(--ink); background: var(--saffron); }
+    .concept--layers .pagination button[disabled] { color: #a99a8d; }
+    .concept--layers :focus-visible { outline-color: var(--saffron); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .concept:not([hidden]) .directory__main { animation: none; }
+      .practitioner, .practitioner > a, .practitioner > a::before, .arrow { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="prototype">
+    <div class="prototype-switcher">
+      <p>個案諮詢總覽・桌機三案（姓名與服務資料皆為排版示意）</p>
+      <div class="tabs" role="tablist" aria-label="選擇設計方向">
+        <button id="tab-a" class="tab" role="tab" aria-controls="concept-a" aria-selected="true" data-target="a">
+          <strong>A・經緯名錄</strong><small>最清楚的比較效率</small>
+        </button>
+        <button id="tab-b" class="tab" role="tab" aria-controls="concept-b" aria-selected="false" tabindex="-1" data-target="b">
+          <strong>B・名帖長卷</strong><small>最有人物份量的文字設計</small>
+        </button>
+        <button id="tab-c" class="tab" role="tab" aria-controls="concept-c" aria-selected="false" tabindex="-1" data-target="c">
+          <strong>C・層疊索引</strong><small>最強烈的品牌對比</small>
+        </button>
+      </div>
+    </div>
+
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="普那生活空間首頁"><img src="../../public/assets/logo-main.png" alt=""></a>
+      <nav class="site-nav" aria-label="主要選單">
+        <a href="#">近期活動</a><a href="#">課程探索</a><a href="#" aria-current="page">個案諮詢</a><a href="#">文章分享</a><a href="#">關於我們</a>
+      </nav>
+    </header>
+
+    <main>
+      <article id="concept-a" class="concept concept--coordinates" role="tabpanel" aria-labelledby="tab-a" data-concept="a">
+        <div class="directory">
+          <aside class="directory__aside">
+            <h1>尋找執行師</h1>
+            <p class="directory__intro">依服務地區與方法，找到適合進一步了解的執行師。可複選條件，結果會立即更新。</p>
+            <form class="filter-form" aria-label="篩選執行師"></form>
+          </aside>
+          <section class="directory__main" aria-labelledby="results-a">
+            <header class="results-head"><h2 id="results-a" tabindex="-1">執行師名錄</h2><p class="results-count" aria-live="polite"></p></header>
+            <ol class="practitioner-list"></ol>
+            <nav class="pagination" aria-label="執行師名錄分頁"></nav>
+          </section>
+        </div>
+        <footer class="concept-note"><strong>A・經緯名錄</strong><span>把地區、姓名、方法固定在穩定欄位，最適合快速掃描與比較；視覺記憶點來自座標點與精準橫列，而不是照片。</span></footer>
+      </article>
+
+      <article id="concept-b" class="concept concept--scroll" role="tabpanel" aria-labelledby="tab-b" data-concept="b" hidden>
+        <div class="directory">
+          <aside class="directory__aside">
+            <h1>尋找執行師</h1>
+            <p class="directory__intro">依服務地區與方法，找到適合進一步了解的執行師。可複選條件，結果會立即更新。</p>
+            <form class="filter-form" aria-label="篩選執行師"></form>
+          </aside>
+          <section class="directory__main" aria-labelledby="results-b">
+            <header class="results-head"><h2 id="results-b" tabindex="-1">執行師名錄</h2><p class="results-count" aria-live="polite"></p></header>
+            <ol class="practitioner-list"></ol>
+            <nav class="pagination" aria-label="執行師名錄分頁"></nav>
+          </section>
+        </div>
+        <footer class="concept-note"><strong>B・名帖長卷</strong><span>放大姓名、拉長每筆呼吸，讓沒有照片的人物仍保有存在感；閱讀較慢，但最接近具溫度的編輯名錄。</span></footer>
+      </article>
+
+      <article id="concept-c" class="concept concept--layers" role="tabpanel" aria-labelledby="tab-c" data-concept="c" hidden>
+        <div class="directory">
+          <aside class="directory__aside">
+            <h1>尋找執行師</h1>
+            <p class="directory__intro">依服務地區與方法，找到適合進一步了解的執行師。可複選條件，結果會立即更新。</p>
+            <form class="filter-form" aria-label="篩選執行師"></form>
+          </aside>
+          <section class="directory__main" aria-labelledby="results-c">
+            <header class="results-head"><h2 id="results-c" tabindex="-1">執行師名錄</h2><p class="results-count" aria-live="polite"></p></header>
+            <ol class="practitioner-list"></ol>
+            <nav class="pagination" aria-label="執行師名錄分頁"></nav>
+          </section>
+        </div>
+        <footer class="concept-note"><strong>C・層疊索引</strong><span>以深色索引面承接名錄，把地區當固定座標、方法當可辨識標記；品牌張力最高，也最能與淺色篩選區形成雙域。</span></footer>
+      </article>
+    </main>
+  </div>
+
+  <script>
+    const practitioners = [
+      { name: '林若安', english: 'An', regions: ['north'], methods: ['rebalance', 'craniosacral'] },
+      { name: '周以澄', english: 'Cheng', regions: ['central'], methods: ['craniosacral', 'facial'] },
+      { name: '陳映禾', english: 'Ingrid', regions: ['south'], methods: ['rebalance', 'human-design'] },
+      { name: '許靜之', english: 'Shizhi', regions: ['north', 'central'], methods: ['facial', 'craniosacral'] },
+      { name: '江予晴', english: 'Haruka', regions: ['north'], methods: ['rebalance', 'facial', 'human-design'] },
+      { name: '沈言希', english: 'Yen', regions: ['south'], methods: ['craniosacral'] },
+      { name: '黃書寧', english: 'Ning', regions: ['central', 'south'], methods: ['rebalance', 'human-design'] },
+      { name: '梁心柔', english: 'Roux', regions: ['north'], methods: ['facial'] },
+      { name: '葉知行', english: 'Chih', regions: ['central'], methods: ['craniosacral', 'rebalance'] },
+      { name: '蘇宛庭', english: 'Ting', regions: ['south'], methods: ['facial', 'human-design'] },
+      { name: '方予真', english: 'Jane', regions: ['north', 'south'], methods: ['craniosacral', 'human-design'] },
+      { name: '蔡明澄', english: 'Ming', regions: ['central'], methods: ['rebalance', 'facial'] }
+    ];
+
+    const regionLabels = { north: '北部', central: '中部', south: '南部' };
+    const methodLabels = { rebalance: '身心再平衡按摩', craniosacral: '生物動能頭薦骨', facial: '日式臉部按摩', 'human-design': '人類圖' };
+    const pageSize = 5;
+
+    const filterMarkup = () => `
+      <fieldset class="filter-group">
+        <legend>服務地區</legend>
+        <div class="filters">${Object.entries(regionLabels).map(([value, label]) => `<button class="filter" type="button" aria-pressed="false" data-group="regions" data-value="${value}">${label}</button>`).join('')}</div>
+      </fieldset>
+      <fieldset class="filter-group">
+        <legend>服務方法</legend>
+        <div class="filters">${Object.entries(methodLabels).map(([value, label]) => `<button class="filter" type="button" aria-pressed="false" data-group="methods" data-value="${value}">${label}</button>`).join('')}</div>
+      </fieldset>
+      <button class="clear-filter" type="button">清除全部篩選</button>`;
+
+    function rowMarkup(person, concept) {
+      const regionText = person.regions.map(value => regionLabels[value]).join('・');
+      const methods = person.methods.map(value => `<li>${methodLabels[value]}</li>`).join('');
+      if (concept === 'c') {
+        return `<li class="practitioner"><a href="#detail" aria-label="查看 ${person.name} 的執行師詳情"><span class="region-plane">${regionText}</span><span class="name-block"><span class="name">${person.name}</span><span class="english-name">${person.english}</span></span><ul class="method-list" aria-label="服務方法">${methods}</ul><span class="arrow" aria-hidden="true"></span></a></li>`;
+      }
+      if (concept === 'b') {
+        return `<li class="practitioner"><a href="#detail" aria-label="查看 ${person.name} 的執行師詳情"><span class="name">${person.name}<span class="english-name">${person.english}</span></span><span><span class="regions">${regionText}</span><ul class="method-list" aria-label="服務方法">${methods}</ul></span><span class="arrow" aria-hidden="true"></span></a></li>`;
+      }
+      return `<li class="practitioner"><a href="#detail" aria-label="查看 ${person.name} 的執行師詳情"><span class="name">${person.name}<span class="english-name">${person.english}</span></span><span class="regions">${regionText}</span><ul class="method-list" aria-label="服務方法">${methods}</ul><span class="arrow" aria-hidden="true"></span></a></li>`;
+    }
+
+    function initializeConcept(panel) {
+      const state = { regions: new Set(), methods: new Set(), page: 1 };
+      const form = panel.querySelector('.filter-form');
+      const list = panel.querySelector('.practitioner-list');
+      const count = panel.querySelector('.results-count');
+      const pagination = panel.querySelector('.pagination');
+      const heading = panel.querySelector('.results-head h2');
+      form.innerHTML = filterMarkup();
+
+      function filteredPeople() {
+        return practitioners.filter(person => {
+          const regionMatch = !state.regions.size || person.regions.some(value => state.regions.has(value));
+          const methodMatch = !state.methods.size || person.methods.some(value => state.methods.has(value));
+          return regionMatch && methodMatch;
+        });
+      }
+
+      function render(moveFocus = false) {
+        const people = filteredPeople();
+        const totalPages = Math.max(1, Math.ceil(people.length / pageSize));
+        state.page = Math.min(state.page, totalPages);
+        const start = (state.page - 1) * pageSize;
+        list.innerHTML = people.slice(start, start + pageSize).map(person => rowMarkup(person, panel.dataset.concept)).join('');
+        if (!people.length) list.innerHTML = '<li style="padding:80px var(--edge);color:var(--muted);line-height:2">目前沒有符合條件的執行師。請清除部分篩選後再試一次。</li>';
+        count.textContent = `符合條件 ${people.length} 位・第 ${state.page} 頁`;
+        pagination.hidden = totalPages <= 1;
+        pagination.innerHTML = `<button type="button" data-page="${state.page - 1}" ${state.page === 1 ? 'disabled' : ''}>上一頁</button>${Array.from({ length: totalPages }, (_, index) => `<button type="button" class="page" data-page="${index + 1}" ${state.page === index + 1 ? 'aria-current="page"' : ''}>${index + 1}</button>`).join('')}<button type="button" data-page="${state.page + 1}" ${state.page === totalPages ? 'disabled' : ''}>下一頁</button>`;
+        pagination.querySelectorAll('button:not([disabled])').forEach(button => button.addEventListener('click', () => { state.page = Number(button.dataset.page); render(true); }));
+        if (moveFocus) heading.focus({ preventScroll: true });
+      }
+
+      form.querySelectorAll('.filter').forEach(button => button.addEventListener('click', () => {
+        const selected = button.getAttribute('aria-pressed') !== 'true';
+        button.setAttribute('aria-pressed', String(selected));
+        const set = state[button.dataset.group];
+        selected ? set.add(button.dataset.value) : set.delete(button.dataset.value);
+        state.page = 1;
+        render(true);
+      }));
+      form.querySelector('.clear-filter').addEventListener('click', () => {
+        state.regions.clear(); state.methods.clear(); state.page = 1;
+        form.querySelectorAll('.filter').forEach(button => button.setAttribute('aria-pressed', 'false'));
+        render(true);
+      });
+      render();
+    }
+
+    document.querySelectorAll('.concept').forEach(initializeConcept);
+    const tabs = [...document.querySelectorAll('[role="tab"]')];
+    const panels = [...document.querySelectorAll('[role="tabpanel"]')];
+
+    function selectTab(tab, focus = false, updateUrl = true) {
+      tabs.forEach(item => { const active = item === tab; item.setAttribute('aria-selected', String(active)); item.tabIndex = active ? 0 : -1; });
+      panels.forEach(panel => { panel.hidden = panel.id !== `concept-${tab.dataset.target}`; });
+      if (focus) tab.focus();
+      if (updateUrl) history.replaceState(null, '', `?panel=${tab.dataset.target}`);
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => selectTab(tab));
+      tab.addEventListener('keydown', event => {
+        if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+          event.preventDefault();
+          const step = event.key === 'ArrowRight' ? 1 : tabs.length - 1;
+          selectTab(tabs[(index + step) % tabs.length], true);
+        }
+      });
+    });
+    const requested = new URLSearchParams(location.search).get('panel');
+    const initial = tabs.find(tab => tab.dataset.target === requested);
+    if (initial) selectTab(initial, false, false);
+  </script>
+</body>
+</html>
