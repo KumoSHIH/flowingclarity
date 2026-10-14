@@ -30,6 +30,10 @@ export interface SessionOverviewContent {
   practitioners: PractitionerOverviewItem[]
 }
 
+export type SessionOverviewApiResponse =
+  | { state: 'ready', content: SessionOverviewContent }
+  | { state: 'empty' | 'error', content: null }
+
 export interface SessionFilters {
   regions: string[]
   methods: string[]

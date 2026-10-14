@@ -2,6 +2,7 @@ import type { StructureResolver } from 'sanity/structure'
 import { courseCategoryDefinitions } from './schemaTypes/courseCategory.ts'
 import { siteSettingsId } from './schemaTypes/siteSettings.ts'
 import { eventsPageId } from './schemaTypes/eventsPage.ts'
+import { sessionPageId } from './schemaTypes/sessionPage.ts'
 
 const courseCategories = Object.values(courseCategoryDefinitions)
 
@@ -90,5 +91,45 @@ export const structure: StructureResolver = (S) =>
             .title('活動')
             .apiVersion('2026-03-01')
             .filter('_type == "event"'),
+        ),
+      S.divider(),
+      S.listItem()
+        .id('session-page')
+        .title('個案諮詢總覽頁')
+        .child(
+          S.document()
+            .id(sessionPageId)
+            .schemaType('sessionPage')
+            .documentId(sessionPageId),
+        ),
+      S.listItem()
+        .id('session-regions')
+        .title('執行師服務地區')
+        .child(
+          S.documentList()
+            .id('session-regions')
+            .title('執行師服務地區')
+            .apiVersion('2026-03-01')
+            .filter('_type == "sessionRegion"'),
+        ),
+      S.listItem()
+        .id('session-methods')
+        .title('執行師服務方法')
+        .child(
+          S.documentList()
+            .id('session-methods')
+            .title('執行師服務方法')
+            .apiVersion('2026-03-01')
+            .filter('_type == "sessionMethod"'),
+        ),
+      S.listItem()
+        .id('practitioners')
+        .title('執行師')
+        .child(
+          S.documentList()
+            .id('practitioners')
+            .title('執行師')
+            .apiVersion('2026-03-01')
+            .filter('_type == "practitioner"'),
         ),
     ])

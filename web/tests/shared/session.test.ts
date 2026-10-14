@@ -8,6 +8,7 @@ import {
   normalizeSessionFilter,
   normalizeSessionPage,
   paginatePractitioners,
+  parseSessionOverview,
 } from '../../shared/utils/session'
 
 function practitioner(
@@ -30,6 +31,72 @@ function practitioner(
 }
 
 describe('session overview helpers', () => {
+  it('transforms valid Sanity content and drops invalid practitioner documents', () => {
+    const result = parseSessionOverview({
+      page: {
+        pageTitle: '尋找\n執行師',
+        intro: '依服務地區與方法，找到適合進一步了解的執行師。可複選條件，結果會立即更新。',
+        resultsHeading: '執行師名錄',
+        emptyMessage: '目前沒有已發布的執行師資料，請稍後再回來查看。',
+        noMatchesMessage: '目前沒有符合條件的執行師，請清除部分篩選後再試一次。',
+      },
+      regions: [{ key: 'north', label: '北部', order: 1 }],
+      methods: [{ key: 'rebalance', label: '身心再平衡按摩', order: 1 }],
+      practitioners: [
+        {
+          id: 'practitioner-valid',
+          name: '林若安',
+          englishName: 'An',
+          slug: 'lin-ruo-an',
+          regionKeys: ['north'],
+          methodKeys: ['rebalance'],
+          summary: '這是符合內容長度與契約要求的執行師服務取向摘要。',
+          order: 1,
+          isPublished: true,
+        },
+        {
+          id: 'practitioner-invalid',
+          name: '無效資料',
+          slug: 'invalid',
+          regionKeys: ['missing-region'],
+          methodKeys: ['rebalance'],
+          order: 2,
+          isPublished: true,
+        },
+      ],
+    })
+
+    expect(result).toEqual(expect.objectContaining({
+      pageTitle: '尋找\n執行師',
+      regions: [{ key: 'north', label: '北部', order: 1 }],
+      practitioners: [expect.objectContaining({ id: 'practitioner-valid' })],
+    }))
+  })
+
+  it('rejects invalid page content without executing authored HTML', () => {
+    const base = {
+      page: {
+        pageTitle: '尋找\n執行師',
+        intro: '依服務地區與方法，找到適合進一步了解的執行師。可複選條件，結果會立即更新。',
+        resultsHeading: '執行師名錄',
+        emptyMessage: '目前沒有已發布的執行師資料，請稍後再回來查看。',
+        noMatchesMessage: '目前沒有符合條件的執行師，請清除部分篩選後再試一次。',
+      },
+      regions: [],
+      methods: [],
+      practitioners: [],
+    }
+    expect(parseSessionOverview(base)).not.toBeNull()
+    expect(parseSessionOverview({
+      ...base,
+      page: { ...base.page, pageTitle: '<br>尋找執行師' },
+    })).toBeNull()
+    expect(parseSessionOverview({
+      ...base,
+      page: { ...base.page, pageTitle: '尋找\n\n執行師' },
+    })).toBeNull()
+  })
+
   it('normalizes repeated query filters and removes unknown or duplicate keys', () => {
     expect(normalizeSessionFilter(
       ['north', 'unknown', 'north', 'south'],

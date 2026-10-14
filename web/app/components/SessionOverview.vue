@@ -269,7 +269,6 @@ onMounted(() => { mounted.value = true })
   padding: clamp(64px, 7vw, 112px) clamp(28px, 3.2vw, 58px) 48px;
   overflow-y: auto;
   background: var(--color-sand);
-  border-right: 1px solid color-mix(in srgb, var(--color-ink) 24%, transparent);
 }
 
 .session-directory__intro h1 {
@@ -458,7 +457,7 @@ onMounted(() => { mounted.value = true })
 .practitioner-row__regions {
   margin: 0;
   color: var(--session-clay);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.1em;
 }
@@ -470,7 +469,7 @@ onMounted(() => { mounted.value = true })
   padding: 0;
   margin: 0;
   color: var(--session-muted);
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.7;
   list-style: none;
 }
@@ -626,7 +625,6 @@ onMounted(() => { mounted.value = true })
     height: auto;
     padding: 72px clamp(28px, 7vw, 72px) 48px;
     overflow: visible;
-    border-right: 0;
     border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 24%, transparent);
   }
 
@@ -768,6 +766,7 @@ onMounted(() => { mounted.value = true })
     grid-row: auto;
     gap: 3px 12px;
     padding-top: 2px;
+    font-size: 14px;
   }
 
   .practitioner-row svg {

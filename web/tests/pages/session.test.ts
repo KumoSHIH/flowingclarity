@@ -140,7 +140,13 @@ describe('session page', () => {
     vi.stubGlobal('useRoute', () => route)
     vi.stubGlobal('useRouter', () => ({ push, replace }))
     vi.stubGlobal('useHead', vi.fn())
-    vi.stubGlobal('useFetch', () => ({ data: ref(undefined), status: ref('success') }))
+    vi.stubGlobal('useFetch', (url: string) => url === '/api/session-overview'
+      ? {
+          data: ref({ state: 'ready', content: sessionOverviewFixture }),
+          status: ref('success'),
+          refresh: vi.fn(),
+        }
+      : { data: ref(undefined), status: ref('success'), refresh: vi.fn() })
   })
 
   afterEach(() => vi.unstubAllGlobals())
@@ -186,5 +192,30 @@ describe('session page', () => {
       path: '/session',
       query: { region: ['north'], method: undefined, page: '1' },
     })
+  })
+
+  it('uses explicit loading and error states without falling back to fixture practitioners', () => {
+    vi.stubGlobal('useFetch', (url: string) => url === '/api/session-overview'
+      ? {
+          data: ref({ state: 'error', content: null }),
+          status: ref('success'),
+          refresh: vi.fn(),
+        }
+      : { data: ref(undefined), status: ref('success'), refresh: vi.fn() })
+
+    const wrapper = mount(SessionPage, {
+      global: {
+        stubs: {
+          SiteHeader: SiteHeaderStub,
+          SiteFooter: true,
+          SiteFooterUnavailable: true,
+          SessionOverview,
+        },
+      },
+    })
+
+    expect(wrapper.text()).toContain('執行師資料暫時無法載入')
+    expect(wrapper.findAll('.practitioner-row')).toHaveLength(0)
+    expect(wrapper.text()).not.toContain('林若安')
   })
 })

@@ -52,6 +52,10 @@ test('course content types are registered with their required semantic fields', 
       'eventDetailMedia',
       'eventDetailContent',
       'event',
+      'sessionPage',
+      'sessionRegion',
+      'sessionMethod',
+      'practitioner',
     ],
   )
   assert.deepEqual(courseOverviewPage.fields.map(({ name }) => name), [

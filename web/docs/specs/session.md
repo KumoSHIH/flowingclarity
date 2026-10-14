@@ -1,6 +1,6 @@
 # 個案諮詢總覽規格
 
-**狀態：** ui-verified
+**狀態：** verified
 
 **路由：** `/session`
 
@@ -18,7 +18,7 @@
 
 第一版包含共用 `SiteHeader`／`SiteFooter`、頁面識別與導讀、地區及服務方法兩組標籤、清除篩選、符合條件的執行師列表、URL 可還原的分頁，以及前往 `/session/[slug]` 的詳情入口。桌面左側負責頁面識別與篩選，右側顯示目前結果；1023px 以下依文件順序改為單欄。
 
-第一版不包含關鍵字搜尋、距離定位、地圖、收藏、比較表、即時可約時段、站內預約、付款、會員功能、評分、療效保證或個人化推薦。執行師詳情頁的完整內容、聯絡／預約流程及 CMS 串接屬後續規格與階段；本頁只保留有效詳情入口，不以假連結代替。
+第一版不包含關鍵字搜尋、距離定位、地圖、收藏、比較表、即時可約時段、站內預約、付款、會員功能、評分、療效保證或個人化推薦。執行師詳情頁的完整內容與聯絡／預約流程屬後續規格；本頁只保留詳情路徑契約，不自行推定詳情內容。
 
 ## 已確認事實、示範內容與工作假設
 
@@ -92,6 +92,8 @@
 - 主要留白、字體角色與 paper、sand、ink、muted、clay、saffron、film／night、warm-white token 沿用 `DESIGN.md`。不新增圓角膠囊海、陰影卡片、柔焦人物背景或漂浮漸層；標籤即使採緊湊外觀，點擊目標仍至少 44 × 44px。
 - `main` 只有一個 `h1`；篩選使用具名稱的 `form` 或 `section`，兩組條件使用 `fieldset`／`legend` 或等價語意；執行師使用 list，姓名使用一致的後續標題層級。詳情入口為原生 `<a>`，篩選與清除為 `<button>`。
 - 目前篩選狀態需以 `aria-pressed` 或等價原生狀態呈現；結果更新與焦點管理不可造成鍵盤使用者失去位置。總覽不載入人物圖片，僅有的裝飾圖形需從輔助技術隱藏。
+- 名錄列的地區文字在桌機與手機皆為 14px；服務方法在桌機為 16px，620px 以下為 14px，以兼顧桌機掃讀與手機換行密度。
+- 桌機的 `session-directory__aside` 不顯示右側邊線，sand 與 paper 直接以背景色面區隔；1023px 以下仍保留篩選區底部分隔線，維持單欄內容層次。
 - 尊重 `prefers-reduced-motion`；移除列表位移、平滑捲動及標籤動畫後，篩選、分頁與焦點仍完整可用。至少驗證 1440、1023、768、390、320px，以及 200% 文字放大／等效窄視窗。
 
 ## 驗收條件
@@ -113,7 +115,7 @@
 - 內容負責人需確認地區 taxonomy、四種初始服務方法的正式命名，以及正式執行師名單、公開姓名、服務範圍、方法、排序及選填摘要；後續可新增技能 taxonomy，不需修改前端欄位。
 - 公開稱謂最終採「執行師」或「療癒師」仍待品牌用語確認；本規格先以「執行師」作介面主詞，資料模型不因顯示用語改變。
 - `/session/[slug]` 的內容契約、預約或聯絡入口、是否提供線上服務，以及個資／專業資格的核准流程需另立詳情規格；總覽第一版不自行推定。
-- A「經緯名錄」已完成桌機與手機假資料原型及 UI 驗證；下一階段為 Sanity schema、正式內容查詢與 fallback 串接。總覽不需要人物照片欄位或圖片資產。
+- A「經緯名錄」已完成桌機、手機、Sanity 整合與 production 內容流驗收；遠端 schema 已部署，隔離測試內容已清除。總覽不需要人物照片欄位或圖片資產，正式上線仍需內容負責人建立並發布總覽文案、taxonomy 與執行師資料。
 
 ## UI 方向候選記錄
 
@@ -132,6 +134,18 @@
 2026-10-14 完成手機 adaptation 與 `verify-ui-behavior`：1023px 以下改單欄，767px 以下重排 sand 首區與名錄，359px 以下將長療法篩選改為單欄。Chrome 裝置模擬確認 1023、768、390、320px 的 `scrollWidth` 均等於 viewport；390px 完整頁確認 8 筆結果、分頁與 Footer 閱讀順序，且名錄圖片數為 0。Nuxt typecheck 與 production build 通過，因此狀態更新為 `ui-verified`。尚未驗證實體 iOS／Android 裝置、Sanity schema、正式資料或 production 內容流程。
 
 2026-10-14 依內容補充調整：`session-directory__aside` 的桌機、平板與手機 padding 對齊 `/events`、`/course`；初始服務方法更新為身心再平衡按摩、生物動能頭薦骨、日式臉部按摩與人類圖，並確認方法為可新增 taxonomy、執行師可複選多項 references。Chrome 實頁量測確認 1440、1023、768、390、320px padding、四項初始方法與無水平溢位；Session 專屬測試 11 項、全套測試 151 項、typecheck 與 production build 均通過。
+
+2026-10-14 調整名錄資訊字級：地區統一為 14px，服務方法為桌機 16px、620px 以下 14px。Chrome 實頁量測確認 1440px 為 14px／16px，390 與 320px 為 14px／14px，三個尺寸皆無水平溢位；Session 專屬測試 11 項、typecheck 與 production build 通過。
+
+2026-10-14 移除 `session-directory__aside` 的桌機右側邊線與不再需要的響應式重設；1023px 以下原有底部分隔線維持不變。Session 專屬測試 11 項與 production build 通過。
+
+2026-10-14 完成 `integrate-sanity-content` 本機階段：Studio 新增固定 ID `session-page` 的總覽單例、可新增且 key／order 唯一的地區與服務方法 taxonomy，以及可複選 references 的執行師文件；前台新增 published-only `/api/session-overview`、明確轉換層與 ready／empty／invalid／error 處理，`/session` 不再以 fixture 作主要資料。Web 27 個測試檔共 157 項、Studio 20 項測試、兩邊 typecheck 與 production build 均通過。尚未部署 schema、修改遠端 dataset、建立或發布測試內容，因此狀態為 `cms-integrated`，下一階段是取得授權後執行 production 內容流驗收。
+
+2026-10-14 11:24（Asia/Taipei）完成 `validate-content-flow`：在 Sanity project `hnypuj6l`、dataset `production` 部署 schema（1/1），以 7 筆 taxonomy、1 筆總覽與 48 位執行師執行可辨識且可清理的真實內容流程。首次測試資料因英文名含數字及執行師強 reference 指向未發布 taxonomy 而未通過遠端 validation；已精準清除該批 112 個可能 ID、修正驗收資料後重新執行，未覆寫既有內容。修正後確認草稿不會由匿名 published 查詢讀取，遠端文件 validation 為 72/72 valid、0 errors；首次發布與草稿更新皆通過匿名讀取隔離，第二次發布後前台同步顯示更新內容。
+
+同次驗收以本機 Nuxt 連接 production API，於 Chrome 1440 × 1000 與 390 × 844 檢查：48 筆資料每頁 8 筆、共 6 頁，地區篩選後 URL 與 18 筆結果一致，列表人物圖片數為 0；桌機／手機均無水平溢位，地區為 14px，方法為 16px／14px，側欄右框為 0px。清除全部隔離文件後，登入與匿名查詢均確認驗收內容無殘留，API 回到 `empty`，兩種 viewport 顯示正式空狀態。驗收截圖僅存於 `/private/tmp`，未以測試內容覆寫版本庫設計圖。最終 Web 27 個測試檔共 157 項、Studio 20 項測試、兩邊 typecheck、production build 與 `git diff --check` 均通過；正式總覽、taxonomy 與執行師內容仍待內容負責人建立及發布。
+
+2026-10-14 後台人工測試發現清理後的固定單例停在 Sanity 已刪除文件狀態，使「個案諮詢總覽頁」無法直接編輯。原因與先前活動總覽相同：驗收曾建立再刪除 `session-page`，但沒有在收尾恢復可編輯草稿。已新增共用安全 helper 與 `seed-page-draft`／`verify-page-draft` 階段；建立前會確認 published 與 draft 都不存在，只建立 `_id: drafts.session-page`、`_type: sessionPage` 的空白草稿，拒絕覆寫既有內容。production 已確認只有這份空白草稿、沒有 published 單例，匿名查詢仍為空；Studio 回歸測試增至 22 項。瀏覽器自動控制工具本次因本機 sandbox 啟動錯誤無法代替人工點擊，因此 UI 欄位實際輸入仍由內容編輯者重新整理 Studio 後確認。
 
 
 #### 筆記，不需要執行，可忽略
