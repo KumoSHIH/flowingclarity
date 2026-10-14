@@ -42,5 +42,6 @@ test('the Studio structure exposes singletons and content collections', () => {
   assert.equal(root.items[10].child.options.type, 'sessionPage')
   assert.equal(root.items[11].id, 'session-regions')
   assert.equal(root.items[12].id, 'session-methods')
-  assert.equal(root.items[13].id, 'practitioners')
+  assert.equal(root.items[13].id, 'session-cities')
+  assert.equal(root.items[14].id, 'practitioners')
 })

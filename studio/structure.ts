@@ -114,13 +114,23 @@ export const structure: StructureResolver = (S) =>
         ),
       S.listItem()
         .id('session-methods')
-        .title('執行師服務方法')
+        .title('執行師服務項目')
         .child(
           S.documentList()
             .id('session-methods')
-            .title('執行師服務方法')
+            .title('執行師服務項目')
             .apiVersion('2026-03-01')
             .filter('_type == "sessionMethod"'),
+        ),
+      S.listItem()
+        .id('session-cities')
+        .title('執行師服務城市')
+        .child(
+          S.documentList()
+            .id('session-cities')
+            .title('執行師服務城市')
+            .apiVersion('2026-03-01')
+            .filter('_type == "sessionCity"'),
         ),
       S.listItem()
         .id('practitioners')

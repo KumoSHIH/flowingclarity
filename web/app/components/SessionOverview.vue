@@ -1,103 +1,127 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 import type {
   SessionFilters,
   SessionOverviewContent,
   SessionOverviewStatus,
-} from '#shared/types/session'
+} from "#shared/types/session";
 import {
   filterPractitioners,
   getPractitionerPath,
   getSessionPaginationItems,
   getSessionPath,
   paginatePractitioners,
-} from '#shared/utils/session'
+} from "#shared/utils/session";
 
-const props = withDefaults(defineProps<{
-  content: SessionOverviewContent
-  status?: SessionOverviewStatus
-  regions?: string[]
-  methods?: string[]
-  page?: number
-}>(), {
-  status: 'ready',
-  regions: () => [],
-  methods: () => [],
-  page: 1,
-})
+const props = withDefaults(
+  defineProps<{
+    content: SessionOverviewContent;
+    status?: SessionOverviewStatus;
+    regions?: string[];
+    methods?: string[];
+    page?: number;
+  }>(),
+  {
+    status: "ready",
+    regions: () => [],
+    methods: () => [],
+    page: 1,
+  },
+);
 
 const emit = defineEmits<{
-  navigate: [filters: SessionFilters, page: number]
-  normalize: [filters: SessionFilters, page: number]
-  retry: []
-}>()
+  navigate: [filters: SessionFilters, page: number];
+  normalize: [filters: SessionFilters, page: number];
+  retry: [];
+}>();
 
-const resultsHeading = ref<HTMLElement | null>(null)
-const mounted = ref(false)
-const orderedRegions = computed(() => props.content.regions.toSorted((a, b) => a.order - b.order))
-const orderedMethods = computed(() => props.content.methods.toSorted((a, b) => a.order - b.order))
-const regionLabels = computed(() => new Map(props.content.regions.map(item => [item.key, item.label])))
-const methodLabels = computed(() => new Map(props.content.methods.map(item => [item.key, item.label])))
+const resultsHeading = ref<HTMLElement | null>(null);
+const mounted = ref(false);
+const orderedRegions = computed(() =>
+  props.content.regions.toSorted((a, b) => a.order - b.order),
+);
+const orderedMethods = computed(() =>
+  props.content.methods.toSorted((a, b) => a.order - b.order),
+);
+const regionLabels = computed(
+  () => new Map(props.content.regions.map((item) => [item.key, item.label])),
+);
+const methodLabels = computed(
+  () => new Map(props.content.methods.map((item) => [item.key, item.label])),
+);
 const filters = computed<SessionFilters>(() => ({
   regions: props.regions,
   methods: props.methods,
-}))
-const allPublishedPractitioners = computed(() => filterPractitioners(
-  props.content.practitioners,
-  { regions: [], methods: [] },
-))
-const filteredPractitioners = computed(() => filterPractitioners(
-  props.content.practitioners,
-  filters.value,
-))
-const pagination = computed(() => paginatePractitioners(filteredPractitioners.value, props.page))
-const paginationItems = computed(() => getSessionPaginationItems(
-  pagination.value.currentPage,
-  pagination.value.totalPages,
-))
-const hasFilters = computed(() => props.regions.length > 0 || props.methods.length > 0)
+}));
+const allPublishedPractitioners = computed(() =>
+  filterPractitioners(props.content.practitioners, {
+    regions: [],
+    methods: [],
+  }),
+);
+const filteredPractitioners = computed(() =>
+  filterPractitioners(props.content.practitioners, filters.value),
+);
+const pagination = computed(() =>
+  paginatePractitioners(filteredPractitioners.value, props.page),
+);
+const paginationItems = computed(() =>
+  getSessionPaginationItems(
+    pagination.value.currentPage,
+    pagination.value.totalPages,
+  ),
+);
+const hasFilters = computed(
+  () => props.regions.length > 0 || props.methods.length > 0,
+);
 
 function toggleFilter(group: keyof SessionFilters, key: string) {
-  const next = new Set(filters.value[group])
-  next.has(key) ? next.delete(key) : next.add(key)
-  emit('navigate', { ...filters.value, [group]: [...next] }, 1)
+  const next = new Set(filters.value[group]);
+  next.has(key) ? next.delete(key) : next.add(key);
+  emit("navigate", { ...filters.value, [group]: [...next] }, 1);
 }
 
 function clearFilters() {
-  emit('navigate', { regions: [], methods: [] }, 1)
+  emit("navigate", { regions: [], methods: [] }, 1);
 }
 
 function navigate(event: MouseEvent, page: number) {
-  event.preventDefault()
-  emit('navigate', filters.value, page)
+  event.preventDefault();
+  emit("navigate", filters.value, page);
 }
 
 function regionText(keys: readonly string[]): string {
-  return keys.map(key => regionLabels.value.get(key)).filter(Boolean).join('・')
+  return keys
+    .map((key) => regionLabels.value.get(key))
+    .filter(Boolean)
+    .join("・");
 }
 
 function methodText(key: string): string {
-  return methodLabels.value.get(key) ?? key
+  return methodLabels.value.get(key) ?? key;
 }
 
 watch(
-  () => [props.page, props.regions.join(','), props.methods.join(',')] as const,
+  () => [props.page, props.regions.join(","), props.methods.join(",")] as const,
   async () => {
-    if (!mounted.value) return
-    await nextTick()
-    resultsHeading.value?.focus({ preventScroll: true })
+    if (!mounted.value) return;
+    await nextTick();
+    resultsHeading.value?.focus({ preventScroll: true });
   },
-)
+);
 
 watch(
   () => [pagination.value.currentPage, props.page] as const,
   ([currentPage, requestedPage]) => {
-    if (currentPage !== requestedPage) emit('normalize', filters.value, currentPage)
+    if (currentPage !== requestedPage)
+      emit("normalize", filters.value, currentPage);
   },
   { immediate: true },
-)
+);
 
-onMounted(() => { mounted.value = true })
+onMounted(() => {
+  mounted.value = true;
+});
 </script>
 
 <template>
@@ -116,19 +140,23 @@ onMounted(() => { mounted.value = true })
       >
         <fieldset>
           <legend>服務地區</legend>
-          <div class="session-filters__options session-filters__options--regions">
+          <div
+            class="session-filters__options session-filters__options--regions"
+          >
             <button
               v-for="option in orderedRegions"
               :key="option.key"
               type="button"
               :aria-pressed="regions.includes(option.key)"
               @click="toggleFilter('regions', option.key)"
-            >{{ option.label }}</button>
+            >
+              {{ option.label }}
+            </button>
           </div>
         </fieldset>
 
         <fieldset>
-          <legend>服務方法</legend>
+          <legend>服務項目</legend>
           <div class="session-filters__options">
             <button
               v-for="option in orderedMethods"
@@ -136,7 +164,9 @@ onMounted(() => { mounted.value = true })
               type="button"
               :aria-pressed="methods.includes(option.key)"
               @click="toggleFilter('methods', option.key)"
-            >{{ option.label }}</button>
+            >
+              {{ option.label }}
+            </button>
           </div>
         </fieldset>
 
@@ -145,7 +175,9 @@ onMounted(() => { mounted.value = true })
           type="button"
           class="session-filters__clear"
           @click="clearFilters"
-        >清除全部篩選</button>
+        >
+          清除全部篩選
+        </button>
       </form>
 
       <p v-if="content.prototypeNotice" class="session-directory__notice">
@@ -162,12 +194,21 @@ onMounted(() => { mounted.value = true })
         <h2 id="session-results-heading" ref="resultsHeading" tabindex="-1">
           {{ content.resultsHeading }}
         </h2>
-        <p v-if="status === 'ready' && pagination.totalItems" class="session-results__count" aria-live="polite">
-          符合條件 {{ pagination.totalItems }} 位・第 {{ pagination.currentPage }} 頁
+        <p
+          v-if="status === 'ready' && pagination.totalItems"
+          class="session-results__count"
+          aria-live="polite"
+        >
+          符合條件 {{ pagination.totalItems }} 位・第
+          {{ pagination.currentPage }} 頁
         </p>
       </header>
 
-      <div v-if="status === 'loading'" class="session-state session-state--loading" role="status">
+      <div
+        v-if="status === 'loading'"
+        class="session-state session-state--loading"
+        role="status"
+      >
         <p>正在整理執行師資料</p>
         <span v-for="index in 4" :key="index" aria-hidden="true" />
       </div>
@@ -188,17 +229,25 @@ onMounted(() => { mounted.value = true })
 
       <template v-else>
         <ol class="practitioner-list">
-          <li v-for="practitioner in pagination.items" :key="practitioner.id" class="practitioner-row">
+          <li
+            v-for="practitioner in pagination.items"
+            :key="practitioner.id"
+            class="practitioner-row"
+          >
             <a
               :href="getPractitionerPath(practitioner.slug)"
               :aria-label="`查看 ${practitioner.name} 的執行師詳情`"
             >
               <h3>
                 {{ practitioner.name }}
-                <span v-if="practitioner.englishName">{{ practitioner.englishName }}</span>
+                <span v-if="practitioner.englishName">{{
+                  practitioner.englishName
+                }}</span>
               </h3>
-              <p class="practitioner-row__regions">{{ regionText(practitioner.regionKeys) }}</p>
-              <ul class="practitioner-row__methods" aria-label="服務方法">
+              <p class="practitioner-row__regions">
+                {{ regionText(practitioner.regionKeys) }}
+              </p>
+              <ul class="practitioner-row__methods" aria-label="服務項目">
                 <li v-for="method in practitioner.methodKeys" :key="method">
                   {{ methodText(method) }}
                 </li>
@@ -215,35 +264,50 @@ onMounted(() => { mounted.value = true })
           class="session-pagination"
           :aria-label="`${content.resultsHeading}分頁`"
         >
-          <button v-if="pagination.currentPage === 1" type="button" disabled>上一頁</button>
+          <button v-if="pagination.currentPage === 1" type="button" disabled>
+            上一頁
+          </button>
           <a
             v-else
             :href="getSessionPath(filters, pagination.currentPage - 1)"
             rel="prev"
             @click="navigate($event, pagination.currentPage - 1)"
-          >上一頁</a>
+            >上一頁</a
+          >
           <ol>
             <li
               v-for="(item, index) in paginationItems"
               :key="item === 'ellipsis' ? `ellipsis-${index}` : item"
             >
               <span v-if="item === 'ellipsis'" aria-hidden="true">…</span>
-              <span v-else-if="item === pagination.currentPage" aria-current="page">{{ item }}</span>
+              <span
+                v-else-if="item === pagination.currentPage"
+                aria-current="page"
+                >{{ item }}</span
+              >
               <a
                 v-else
                 :href="getSessionPath(filters, item)"
                 :aria-label="`${content.resultsHeading}第 ${item} 頁`"
                 @click="navigate($event, item)"
-              >{{ item }}</a>
+                >{{ item }}</a
+              >
             </li>
           </ol>
-          <button v-if="pagination.currentPage === pagination.totalPages" type="button" disabled>下一頁</button>
+          <button
+            v-if="pagination.currentPage === pagination.totalPages"
+            type="button"
+            disabled
+          >
+            下一頁
+          </button>
           <a
             v-else
             :href="getSessionPath(filters, pagination.currentPage + 1)"
             rel="next"
             @click="navigate($event, pagination.currentPage + 1)"
-          >下一頁</a>
+            >下一頁</a
+          >
         </nav>
       </template>
     </section>
@@ -427,7 +491,10 @@ onMounted(() => { mounted.value = true })
 .practitioner-row > a {
   display: grid;
   min-height: 142px;
-  grid-template-columns: minmax(210px, 0.9fr) minmax(110px, 0.45fr) minmax(240px, 1.25fr) 42px;
+  grid-template-columns: minmax(210px, 0.9fr) minmax(110px, 0.45fr) minmax(
+      240px,
+      1.25fr
+    ) 42px;
   align-items: center;
   gap: clamp(22px, 2.5vw, 38px);
   padding: 26px clamp(28px, 6vw, 116px) 26px clamp(44px, 5vw, 84px);
@@ -496,7 +563,9 @@ onMounted(() => { mounted.value = true })
   fill: none;
   stroke: currentColor;
   stroke-width: 1.5;
-  transition: color 220ms ease, transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    color 220ms ease,
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .practitioner-row > a:hover svg,
@@ -604,14 +673,23 @@ onMounted(() => { mounted.value = true })
   display: block;
   min-height: 112px;
   border-top: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-sand) 55%, transparent), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-sand) 55%, transparent),
+    transparent
+  );
   background-size: 220% 100%;
   animation: loading-sweep 1.6s ease-in-out infinite;
 }
 
 @keyframes loading-sweep {
-  from { background-position: 100% 0; }
-  to { background-position: -120% 0; }
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
 }
 
 @media (max-width: 1023px) {
@@ -625,7 +703,8 @@ onMounted(() => { mounted.value = true })
     height: auto;
     padding: 72px clamp(28px, 7vw, 72px) 48px;
     overflow: visible;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 24%, transparent);
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--color-ink) 24%, transparent);
   }
 
   .session-directory__intro h1 {

@@ -30,7 +30,7 @@ export const sessionOverviewFixture: SessionOverviewContent = {
   resultsHeading: '執行師名錄',
   emptyMessage: '目前沒有已發布的執行師資料，請稍後再回來查看。',
   noMatchesMessage: '目前沒有符合條件的執行師，請清除部分篩選後再試一次。',
-  prototypeNotice: '本頁姓名、地區與服務方法皆為前端示意資料。',
+  prototypeNotice: '本頁姓名、地區與服務項目皆為前端示意資料。',
   regions: [
     { key: 'north', label: '北部', order: 1 },
     { key: 'central', label: '中部', order: 2 },

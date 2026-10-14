@@ -113,7 +113,7 @@ components:
 
 內容詳情頁的桌機固定左側欄以底色、留白與內部分隔建立層級，不使用 `border-right`；不大於 `1023px` 回到單欄後，可保留區塊底線與項目內部分隔。此規則適用於所有採 fixed／sticky facts rail 的相似頁面。
 
-**The Detail Rail Rule.** 相似詳情頁的 facts rail 必須共用 `/events/[slug]` 的節奏：桌機資料列為 `26px clamp(28px, 3.2vw, 50px)`，操作區為 `34px clamp(28px, 3.2vw, 50px)`；`<= 1023px` 資料列為 `22px 24px`、操作區為 `24px`。資料列使用底部分隔，桌機側欄本身無右框線。閱讀內容的連續 `profile-section` 不以 `border-top` 或額外 `padding-top` 切段，只使用章節間距維持節奏。
+**The Detail Rail Rule.** 相似詳情頁的 facts rail 必須共用 `/events/[slug]` 的節奏：桌機資料列為 `26px clamp(28px, 3.2vw, 50px)`，獨立主要操作區為 `34px clamp(28px, 3.2vw, 50px)`；`<= 1023px` 資料列為 `22px 24px`、獨立主要操作區為 `24px`。聯繫資料須與上方服務項目、服務地區使用相同 padding；側欄資訊小標題統一為 14px、粗體與 `.08em` 字距，聯繫內容與按鈕文字皆為 14px，聯繫清單不使用 `border-top` 或 `border-bottom`。桌機側欄本身無右框線。閱讀內容的連續 `profile-section` 不以 `border-top` 或額外 `padding-top` 切段，只使用章節間距維持節奏。
 
 ## Elevation & Depth
 

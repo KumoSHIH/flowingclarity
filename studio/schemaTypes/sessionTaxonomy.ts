@@ -2,7 +2,7 @@ import { defineField, defineType } from 'sanity'
 
 const keyPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
-function taxonomyFields(type: 'sessionRegion' | 'sessionMethod') {
+function taxonomyFields(type: 'sessionRegion' | 'sessionMethod' | 'sessionCity') {
   return [
     defineField({
       name: 'key',
@@ -77,10 +77,25 @@ export const sessionRegion = defineType({
 
 export const sessionMethod = defineType({
   name: 'sessionMethod',
-  title: '執行師服務方法',
+  title: '執行師服務項目',
   type: 'document',
   validation: Rule => Rule.custom(publicDocumentIdIsSafe),
   fields: taxonomyFields('sessionMethod'),
+  preview: {
+    select: { title: 'label', key: 'key', order: 'order' },
+    prepare: ({ title, key, order }) => ({
+      title,
+      subtitle: [`順序 ${order ?? '—'}`, key].filter(Boolean).join(' · '),
+    }),
+  },
+})
+
+export const sessionCity = defineType({
+  name: 'sessionCity',
+  title: '執行師服務城市',
+  type: 'document',
+  validation: Rule => Rule.custom(publicDocumentIdIsSafe),
+  fields: taxonomyFields('sessionCity'),
   preview: {
     select: { title: 'label', key: 'key', order: 'order' },
     prepare: ({ title, key, order }) => ({

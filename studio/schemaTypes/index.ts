@@ -8,8 +8,9 @@ import { eventDetailSchemaTypes } from './eventDetail.ts'
 import { eventsPage } from './eventsPage.ts'
 import { homeBanner } from './homeBanner.ts'
 import { practitioner } from './practitioner.ts'
+import { sessionDetailSchemaTypes } from './sessionDetail.ts'
 import { sessionPage } from './sessionPage.ts'
-import { sessionMethod, sessionRegion } from './sessionTaxonomy.ts'
+import { sessionCity, sessionMethod, sessionRegion } from './sessionTaxonomy.ts'
 import { siteSettings } from './siteSettings.ts'
 
 export const schemaTypes = [
@@ -27,6 +28,8 @@ export const schemaTypes = [
   event,
   sessionPage,
   sessionRegion,
+  sessionCity,
   sessionMethod,
+  ...sessionDetailSchemaTypes,
   practitioner,
 ]

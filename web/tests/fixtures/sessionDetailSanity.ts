@@ -1,0 +1,30 @@
+export const sanitySessionDetail = {
+  id: 'practitioner-lin-ruo-an',
+  slug: 'lin-ruo-an',
+  name: '林若安',
+  englishName: 'AN LIN',
+  summary: '陪伴人重新感受身體的界線與節奏，在安靜穩定的接觸裡，找到可以呼吸與停留的位置。',
+  isPublished: true,
+  regions: ['南部'],
+  methods: ['身心再平衡按摩', '生物動能頭薦骨'],
+  portrait: {
+    src: 'https://cdn.sanity.io/images/test/production/portrait.jpg',
+    alt: '林若安執行師肖像',
+    displayMode: 'cover',
+    hotspot: { x: 0.6, y: 0.42 },
+  },
+  bio: ['陪伴案主回到身體感受，建立可以停留與呼吸的空間；透過安靜而清楚的說明，讓每一步都保留選擇與調整的餘地，並依當下狀態共同確認合適的服務節奏。'],
+  experienceItems: ['身心再平衡按摩相關訓練', '生物動能頭薦骨個案實作'],
+  serviceLocations: [
+    { key: 'kaohsiung', cities: ['高雄市', '台南市'], venueName: '安靜工作室', publicDetail: 'venue' },
+  ],
+  contactIntro: '請先透過合適的公開管道詢問可預約時間。',
+  contactItems: [
+    { key: 'phone', type: 'phone', label: '電話', displayText: '07-000-0000', value: '07-000-0000' },
+    { key: 'line', type: 'lineId', label: 'LINE ID', displayText: '@flowing-demo', value: '@flowing-demo' },
+    { key: 'facebook', type: 'facebook', label: 'Facebook', displayText: '公開頁面', value: 'https://example.com/facebook' },
+  ],
+  bookingAction: { label: '前往預約表單', url: 'https://example.com/booking' },
+  seoTitle: '林若安執行師服務介紹',
+  seoDescription: '認識林若安執行師的服務取向、服務項目、公開服務地區與可使用的聯繫管道，並在預約前確認適合自己的下一步。',
+}

@@ -1,4 +1,4 @@
-import type { SessionDetailContent } from '../types/sessionDetail'
+import type { SessionDetailContent } from '#shared/types/sessionDetail'
 
 const primaryFixture: SessionDetailContent = {
   id: 'prototype-practitioner-01',
@@ -6,9 +6,11 @@ const primaryFixture: SessionDetailContent = {
   name: '林若安',
   englishName: 'AN LIN',
   summary: '陪伴人重新感受身體的界線與節奏，在安靜、穩定的接觸裡，找到可以呼吸與停留的位置。',
+  regions: ['南部'],
   portrait: {
     src: '/images/course-detail/facial-portrait-4.jpg',
     alt: '排版示意人物肖像，非正式執行師',
+    displayMode: 'contained',
     objectPosition: '58% center',
   },
   bio: [
@@ -24,9 +26,9 @@ const primaryFixture: SessionDetailContent = {
   serviceLocations: [
     {
       key: 'kaohsiung-studio',
-      city: '高雄市',
+      cities: ['高雄市', '台南市'],
       venueName: '示意服務空間',
-      address: '示意地址不代表正式服務地點',
+      address: '示意地址不代表正式服務地區',
       publicDetail: 'venue',
     },
   ],
@@ -50,12 +52,13 @@ const minimalFixture: SessionDetailContent = {
   id: 'prototype-practitioner-02',
   slug: 'prototype-practitioner-02',
   name: '周以澄',
+  regions: ['中部'],
   englishName: undefined,
   portrait: undefined,
   experienceItems: [],
   bookingAction: undefined,
   serviceLocations: [
-    { key: 'taichung', city: '台中市', publicDetail: 'cityOnly' },
+    { key: 'taichung', cities: ['台中市'], publicDetail: 'cityOnly' },
   ],
   contactItems: [
     { key: 'line-id', type: 'lineId', label: 'LINE ID', displayText: '@flowing-demo' },
@@ -67,6 +70,7 @@ const longFixture: SessionDetailContent = {
   id: 'prototype-practitioner-long',
   slug: 'prototype-practitioner-long',
   name: '示意長姓名用於驗證自然換行與閱讀順序',
+  regions: ['北部'],
   englishName: 'A VERY LONG PUBLIC ENGLISH NAME',
   portrait: undefined,
   summary: '這是一段用於驗證較長摘要在窄螢幕自然換行的示意內容，需保持完整可讀，不能裁切或造成水平捲動。',
@@ -74,11 +78,11 @@ const longFixture: SessionDetailContent = {
   experienceItems: Array.from({ length: 12 }, (_, index) => `第 ${index + 1} 筆可排序示意經歷，用於驗證較長清單完整顯示與自然換行`),
   serviceLocations: Array.from({ length: 6 }, (_, index) => ({
     key: `location-${index + 1}`,
-    city: `示意城市 ${index + 1}`,
-    venueName: `示意服務地點 ${index + 1}`,
+    cities: [`示意城市 ${index + 1}`],
+    venueName: `示意服務地區 ${index + 1}`,
     publicDetail: 'venue' as const,
   })),
-  methods: Array.from({ length: 20 }, (_, index) => `第 ${index + 1} 種可擴充服務方法名稱`),
+  methods: Array.from({ length: 20 }, (_, index) => `第 ${index + 1} 種可擴充服務項目名稱`),
   contactItems: Array.from({ length: 6 }, (_, index) => ({
     key: `contact-${index + 1}`,
     type: 'lineId' as const,

@@ -1,5 +1,5 @@
-import { mount } from '@vue/test-utils'
-import { ref } from 'vue'
+import { flushPromises, mount } from '@vue/test-utils'
+import { defineComponent, ref } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import SessionDetail from '../../app/components/SessionDetail.vue'
 import {
@@ -37,6 +37,18 @@ describe('session detail component', () => {
     })
     expect(wrapper.get('a[href^="tel:"]').attributes('target')).toBeUndefined()
     expect(wrapper.get('.session-detail__contact-text').text()).toContain('@flowing-demo')
+    expect(wrapper.get('.session-detail__portrait-stage').classes()).toContain('session-detail__portrait-stage--contained')
+  })
+
+  it('uses a full-bleed portrait when selected by the editor', () => {
+    const content = structuredClone(sessionDetailFixture)
+    content.portrait!.displayMode = 'cover'
+    const wrapper = mount(SessionDetail, {
+      props: { content },
+      global: { stubs: { NuxtLink: NuxtLinkStub } },
+    })
+
+    expect(wrapper.get('.session-detail__portrait-stage').classes()).toContain('session-detail__portrait-stage--cover')
   })
 
   it('omits optional portrait, experience, English name, and booking action', () => {
@@ -60,7 +72,8 @@ describe('session detail component', () => {
     })
 
     expect(wrapper.text()).toContain('示意服務空間')
-    expect(wrapper.text()).not.toContain('示意地址不代表正式服務地點')
+    expect(wrapper.text()).toContain('高雄市、台南市')
+    expect(wrapper.text()).not.toContain('示意地址不代表正式服務地區')
   })
 
   it('keeps maximum supported collections in the semantic reading path', () => {
@@ -102,18 +115,28 @@ describe('session detail component', () => {
 
 describe('session detail page', () => {
   const useHeadMock = vi.fn()
+  let apiResponse = ref({ state: 'ready', content: sessionDetailFixture } as const)
+  let requestStatus = ref('success')
+  let requestError = ref<{ statusCode?: number } | null>(null)
 
   beforeEach(() => {
     useHeadMock.mockClear()
     vi.stubGlobal('useHead', useHeadMock)
-    vi.stubGlobal('useFetch', () => ({ data: ref({ state: 'empty', content: null }) }))
+    apiResponse = ref({ state: 'ready', content: sessionDetailFixture } as const)
+    requestStatus = ref('success')
+    requestError = ref(null)
+    vi.stubGlobal('useFetch', () => ({ data: apiResponse, status: requestStatus, error: requestError, refresh: vi.fn() }))
   })
 
   afterEach(() => vi.unstubAllGlobals())
 
-  function mountPage(slug: string) {
+  async function mountPage(slug: string) {
     vi.stubGlobal('useRoute', () => ({ params: { slug }, path: `/session/${slug}` }))
-    return mount(SessionDetailPage, {
+    const PageHost = defineComponent({
+      components: { SessionDetailPage },
+      template: '<Suspense><SessionDetailPage /></Suspense>',
+    })
+    const wrapper = mount(PageHost, {
       global: {
         stubs: {
           SiteHeader: SiteHeaderStub,
@@ -126,19 +149,29 @@ describe('session detail page', () => {
         },
       },
     })
+    await flushPromises()
+    return wrapper
   }
 
-  it('renders the fixture matching the route slug', () => {
-    const wrapper = mountPage('prototype-practitioner-01')
+  it('renders published API content for the route slug', async () => {
+    const wrapper = await mountPage('prototype-practitioner-01')
     expect(wrapper.get('[data-site-header]').attributes('data-always-visible')).toBeDefined()
     expect(wrapper.get('[data-detail]').attributes('data-name')).toBe('林若安')
     expect(wrapper.get('[data-detail]').attributes('data-status')).toBe('ready')
   })
 
-  it('maps unknown fixture slugs to not-found and noindex', () => {
-    const wrapper = mountPage('missing-practitioner')
+  it('maps an empty API response to not-found without fixture fallback', async () => {
+    apiResponse.value = { state: 'empty', content: null }
+    const wrapper = await mountPage('missing-practitioner')
     expect(wrapper.get('[data-detail]').attributes('data-status')).toBe('not-found')
     const headFactory = useHeadMock.mock.calls[0]?.[0] as () => { meta: Array<{ name: string, content: string }> }
     expect(headFactory().meta).toContainEqual({ name: 'robots', content: 'noindex' })
+  })
+
+  it('maps an API 404 response to not-found instead of a generic error', async () => {
+    requestStatus.value = 'error'
+    requestError.value = { statusCode: 404 }
+    const wrapper = await mountPage('missing-practitioner')
+    expect(wrapper.get('[data-detail]').attributes('data-status')).toBe('not-found')
   })
 })

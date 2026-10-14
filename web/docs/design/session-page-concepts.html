@@ -385,7 +385,7 @@
         <div class="filters">${Object.entries(regionLabels).map(([value, label]) => `<button class="filter" type="button" aria-pressed="false" data-group="regions" data-value="${value}">${label}</button>`).join('')}</div>
       </fieldset>
       <fieldset class="filter-group">
-        <legend>服務方法</legend>
+        <legend>服務項目</legend>
         <div class="filters">${Object.entries(methodLabels).map(([value, label]) => `<button class="filter" type="button" aria-pressed="false" data-group="methods" data-value="${value}">${label}</button>`).join('')}</div>
       </fieldset>
       <button class="clear-filter" type="button">清除全部篩選</button>`;
@@ -394,12 +394,12 @@
       const regionText = person.regions.map(value => regionLabels[value]).join('・');
       const methods = person.methods.map(value => `<li>${methodLabels[value]}</li>`).join('');
       if (concept === 'c') {
-        return `<li class="practitioner"><a href="#detail" aria-label="查看 ${person.name} 的執行師詳情"><span class="region-plane">${regionText}</span><span class="name-block"><span class="name">${person.name}</span><span class="english-name">${person.english}</span></span><ul class="method-list" aria-label="服務方法">${methods}</ul><span class="arrow" aria-hidden="true"></span></a></li>`;
+        return `<li class="practitioner"><a href="#detail" aria-label="查看 ${person.name} 的執行師詳情"><span class="region-plane">${regionText}</span><span class="name-block"><span class="name">${person.name}</span><span class="english-name">${person.english}</span></span><ul class="method-list" aria-label="服務項目">${methods}</ul><span class="arrow" aria-hidden="true"></span></a></li>`;
       }
       if (concept === 'b') {
-        return `<li class="practitioner"><a href="#detail" aria-label="查看 ${person.name} 的執行師詳情"><span class="name">${person.name}<span class="english-name">${person.english}</span></span><span><span class="regions">${regionText}</span><ul class="method-list" aria-label="服務方法">${methods}</ul></span><span class="arrow" aria-hidden="true"></span></a></li>`;
+        return `<li class="practitioner"><a href="#detail" aria-label="查看 ${person.name} 的執行師詳情"><span class="name">${person.name}<span class="english-name">${person.english}</span></span><span><span class="regions">${regionText}</span><ul class="method-list" aria-label="服務項目">${methods}</ul></span><span class="arrow" aria-hidden="true"></span></a></li>`;
       }
-      return `<li class="practitioner"><a href="#detail" aria-label="查看 ${person.name} 的執行師詳情"><span class="name">${person.name}<span class="english-name">${person.english}</span></span><span class="regions">${regionText}</span><ul class="method-list" aria-label="服務方法">${methods}</ul><span class="arrow" aria-hidden="true"></span></a></li>`;
+      return `<li class="practitioner"><a href="#detail" aria-label="查看 ${person.name} 的執行師詳情"><span class="name">${person.name}<span class="english-name">${person.english}</span></span><span class="regions">${regionText}</span><ul class="method-list" aria-label="服務項目">${methods}</ul><span class="arrow" aria-hidden="true"></span></a></li>`;
     }
 
     function initializeConcept(panel) {
