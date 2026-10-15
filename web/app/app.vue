@@ -22,5 +22,6 @@ useHead({
   <div>
     <NuxtRouteAnnouncer />
     <NuxtPage />
+    <GoTopButton />
   </div>
 </template>

@@ -1,6 +1,6 @@
 # Flowing Clarity Studio
 
-Sanity Studio 用來編輯首頁 Banner、課程、活動與個案諮詢內容。各總覽頁使用固定單例；課程、活動與執行師使用獨立文件及 reference 關聯，公開網站只查詢已發布且對應公開開關為 `true` 的內容。儲存草稿後仍需發布，公開網站才會使用更新內容。
+Sanity Studio 用來編輯首頁 Banner、課程、活動、個案諮詢與文章分享內容。各總覽頁使用固定單例；課程、活動、執行師與文章使用獨立文件及 reference 關聯，公開網站只查詢已發布且符合各內容契約的文件。儲存草稿後仍需發布，公開網站才會使用更新內容。
 
 ## 初次設定
 
@@ -18,6 +18,7 @@ Sanity Studio 用來編輯首頁 Banner、課程、活動與個案諮詢內容�
 - 課程梯次以 stage 與 ISO 日期區間記錄，並可設定城市、場地、時間、名額、費用、報名網址及補充事項；schema 阻止日期倒置、重疊、順序重複或倒退。首日與末日由日期區間推導，不重複儲存。公開且開放報名的梯次必須使用 HTTPS 報名網址。
 - 「活動總覽頁」是固定 ID `events-page` 的單例；「活動」是獨立文件，可選填一門已公開課程。活動使用結構化起訖時間、參與方式、地點、報名狀態、HTTPS 報名網址、保存設定與同時段順序；公開文件 ID 不得包含句點。
 - 「個案諮詢總覽頁」是固定 ID `session-page` 的單例；服務地區與服務項目是可新增 taxonomy，識別碼與順序在同類別內不可重複。執行師可複選服務地區與服務項目，總覽不使用人物照片；`isPublished` 關閉或契約不完整的文件不會出現在前台。
+- 「文章分享總覽頁」是固定 ID `articles-page` 的單例；文章固定 reference 四個課程分類之一，另可選 1–8 個可新增的文章標籤。文章與標籤使用 Sanity draft／published 狀態，不另設公開開關；總覽只讀摘要資料，不查詢正文。
 
 ## 驗收
 
@@ -33,7 +34,9 @@ Sanity Studio 用來編輯首頁 Banner、課程、活動與個案諮詢內容�
 
 個案諮詢 schema 已部署至 production，並以 7 筆 taxonomy、1 筆總覽與 48 位執行師完成草稿隔離、兩次發布、匿名 published 查詢、分頁、地區篩選、1440px／390px 前台與清理後空狀態驗收。隔離測試內容已精準清除；production 只保留無內容、未發布的 `drafts.session-page`，避免單例在刪除驗收內容後停在不可編輯狀態，匿名前台仍讀不到此草稿。正式總覽文案、taxonomy 與執行師資料仍待內容負責人建立及發布。完整紀錄見 [個案諮詢規格](../web/docs/specs/session.md)。
 
-固定單例若曾被內容流驗收建立後刪除，不要把 published 與 draft 同時為 0 當成最終收尾。先確認兩者都不存在，再建立只含 `_id: drafts.<單例 ID>` 與 `_type` 的空白草稿；這份草稿不可發布，也不可用覆寫操作取代既有內容。Session 可在 `studio/` 執行 `npx sanity exec scripts/validateSessionFlow.ts --with-user-token -- seed-page-draft`，再以 `verify-page-draft` 確認登入者可見草稿而匿名 published 查詢仍為空。
+文章 schema 已部署至 production，並以 10 個標籤、1 筆總覽與 24 篇文章完成草稿隔離、兩次發布、匿名 published 查詢、分類／標籤篩選、三頁分頁、桌機／手機與清理後空狀態驗收。70 個隔離測試文件已精準清除；人工後台測試另發現主要分類 picker 同時顯示新舊分類文件，現已限制為四個正式 `course-category-*` ID 並完成回歸。production 的 `articles-page` 已由 Studio 人工發布，前台 API 可匿名讀取 4 個主要分類、3 個標籤與 3 篇文章，文章總覽規格為 `verified`；單篇文章頁與正式內容核准仍待後續處理。完整紀錄見 [文章分享規格](../web/docs/specs/articles.md)。
+
+固定單例若曾被內容流驗收建立後刪除，不要把 published 與 draft 同時為 0 當成最終收尾。先確認兩者都不存在，再建立只含 `_id: drafts.<單例 ID>` 與 `_type` 的空白草稿；這份草稿不可發布，也不可用覆寫操作取代既有內容。Session 使用 `validateSessionFlow.ts`，文章分享使用 `validateArticlesFlow.ts`；在 `studio/` 以 `npx sanity exec scripts/<檔名> --with-user-token -- seed-page-draft` 建立，再以 `verify-page-draft` 確認登入者可見草稿而匿名 published 查詢仍為空。
 
 若既有分類使用 `courseCategory.*` ID，需先複製為對應的 `course-category-*` 文件並更新課程 reference；舊 ID 含句點，Sanity 公開 API 會將其視為受保護路徑而拒絕未驗證讀取。完成遷移前不要刪除舊文件。
 

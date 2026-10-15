@@ -66,6 +66,14 @@ Footer 採主色 bark（`#766254`）表面與 paper 文字，保留 2.4px 連結
 
 新版典型內容量測 320、560、900、1024、1440px，最少／最長內容量測 320、1440px，無文字或操作元素水平溢位。2026-10-08 已完成遠端 schema 與 API 層草稿／發布／還原驗證；最新證據見 [Footer 規格](footer.md) 及 [review](../design/review/footer-content-flow/README.md)。仍待 Studio hostname／編輯介面、正式內容核准、四個目的頁及完整人工驗收。
 
+## 全站回頂元件
+
+狀態：2026-10-15 已新增 `GoTopButton.vue` 並由 `app.vue` 全域掛載。按鈕在 `window.scrollY > 480` 時出現，使用原生 button、繁中 accessible name 與裝飾 SVG；點擊後回到頁面頂端，正常模式採 smooth scrolling，reduced motion 改為 `auto`。元件卸載時必須移除 scroll listener。
+
+外觀沿用全站直角與平面表面：桌機 56 × 56px、手機 52 × 52px，night 背景、paper 箭頭、clay hover、saffron focus ring，不使用圓形、陰影或文字字元箭頭。右下留白以 `clamp(20px, 3vw, 48px)` 為基準，並分別納入 right／bottom safe-area inset；z-index 為 40，低於固定 Header 的 50。不加入 CMS 欄位或逐頁設定。
+
+實際瀏覽器已於首頁驗證 1440 × 900 與 390 × 844：頂端按鈕數量為 0，捲動 700px 後各顯示一個按鈕，尺寸分別為 56px 與 52px，焦點外框為 2px，頁面無水平溢位；點擊後 `scrollY` 回到 0 且按鈕隱藏。元件測試另覆蓋 480px 顯示邊界、accessible name、smooth scrolling、reduced motion 與 listener cleanup；Web 34 個測試檔共 190 項、typecheck、production build 及 `git diff --check` 通過，Impeccable detector 為 0 項。實體觸控裝置及螢幕閱讀器尚未執行，不記為已完成。
+
 ### 既有抽取驗證
 
 2026-10-04：前端 30 項測試、typecheck 與正式 build 通過。以原始 CSS 和抽取後 CSS 建立本機 Banner 文字區測試頁，在 Chrome 比對 390、1023、1024、1180、1440px 的字級、行高、顏色、內距及元素位置／尺寸，結果一致；減少動態模式確認為零秒過渡，並檢視手機與桌面截圖。此紀錄早於 2026-10-05 的標題尺寸與 Banner 版面調整，不代表目前版本已完成視覺驗收。

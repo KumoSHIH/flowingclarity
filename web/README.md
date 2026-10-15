@@ -34,3 +34,7 @@ npm run build:web
 - `shared/`：前後端共用的內容型別、解析與路由對應
 - `tests/`：Vitest 測試
 - `public/`：不經建置處理的靜態檔案
+
+## 全域共用元件
+
+`app.vue` 掛載 `GoTopButton.vue`，因此所有 Nuxt 路由自動具有右下角回頂按鈕，不要在個別頁面重複加入。元件捲動超過 480px 才出現，並依 `prefers-reduced-motion` 選擇平滑或立即回頂；樣式與互動契約記錄於 [設計系統規格](docs/specs/design-system.md)。新增其他全域元件時，應同樣由 app shell 掛載、補元件行為測試，並避免依賴單一路由內容。

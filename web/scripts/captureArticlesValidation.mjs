@@ -4,7 +4,7 @@ import { resolve } from 'node:path'
 const port = Number(process.argv[2] ?? 9224)
 const pageUrl = process.argv[3] ?? 'http://127.0.0.1:3100/articles'
 const captureImages = process.argv[4] !== 'metrics-only'
-const outputDirectory = resolve('.impeccable/review/articles-prototype')
+const outputDirectory = resolve('.impeccable/review', process.argv[5] ?? 'articles-prototype')
 
 async function createSession() {
   const target = await fetch(

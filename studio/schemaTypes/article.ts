@@ -1,7 +1,17 @@
 import { defineField, defineType } from 'sanity'
 import { articleDocumentIdIsSafe } from './articleTag.ts'
+import { courseCategoryDefinitions } from './courseCategory.ts'
 
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+export const articleCategoryIds: string[] = Object.values(courseCategoryDefinitions).map(({ id }) => id)
+
+export function articleCategoryReferenceIsCanonical(value: unknown): true | string {
+  if (!value || typeof value !== 'object') return true
+  const reference = value as { _ref?: string }
+  return reference._ref && articleCategoryIds.includes(reference._ref)
+    ? true
+    : '請選擇四個正式主要分類之一。'
+}
 
 export const article = defineType({
   name: 'article',
@@ -11,7 +21,18 @@ export const article = defineType({
   fields: [
     defineField({ name: 'title', title: '文章標題', type: 'string', validation: Rule => Rule.required().min(4).max(50) }),
     defineField({ name: 'slug', title: '網址識別碼', type: 'slug', options: { source: 'title', maxLength: 80 }, validation: Rule => Rule.required().custom(value => !value?.current || slugPattern.test(value.current) ? true : '請使用小寫英數與連字號。') }),
-    defineField({ name: 'category', title: '主要分類', type: 'reference', to: [{ type: 'courseCategory' }], options: { disableNew: true }, validation: Rule => Rule.required() }),
+    defineField({
+      name: 'category',
+      title: '主要分類',
+      type: 'reference',
+      to: [{ type: 'courseCategory' }],
+      options: {
+        disableNew: true,
+        filter: '_id in $categoryIds',
+        filterParams: { categoryIds: articleCategoryIds },
+      },
+      validation: Rule => Rule.required().custom(articleCategoryReferenceIsCanonical),
+    }),
     defineField({ name: 'tags', title: '相關標籤', type: 'array', of: [{ type: 'reference', to: [{ type: 'articleTag' }] }], validation: Rule => Rule.required().min(1).max(8).unique() }),
     defineField({ name: 'excerpt', title: '文章摘要', type: 'text', rows: 5, validation: Rule => Rule.required().min(30).max(140) }),
     defineField({ name: 'publishedAt', title: '發布時間', type: 'datetime', validation: Rule => Rule.required().max(new Date().toISOString()) }),

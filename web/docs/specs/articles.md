@@ -1,6 +1,6 @@
 # 文章分享總覽頁規格
 
-**狀態：** cms-integrated  
+**狀態：** verified
 **路由：** `/articles`  
 **頁面模式：** Browse；依主要分類與相關標籤篩選並分頁瀏覽文章  
 **設計依據：** [`PRODUCT.md`](../../PRODUCT.md)、[`DESIGN.md`](../../DESIGN.md)、[`course.md`](course.md)，以及已核准的 C「文章地層長譜」[桌機稿](../design/review/articles-page-concepts-desktop/articles-strata-score.webp)與[手機稿](../design/review/articles-page-concepts-desktop/articles-strata-score-mobile.webp)
@@ -148,7 +148,8 @@
 - 標籤 slug 變更後的重新導向、標籤合併與刪除流程需在 schema 實作前定案；第一版先禁止直接刪除使用中的標籤。
 - 已完成 `build-ui-prototype` 與 `verify-ui-behavior`：`/articles` 目前使用型別化 fixture 呈現 24 篇 2026 年示意文章，包含四分類、標籤複選、URL 還原、每頁 8 篇、完整狀態與桌機／手機地層版面。內容、日期與平面圖樣仍是示意，不代表正式文章或核准素材。
 - 已完成本機 `integrate-sanity-content`：Studio 提供文章總覽單例、可新增的文章標籤與文章文件；文章主要分類只能 reference 既有四個 `courseCategory`，前台透過 published-only API、嚴格轉換與明確 empty／error 狀態讀取，不再以 fixture 作為主要資料。
-- 下一階段使用 `validate-content-flow` 部署 schema，建立隔離測試內容並驗證草稿、發布、匿名前台讀取、篩選分頁與清理。這些遠端操作尚未獲得本次明確授權，因此目前未執行；正式資料與文章詳情頁亦未開始。
+- 2026-10-15 已在明確授權後執行 `validate-content-flow`：schema 已部署至 production dataset，隔離測試內容完成草稿隔離、首次發布、更新草稿不外洩、更新發布、匿名查詢、前台篩選／分頁、響應式與清理驗證。70 個隔離測試文件均已刪除；其後由人工後台測試編輯並發布正式 singleton，驗收腳本未覆寫或刪除人工內容。
+- 人工回歸已完成並允許接續流程：主要分類 picker 的新舊文件重複問題已限制為四個正式 `course-category-*` ID，singleton 亦已由 Studio 成功發布。21:48 前台 `/api/articles` 實測回傳 `200 / ready`，可匿名讀取 4 個主要分類、3 個標籤與 3 篇文章；文章總覽狀態更新為 `verified`。正式文案與內容核准，以及單篇文章頁，仍屬後續工作。
 
 ## 階段紀錄
 
@@ -158,6 +159,9 @@
 - 2026-10-15：完成 `build-ui-prototype`。新增型別、篩選／排序／分頁工具、24 篇 2026 年 fixture、`ArticleOverview` 與 `/articles` 頁面；支援分類單選、標籤 OR 複選、URL canonicalization、焦點回復、8 篇分頁及 loading／空白／無結果／錯誤／缺圖／長內容。`npm run test` 共 184 項通過，`npm run typecheck` 與 `npm run build` 通過；1440、1023、768、390、320px 實機指標無水平溢位、控制項最小 44px，桌機中央線與手機左 rail 均正確。瀏覽器檢查產物位於 `.impeccable/review/articles-prototype/`；正式文章、圖片、Sanity 與文章詳情仍待後續階段。
 - 2026-10-15：完成 `verify-ui-behavior`，狀態更新為 `ui-verified`。以 Chrome 檢查 1440、1023、768、390、320px 及 1440px／200% 文字縮放等效的 720px viewport，`scrollWidth` 均等於 viewport、每頁 8 篇、單一 `h1`、控制項最小 44×44px；桌機中央線與 `<=1023px` 左 rail 符合核准稿。實際操作確認標籤、分類、上一頁／下一頁、焦點回復、URL 及瀏覽器返回可還原狀態；修正次要文字對比與 0 筆結果 live region。桌機與手機截圖及 metrics 位於 `.impeccable/review/articles-prototype/`。Impeccable detector 為 0 個 anti-pattern，字級提示均為頁面專屬編排、未新增全站 token；`npm run test` 184 項、`npm run typecheck`、`npm run build`、`git diff --check` 全數通過。尚未驗證 Sanity 編輯、草稿隔離、正式發布、文章詳情與正式內容素材。
 - 2026-10-15：完成本機 `integrate-sanity-content`，狀態更新為 `cms-integrated`。新增 `articlesPage`（固定 ID `articles-page`）、`articleTag`、`article` schema 與 Studio 結構；文章不設第二個公開開關，分類禁止新增並沿用 `courseCategory`，標籤可新增且文章可選 1–8 個。新增 published perspective 的 `/api/articles` 最小查詢與轉換，明確處理未設定、無效與讀取失敗，且總覽不查詢正文、不以 fixture 補正式資料。Web 全套 186 項測試、typecheck、build 通過；Studio 24 項測試、typecheck、build 通過。尚未部署遠端 schema、建立 production 測試內容或驗證草稿／發布／匿名讀取，下一階段需取得遠端操作授權後執行 `validate-content-flow`。
+- 2026-10-15 21:06–21:10（Asia/Taipei）：在 production dataset 完成內容流程驗收。新增可重複執行且拒絕混入既有內容的 `validateArticlesFlow.ts`；建立 1 頁面、10 標籤、24 文章草稿，涵蓋 8 標籤、長標題／摘要、缺圖與三頁分頁。匿名草稿隔離、首次發布、更新草稿仍讀舊版、再次發布才讀新版均通過；真實前台於 1440／1023／768／720（200% 等效）／390／320px 無水平溢位，每頁 8 篇、控制項至少 44px，分類、標籤、歷史返回、頁碼及焦點回復通過。桌機與手機截圖及量測位於 `.impeccable/review/articles-content-flow/`；空集合量測位於 `.impeccable/review/articles-content-flow-empty/`。清理後驗證公開內容為 0，並只建立空白 `drafts.articles-page`；匿名 API 為 `empty`。最終 Web 33 檔／186 項與 Studio 24 項測試、兩側 typecheck 及 build 全數通過；僅有既知的 Volar、字型與 sourcemap 警告。本機 Studio 已啟動，但瀏覽器操作介面連續重置，未完成登入後實際開啟單例表單，故狀態仍為 `cms-integrated`。
+- 2026-10-15 21:26（Asia/Taipei）：依人工測試修正文章「主要分類」重複選項。根因是 reference picker 同時列出舊 `courseCategory.*` 與正式 `course-category-*` 文件；schema 現在以固定 ID 查詢只顯示四個正式分類，並拒絕保存舊或未知 reference。新增回歸測試後 Studio 25 項測試、typecheck、build 通過，production schema 1/1 重新部署成功；待人工重新整理 Studio 確認選項去重。
+- 2026-10-15 21:49（Asia/Taipei）：人工回歸後使用者允許接續流程。唯讀檢查確認 production 已由 Studio 發布 `articles-page`，沒有 singleton 草稿；隔離驗收用標籤與文章仍為 0，表示清理完整。真實 Nuxt `/api/articles` 回傳 `200 / ready`，包含 4 個主要分類、3 個標籤與 3 篇人工發布文章，確認 Studio 編輯／發布、匿名 Sanity 讀取及前台轉換已連通，狀態更新為 `verified`。最終 Web 34 檔／190 項與 Studio 25 項測試、兩側 typecheck 及 build 全數通過；build 仍只有既知的 Volar、字型與 sourcemap 警告。此狀態只代表文章總覽流程驗收完成；單篇文章頁與正式內容核准不在本階段範圍。
 
 
 #### 筆記，不需要執行，可忽略
