@@ -18,7 +18,7 @@ export default defineConfig({
     structureTool({ structure }),
   ],
   document: {
-    actions: (prev, context) => ['siteSettings', 'eventsPage', 'sessionPage'].includes(context.schemaType)
+    actions: (prev, context) => ['siteSettings', 'eventsPage', 'sessionPage', 'articlesPage'].includes(context.schemaType)
       ? prev.filter(action => !['duplicate', 'delete', 'unpublish'].includes(action.action ?? ''))
       : prev,
     newDocumentOptions: (prev, { creationContext }) =>
@@ -30,6 +30,7 @@ export default defineConfig({
             'siteSettings',
             'eventsPage',
             'sessionPage',
+            'articlesPage',
           ].includes(templateId))
         : prev,
   },

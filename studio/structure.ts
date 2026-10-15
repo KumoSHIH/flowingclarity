@@ -3,6 +3,7 @@ import { courseCategoryDefinitions } from './schemaTypes/courseCategory.ts'
 import { siteSettingsId } from './schemaTypes/siteSettings.ts'
 import { eventsPageId } from './schemaTypes/eventsPage.ts'
 import { sessionPageId } from './schemaTypes/sessionPage.ts'
+import { articlesPageId } from './schemaTypes/articlesPage.ts'
 
 const courseCategories = Object.values(courseCategoryDefinitions)
 
@@ -142,4 +143,14 @@ export const structure: StructureResolver = (S) =>
             .apiVersion('2026-03-01')
             .filter('_type == "practitioner"'),
         ),
+      S.divider(),
+      S.listItem().id('articles-page').title('文章分享總覽頁').child(
+        S.document().id(articlesPageId).schemaType('articlesPage').documentId(articlesPageId),
+      ),
+      S.listItem().id('article-tags').title('文章相關標籤').child(
+        S.documentList().id('article-tags').title('文章相關標籤').apiVersion('2026-03-01').filter('_type == "articleTag"'),
+      ),
+      S.listItem().id('articles').title('文章').child(
+        S.documentList().id('articles').title('文章').apiVersion('2026-03-01').filter('_type == "article"'),
+      ),
     ])

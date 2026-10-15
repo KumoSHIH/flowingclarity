@@ -61,6 +61,9 @@ test('course content types are registered with their required semantic fields', 
       'sessionBookingAction',
       'sessionDetailSeo',
       'practitioner',
+      'articlesPage',
+      'articleTag',
+      'article',
     ],
   )
   assert.deepEqual(courseOverviewPage.fields.map(({ name }) => name), [

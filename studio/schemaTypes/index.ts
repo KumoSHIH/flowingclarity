@@ -12,6 +12,9 @@ import { sessionDetailSchemaTypes } from './sessionDetail.ts'
 import { sessionPage } from './sessionPage.ts'
 import { sessionCity, sessionMethod, sessionRegion } from './sessionTaxonomy.ts'
 import { siteSettings } from './siteSettings.ts'
+import { article } from './article.ts'
+import { articleTag } from './articleTag.ts'
+import { articlesPage } from './articlesPage.ts'
 
 export const schemaTypes = [
   siteSettings,
@@ -32,4 +35,7 @@ export const schemaTypes = [
   sessionMethod,
   ...sessionDetailSchemaTypes,
   practitioner,
+  articlesPage,
+  articleTag,
+  article,
 ]

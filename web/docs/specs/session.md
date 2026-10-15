@@ -147,7 +147,7 @@
 
 2026-10-14 後台人工測試發現清理後的固定單例停在 Sanity 已刪除文件狀態，使「個案諮詢總覽頁」無法直接編輯。原因與先前活動總覽相同：驗收曾建立再刪除 `session-page`，但沒有在收尾恢復可編輯草稿。已新增共用安全 helper 與 `seed-page-draft`／`verify-page-draft` 階段；建立前會確認 published 與 draft 都不存在，只建立 `_id: drafts.session-page`、`_type: sessionPage` 的空白草稿，拒絕覆寫既有內容。production 已確認只有這份空白草稿、沒有 published 單例，匿名查詢仍為空；Studio 回歸測試增至 22 項。瀏覽器自動控制工具本次因本機 sandbox 啟動錯誤無法代替人工點擊，因此 UI 欄位實際輸入仍由內容編輯者重新整理 Studio 後確認。
 
-2026-10-14 依人工調整後實作回查文件：公開介面與 Studio 顯示名稱統一使用「服務項目」，取代「服務方法／療法」；既有資料欄位 `methods` 與 URL query `method` 保持不變，避免破壞資料契約與既有連結。
+2026-10-14 依人工調整後實作回查文件：公開介面與 Studio 顯示名稱統一使用「服務項目」，取代「服務方法／療法」；既有資料欄位 `methods` 與 URL query `method` 保持不變，避免破壞資料契約與既有連結。回查後 Web 30 個測試檔共 173 項、Studio 22 項測試、兩端 typecheck 與 production build 均通過；Web typecheck 仍只有既有 `vue-router/volar/sfc-route-blocks` 套件警告。
 
 
 #### 筆記，不需要執行，可忽略

@@ -165,7 +165,7 @@ SEO 不得加入頁面未呈現或未核准的資格、療效、價格與服務�
 
 2026-10-14 統一詳情側欄聯繫樣式：`.session-detail__contact` 與上方資料列共用 padding；「聯繫方式」改用與「服務項目」相同的 14px 小標題樣式，區塊內容與預約按鈕文字統一為 14px，並移除聯繫清單的上下框線。Session detail 9 項元件／頁面測試、Web typecheck 與 production build 通過，Impeccable layout detector 為 0 findings；typecheck 仍只有既有 `vue-router/volar/sfc-route-blocks` 套件警告。
 
-2026-10-14 依人工調整後實作回查文件：詳情首區標籤採「服務地區」，側欄順序固定為「服務項目 → 服務地區 → 聯繫方式」，窄版維持同一 DOM 閱讀順序，完整介紹與經歷接續其後。同步將公開介面的「服務方法／療法」統一記為「服務項目」；資料欄位 `methods` 與既有 URL query `method` 保持不變。
+2026-10-14 依人工調整後實作回查文件：詳情首區標籤採「服務地區」，側欄順序固定為「服務項目 → 服務地區 → 聯繫方式」，窄版維持同一 DOM 閱讀順序，完整介紹與經歷接續其後。同步將公開介面的「服務方法／療法」統一記為「服務項目」；資料欄位 `methods` 與既有 URL query `method` 保持不變。回查後 Web 30 個測試檔共 173 項、Studio 22 項測試、兩端 typecheck 與 production build 均通過；Web typecheck 仍只有既有 `vue-router/volar/sfc-route-blocks` 套件警告。
 
 #### 筆記，不需要執行，可忽略
 
