@@ -1,0 +1,842 @@
+{
+  "viewports": [
+    {
+      "name": "overlay-320",
+      "path": "/articles/prototype-article-01",
+      "innerWidth": 320,
+      "scrollWidth": 320,
+      "scrollHeight": 5748,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "在安靜裡，聽見身體的細微回應"
+        },
+        {
+          "level": "H2",
+          "text": "圖片向頁面邊界延伸，文字維持穩定軸線"
+        },
+        {
+          "level": "H2",
+          "text": "把注意力留在身體裡"
+        },
+        {
+          "level": "H2",
+          "text": "讓停頓成為練習的一部分"
+        },
+        {
+          "level": "H2",
+          "text": "從細節回到整體"
+        },
+        {
+          "level": "H2",
+          "text": "延伸閱讀"
+        },
+        {
+          "level": "H3",
+          "text": "為自己的節奏，留一點空白"
+        },
+        {
+          "level": "H3",
+          "text": "從關係之間，看見自己的位置"
+        },
+        {
+          "level": "H3",
+          "text": "觸碰之前，先回到自己的呼吸"
+        },
+        {
+          "level": "H3",
+          "text": "理解天賦，不急著成為答案"
+        },
+        {
+          "level": "H3",
+          "text": "讓臉部鬆開，也讓表情回來"
+        }
+      ],
+      "bodySections": 5,
+      "relatedItems": 5,
+      "missingAlt": 0,
+      "emptyMeaningfulAlt": 0,
+      "minimumControlWidth": 44,
+      "minimumControlHeight": 44,
+      "bodyLineHeight": "33.6px",
+      "sectionTitleSize": "26px",
+      "transitionDuration": "1.5s",
+      "lazyImages": 8,
+      "eagerImages": 1,
+      "currentNavigation": "文章分享",
+      "contrast": {
+        "body": 6.22,
+        "metadata": 5.31,
+        "relatedCategory": 6.44,
+        "fixtureNotice": 5.33
+      }
+    },
+    {
+      "name": "overlay-390",
+      "path": "/articles/prototype-article-01",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "scrollHeight": 5296,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "在安靜裡，聽見身體的細微回應"
+        },
+        {
+          "level": "H2",
+          "text": "圖片向頁面邊界延伸，文字維持穩定軸線"
+        },
+        {
+          "level": "H2",
+          "text": "把注意力留在身體裡"
+        },
+        {
+          "level": "H2",
+          "text": "讓停頓成為練習的一部分"
+        },
+        {
+          "level": "H2",
+          "text": "從細節回到整體"
+        },
+        {
+          "level": "H2",
+          "text": "延伸閱讀"
+        },
+        {
+          "level": "H3",
+          "text": "為自己的節奏，留一點空白"
+        },
+        {
+          "level": "H3",
+          "text": "從關係之間，看見自己的位置"
+        },
+        {
+          "level": "H3",
+          "text": "觸碰之前，先回到自己的呼吸"
+        },
+        {
+          "level": "H3",
+          "text": "理解天賦，不急著成為答案"
+        },
+        {
+          "level": "H3",
+          "text": "讓臉部鬆開，也讓表情回來"
+        }
+      ],
+      "bodySections": 5,
+      "relatedItems": 5,
+      "missingAlt": 0,
+      "emptyMeaningfulAlt": 0,
+      "minimumControlWidth": 44,
+      "minimumControlHeight": 44,
+      "bodyLineHeight": "33.6px",
+      "sectionTitleSize": "26px",
+      "transitionDuration": "1.5s",
+      "lazyImages": 8,
+      "eagerImages": 1,
+      "currentNavigation": "文章分享",
+      "contrast": {
+        "body": 6.22,
+        "metadata": 5.31,
+        "relatedCategory": 6.44,
+        "fixtureNotice": 5.33
+      }
+    },
+    {
+      "name": "overlay-768",
+      "path": "/articles/prototype-article-01",
+      "innerWidth": 768,
+      "scrollWidth": 768,
+      "scrollHeight": 5087,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "在安靜裡，聽見身體的細微回應"
+        },
+        {
+          "level": "H2",
+          "text": "圖片向頁面邊界延伸，文字維持穩定軸線"
+        },
+        {
+          "level": "H2",
+          "text": "把注意力留在身體裡"
+        },
+        {
+          "level": "H2",
+          "text": "讓停頓成為練習的一部分"
+        },
+        {
+          "level": "H2",
+          "text": "從細節回到整體"
+        },
+        {
+          "level": "H2",
+          "text": "延伸閱讀"
+        },
+        {
+          "level": "H3",
+          "text": "為自己的節奏，留一點空白"
+        },
+        {
+          "level": "H3",
+          "text": "從關係之間，看見自己的位置"
+        },
+        {
+          "level": "H3",
+          "text": "觸碰之前，先回到自己的呼吸"
+        },
+        {
+          "level": "H3",
+          "text": "理解天賦，不急著成為答案"
+        },
+        {
+          "level": "H3",
+          "text": "讓臉部鬆開，也讓表情回來"
+        }
+      ],
+      "bodySections": 5,
+      "relatedItems": 5,
+      "missingAlt": 0,
+      "emptyMeaningfulAlt": 0,
+      "minimumControlWidth": 44,
+      "minimumControlHeight": 44,
+      "bodyLineHeight": "33.6px",
+      "sectionTitleSize": "26px",
+      "transitionDuration": "1.5s",
+      "lazyImages": 8,
+      "eagerImages": 1,
+      "currentNavigation": "文章分享",
+      "contrast": {
+        "body": 6.22,
+        "metadata": 5.31,
+        "relatedCategory": 6.44,
+        "fixtureNotice": 5.33
+      }
+    },
+    {
+      "name": "overlay-1023",
+      "path": "/articles/prototype-article-01",
+      "innerWidth": 1023,
+      "scrollWidth": 1008,
+      "scrollHeight": 5110,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "在安靜裡，聽見身體的細微回應"
+        },
+        {
+          "level": "H2",
+          "text": "圖片向頁面邊界延伸，文字維持穩定軸線"
+        },
+        {
+          "level": "H2",
+          "text": "把注意力留在身體裡"
+        },
+        {
+          "level": "H2",
+          "text": "讓停頓成為練習的一部分"
+        },
+        {
+          "level": "H2",
+          "text": "從細節回到整體"
+        },
+        {
+          "level": "H2",
+          "text": "延伸閱讀"
+        },
+        {
+          "level": "H3",
+          "text": "為自己的節奏，留一點空白"
+        },
+        {
+          "level": "H3",
+          "text": "從關係之間，看見自己的位置"
+        },
+        {
+          "level": "H3",
+          "text": "觸碰之前，先回到自己的呼吸"
+        },
+        {
+          "level": "H3",
+          "text": "理解天賦，不急著成為答案"
+        },
+        {
+          "level": "H3",
+          "text": "讓臉部鬆開，也讓表情回來"
+        }
+      ],
+      "bodySections": 5,
+      "relatedItems": 5,
+      "missingAlt": 0,
+      "emptyMeaningfulAlt": 0,
+      "minimumControlWidth": 44,
+      "minimumControlHeight": 44,
+      "bodyLineHeight": "33.6px",
+      "sectionTitleSize": "26px",
+      "transitionDuration": "1.5s",
+      "lazyImages": 8,
+      "eagerImages": 1,
+      "currentNavigation": "文章分享",
+      "contrast": {
+        "body": 6.22,
+        "metadata": 5.31,
+        "relatedCategory": 6.44,
+        "fixtureNotice": 5.33
+      }
+    },
+    {
+      "name": "overlay-1024",
+      "path": "/articles/prototype-article-01",
+      "innerWidth": 1024,
+      "scrollWidth": 1009,
+      "scrollHeight": 5014,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "在安靜裡，聽見身體的細微回應"
+        },
+        {
+          "level": "H2",
+          "text": "圖片向頁面邊界延伸，文字維持穩定軸線"
+        },
+        {
+          "level": "H2",
+          "text": "把注意力留在身體裡"
+        },
+        {
+          "level": "H2",
+          "text": "讓停頓成為練習的一部分"
+        },
+        {
+          "level": "H2",
+          "text": "從細節回到整體"
+        },
+        {
+          "level": "H2",
+          "text": "延伸閱讀"
+        },
+        {
+          "level": "H3",
+          "text": "為自己的節奏，留一點空白"
+        },
+        {
+          "level": "H3",
+          "text": "從關係之間，看見自己的位置"
+        },
+        {
+          "level": "H3",
+          "text": "觸碰之前，先回到自己的呼吸"
+        },
+        {
+          "level": "H3",
+          "text": "理解天賦，不急著成為答案"
+        },
+        {
+          "level": "H3",
+          "text": "讓臉部鬆開，也讓表情回來"
+        }
+      ],
+      "bodySections": 5,
+      "relatedItems": 5,
+      "missingAlt": 0,
+      "emptyMeaningfulAlt": 0,
+      "minimumControlWidth": 44,
+      "minimumControlHeight": 44,
+      "bodyLineHeight": "33.6px",
+      "sectionTitleSize": "38px",
+      "transitionDuration": "1.5s",
+      "lazyImages": 8,
+      "eagerImages": 1,
+      "currentNavigation": "文章分享",
+      "contrast": {
+        "body": 6.22,
+        "metadata": 5.31,
+        "relatedCategory": 6.44,
+        "fixtureNotice": 5.33
+      }
+    },
+    {
+      "name": "overlay-1440",
+      "path": "/articles/prototype-article-01",
+      "innerWidth": 1440,
+      "scrollWidth": 1425,
+      "scrollHeight": 5236,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "在安靜裡，聽見身體的細微回應"
+        },
+        {
+          "level": "H2",
+          "text": "圖片向頁面邊界延伸，文字維持穩定軸線"
+        },
+        {
+          "level": "H2",
+          "text": "把注意力留在身體裡"
+        },
+        {
+          "level": "H2",
+          "text": "讓停頓成為練習的一部分"
+        },
+        {
+          "level": "H2",
+          "text": "從細節回到整體"
+        },
+        {
+          "level": "H2",
+          "text": "延伸閱讀"
+        },
+        {
+          "level": "H3",
+          "text": "為自己的節奏，留一點空白"
+        },
+        {
+          "level": "H3",
+          "text": "從關係之間，看見自己的位置"
+        },
+        {
+          "level": "H3",
+          "text": "觸碰之前，先回到自己的呼吸"
+        },
+        {
+          "level": "H3",
+          "text": "理解天賦，不急著成為答案"
+        },
+        {
+          "level": "H3",
+          "text": "讓臉部鬆開，也讓表情回來"
+        }
+      ],
+      "bodySections": 5,
+      "relatedItems": 5,
+      "missingAlt": 0,
+      "emptyMeaningfulAlt": 0,
+      "minimumControlWidth": 44,
+      "minimumControlHeight": 44,
+      "bodyLineHeight": "33.6px",
+      "sectionTitleSize": "38px",
+      "transitionDuration": "1.5s",
+      "lazyImages": 8,
+      "eagerImages": 1,
+      "currentNavigation": "文章分享",
+      "contrast": {
+        "body": 6.22,
+        "metadata": 5.31,
+        "relatedCategory": 6.44,
+        "fixtureNotice": 5.33
+      }
+    },
+    {
+      "name": "text-zoom-200-equivalent",
+      "path": "/articles/prototype-article-01",
+      "innerWidth": 720,
+      "scrollWidth": 720,
+      "scrollHeight": 5301,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "在安靜裡，聽見身體的細微回應"
+        },
+        {
+          "level": "H2",
+          "text": "圖片向頁面邊界延伸，文字維持穩定軸線"
+        },
+        {
+          "level": "H2",
+          "text": "把注意力留在身體裡"
+        },
+        {
+          "level": "H2",
+          "text": "讓停頓成為練習的一部分"
+        },
+        {
+          "level": "H2",
+          "text": "從細節回到整體"
+        },
+        {
+          "level": "H2",
+          "text": "延伸閱讀"
+        },
+        {
+          "level": "H3",
+          "text": "為自己的節奏，留一點空白"
+        },
+        {
+          "level": "H3",
+          "text": "從關係之間，看見自己的位置"
+        },
+        {
+          "level": "H3",
+          "text": "觸碰之前，先回到自己的呼吸"
+        },
+        {
+          "level": "H3",
+          "text": "理解天賦，不急著成為答案"
+        },
+        {
+          "level": "H3",
+          "text": "讓臉部鬆開，也讓表情回來"
+        }
+      ],
+      "bodySections": 5,
+      "relatedItems": 5,
+      "missingAlt": 0,
+      "emptyMeaningfulAlt": 0,
+      "minimumControlWidth": 44,
+      "minimumControlHeight": 44,
+      "bodyLineHeight": "33.6px",
+      "sectionTitleSize": "26px",
+      "transitionDuration": "1.5s",
+      "lazyImages": 8,
+      "eagerImages": 1,
+      "currentNavigation": "文章分享",
+      "contrast": {
+        "body": 6.22,
+        "metadata": 5.31,
+        "relatedCategory": 6.44,
+        "fixtureNotice": 5.33
+      }
+    },
+    {
+      "name": "split-390",
+      "path": "/articles/prototype-article-02",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "scrollHeight": 5395,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "為自己的節奏，留一點空白"
+        },
+        {
+          "level": "H2",
+          "text": "圖片向頁面邊界延伸，文字維持穩定軸線"
+        },
+        {
+          "level": "H2",
+          "text": "把注意力留在身體裡"
+        },
+        {
+          "level": "H2",
+          "text": "讓停頓成為練習的一部分"
+        },
+        {
+          "level": "H2",
+          "text": "從細節回到整體"
+        },
+        {
+          "level": "H2",
+          "text": "延伸閱讀"
+        },
+        {
+          "level": "H3",
+          "text": "為自己的節奏，留一點空白"
+        },
+        {
+          "level": "H3",
+          "text": "從關係之間，看見自己的位置"
+        },
+        {
+          "level": "H3",
+          "text": "觸碰之前，先回到自己的呼吸"
+        },
+        {
+          "level": "H3",
+          "text": "理解天賦，不急著成為答案"
+        },
+        {
+          "level": "H3",
+          "text": "讓臉部鬆開，也讓表情回來"
+        }
+      ],
+      "bodySections": 5,
+      "relatedItems": 5,
+      "missingAlt": 0,
+      "emptyMeaningfulAlt": 0,
+      "minimumControlWidth": 44,
+      "minimumControlHeight": 44,
+      "bodyLineHeight": "33.6px",
+      "sectionTitleSize": "26px",
+      "transitionDuration": "1.5s",
+      "lazyImages": 8,
+      "eagerImages": 1,
+      "currentNavigation": "文章分享",
+      "contrast": {
+        "body": 6.22,
+        "metadata": 5.31,
+        "relatedCategory": 6.44,
+        "fixtureNotice": 5.33
+      }
+    },
+    {
+      "name": "minimal-390",
+      "path": "/articles/prototype-article-minimal",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "scrollHeight": 2075,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "只有文字，也能安靜地讀完"
+        },
+        {
+          "level": "H2",
+          "text": "一段一段的文字"
+        }
+      ],
+      "bodySections": 1,
+      "relatedItems": 0,
+      "missingAlt": 0,
+      "emptyMeaningfulAlt": 0,
+      "minimumControlWidth": 44,
+      "minimumControlHeight": 44,
+      "bodyLineHeight": "33.6px",
+      "sectionTitleSize": "26px",
+      "transitionDuration": null,
+      "lazyImages": 0,
+      "eagerImages": 0,
+      "currentNavigation": "文章分享",
+      "contrast": {
+        "body": 6.22,
+        "metadata": 5.31,
+        "relatedCategory": null,
+        "fixtureNotice": 5.33
+      }
+    },
+    {
+      "name": "long-390",
+      "path": "/articles/prototype-article-long",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "scrollHeight": 12801,
+      "h1Count": 1,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "在變動與未知同時發生的日子裡，練習辨認身體真正想要告訴自己的細微訊息"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 1"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 2"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 3"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 4"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 5"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 6"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 7"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 8"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 9"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 10"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 11"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 12"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 13"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 14"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 15"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 16"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 17"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 18"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 19"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 20"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 21"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 22"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 23"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 24"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 25"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 26"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 27"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 28"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 29"
+        },
+        {
+          "level": "H2",
+          "text": "長文段落 30"
+        },
+        {
+          "level": "H2",
+          "text": "延伸閱讀"
+        },
+        {
+          "level": "H3",
+          "text": "為自己的節奏，留一點空白"
+        },
+        {
+          "level": "H3",
+          "text": "從關係之間，看見自己的位置"
+        },
+        {
+          "level": "H3",
+          "text": "觸碰之前，先回到自己的呼吸"
+        },
+        {
+          "level": "H3",
+          "text": "理解天賦，不急著成為答案"
+        },
+        {
+          "level": "H3",
+          "text": "讓臉部鬆開，也讓表情回來"
+        },
+        {
+          "level": "H3",
+          "text": "當情緒有了可以停靠的位置"
+        },
+        {
+          "level": "H3",
+          "text": "在支持與放手之間練習"
+        },
+        {
+          "level": "H3",
+          "text": "那些重複出現的家族語句"
+        }
+      ],
+      "bodySections": 30,
+      "relatedItems": 8,
+      "missingAlt": 0,
+      "emptyMeaningfulAlt": 0,
+      "minimumControlWidth": 44,
+      "minimumControlHeight": 44,
+      "bodyLineHeight": "33.6px",
+      "sectionTitleSize": "26px",
+      "transitionDuration": "1.5s",
+      "lazyImages": 8,
+      "eagerImages": 1,
+      "currentNavigation": "文章分享",
+      "contrast": {
+        "body": 6.22,
+        "metadata": 5.31,
+        "relatedCategory": 6.44,
+        "fixtureNotice": 5.33
+      }
+    }
+  ],
+  "interactions": {
+    "initial": {
+      "live": "",
+      "transform": "translateX(calc(0% + 0px))",
+      "visibleTabbableLinks": 1,
+      "hiddenLinks": 4,
+      "focusedNextButton": true
+    },
+    "afterKeyboardActivation": {
+      "live": "目前顯示第 2 篇，共 5 篇",
+      "transform": "translateX(calc(-100% - 30px))",
+      "previousDisabled": false,
+      "visibleTabbableLinks": 1,
+      "hiddenLinks": 4,
+      "firstLinkHidden": true,
+      "secondLinkTabbable": true
+    },
+    "atEnd": {
+      "live": "目前顯示第 5 篇，共 5 篇",
+      "nextDisabled": true,
+      "tabbableLinks": 1
+    }
+  },
+  "reducedMotion": {
+    "transitionDuration": "0s",
+    "skeletonAnimation": "0s"
+  },
+  "routeStatus": {
+    "known": 200,
+    "missing": 404
+  },
+  "noScriptFallback": {
+    "enhancedClassPresent": false,
+    "controlsPresent": false,
+    "relatedLinks": 5,
+    "hiddenItems": 0,
+    "removedFromTabOrder": 0
+  }
+}

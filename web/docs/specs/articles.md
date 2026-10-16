@@ -143,7 +143,7 @@
 - 2026-10-15 已完成 [桌機三案](../design/review/articles-page-concepts-desktop/README.md)並選定 C「文章地層長譜」；示意日期統一使用 2026 年，手機版採單欄地層 rail。桌機與手機方向均已寫入 surface brief，規格更新為 `design-approved`。
 - 工作假設待產品確認：多選標籤使用 OR 聯集，主要分類與標籤使用 AND 交集；若希望文章必須同時具備所有已選標籤，需在前端實作前改為 AND 規則。
 - 工作假設待產品確認：課程名稱標籤只是獨立 `articleTag`，不自動同步或 reference `course`。若需由標籤連到課程或跟隨課程更名，需在 CMS 串接前補充關聯規則。
-- 單篇文章頁 [`articles-detail.md`](articles-detail.md) 已完成 fixture 驅動前端原型並進入 `frontend-ready`，定義可排序正文區塊、SEO 與後台自選相關文章；作者、課程關聯及自動推薦不在第一版範圍。詳情頁仍需 UI 行為驗收、Sanity 串接與內容流程驗收。
+- 單篇文章頁 [`articles-detail.md`](articles-detail.md) 已完成 fixture 驅動前端原型與 UI 行為驗收並進入 `ui-verified`，定義可排序正文區塊、SEO 與後台自選相關文章；作者、課程關聯及自動推薦不在第一版範圍。詳情頁仍需 Sanity 串接與內容流程驗收。
 - 正式頁面標題、導讀、空狀態文字、首批標籤與文章內容仍待內容負責人提供並核准。
 - 標籤 slug 變更後的重新導向、標籤合併與刪除流程需在 schema 實作前定案；第一版先禁止直接刪除使用中的標籤。
 - 已完成 `build-ui-prototype` 與 `verify-ui-behavior`：`/articles` 目前使用型別化 fixture 呈現 24 篇 2026 年示意文章，包含四分類、標籤複選、URL 還原、每頁 8 篇、完整狀態與桌機／手機地層版面。內容、日期與平面圖樣仍是示意，不代表正式文章或核准素材。
@@ -163,6 +163,7 @@
 - 2026-10-15 21:26（Asia/Taipei）：依人工測試修正文章「主要分類」重複選項。根因是 reference picker 同時列出舊 `courseCategory.*` 與正式 `course-category-*` 文件；schema 現在以固定 ID 查詢只顯示四個正式分類，並拒絕保存舊或未知 reference。新增回歸測試後 Studio 25 項測試、typecheck、build 通過，production schema 1/1 重新部署成功；待人工重新整理 Studio 確認選項去重。
 - 2026-10-15 21:49（Asia/Taipei）：人工回歸後使用者允許接續流程。唯讀檢查確認 production 已由 Studio 發布 `articles-page`，沒有 singleton 草稿；隔離驗收用標籤與文章仍為 0，表示清理完整。真實 Nuxt `/api/articles` 回傳 `200 / ready`，包含 4 個主要分類、3 個標籤與 3 篇人工發布文章，確認 Studio 編輯／發布、匿名 Sanity 讀取及前台轉換已連通，狀態更新為 `verified`。最終 Web 34 檔／190 項與 Studio 25 項測試、兩側 typecheck 及 build 全數通過；build 仍只有既知的 Volar、字型與 sourcemap 警告。此狀態只代表文章總覽流程驗收完成；單篇文章頁與正式內容核准不在本階段範圍。
 - 2026-10-16：單篇文章頁完成 `build-ui-prototype` 並更新為 `frontend-ready`。新增型別化 fixtures、兩種 Hero、三種正文區塊、完整狀態、SEO metadata 與手動 swiper；320–1440px、最小／最長內容及 200／404 路由已驗證。Web 35 檔／198 項測試、typecheck 與 production build 通過；下一階段為詳情頁 `verify-ui-behavior`，尚未串接 Sanity 或正式內容。
+- 2026-10-16：單篇文章頁完成 `verify-ui-behavior` 並更新為 `ui-verified`。Chromium 驗證 320–1440px、200% 等效寬度、overlay／split／最小／最長內容、鍵盤 swiper、無 JavaScript 降級、對比、reduced motion、200／404；修正不可見卡片 Tab、索引重設與圖片載入。Impeccable detector 0 個反模式，Web 35 檔／199 項測試、typecheck 與 production build 通過；下一階段為詳情頁 Sanity 串接。
 
 
 #### 筆記，不需要執行，可忽略
@@ -176,3 +177,4 @@
 - [x] 2026-10-16 詳情稿已補上純文字 `richTextSection`；`--paragraph-gap: 0px` 使所有正文統一為 `16px / 2.1` 與 computed `33.6px` 基線，正文區塊 row gap 為桌機 `96px`／手機 `64px`。歷史檔名雖仍為 `articles-detail-selected-desktop.html`，同一原型已涵蓋 390px 的兩種 Hero、先圖後文單欄、單張 swiper，以及 `split` 無代表圖＋無相關文章狀態；當時規格暫維持 `draft`，後續已完成確認與壓力測試。
 - [x] 2026-10-16 手機修正版已統一麵包屑交叉軸、將 `.edge-body` 上內距設為 `0`、內容章節與延伸閱讀標題改為全站詳情共用 `26px`，並把 swiper 手動切換速度調整為 `1500ms`；規格與設計系統 token 已同步。
 - [x] 2026-10-16 使用者確認接續後完成 fixture 驅動 Nuxt 原型與最大長度壓力測試；詳情狀態為 `frontend-ready`，下一步是 UI 行為驗收，Sanity 串接仍未開始。
+- [x] 2026-10-16 完成詳情頁 UI 行為驗收與鍵盤 carousel 修正；狀態為 `ui-verified`，下一步為 Sanity schema、published-only API 與安全 parser。

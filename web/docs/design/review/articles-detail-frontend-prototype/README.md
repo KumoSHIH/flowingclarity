@@ -15,4 +15,4 @@
 - `long-390.png`：長標題與 8 標籤首屏壓力測試。
 - Web 35 個測試檔、198 項測試、typecheck 與 production build 通過；build 僅保留既知的 Volar route-block、字型與 sourcemap 警告。
 
-本階段狀態為 `frontend-ready`。尚未驗證正式 Sanity schema、published-only API、parser、草稿隔離、正式內容或發布流程；下一階段為 `verify-ui-behavior`。
+本階段最初交付狀態為 `frontend-ready`；後續 UI 行為驗收已完成，結果與修正證據見 [`articles-detail-ui-verified`](../articles-detail-ui-verified/README.md)。正式 Sanity schema、published-only API、parser、草稿隔離、正式內容與發布流程仍未驗證。

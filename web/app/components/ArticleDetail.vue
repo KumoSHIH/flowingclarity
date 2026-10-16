@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import type {
   ArticleDetailContent,
   ArticleDetailStatus,
@@ -20,6 +20,8 @@ const props = withDefaults(
 const emit = defineEmits<{ retry: [] }>();
 const currentSlide = ref(0);
 const visibleCount = ref(3);
+const hasMovedRelatedArticles = ref(false);
+const isEnhanced = ref(false);
 
 const relatedCount = computed(() => props.content?.relatedArticles.length ?? 0);
 const maxSlide = computed(() =>
@@ -27,10 +29,12 @@ const maxSlide = computed(() =>
 );
 const trackStyle = computed(() => ({
   "--visible": String(visibleCount.value),
-  transform: `translateX(calc(-${currentSlide.value} * (100% + 30px) / ${visibleCount.value}))`,
+  transform: isEnhanced.value
+    ? `translateX(calc(-${currentSlide.value} * (100% + 30px) / ${visibleCount.value}))`
+    : undefined,
 }));
 const liveMessage = computed(() =>
-  relatedCount.value
+  hasMovedRelatedArticles.value && relatedCount.value
     ? `目前顯示第 ${currentSlide.value + 1} 篇，共 ${relatedCount.value} 篇`
     : "",
 );
@@ -45,6 +49,14 @@ function moveSlide(direction: -1 | 1) {
   currentSlide.value = Math.min(
     maxSlide.value,
     Math.max(0, currentSlide.value + direction),
+  );
+  hasMovedRelatedArticles.value = true;
+}
+
+function isRelatedArticleVisible(index: number) {
+  return (
+    index >= currentSlide.value &&
+    index < currentSlide.value + visibleCount.value
   );
 }
 
@@ -66,9 +78,17 @@ function itemTag(item: ArticleRichContentItem) {
 
 onMounted(() => {
   updateVisibleCount();
+  isEnhanced.value = true;
   window.addEventListener("resize", updateVisibleCount);
 });
 onBeforeUnmount(() => window.removeEventListener("resize", updateVisibleCount));
+watch(
+  () => props.content?.id,
+  () => {
+    currentSlide.value = 0;
+    hasMovedRelatedArticles.value = false;
+  },
+);
 </script>
 
 <template>
@@ -82,12 +102,14 @@ onBeforeUnmount(() => window.removeEventListener("resize", updateVisibleCount));
     </nav>
 
     <div v-if="status === 'loading'" class="article-state" role="status">
-      <span class="article-state__skeleton article-state__skeleton--title" />
-      <span v-for="index in 4" :key="index" class="article-state__skeleton" />
+      <div aria-hidden="true" class="article-state__skeletons">
+        <span class="article-state__skeleton article-state__skeleton--title" />
+        <span v-for="index in 4" :key="index" class="article-state__skeleton" />
+      </div>
       <p>正在整理文章內容…</p>
     </div>
 
-    <div v-else-if="status === 'error'" class="article-state">
+    <div v-else-if="status === 'error'" class="article-state" role="alert">
       <h1>文章內容暫時無法載入</h1>
       <p>請稍後再試一次；文章總覽仍可正常瀏覽。</p>
       <div class="article-state__actions">
@@ -127,6 +149,8 @@ onBeforeUnmount(() => window.removeEventListener("resize", updateVisibleCount));
               :alt="content.coverImage.alt"
               :width="content.coverImage.width"
               :height="content.coverImage.height"
+              decoding="async"
+              fetchpriority="high"
               :style="
                 content.coverImage.objectPosition
                   ? { objectPosition: content.coverImage.objectPosition }
@@ -170,6 +194,8 @@ onBeforeUnmount(() => window.removeEventListener("resize", updateVisibleCount));
                 :alt="section.image.alt"
                 :width="section.image.width"
                 :height="section.image.height"
+                decoding="async"
+                loading="lazy"
                 :style="
                   section.image.objectPosition
                     ? { objectPosition: section.image.objectPosition }
@@ -197,6 +223,8 @@ onBeforeUnmount(() => window.removeEventListener("resize", updateVisibleCount));
               :alt="section.image.alt"
               :width="section.image.width"
               :height="section.image.height"
+              decoding="async"
+              loading="lazy"
               :style="
                 section.image.objectPosition
                   ? { objectPosition: section.image.objectPosition }
@@ -213,44 +241,77 @@ onBeforeUnmount(() => window.removeEventListener("resize", updateVisibleCount));
       <section
         v-if="content.relatedArticles.length"
         class="article-related"
+        :class="{ 'article-related--enhanced': isEnhanced }"
         aria-labelledby="article-related-title"
       >
         <header>
           <h2 id="article-related-title">延伸閱讀</h2>
-          <div v-if="maxSlide > 0" class="article-related__controls">
+          <div
+            v-if="isEnhanced && maxSlide > 0"
+            class="article-related__controls"
+          >
             <button
               type="button"
               aria-label="上一篇相關文章"
+              aria-controls="article-related-track"
               :disabled="currentSlide === 0"
               @click="moveSlide(-1)"
             >
-              ←
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M14.5 5 7.5 12l7 7" />
+              </svg>
             </button>
             <button
               type="button"
               aria-label="下一篇相關文章"
+              aria-controls="article-related-track"
               :disabled="currentSlide === maxSlide"
               @click="moveSlide(1)"
             >
-              →
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="m9.5 5 7 7-7 7" />
+              </svg>
             </button>
           </div>
         </header>
         <p class="sr-only" aria-live="polite">{{ liveMessage }}</p>
         <div class="article-related__viewport">
-          <ul class="article-related__track" :style="trackStyle">
-            <li v-for="article in content.relatedArticles" :key="article.id">
-              <NuxtLink :to="`/articles/${article.slug}`">
+          <ul
+            id="article-related-track"
+            class="article-related__track"
+            :style="trackStyle"
+          >
+            <li
+              v-for="(article, index) in content.relatedArticles"
+              :key="article.id"
+              :aria-hidden="
+                isEnhanced && !isRelatedArticleVisible(index)
+                  ? 'true'
+                  : undefined
+              "
+            >
+              <NuxtLink
+                :to="`/articles/${article.slug}`"
+                :tabindex="
+                  isEnhanced && !isRelatedArticleVisible(index) ? -1 : undefined
+                "
+              >
                 <img
                   :src="article.coverImage.src"
                   :alt="article.coverImage.alt"
                   :width="article.coverImage.width"
                   :height="article.coverImage.height"
+                  decoding="async"
+                  loading="lazy"
                 />
                 <small>{{ article.category.name }}</small>
                 <h3>{{ article.title }}</h3>
                 <p>{{ article.excerpt }}</p>
-                <span>閱讀文章 <b aria-hidden="true">→</b></span>
+                <span
+                  >閱讀文章
+                  <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="m9.5 5 7 7-7 7" /></svg
+                ></span>
               </NuxtLink>
             </li>
           </ul>
@@ -527,29 +588,49 @@ onBeforeUnmount(() => window.removeEventListener("resize", updateVisibleCount));
   gap: 8px;
 }
 .article-related__controls button {
+  display: inline-grid;
   width: 48px;
   height: 48px;
+  place-items: center;
   border: 1px solid rgb(56 52 46 / 35%);
   color: inherit;
   background: transparent;
   cursor: pointer;
+}
+.article-related__controls svg,
+.article-related a > span svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentcolor;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  stroke-width: 1.5;
 }
 .article-related__controls button:disabled {
   opacity: 0.35;
   cursor: not-allowed;
 }
 .article-related__viewport {
-  overflow: hidden;
+  overflow: visible;
 }
 .article-related__track {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 30px;
   padding: 0;
   margin: 0;
   list-style: none;
+}
+.article-related--enhanced .article-related__viewport {
+  overflow: clip;
+}
+.article-related--enhanced .article-related__track {
+  display: flex;
+  grid-template-columns: none;
   transition: transform 1500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
-.article-related__track > li {
+.article-related--enhanced .article-related__track > li {
   min-width: calc((100% - (var(--visible) - 1) * 30px) / var(--visible));
   flex: 0 0 calc((100% - (var(--visible) - 1) * 30px) / var(--visible));
 }
@@ -646,10 +727,15 @@ onBeforeUnmount(() => window.removeEventListener("resize", updateVisibleCount));
   cursor: pointer;
 }
 .article-state__skeleton {
+  display: block;
   width: min(620px, 75vw);
   height: 12px;
   background: color-mix(in srgb, var(--color-bark) 30%, transparent);
   animation: article-pulse 1.6s ease-in-out infinite;
+}
+.article-state__skeletons {
+  display: grid;
+  gap: 18px;
 }
 .article-state__skeleton--title {
   width: min(460px, 65vw);
@@ -759,6 +845,9 @@ onBeforeUnmount(() => window.removeEventListener("resize", updateVisibleCount));
   .article-related {
     padding: 72px 24px 88px;
   }
+  .article-related__track {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .article-related h2,
   .article-section h2 {
     font-size: var(--detail-section-title-size);
@@ -772,10 +861,13 @@ onBeforeUnmount(() => window.removeEventListener("resize", updateVisibleCount));
   .article-related h3 {
     font-size: 23px;
   }
+  .article-related__track {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .article-related__track {
+  .article-related--enhanced .article-related__track {
     transition: none;
   }
   .article-state__skeleton {

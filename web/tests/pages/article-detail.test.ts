@@ -57,9 +57,11 @@ describe("article detail", () => {
 
   it("moves the related-article track with bounded controls and live feedback", async () => {
     const wrapper = mountDetail();
+    await wrapper.vm.$nextTick();
     const controls = wrapper.findAll(".article-related__controls button");
 
     expect(controls).toHaveLength(2);
+    expect(wrapper.get('[aria-live="polite"]').text()).toBe("");
     expect(controls[0]!.attributes("disabled")).toBeDefined();
     expect(controls[1]!.attributes("disabled")).toBeUndefined();
     await controls[1]!.trigger("click");
@@ -74,6 +76,31 @@ describe("article detail", () => {
     await controls[1]!.trigger("click");
     await controls[1]!.trigger("click");
     expect(controls[1]!.attributes("disabled")).toBeDefined();
+  });
+
+  it("keeps only visible carousel links in the enhanced tab order and resets for new content", async () => {
+    const wrapper = mountDetail();
+    await wrapper.vm.$nextTick();
+    let links = wrapper.findAll(".article-related__track a");
+
+    expect(links[0]!.attributes("tabindex")).toBeUndefined();
+    expect(links[1]!.attributes("tabindex")).toBe("-1");
+
+    await wrapper
+      .findAll(".article-related__controls button")[1]!
+      .trigger("click");
+    expect(wrapper.get('[aria-live="polite"]').text()).toBe(
+      "目前顯示第 2 篇，共 5 篇",
+    );
+    links = wrapper.findAll(".article-related__track a");
+    expect(links[0]!.attributes("tabindex")).toBe("-1");
+    expect(links[1]!.attributes("tabindex")).toBeUndefined();
+
+    await wrapper.setProps({ content: splitArticleDetailFixture });
+    expect(wrapper.get('[aria-live="polite"]').text()).toBe("");
+    expect(
+      wrapper.get(".article-related__track").attributes("style"),
+    ).toContain("translateX(calc(-0");
   });
 
   it("supports split hero without a cover and omits an empty related section", () => {
@@ -115,7 +142,9 @@ describe("article detail", () => {
 
     const missing = mountDetail(undefined, "not-found");
     expect(missing.text()).toContain("找不到這篇文章");
-    expect(missing.get("a").attributes("href")).toBe("/");
+    expect(missing.get(".article-state a").attributes("href")).toBe(
+      "/articles",
+    );
     expect(missing.findAll("h1")).toHaveLength(1);
   });
 });
