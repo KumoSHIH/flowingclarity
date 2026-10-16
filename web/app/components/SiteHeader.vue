@@ -1,25 +1,42 @@
 <script setup lang="ts">
-import { computed, ref, toRef, watch } from 'vue'
-import type { SiteSettings } from '../types/siteSettings'
-import { siteNavigationItems } from '../constants/siteNavigation'
-import type { SiteNavigationItem } from '../constants/siteNavigation'
-import { useSiteHeader } from '../composables/useSiteHeader'
+import { computed, ref, toRef, watch } from "vue";
+import type { SiteSettings } from "../types/siteSettings";
+import { siteNavigationItems } from "../constants/siteNavigation";
+import type { SiteNavigationItem } from "../constants/siteNavigation";
+import { useSiteHeader } from "../composables/useSiteHeader";
 
-const props = withDefaults(defineProps<{
-  revealAfter?: HTMLElement | null
-  alwaysVisible?: boolean
-  settings?: SiteSettings | null
-}>(), {
-  revealAfter: null,
-  alwaysVisible: false,
-})
+const props = withDefaults(
+  defineProps<{
+    revealAfter?: HTMLElement | null;
+    alwaysVisible?: boolean;
+    settings?: SiteSettings | null;
+    currentPath?: string;
+  }>(),
+  {
+    revealAfter: null,
+    alwaysVisible: false,
+    currentPath: undefined,
+  },
+);
 
-const logoFailed = ref(false)
-watch(() => props.settings?.brandLogo?.src, () => { logoFailed.value = false })
-const items = computed<readonly SiteNavigationItem[]>(() => props.settings?.navigationItems ?? siteNavigationItems)
+const logoFailed = ref(false);
+watch(
+  () => props.settings?.brandLogo?.src,
+  () => {
+    logoFailed.value = false;
+  },
+);
+const items = computed<readonly SiteNavigationItem[]>(
+  () => props.settings?.navigationItems ?? siteNavigationItems,
+);
 
-const menuButton = ref<HTMLButtonElement | null>(null)
-const navigation = ref<HTMLElement | null>(null)
+function itemIsCurrent(href: string) {
+  if (!props.currentPath) return false;
+  return props.currentPath === href || props.currentPath.startsWith(`${href}/`);
+}
+
+const menuButton = ref<HTMLButtonElement | null>(null);
+const navigation = ref<HTMLElement | null>(null);
 
 const {
   closeMobileMenu,
@@ -28,11 +45,11 @@ const {
   toggleMobileMenu,
   usesCompactHeader,
 } = useSiteHeader({
-  alwaysVisible: toRef(props, 'alwaysVisible'),
-  revealAfter: toRef(props, 'revealAfter'),
+  alwaysVisible: toRef(props, "alwaysVisible"),
+  revealAfter: toRef(props, "revealAfter"),
   menuButton,
   navigation,
-})
+});
 </script>
 
 <template>
@@ -59,7 +76,9 @@ const {
         draggable="false"
         @error="logoFailed = true"
       />
-      <span v-else class="leading-normal">{{ settings?.brandName ?? '首頁' }}</span>
+      <span v-else class="leading-normal">{{
+        settings?.brandName ?? "首頁"
+      }}</span>
     </a>
     <button
       ref="menuButton"
@@ -88,6 +107,7 @@ const {
         :key="item.href"
         :href="item.href"
         :aria-label="item.accessibleLabel"
+        :aria-current="itemIsCurrent(item.href) ? 'page' : undefined"
         @click="closeMobileMenu()"
       >
         {{ item.label }}
@@ -155,6 +175,12 @@ const {
   text-decoration: none;
 }
 
+.home-sticky-header__nav a[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 8px;
+}
+
 .home-sticky-header__menu-toggle {
   display: none;
 }
@@ -204,7 +230,8 @@ const {
     display: flex;
     min-height: 72px;
     align-items: center;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-oxblood) 14%, transparent);
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--color-oxblood) 14%, transparent);
     font-size: clamp(18px, 3vw, 22px);
     font-weight: 600;
     letter-spacing: 0.12em;

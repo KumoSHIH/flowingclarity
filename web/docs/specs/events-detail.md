@@ -41,7 +41,7 @@
 
 共用 CSS 只定義 `.detail-*` 的排版、字級角色、1px 分隔線、焦點與狀態；各頁以 modifier 或 CSS custom properties 決定構圖。沿用 `main.css` 的 paper、sand、ink、clay、saffron、persimmon、night、字體與控制項 token，不把三款決策稿的特殊構圖升格為全站規則。
 
-活動、課程、執行師等內容詳情頁依 [`DESIGN.md`](../../DESIGN.md) 共用閱讀字級：桌機 `h1` 為 `clamp(44px, 4.8vw, 72px)`、摘要 `17px / 2`、章節 `h2` 為 `38px / 1.4`、正文 `16px / 2.1` 且最寬約 `68ch`；`<= 1023px` 時依序為 `42px`、`16px`、`32px`、`16px`。桌機 fixed／sticky facts rail 不使用 `border-right`，只以表面色、留白及欄內分隔建立層級；單欄斷點仍可保留底線與項目分隔。
+活動、執行師與文章等內容詳情頁依 [`DESIGN.md`](../../DESIGN.md) 沿用桌機閱讀字級：`h1` 為 `clamp(44px, 4.8vw, 72px)`、摘要 `17px / 2`、章節 `h2` 為 `38px / 1.4`、正文 `16px / 2.1` 且最寬約 `68ch`；所有內容詳情頁的手機內容章節 `h2` 統一為 `26px`。課程桌機保留已核准的展示尺寸，但手機同樣使用 26px。桌機 fixed／sticky facts rail 不使用 `border-right`，只以表面色、留白及欄內分隔建立層級；單欄斷點仍可保留底線與項目分隔。
 
 相似詳情元件也沿用同一 rail spacing：桌機資料列 `26px clamp(28px, 3.2vw, 50px)`、操作區 `34px clamp(28px, 3.2vw, 50px)`；`<= 1023px` 資料列 `22px 24px`、操作區 `24px`。連續閱讀章節可依內容使用 margin 分段，不以 `border-top` 或額外 `padding-top` 重複切割視覺。
 
@@ -71,7 +71,7 @@
 - 品質檢查：Impeccable detector 第四輪執行一次；已修正概念說明文字對比。首輪畫面檢查修正 B 的平板圖片比例及焦點證據；選案後再移除帶領者照片與深色背景、縮短章節間距，並重拍 18 組驗證證據。2026-10-14 起，既有實作字級已提升為全站內容詳情頁共用契約並記錄於 `DESIGN.md`。
 - 心得元件驗證：2026-10-13 以 Chrome 檢查 A／B／C 的 1280px、1440px 桌機畫面；六組均無水平溢位，C 案方向鍵、焦點與內容切換同步。證據位於 `docs/design/review/student-testimonial-concepts-desktop/`；桌機最終選用內容頁內嵌單欄長文，並已建立 Vue 共用元件原型。
 - 長文接續示意：2026-10-13 以 Chrome 於 1440px 驗證 B「固定邊欄」的內嵌單欄心得，無水平溢位，兩則長文與名稱完整，心得區不含圖片；完整頁證據位於 `docs/design/review/student-testimonial-in-context-desktop/`。
-- 前端實作驗證：2026-10-13 以 Chrome 檢查 1440×1000、390×844 與 320×720。三組 `scrollWidth` 均等於 `clientWidth`；皆只有一個可見 `h1`、4 筆活動資訊、3 筆流程、2 則心得、0 張心得圖片及 0 個啟用報名連結。桌機為 grid／sticky，手機為 block／static；內容標題為 38px／32px，介紹與心得正文均為 16px，操作高度 76px。完整頁與數值證據位於 `.impeccable/review/event-detail-frontend-prototype/`。
+- 前端實作驗證：2026-10-13 以 Chrome 檢查 1440×1000、390×844 與 320×720。三組 `scrollWidth` 均等於 `clientWidth`；皆只有一個可見 `h1`、4 筆活動資訊、3 筆流程、2 則心得、0 張心得圖片及 0 個啟用報名連結。桌機為 grid／sticky，介紹與心得正文均為 16px，操作高度 76px。2026-10-16 共用手機內容標題 token 由 32px 更新為 26px；另以 390px fixture 頁確認活動與心得標題皆為 26px、右界 366px、無水平溢位或遮擋，最新證據位於 [`review/detail-heading-token-mobile/`](../design/review/detail-heading-token-mobile/README.md)。
 - 自動驗證：活動詳情新增 6 項行為測試；全站 22 個測試檔、133 項測試通過，`nuxt typecheck` 與 production build 完成。typecheck 仍輸出既有 `vue-router/volar/sfc-route-blocks` 套件相容性警告，但命令成功結束。
 - 品質檢測：Impeccable detector 執行一次，當時只回報本頁已核准字級；該字級已於 2026-10-14 納入全站內容詳情頁共用契約。
 - CMS 整合：2026-10-13 在既有 `event` 集合新增語意化詳情物件。內容編排支援文字、帶領者、流程、心得、清單、引言與單／雙圖。GROQ 以單一 `isPublished` 控制總覽與詳情，server API 使用 `published` perspective 與安全轉換層；活動開始後自動移除報名操作，只有開放報名且 HTTPS 網址有效時才輸出連結。

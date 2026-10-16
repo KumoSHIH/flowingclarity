@@ -139,6 +139,7 @@
 - 2026-10-11：依後台人工測試回饋，所有課程詳情 `text` 欄位加入「可按 Enter 換行，前台會保留段落」提示，前台以 `white-space: pre-line` 保留簡介、完整介紹、圖文說明、引言、課綱、適合對象、梯次及報名說明的換行。已部署更新 schema；`rebalancing` 真實內容於 1440px／390px 各有 15 個換行保留元素，其中 5 個含編輯者換行，兩尺寸皆無水平溢位。Web 17 檔、103 項與 Studio 14 項測試、兩端 typecheck 及 production build 通過；證據位於 `.impeccable/review/course-detail-line-breaks/`。
 - 2026-10-11：修正章節錨點偏移與 active 誤判。點擊改以固定 Header、章節列實際高度及 16px 間距計算目標，平滑捲動期間維持使用者選取；一般捲動以固定列下方的章節邊界判定，手機作用中項目會自動水平置入可視範圍。Chrome CDP 實測 1440px／390px 點擊定位誤差分別約 0.22px／0.44px，後續垂直捲動皆切換至正確章節，手機錨點列水平移動 354px 且 active 完整可見。Web 17 檔、104 項測試、typecheck 與 production build 通過；Impeccable detector 為 0 項 anti-pattern，證據位於 `.impeccable/review/course-detail-anchor-tracking/`。
 - 2026-10-13：新增學員心得共用元件規劃與三款桌機候選稿。Chrome 於 1280px、1440px 檢查六組畫面，皆無水平溢位；C 案方向鍵切換可同步選取、焦點與內容。此階段未修改 production schema、查詢、Vue 元件或測試，手機版待選案後設計。
+- 2026-10-16：手機內容章節標題改用全站共用 `--detail-section-title-size: 26px`，涵蓋介紹、適合對象、圖冊、梯次、課綱、帶領者、影片與報名；Hero 與引言維持原展示字級。390px fixture 頁的 12 個內容 `h2` 均為 `26px / 32.5px`、最右界 368px，長標題可自然換兩行且無水平溢位；完整長頁及淺色長文／深色報名區近照位於 [`review/detail-heading-token-mobile/`](../design/review/detail-heading-token-mobile/README.md)。Web 34 檔／190 項測試、typecheck 與 production build 通過。
 
 ## 待處理與下一階段
 
@@ -148,4 +149,11 @@
 - 發布前仍需補真實 iOS／Android 裝置，以及 Safari、Firefox 的交叉驗證；本階段只完成 Chrome headless 驗收。
 
 #### 筆記，不需要執行，可忽略
-- 使用 `web/.agents/skills/develop-feature/SKILL.md` 從 web/docs/specs/course-detail.md 接續下一個流程
+- 使用 `$develop-feature` 從 web/docs/specs/course-detail.md 接續下一個流程
+
+#### 待修正項目
+[] 最上方補上麵包屑導覽列
+[x] 內文標題字級太大，需與其他內頁的大標題字級相同；2026-10-16 手機內容章節 `h2` 已統一引用共用 `--detail-section-title-size: 26px`，桌機與 Hero 展示標題維持既有核准構圖
+[] 缺少學員分享的區塊（此區後檯可自由新增，只能有一個），近期活動內頁有相同的元件，用這個就可以
+[] 新增圖片輪播，左：swiper 右：固定文字（後檯可編輯輸入一段文字）
+[] 新增元件：延伸閱讀（同 articles-detail），此區塊為自由新增，固定在最下方，可選取想放的文章或是關聯文章，

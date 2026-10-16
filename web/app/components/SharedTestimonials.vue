@@ -31,7 +31,7 @@ defineProps<{
   margin: 0;
   border-bottom: 1px solid var(--color-ink);
   font-family: var(--font-display);
-  font-size: 38px;
+  font-size: var(--detail-section-title-size);
   font-weight: 400;
   line-height: 1.4;
   letter-spacing: 0.02em;
@@ -79,10 +79,6 @@ cite::before {
 @media (max-width: 1023px) {
   .shared-testimonials {
     padding: 72px 24px 80px;
-  }
-
-  .shared-testimonials > h2 {
-    font-size: 32px;
   }
 
   blockquote {

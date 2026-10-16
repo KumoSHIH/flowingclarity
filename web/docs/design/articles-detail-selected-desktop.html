@@ -1,0 +1,1229 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>文章分享內頁｜選定方向桌機稿</title>
+    <style>
+      @font-face {
+        font-family: "Noto Serif TC";
+        src: url("../../public/fonts/NotoSerifTC-Variable.ttf")
+          format("truetype");
+        font-weight: 200 900;
+        font-display: swap;
+      }
+
+      :root {
+        --paper: #f8f5ef;
+        --sand: #e8dfd2;
+        --ink: #38342e;
+        --muted: #625a51;
+        --clay: #a46b54;
+        --clay-text: #745142;
+        --saffron: #f8bf4c;
+        --night: #241710;
+        --bark: #766254;
+        --warm-white: #f7f6f4;
+        --line: rgb(56 52 46 / 22%);
+        --line-light: rgb(247 246 244 / 26%);
+        --edge: clamp(52px, 6vw, 116px);
+        --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+        --sans: "BIZ UDPGothic", "Noto Sans TC", "PingFang TC", sans-serif;
+        --chooser: 74px;
+        --header: 87px;
+        --body-leading: 2.1;
+        --paragraph-gap: 0px;
+        --content-section-gap: 96px;
+        --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        min-width: 1180px;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+        background: var(--night);
+      }
+      body {
+        margin: 0;
+        overflow-x: hidden;
+        color: var(--ink);
+        background: var(--night);
+        font-family: var(--sans);
+      }
+      button,
+      a {
+        color: inherit;
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      h1,
+      h2,
+      h3,
+      p,
+      ul,
+      ol {
+        margin-top: 0;
+      }
+      figure {
+        margin: 0;
+      }
+      img {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+      }
+      ::selection {
+        color: var(--warm-white);
+        background: var(--clay);
+      }
+      :focus-visible {
+        outline: 3px solid var(--saffron);
+        outline-offset: 4px;
+        box-shadow: 0 0 0 7px var(--night);
+      }
+
+      .prototype {
+        width: min(100%, 1920px);
+        min-height: 100vh;
+        margin: 0 auto;
+        background: var(--paper);
+      }
+      .switcher {
+        position: sticky;
+        z-index: 100;
+        top: 0;
+        display: grid;
+        min-height: var(--chooser);
+        grid-template-columns: auto minmax(560px, 720px);
+        align-items: center;
+        justify-content: space-between;
+        gap: 36px;
+        padding: 10px 76px;
+        color: var(--warm-white);
+        background: var(--night);
+        border-bottom: 1px solid var(--line-light);
+      }
+      .switcher p {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        white-space: nowrap;
+      }
+      .tabs {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .tab {
+        min-height: 52px;
+        padding: 0 20px;
+        color: #e1d6cb;
+        background: transparent;
+        border: 0;
+        border-left: 1px solid var(--line-light);
+        text-align: left;
+      }
+      .tab:last-child {
+        border-right: 1px solid var(--line-light);
+      }
+      .tab[aria-selected="true"] {
+        color: var(--ink);
+        background: var(--saffron);
+      }
+      .tab strong {
+        display: block;
+        font-family: var(--serif);
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .tab small {
+        display: block;
+        margin-top: 2px;
+        font-size: 12px;
+        letter-spacing: 0.04em;
+      }
+
+      .site-header {
+        display: flex;
+        height: var(--header);
+        align-items: center;
+        justify-content: space-between;
+        gap: 36px;
+        padding: 0 var(--edge);
+        background: var(--paper);
+        border-bottom: 1px solid var(--line);
+      }
+      .brand {
+        display: inline-flex;
+        min-height: 48px;
+        align-items: center;
+        text-decoration: none;
+      }
+      .brand img {
+        width: auto;
+        height: 58px;
+        object-fit: contain;
+      }
+      .site-nav {
+        display: flex;
+        align-items: center;
+        gap: clamp(22px, 3vw, 46px);
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+      }
+      .site-nav a {
+        display: inline-flex;
+        min-height: 48px;
+        align-items: center;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .site-nav a[aria-current="page"] {
+        border-bottom: 1px solid currentColor;
+      }
+      .mobile-menu-button {
+        display: none;
+      }
+      .breadcrumb {
+        display: flex;
+        padding: 0;
+        margin: 0;
+        align-items: center;
+        gap: 10px;
+        color: var(--muted);
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        list-style: none;
+      }
+      .breadcrumb li {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+      }
+      .breadcrumb li + li::before {
+        margin-right: 10px;
+        color: var(--clay);
+        content: "/";
+      }
+      .breadcrumb a {
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+        text-underline-offset: 5px;
+      }
+
+      .hero {
+        padding: 30px var(--edge) 58px;
+        background: var(--paper);
+      }
+      .hero__grid {
+        display: grid;
+        grid-template-columns: minmax(220px, 22%) minmax(0, 1fr);
+        gap: 56px;
+        margin-top: 42px;
+      }
+      .meta {
+        display: flex;
+        min-height: 420px;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 26px 24px;
+        background: var(--sand);
+      }
+      .meta__category {
+        margin: 0;
+        font-family: var(--serif);
+        font-size: 30px;
+        line-height: 1.45;
+      }
+      .meta__bottom {
+        padding-top: 22px;
+        border-top: 1px solid var(--ink);
+      }
+      .meta__tag {
+        display: inline-flex;
+        min-height: 34px;
+        align-items: center;
+        color: var(--clay-text);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        border-bottom: 1px solid currentColor;
+      }
+      .meta time {
+        display: block;
+        margin-top: 20px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+      }
+      .article-title {
+        max-width: 8em;
+        margin: 0;
+        font-family: var(--serif);
+        font-size: clamp(50px, 4.8vw, 72px);
+        font-weight: 400;
+        line-height: 1.22;
+        letter-spacing: 0.025em;
+        text-wrap: balance;
+      }
+      .article-lead {
+        max-width: 37em;
+        margin: 28px 0 0;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 2;
+        letter-spacing: 0.035em;
+      }
+
+      .hero-variant[hidden] {
+        display: none;
+      }
+      .hero-variant:not([hidden]) {
+        animation: reveal 540ms var(--ease) both;
+      }
+      @keyframes reveal {
+        from {
+          opacity: 0.35;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      .hero-overlay {
+        position: relative;
+        display: flex;
+        min-height: 420px;
+        overflow: hidden;
+        align-items: flex-end;
+        background: var(--night);
+        isolation: isolate;
+      }
+      .hero-overlay__image {
+        position: absolute;
+        z-index: -2;
+        inset: 0;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+      .hero-overlay::after {
+        position: absolute;
+        z-index: -1;
+        inset: 0;
+        background: rgb(20 13 9 / 58%);
+        content: "";
+      }
+      .hero-overlay__copy {
+        position: relative;
+        z-index: 1;
+        width: min(720px, 72%);
+        padding: 62px 58px 54px;
+        color: var(--warm-white);
+      }
+      .hero-overlay .article-lead {
+        color: #eee5dc;
+      }
+
+      .hero-split {
+        display: grid;
+        min-height: 420px;
+        grid-template-columns: minmax(0, 1fr) minmax(310px, 40%);
+        gap: 54px;
+        align-items: end;
+      }
+      .hero-split__copy {
+        padding-bottom: 14px;
+      }
+      .hero-split--no-cover {
+        grid-template-columns: 1fr;
+      }
+      .hero-split--no-cover .hero-split__copy {
+        max-width: 760px;
+      }
+      .hero-cover {
+        height: 420px;
+        overflow: hidden;
+        background: var(--sand);
+      }
+      .hero-cover img {
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        filter: saturate(0.82) contrast(0.98);
+      }
+
+      .section-title {
+        margin-bottom: 24px;
+        font-family: var(--serif);
+        font-size: 38px;
+        font-weight: 400;
+        line-height: 1.4;
+        letter-spacing: 0.02em;
+        text-wrap: balance;
+      }
+      .body-copy {
+        max-width: 68ch;
+        margin-bottom: 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: var(--body-leading);
+        letter-spacing: 0.025em;
+      }
+      .body-copy + .body-copy {
+        margin-top: var(--paragraph-gap);
+      }
+      .image-frame {
+        overflow: hidden;
+        background: var(--sand);
+      }
+      .image-frame img {
+        height: 100%;
+        object-fit: cover;
+        filter: saturate(0.82) contrast(0.98);
+      }
+      figcaption {
+        margin-top: 12px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.7;
+        letter-spacing: 0.04em;
+      }
+
+      .edge-body {
+        display: grid;
+        gap: var(--content-section-gap);
+        padding: 0 var(--edge) 94px;
+        background: var(--paper);
+      }
+      .edge-intro {
+        max-width: 760px;
+        margin-left: 31%;
+      }
+      .text-only-section {
+        max-width: 68ch;
+        margin-left: 31%;
+      }
+      .edge-row {
+        display: grid;
+        grid-template-columns: minmax(330px, 36%) minmax(0, 1fr);
+        gap: clamp(70px, 9vw, 150px);
+        align-items: center;
+      }
+      .edge-row__media {
+        height: 480px;
+        margin-left: calc(var(--edge) * -1);
+      }
+      .edge-row__copy {
+        max-width: 680px;
+      }
+      .edge-row--reverse {
+        grid-template-columns: minmax(0, 1fr) minmax(330px, 36%);
+      }
+      .edge-row--reverse .edge-row__copy {
+        padding-left: 16%;
+      }
+      .edge-row--reverse .edge-row__media {
+        grid-column: 2;
+        grid-row: 1;
+        margin-right: calc(var(--edge) * -1);
+        margin-left: 0;
+      }
+      .edge-wide {
+        padding: 0;
+      }
+      .edge-wide .image-frame {
+        height: 600px;
+      }
+      .edge-wide figcaption {
+        max-width: 56ch;
+        margin: 16px 0 0 auto;
+      }
+
+      .related {
+        padding: 82px var(--edge) 96px;
+        color: var(--ink);
+        background: var(--paper);
+      }
+      .related-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 50px;
+        margin-bottom: 38px;
+      }
+      .related-head h2 {
+        margin: 0;
+        font-family: var(--serif);
+        font-size: 38px;
+        font-weight: 400;
+      }
+      .carousel-controls {
+        display: flex;
+        gap: 10px;
+      }
+      .carousel-controls button {
+        width: 48px;
+        height: 48px;
+        color: var(--ink);
+        background: transparent;
+        border: 1px solid var(--ink);
+      }
+      .carousel-controls button:disabled {
+        color: var(--muted);
+        border-color: var(--line);
+        cursor: not-allowed;
+        opacity: 0.55;
+      }
+      .carousel-controls svg {
+        width: 19px;
+        height: 19px;
+        fill: none;
+        stroke: currentColor;
+        stroke-linecap: square;
+        stroke-width: 1.5;
+      }
+      .related-list {
+        display: flex;
+        padding: 0;
+        margin: 0;
+        gap: 30px;
+        list-style: none;
+        transition: transform 1500ms var(--ease);
+      }
+      .related-card {
+        min-width: calc((100% - 60px) / 3);
+        flex: 0 0 calc((100% - 60px) / 3);
+      }
+      .related-viewport {
+        overflow: hidden;
+      }
+      .related-card__image {
+        height: 238px;
+        margin-bottom: 22px;
+        overflow: hidden;
+        background: var(--sand);
+      }
+      .related-card__image img {
+        height: 100%;
+        object-fit: cover;
+      }
+      .related-card__category {
+        margin: 0 0 12px;
+        color: var(--clay-text);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+      }
+      .related-card h3 {
+        margin: 0 0 12px;
+        font-family: var(--serif);
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 1.5;
+      }
+      .related-card__description {
+        display: -webkit-box;
+        min-height: 3.6em;
+        margin: 0 0 24px;
+        overflow: hidden;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.8;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+      }
+      .related-card__button {
+        display: inline-flex;
+        min-width: 132px;
+        min-height: 48px;
+        padding: 0 22px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        color: var(--ink);
+        border: 1px solid var(--ink);
+        text-decoration: none;
+      }
+      .related-card__button::after {
+        content: "→";
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .demo-note {
+        padding: 16px var(--edge);
+        margin: 0;
+        color: #efe5dc;
+        background: var(--bark);
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        text-align: center;
+      }
+      .site-footer {
+        display: flex;
+        min-height: 190px;
+        align-items: end;
+        justify-content: space-between;
+        gap: 48px;
+        padding: 50px var(--edge);
+        color: var(--warm-white);
+        background: var(--bark);
+        border-top: 1px solid var(--line-light);
+      }
+      .site-footer strong {
+        font-family: var(--serif);
+        font-size: 25px;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+      }
+      .site-footer p {
+        max-width: 42em;
+        margin: 0;
+        color: #eee2d7;
+        font-size: 12px;
+        line-height: 1.8;
+        text-align: right;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        .hero-variant:not([hidden]) {
+          animation: none;
+        }
+        .related-list {
+          transition: none;
+        }
+      }
+
+      @media (max-width: 1023px) {
+        :root {
+          --edge: 24px;
+          --content-section-gap: 64px;
+        }
+        html {
+          min-width: 320px;
+        }
+        .switcher {
+          min-height: 70px;
+          grid-template-columns: 1fr;
+          padding: 8px 16px;
+        }
+        .switcher > p {
+          display: none;
+        }
+        .tab {
+          min-height: 54px;
+          padding: 0 12px;
+        }
+        .tab strong {
+          font-size: 14px;
+        }
+        .tab small {
+          font-size: 10px;
+        }
+        .site-header {
+          position: relative;
+          height: 72px;
+          padding: 0 24px;
+        }
+        .brand img {
+          height: 48px;
+        }
+        .mobile-menu-button {
+          display: inline-flex;
+          width: 48px;
+          height: 48px;
+          padding: 0;
+          align-items: center;
+          justify-content: center;
+          color: var(--ink);
+          background: transparent;
+          border: 1px solid var(--line);
+        }
+        .mobile-menu-button svg {
+          width: 22px;
+          height: 22px;
+          fill: none;
+          stroke: currentColor;
+          stroke-width: 1.5;
+        }
+        .site-nav {
+          position: absolute;
+          z-index: 20;
+          top: 72px;
+          right: 0;
+          left: 0;
+          display: none;
+          padding: 18px 24px 28px;
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0;
+          background: var(--paper);
+          border-bottom: 1px solid var(--line);
+        }
+        .site-nav[data-open="true"] {
+          display: flex;
+        }
+        .site-nav a {
+          min-height: 52px;
+          border-bottom: 1px solid var(--line);
+        }
+        .site-nav a[aria-current="page"] {
+          border-bottom-color: var(--ink);
+        }
+        .hero {
+          padding: 18px 24px 48px;
+        }
+        .breadcrumb {
+          align-items: center;
+          flex-wrap: wrap;
+          line-height: 1.6;
+        }
+        .breadcrumb li {
+          min-height: 38px;
+        }
+        .breadcrumb a {
+          min-height: 38px;
+        }
+        .hero__grid {
+          grid-template-columns: 1fr;
+          gap: 18px;
+          margin-top: 24px;
+        }
+        .meta {
+          min-height: 112px;
+          padding: 18px 20px;
+          display: grid;
+          grid-template-columns: 1fr auto;
+          align-items: start;
+        }
+        .meta__category {
+          font-size: 24px;
+        }
+        .meta__bottom {
+          padding: 0;
+          border-top: 0;
+          text-align: right;
+        }
+        .meta__tag {
+          min-height: 28px;
+        }
+        .meta time {
+          margin-top: 10px;
+        }
+        .article-title {
+          max-width: none;
+          font-size: 42px;
+          line-height: 1.3;
+        }
+        .article-lead {
+          margin-top: 20px;
+          font-size: 16px;
+          line-height: 2;
+        }
+        .hero-overlay {
+          min-height: 520px;
+        }
+        .hero-overlay__copy {
+          width: 100%;
+          padding: 36px 24px;
+        }
+        .hero-split {
+          min-height: 0;
+          grid-template-columns: 1fr;
+          gap: 30px;
+        }
+        .hero-split__copy {
+          padding: 28px 0 0;
+        }
+        .hero-cover {
+          height: 360px;
+        }
+        .section-title,
+        .related-head h2 {
+          font-size: 26px;
+        }
+        .edge-body {
+          padding: 0 24px 72px;
+        }
+        .edge-intro,
+        .text-only-section {
+          max-width: 68ch;
+          margin-left: 0;
+        }
+        .edge-row,
+        .edge-row--reverse {
+          grid-template-columns: 1fr;
+          gap: 30px;
+        }
+        .edge-row__media,
+        .edge-row--reverse .edge-row__media {
+          width: calc(100% + 24px);
+          height: 320px;
+          grid-column: 1;
+          grid-row: 1;
+          margin: 0;
+        }
+        .edge-row__media {
+          margin-left: -24px;
+        }
+        .edge-row--reverse .edge-row__media {
+          margin-right: -24px;
+          margin-left: 0;
+        }
+        .edge-row__copy,
+        .edge-row--reverse .edge-row__copy {
+          grid-column: 1;
+          grid-row: 2;
+          padding-left: 0;
+        }
+        .edge-wide .image-frame {
+          height: 360px;
+        }
+        .edge-wide figcaption {
+          margin-top: 12px;
+        }
+        .related {
+          padding: 64px 24px 72px;
+        }
+        .related-head {
+          gap: 24px;
+          margin-bottom: 28px;
+        }
+        .related-list {
+          gap: 24px;
+        }
+        .related-card {
+          min-width: 100%;
+          flex-basis: 100%;
+        }
+        .related-card__image {
+          height: 236px;
+        }
+        .demo-note {
+          padding: 16px 24px;
+          line-height: 1.8;
+        }
+        .site-footer {
+          min-height: 230px;
+          padding: 44px 24px;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-end;
+        }
+        .site-footer p {
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="prototype">
+      <header class="switcher">
+        <p>文章分享內頁・選定方向・桌機稿</p>
+        <div class="tabs" role="tablist" aria-label="Banner 樣式">
+          <button
+            class="tab"
+            role="tab"
+            aria-selected="true"
+            aria-controls="hero-overlay"
+            id="tab-overlay"
+            data-hero="overlay"
+          >
+            <strong>樣式一・遮罩滿版</strong><small>橫圖滿版＋黑色遮罩</small>
+          </button>
+          <button
+            class="tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="hero-split"
+            id="tab-split"
+            data-hero="split"
+          >
+            <strong>樣式二・右側圖片窗</strong><small>橫圖置中裁切於右側</small>
+          </button>
+        </div>
+      </header>
+
+      <header class="site-header">
+        <a class="brand" href="#"
+          ><img src="../../public/assets/logo-main.png" alt="善那生活空間"
+        /></a>
+        <button
+          class="mobile-menu-button"
+          type="button"
+          aria-label="開啟主要導覽"
+          aria-expanded="false"
+          aria-controls="site-nav"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="主要導覽">
+          <a href="#">近期活動</a><a href="#">課程探索</a
+          ><a href="#">個案諮詢</a><a href="#" aria-current="page">文章分享</a
+          ><a href="#">關於我們</a>
+        </nav>
+      </header>
+      <main>
+        <article>
+          <header class="hero">
+            <nav aria-label="麵包屑">
+              <ol class="breadcrumb">
+                <li><a href="#">首頁</a></li>
+                <li><a href="#">文章分享</a></li>
+                <li aria-current="page">在安靜裡，聽見身體的細微回應</li>
+              </ol>
+            </nav>
+            <div class="hero__grid">
+              <aside class="meta">
+                <p class="meta__category">愛身體</p>
+                <div class="meta__bottom">
+                  <span class="meta__tag">頭薦骨</span
+                  ><time datetime="2026-10-08">2026.10.08</time>
+                </div>
+              </aside>
+              <div
+                class="hero-variant hero-overlay"
+                id="hero-overlay"
+                role="tabpanel"
+                aria-labelledby="tab-overlay"
+              >
+                <img
+                  class="hero-overlay__image"
+                  src="assets/articles-detail/clay-breath.png"
+                  alt="陶土壓痕、半透明紙與深色線條橫向展開的靜物"
+                />
+                <div class="hero-overlay__copy">
+                  <h1 class="article-title">在安靜裡，聽見身體的細微回應</h1>
+                  <p class="article-lead">
+                    一次練習，一段關於停留與感受的記錄。從呼吸開始，觀察當下的身體經驗，也為尚未能說清楚的感覺留一點空間。
+                  </p>
+                </div>
+              </div>
+              <div
+                class="hero-variant hero-split"
+                id="hero-split"
+                role="tabpanel"
+                aria-labelledby="tab-split"
+                hidden
+              >
+                <div class="hero-split__copy">
+                  <h1 class="article-title">在安靜裡，聽見身體的細微回應</h1>
+                  <p class="article-lead">
+                    一次練習，一段關於停留與感受的記錄。從呼吸開始，觀察當下的身體經驗，也為尚未能說清楚的感覺留一點空間。
+                  </p>
+                </div>
+                <figure class="hero-cover">
+                  <img
+                    src="assets/articles-detail/paper-thread.png"
+                    alt="暖色手工紙與細線交疊形成的抽象構圖"
+                  />
+                </figure>
+              </div>
+            </div>
+          </header>
+
+          <div class="edge-body">
+            <section class="edge-intro">
+              <h2 class="section-title">
+                圖片向頁面邊界延伸，文字維持穩定軸線
+              </h2>
+              <p class="body-copy">
+                圖像可以帶來呼吸，但正文仍需要可預期的閱讀位置。圖片突破內容留白，文字始終沿同一條內側軸線排列；區塊之間不再加上分隔線，讓閱讀節奏由留白自然形成。
+              </p>
+            </section>
+            <section class="text-only-section">
+              <h2 class="section-title">把注意力留在身體裡</h2>
+              <p class="body-copy">
+                有時候，我們會很快地替感受找出原因，也很快地想知道下一步該怎麼做。可是身體的經驗不一定立刻成為答案，它可能只是一點緊、一段沉默，或某個突然變得清楚的呼吸。
+              </p>
+              <p class="body-copy">
+                練習並不是要求自己感覺得更多，而是讓已經存在的感受有被注意的機會。當我們不急著推開或解釋，原本模糊的經驗便可能慢慢呈現自己的輪廓。
+              </p>
+              <p class="body-copy">
+                這段時間可以很短。只是坐著，感覺腳底與地面的接觸，或察覺背部被椅子承接的位置。每一次回來，都在重新建立與身體之間的聯繫。
+              </p>
+            </section>
+            <section class="edge-row">
+              <figure class="image-frame edge-row__media">
+                <img
+                  src="assets/articles-detail/clay-breath.png"
+                  alt="陶土壓痕、半透明紙與深色線條構成的靜物"
+                />
+              </figure>
+              <div class="edge-row__copy">
+                <h2 class="section-title">讓停頓成為練習的一部分</h2>
+                <p class="body-copy">
+                  停頓不是空白，也不是落後。它讓感受有時間完成，讓注意力不必急著離開。
+                </p>
+                <p class="body-copy">
+                  可以從最簡單的提問開始：現在有哪些地方被支撐？呼吸在哪裡比較容易發生？
+                </p>
+              </div>
+            </section>
+            <section class="edge-row edge-row--reverse">
+              <div class="edge-row__copy">
+                <h2 class="section-title">從細節回到整體</h2>
+                <p class="body-copy">
+                  當一個局部的感受被辨認，注意力也能重新回到完整的身體。這不是尋找標準答案，而是練習在變化裡保持聯繫。
+                </p>
+              </div>
+              <figure class="image-frame edge-row__media">
+                <img
+                  src="assets/articles-detail/paper-thread.png"
+                  alt="層疊紙張與金色細線形成的暖色抽象景象"
+                />
+              </figure>
+            </section>
+            <figure class="edge-wide">
+              <div class="image-frame">
+                <img
+                  src="assets/articles-detail/clay-breath.png"
+                  alt="陶土、紙張與線條橫向展開的靜物構圖"
+                />
+              </div>
+              <figcaption>
+                圖片說明示意：材質的凹痕與邊界，記錄注意力停留過的位置。
+              </figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <section class="related" aria-labelledby="related-title">
+          <div class="related-head">
+            <h2 id="related-title">延伸閱讀</h2>
+            <div class="carousel-controls">
+              <button
+                id="related-prev"
+                type="button"
+                disabled
+                aria-label="上一筆"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M20 12H5M10 6l-6 6 6 6" />
+                </svg></button
+              ><button id="related-next" type="button" aria-label="下一筆">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 12h15M14 6l6 6-6 6" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="related-viewport">
+            <ul class="related-list" id="related-list">
+              <li class="related-card">
+                <div class="related-card__image">
+                  <img
+                    src="assets/articles-detail/paper-thread.png"
+                    alt="層疊紙張與細線構成的暖色抽象畫面"
+                  />
+                </div>
+                <p class="related-card__category">究生命</p>
+                <h3>為自己的節奏，留一點空白</h3>
+                <p class="related-card__description">
+                  當生活被安排得太滿，留白不是停滯，而是一段重新辨認感受與方向的時間。
+                </p>
+                <a class="related-card__button" href="#">閱讀文章</a>
+              </li>
+              <li class="related-card">
+                <div class="related-card__image">
+                  <img
+                    src="assets/articles-detail/clay-breath.png"
+                    alt="陶土與半透明紙張構成的靜物"
+                  />
+                </div>
+                <p class="related-card__category">撫慰心</p>
+                <h3>從關係之間，看見自己的位置</h3>
+                <p class="related-card__description">
+                  在靠近與離開之間，練習看見彼此的界線，也聽見自己真正需要的是什麼。
+                </p>
+                <a class="related-card__button" href="#">閱讀文章</a>
+              </li>
+              <li class="related-card">
+                <div class="related-card__image">
+                  <img
+                    src="assets/articles-detail/paper-thread.png"
+                    alt="手工紙邊緣與金色細線交疊的畫面"
+                  />
+                </div>
+                <p class="related-card__category">愛身體</p>
+                <h3>當感受還沒有名字</h3>
+                <p class="related-card__description">
+                  有些經驗暫時說不清楚，身體仍會用重量、溫度與呼吸，留下可以被注意的線索。
+                </p>
+                <a class="related-card__button" href="#">閱讀文章</a>
+              </li>
+              <li class="related-card">
+                <div class="related-card__image">
+                  <img
+                    src="assets/articles-detail/clay-breath.png"
+                    alt="陶土表面與細線交會形成的靜物畫面"
+                  />
+                </div>
+                <p class="related-card__category">展現美</p>
+                <h3>讓創作回到正在發生的此刻</h3>
+                <p class="related-card__description">
+                  不急著完成作品，先讓眼睛、手與材料在同一個當下重新相遇。
+                </p>
+                <a class="related-card__button" href="#">閱讀文章</a>
+              </li>
+              <li class="related-card">
+                <div class="related-card__image">
+                  <img
+                    src="assets/articles-detail/paper-thread.png"
+                    alt="米白紙張與金色線條緩慢延伸的畫面"
+                  />
+                </div>
+                <p class="related-card__category">撫慰心</p>
+                <h3>不必立刻知道答案</h3>
+                <p class="related-card__description">
+                  在尚未清楚的階段停留一下，也可能是與自己保持聯繫的一種方式。
+                </p>
+                <a class="related-card__button" href="#">閱讀文章</a>
+              </li>
+            </ul>
+          </div>
+          <p class="sr-only" id="related-status" aria-live="polite"></p>
+        </section>
+      </main>
+      <p class="demo-note">
+        Banner 由後台選擇樣式；正文採 B
+        的破邊圖片軸線且不使用分隔線；延伸閱讀不使用區塊底色與日期。
+      </p>
+      <footer class="site-footer">
+        <strong>善那生活空間</strong>
+        <p>內容與圖像皆為設計示意，不代表已核准的正式文章。</p>
+      </footer>
+    </div>
+    <script>
+      const tabs = [...document.querySelectorAll(".tab")];
+      const panels = [...document.querySelectorAll(".hero-variant")];
+      const relatedList = document.querySelector("#related-list");
+      const relatedCards = [...document.querySelectorAll(".related-card")];
+      const relatedPrev = document.querySelector("#related-prev");
+      const relatedNext = document.querySelector("#related-next");
+      const relatedStatus = document.querySelector("#related-status");
+      const mobileMenuButton = document.querySelector(".mobile-menu-button");
+      const siteNav = document.querySelector("#site-nav");
+      let relatedIndex = 0;
+
+      function selectHero(hero, updateUrl = true) {
+        tabs.forEach((tab) =>
+          tab.setAttribute("aria-selected", String(tab.dataset.hero === hero)),
+        );
+        tabs.forEach((tab) => {
+          tab.tabIndex = tab.dataset.hero === hero ? 0 : -1;
+        });
+        panels.forEach((panel) => {
+          panel.hidden = panel.id !== `hero-${hero}`;
+        });
+        if (updateUrl)
+          history.replaceState({}, "", `${location.pathname}?hero=${hero}`);
+      }
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => selectHero(tab.dataset.hero));
+        tab.addEventListener("keydown", (event) => {
+          if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+          event.preventDefault();
+          const next =
+            event.key === "ArrowRight"
+              ? (index + 1) % tabs.length
+              : (index - 1 + tabs.length) % tabs.length;
+          tabs[next].focus();
+          selectHero(tabs[next].dataset.hero);
+        });
+      });
+
+      const query = new URLSearchParams(location.search);
+      const requestedHero = query.get("hero");
+      selectHero(
+        ["overlay", "split"].includes(requestedHero)
+          ? requestedHero
+          : "overlay",
+        false,
+      );
+
+      if (requestedHero === "split" && query.get("cover") === "none") {
+        document
+          .querySelector("#hero-split")
+          .classList.add("hero-split--no-cover");
+        document.querySelector("#hero-split .hero-cover").hidden = true;
+      }
+      if (query.get("related") === "none") {
+        document.querySelector(".related").hidden = true;
+      }
+
+      function updateRelated() {
+        const visibleRelated = window.innerWidth <= 1023 ? 1 : 3;
+        const cardWidth = relatedCards[0].getBoundingClientRect().width;
+        const listGap = Number.parseFloat(
+          getComputedStyle(relatedList).columnGap,
+        );
+        relatedIndex = Math.min(
+          relatedIndex,
+          relatedCards.length - visibleRelated,
+        );
+        relatedList.style.transform = `translateX(-${relatedIndex * (cardWidth + listGap)}px)`;
+        relatedPrev.disabled = relatedIndex === 0;
+        relatedNext.disabled =
+          relatedIndex >= relatedCards.length - visibleRelated;
+        relatedStatus.textContent =
+          visibleRelated === 1
+            ? `目前顯示第 ${relatedIndex + 1} 篇，共 ${relatedCards.length} 篇`
+            : `目前顯示第 ${relatedIndex + 1} 至 ${Math.min(relatedIndex + visibleRelated, relatedCards.length)} 篇，共 ${relatedCards.length} 篇`;
+      }
+
+      relatedPrev.addEventListener("click", () => {
+        relatedIndex = Math.max(0, relatedIndex - 1);
+        updateRelated();
+      });
+      relatedNext.addEventListener("click", () => {
+        const visibleRelated = window.innerWidth <= 1023 ? 1 : 3;
+        relatedIndex = Math.min(
+          relatedCards.length - visibleRelated,
+          relatedIndex + 1,
+        );
+        updateRelated();
+      });
+      window.addEventListener("resize", updateRelated);
+      updateRelated();
+
+      mobileMenuButton.addEventListener("click", () => {
+        const isOpen =
+          mobileMenuButton.getAttribute("aria-expanded") === "true";
+        mobileMenuButton.setAttribute("aria-expanded", String(!isOpen));
+        mobileMenuButton.setAttribute(
+          "aria-label",
+          isOpen ? "開啟主要導覽" : "關閉主要導覽",
+        );
+        siteNav.dataset.open = String(!isOpen);
+      });
+    </script>
+  </body>
+</html>

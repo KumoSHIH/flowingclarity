@@ -573,8 +573,8 @@ onBeforeUnmount(() => {
   .course-hero { width: 100%; min-width: 0; max-width: 100vw; min-height: 0; overflow: hidden; }.course-hero__visual { width: 100vw; min-width: 0; max-width: 100vw; min-height: 430px; }.course-hero__visual::after { background: linear-gradient(0deg, rgb(57 38 24 / 70%), transparent 56%); }
   .course-hero h1 { right: auto; bottom: 30px; left: 22px; width: calc(100vw - 44px); max-width: none; overflow-wrap: anywhere; font-size: clamp(36px, 9.5vw, 44px); letter-spacing: 0; text-wrap: wrap; word-break: break-all; }.course-hero__copy { box-sizing: border-box; gap: 48px; width: 100vw; min-width: 0; max-width: 100vw; padding: 48px 22px 54px; overflow-wrap: anywhere; }.course-hero dl { grid-template-columns: 1fr; }
   .primary-action { min-height: 72px; padding: 0 22px; font-size: 17px; }.course-chapters { grid-template-columns: repeat(8, minmax(122px, 1fr)); scrollbar-width: none; }.course-chapters a { min-height: 58px; }
-  .course-intro { gap: 34px; padding: 88px 22px 102px; }.course-intro h2, .course-audience h2 { font-size: clamp(44px, 12vw, 56px); }
-  .course-gallery { padding: 86px 22px 104px; }.course-gallery > header { margin-bottom: 46px; }.course-gallery h2, .course-schedule h2, .course-curriculum h2 { font-size: clamp(42px, 11.5vw, 54px); }
+  .course-intro { gap: 34px; padding: 88px 22px 102px; }.course-intro h2, .course-audience h2 { font-size: var(--detail-section-title-size); }
+  .course-gallery { padding: 86px 22px 104px; }.course-gallery > header { margin-bottom: 46px; }.course-gallery h2, .course-schedule h2, .course-curriculum h2 { font-size: var(--detail-section-title-size); }
   .gallery-panel footer { display: grid; gap: 8px; }
   .gallery-panel--collage { display: grid; min-height: 0; gap: 26px; }.gallery-panel--collage .gallery-item:nth-child(n) { position: relative; inset: auto; width: 88%; height: auto; }.gallery-panel--collage .gallery-item:nth-child(even) { margin-left: auto; }.gallery-panel--collage .gallery-item figure { height: 330px; }.gallery-panel--collage .gallery-item:nth-child(3) figure { height: 390px; }.gallery-panel--collage blockquote { position: static; width: 88%; margin-left: auto; padding: 26px; font-size: 21px; }.gallery-panel--collage footer { position: static; }
   .gallery-item figcaption { position: static; max-width: none; padding: 15px 17px; }
@@ -582,13 +582,13 @@ onBeforeUnmount(() => {
   .gallery-panel--weave .gallery-item { grid-template-columns: 1fr; gap: 30px; padding: 54px 0; }.gallery-panel--weave .gallery-item:nth-child(even) figure { order: initial; margin-left: auto; }.gallery-panel--weave figure { width: 90%; height: 330px; }
   .gallery-panel--folio figure { height: 280px; }.gallery-panel--folio .gallery-item:nth-child(even) figure { height: 330px; }
   .gallery-panel--dossier .gallery-item { grid-column: 1; grid-template-columns: 1fr; gap: 20px; }.gallery-panel--dossier .gallery-item figure { width: 90%; height: 290px; }.gallery-panel--dossier .gallery-item:nth-child(even) figure { margin-left: auto; }.gallery-panel--dossier blockquote { position: static; grid-column: 1; grid-row: auto; padding: 24px; background: var(--color-bark); color: var(--color-warm-white); font-size: 30px; }
-  .course-teacher__portrait { min-height: 370px; }.course-teacher__copy { padding: 72px 22px 84px; }.course-teacher h2 { font-size: 46px; }
+  .course-teacher__portrait { min-height: 370px; }.course-teacher__copy { padding: 72px 22px 84px; }.course-teacher h2 { font-size: var(--detail-section-title-size); }
   .course-quote { min-height: 440px; padding: 74px 22px; }.course-quote blockquote { font-size: clamp(33px, 9vw, 44px); }.course-quote cite { text-align: center; }
   .course-curriculum, .course-audience { gap: 46px; padding: 90px 22px; }.curriculum-list button { grid-template-columns: 60px 1fr 24px; min-height: 104px; }.curriculum-panel { padding: 0 8px 28px 76px; }
-  .course-video { min-height: 560px; }.course-video > div { right: 22px; left: 22px; width: auto; }.course-video h2 { font-size: clamp(42px, 11vw, 54px); }
+  .course-video { min-height: 560px; }.course-video > div { right: 22px; left: 22px; width: auto; }.course-video h2 { font-size: var(--detail-section-title-size); }
   .course-audience li { min-height: 92px; }
   .course-schedule { padding: 90px 22px 104px; }.course-schedule > header { margin-bottom: 44px; }.schedule-grid { grid-template-columns: 1fr; }.schedule-grid article { padding: 32px 0; }.schedule-grid article + article { border-top: 1px solid var(--line); border-left: 0; }.schedule-grid strong { right: 0; }
-  .course-registration > div { min-height: 540px; padding: 72px 22px; }.course-registration h2 { font-size: clamp(44px, 11.5vw, 56px); }.course-registration figure { min-height: 430px; }
+  .course-registration > div { min-height: 540px; padding: 72px 22px; }.course-registration h2 { font-size: var(--detail-section-title-size); }.course-registration figure { min-height: 430px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

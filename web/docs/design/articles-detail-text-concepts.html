@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>文章分享內頁｜純文字文章三款桌機設計</title>
+  <style>
+    @font-face {
+      font-family: "Noto Serif TC";
+      src: url("../../public/fonts/NotoSerifTC-Variable.ttf") format("truetype");
+      font-weight: 200 900;
+      font-display: swap;
+    }
+
+    :root {
+      --paper: #f8f5ef;
+      --sand: #e8dfd2;
+      --ink: #38342e;
+      --muted: #625a51;
+      --clay: #a46b54;
+      --clay-text: #745142;
+      --saffron: #f8bf4c;
+      --night: #241710;
+      --film: #352319;
+      --bark: #766254;
+      --persimmon: #df5b35;
+      --warm-white: #f7f6f4;
+      --warm-muted: #e1d6cb;
+      --line: rgb(56 52 46 / 22%);
+      --line-light: rgb(247 246 244 / 26%);
+      --edge: clamp(52px, 6vw, 116px);
+      --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+      --sans: "BIZ UDPGothic", "Noto Sans TC", "PingFang TC", sans-serif;
+      --chooser: 74px;
+      --header: 87px;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 1180px; overflow-x: hidden; scroll-behavior: smooth; background: var(--night); }
+    body { margin: 0; overflow-x: hidden; color: var(--ink); background: var(--night); font-family: var(--sans); }
+    button, a { color: inherit; font: inherit; }
+    button { cursor: pointer; }
+    h1, h2, h3, p, ul, ol, figure { margin-top: 0; }
+    img { display: block; width: 100%; max-width: 100%; }
+    ::selection { color: var(--warm-white); background: var(--persimmon); }
+    :focus-visible { outline: 3px solid var(--saffron); outline-offset: 4px; box-shadow: 0 0 0 7px var(--night); }
+    * { scrollbar-color: var(--clay) var(--paper); scrollbar-width: thin; }
+
+    .prototype { width: min(100%, 1920px); min-height: 100vh; margin: 0 auto; background: var(--paper); }
+    .switcher {
+      position: sticky;
+      z-index: 100;
+      top: 0;
+      display: grid;
+      min-height: var(--chooser);
+      grid-template-columns: auto minmax(720px, 910px);
+      align-items: center;
+      justify-content: space-between;
+      gap: 36px;
+      padding: 10px 76px;
+      color: var(--warm-white);
+      background: var(--night);
+      border-bottom: 1px solid var(--line-light);
+    }
+    .switcher p { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .08em; white-space: nowrap; }
+    .tabs { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .tab { min-height: 52px; padding: 0 18px; color: var(--warm-muted); background: transparent; border: 0; border-left: 1px solid var(--line-light); text-align: left; }
+    .tab:last-child { border-right: 1px solid var(--line-light); }
+    .tab[aria-selected="true"] { color: var(--ink); background: var(--saffron); }
+    .tab strong { display: block; font-family: var(--serif); font-size: 15px; font-weight: 600; }
+    .tab small { display: block; margin-top: 2px; font-size: 11px; letter-spacing: .04em; }
+
+    .concept[hidden] { display: none; }
+    .concept { min-height: calc(100vh - var(--chooser)); background: var(--paper); }
+    .concept:not([hidden]) .stage { animation: reveal 620ms var(--ease) both; }
+    @keyframes reveal { from { opacity: .25; clip-path: inset(0 0 6% 0); transform: translateY(12px); } to { opacity: 1; clip-path: inset(0); transform: none; } }
+
+    .site-header { display: flex; height: var(--header); align-items: center; justify-content: space-between; gap: 36px; padding: 0 var(--edge); background: var(--paper); border-bottom: 1px solid var(--line); }
+    .brand { display: inline-flex; min-height: 48px; align-items: center; text-decoration: none; }
+    .brand img { width: auto; height: 58px; object-fit: contain; }
+    .site-nav { display: flex; align-items: center; gap: clamp(22px, 3vw, 46px); font-size: 12px; font-weight: 600; letter-spacing: .08em; }
+    .site-nav a { display: inline-flex; min-height: 48px; align-items: center; text-decoration: none; }
+    .site-nav a[aria-current="page"] { border-bottom: 1px solid currentColor; }
+    .breadcrumb { display: flex; padding: 0; margin: 0; align-items: center; gap: 10px; color: var(--muted); font-size: 12px; letter-spacing: .05em; list-style: none; }
+    .breadcrumb li + li::before { margin-right: 10px; color: var(--clay); content: "/"; }
+    .breadcrumb a { display: inline-flex; min-height: 44px; align-items: center; text-underline-offset: 5px; }
+    .article-title { margin: 0; font-family: var(--serif); font-size: clamp(50px, 4.7vw, 68px); font-weight: 400; line-height: 1.2; letter-spacing: .025em; text-wrap: balance; }
+    .article-lead { color: var(--muted); font-size: 16px; line-height: 2; letter-spacing: .035em; }
+    .meta { display: grid; gap: 14px; padding: 0; margin: 22px 0 0; color: var(--clay-text); font-size: 12px; font-weight: 700; letter-spacing: .08em; list-style: none; }
+    .tag { display: inline-flex; min-height: 32px; align-items: center; border-bottom: 1px solid currentColor; }
+    .body-copy { max-width: 68ch; margin-bottom: 0; color: var(--muted); font-size: 16px; line-height: 2.1; letter-spacing: .025em; }
+    .body-copy + .body-copy { margin-top: 18px; }
+    .section-title { margin-bottom: 24px; font-family: var(--serif); font-size: 36px; font-weight: 400; line-height: 1.45; letter-spacing: .02em; text-wrap: balance; }
+    .image-frame { overflow: hidden; background: var(--sand); }
+    .image-frame img { height: 100%; object-fit: cover; object-position: 48% center; filter: saturate(.82) contrast(.98); }
+
+    /* Pinned direction — the selected B hero is identical in all three drafts. */
+    .shared-hero { padding: 30px var(--edge) 58px; background: var(--paper); }
+    .shared-hero__grid { display: grid; grid-template-columns: minmax(220px, 22%) minmax(0, 1fr); gap: 56px; margin-top: 42px; }
+    .shared-hero__meta { padding-top: 8px; border-top: 1px solid var(--ink); }
+    .shared-hero__meta > p { margin: 16px 0 0; font-family: var(--serif); font-size: 17px; font-weight: 600; }
+    .shared-hero__main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(310px, 40%); gap: 54px; align-items: end; }
+    .shared-hero__copy { padding-bottom: 14px; }
+    .shared-hero .article-title { max-width: 8.5em; }
+    .shared-hero .article-lead { max-width: 37em; margin: 26px 0 0; }
+    .shared-cover { height: 420px; }
+
+    .related { padding: 82px var(--edge) 92px; color: var(--warm-white); background: var(--film); }
+    .related-head { display: flex; align-items: end; justify-content: space-between; gap: 50px; margin-bottom: 38px; }
+    .related-head h2 { margin: 0; font-family: var(--serif); font-size: 36px; font-weight: 400; }
+    .carousel-controls { display: flex; gap: 10px; }
+    .carousel-controls button { width: 48px; height: 48px; color: var(--warm-white); background: transparent; border: 1px solid var(--line-light); }
+    .carousel-controls button:disabled { color: #897b70; cursor: not-allowed; }
+    .carousel-controls svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-linecap: square; stroke-width: 1.5; }
+    .related-list { display: grid; padding: 0; margin: 0; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line-light); list-style: none; }
+    .related-card { min-height: 270px; padding: 26px 28px; background: var(--film); }
+    .related-card__top { display: flex; justify-content: space-between; gap: 18px; color: var(--warm-muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; }
+    .related-card time { color: var(--saffron); }
+    .related-card h3 { margin: 48px 0 20px; font-family: var(--serif); font-size: 24px; font-weight: 400; line-height: 1.55; }
+    .related-card a { display: inline-flex; min-height: 44px; align-items: center; color: var(--saffron); text-underline-offset: 6px; }
+    .demo-note { padding: 16px var(--edge); margin: 0; color: #efe5dc; background: var(--bark); font-size: 11px; letter-spacing: .04em; text-align: center; }
+    .site-footer { display: flex; min-height: 190px; align-items: end; justify-content: space-between; gap: 48px; padding: 50px var(--edge); color: var(--warm-white); background: var(--bark); border-top: 1px solid var(--line-light); }
+    .site-footer strong { font-family: var(--serif); font-size: 25px; font-weight: 500; letter-spacing: .05em; }
+    .site-footer p { max-width: 42em; margin: 0; color: #eee2d7; font-size: 12px; line-height: 1.8; text-align: right; }
+
+    /* A — 靜水長讀: a continuous editorial reading column. */
+    .quiet-body { display: grid; grid-template-columns: minmax(220px, 22%) minmax(0, 1fr); border-top: 1px solid var(--line); }
+    .quiet-rail { padding: 70px 42px 96px var(--edge); background: var(--sand); }
+    .quiet-rail__inner { position: sticky; top: calc(var(--chooser) + 30px); }
+    .quiet-rail p { max-width: 19em; color: var(--muted); font-size: 12px; line-height: 1.9; }
+    .quiet-rail__line { position: relative; height: 300px; margin-top: 34px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line); }
+    .quiet-rail__line::before { position: absolute; top: -5px; left: 0; width: 9px; height: 9px; background: var(--clay); border-radius: 50%; content: ""; }
+    .quiet-rail__line span { position: absolute; top: 18px; left: 0; color: var(--clay-text); font-size: 10px; font-weight: 700; letter-spacing: .13em; writing-mode: vertical-rl; }
+    .quiet-reading { padding: 70px var(--edge) 92px clamp(72px, 8vw, 132px); }
+    .quiet-intro { max-width: 720px; padding-bottom: 44px; margin-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .quiet-intro p { margin: 0; font-family: var(--serif); font-size: 24px; line-height: 1.8; letter-spacing: .025em; }
+    .quiet-section { max-width: 760px; padding-top: 52px; }
+    .quiet-section + .quiet-section { margin-top: 18px; }
+    .quiet-section .section-title { max-width: 13em; }
+
+    /* B — 頁邊節奏: headings step into the margin while copy stays calm. */
+    .margin-body { padding: 72px var(--edge) 92px; border-top: 1px solid var(--line); background: var(--paper); }
+    .margin-body__intro { display: grid; grid-template-columns: minmax(260px, 31%) minmax(0, 1fr); gap: 76px; padding-bottom: 48px; border-bottom: 1px solid var(--ink); }
+    .margin-body__intro h2 { max-width: 9em; margin: 0; font-family: var(--serif); font-size: 44px; font-weight: 400; line-height: 1.35; }
+    .margin-body__intro p { max-width: 68ch; margin: 0; color: var(--muted); font-size: 16px; line-height: 2.1; }
+    .margin-chapter { display: grid; grid-template-columns: minmax(260px, 31%) minmax(0, 1fr); gap: 76px; padding: 54px 0; border-bottom: 1px solid var(--line); }
+    .margin-chapter__heading { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 18px; align-content: start; }
+    .margin-chapter__mark { width: 10px; height: 10px; margin-top: 16px; background: var(--clay); border-radius: 50%; }
+    .margin-chapter .section-title { margin: 0; font-size: 31px; }
+    .margin-chapter__copy { max-width: 740px; }
+    .margin-close { display: flex; justify-content: flex-end; padding-top: 28px; color: var(--clay-text); font-family: var(--serif); font-size: 18px; }
+
+    /* C — 章節帶譜: every text chapter becomes a full-width reading band. */
+    .band-body { border-top: 1px solid var(--line); }
+    .band-intro { display: grid; grid-template-columns: minmax(280px, 35%) minmax(0, 1fr); gap: 80px; padding: 62px var(--edge); color: var(--warm-white); background: var(--night); }
+    .band-intro h2 { margin: 0; font-family: var(--serif); font-size: 42px; font-weight: 400; line-height: 1.4; }
+    .band-intro p { max-width: 68ch; margin: 0; color: #dfd3c7; font-size: 16px; line-height: 2.1; }
+    .band-chapter { display: grid; grid-template-columns: minmax(280px, 35%) minmax(0, 1fr); gap: 80px; min-height: 330px; padding: 62px var(--edge); border-bottom: 1px solid var(--line); }
+    .band-chapter:nth-child(odd) { background: var(--sand); }
+    .band-chapter__title { align-self: start; }
+    .band-chapter__title .section-title { max-width: 10em; margin: 0; }
+    .band-chapter__title span { display: block; width: 54px; height: 1px; margin-top: 24px; background: var(--clay); }
+    .band-chapter__copy { max-width: 720px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .concept:not([hidden]) .stage { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="prototype">
+    <header class="switcher">
+      <p>文章分享內頁・純文字長文・桌機稿第二輪</p>
+      <div class="tabs" role="tablist" aria-label="設計方向">
+        <button class="tab" role="tab" aria-selected="true" aria-controls="concept-a" id="tab-a" data-concept="a"><strong>A・靜水長讀</strong><small>最安靜的連續閱讀</small></button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="concept-b" id="tab-b" data-concept="b"><strong>B・頁邊節奏</strong><small>標題與正文清楚對讀</small></button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="concept-c" id="tab-c" data-concept="c"><strong>C・章節帶譜</strong><small>以色面區分長篇段落</small></button>
+      </div>
+    </header>
+
+    <section class="concept" id="concept-a" role="tabpanel" aria-labelledby="tab-a">
+      <div class="stage">
+        <header class="site-header">
+          <a class="brand" href="#"><img src="../../public/assets/logo-main.png" alt="善那生活空間"></a>
+          <nav class="site-nav" aria-label="主要導覽"><a href="#">近期活動</a><a href="#">課程探索</a><a href="#">個案諮詢</a><a href="#" aria-current="page">文章分享</a><a href="#">關於我們</a></nav>
+        </header>
+        <main>
+          <article>
+            <header class="shared-hero">
+              <nav aria-label="麵包屑"><ol class="breadcrumb"><li><a href="#">首頁</a></li><li><a href="#">文章分享</a></li><li aria-current="page">來自尼騰 Neeten 的分享（一）</li></ol></nav>
+              <div class="shared-hero__grid">
+                <aside class="shared-hero__meta"><p>文章資訊</p><ul class="meta"><li>究生命</li><li><span class="tag">靜心</span></li><li><time datetime="2025-09-24">2025.09.24</time></li></ul></aside>
+                <div class="shared-hero__main"><div class="shared-hero__copy"><h1 class="article-title">來自尼騰 Neeten 的分享（一）</h1><p class="article-lead">一段從家庭經驗、青春探索到遇見動態靜心的生命分享。文章以一段一段的文字，慢慢展開個人選擇與內在轉變。</p></div><figure class="image-frame shared-cover"><img src="assets/articles-detail/paper-thread.png" alt="暖色手工紙與細線交疊形成的抽象構圖"></figure></div>
+              </div>
+            </header>
+            <div class="quiet-body">
+              <aside class="quiet-rail"><div class="quiet-rail__inner"><p>不設章節目錄，不增加閱讀任務；頁邊只用一條安靜的線，陪伴長文向下延伸。</p><div class="quiet-rail__line" aria-hidden="true"><span>長文閱讀</span></div></div></aside>
+              <div class="quiet-reading">
+                <div class="quiet-intro"><p>有些生命故事需要的不是更多圖像，而是一個讓語句能停留、段落能呼吸的閱讀空間。</p></div>
+                <section class="quiet-section"><h2 class="section-title">來自豐盛家庭的童年創傷</h2><p class="body-copy">尼騰回顧自己的家庭背景。物質生活充足，也有許多美好的共同經驗，但家庭關係中的變化，讓他開始重新理解安全感與歸屬。</p><p class="body-copy">父母在他年少時分開。當原本熟悉的生活結構改變，他也逐漸對既有期待產生疑問，想找出一條不同的路。</p></section>
+                <section class="quiet-section"><h2 class="section-title">在父母的衝突間找出路</h2><p class="body-copy">站在兩段關係之間，他同時保有對父親與母親的愛，也承受彼此衝突帶來的拉扯。多年以後，才慢慢看見這段經驗如何影響自己。</p><p class="body-copy">那些困難並不只留下負面結果，也推動他持續探索：當熟悉的方法無法回應內在需要時，是否還有別的選擇？</p></section>
+                <section class="quiet-section"><h2 class="section-title">青少年期的啟蒙和覺醒</h2><p class="body-copy">一本關於瑜伽的書，成為早期探索的入口。他從閱讀與練習開始，把注意力轉向呼吸、身體與日常節奏，也第一次感覺到另一種生活方式。</p><p class="body-copy">這份好奇逐漸與家人的期待拉開距離。離開學校、投入農場學習，既是青春期的選擇，也是他開始為自己的人生負責。</p></section>
+                <section class="quiet-section"><h2 class="section-title">遇見橘袍舞蹈而進入動態靜心</h2><p class="body-copy">在慕尼黑的生活裡，他遇見一群以舞蹈與呼吸探索內在的人。第一次參與動態靜心時，強烈而直接的經驗打開了新的方向。</p><p class="body-copy">故事仍會繼續，但這個相遇像一道轉折：過往的困惑沒有被抹去，而是開始被放進更大的生命脈絡裡理解。</p></section>
+              </div>
+            </div>
+          </article>
+          <section class="related" aria-labelledby="related-a">
+            <div class="related-head"><h2 id="related-a">延伸閱讀</h2><div class="carousel-controls"><button type="button" disabled aria-label="上一筆"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M10 6l-6 6 6 6"/></svg></button><button type="button" aria-label="下一筆"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M14 6l6 6-6 6"/></svg></button></div></div>
+            <ul class="related-list"><li class="related-card"><div class="related-card__top"><span>究生命</span><time datetime="2026-09-26">2026.09.26</time></div><h3>為自己的節奏，留一點空白</h3><a href="#">閱讀全文</a></li><li class="related-card"><div class="related-card__top"><span>撫慰心</span><time datetime="2026-09-12">2026.09.12</time></div><h3>從關係之間，看見自己的位置</h3><a href="#">閱讀全文</a></li><li class="related-card"><div class="related-card__top"><span>愛身體</span><time datetime="2026-08-30">2026.08.30</time></div><h3>當感受還沒有名字</h3><a href="#">閱讀全文</a></li></ul>
+          </section>
+        </main>
+        <p class="demo-note">A・保留 B 首區，正文改為單一連續長欄；最接近紙本散文，適合讀者不需額外導覽的純文字文章。</p>
+        <footer class="site-footer"><strong>善那生活空間</strong><p>版面依舊站文章的長段落結構製作；文案為設計示意，不代表正式核准內容。</p></footer>
+      </div>
+    </section>
+
+    <section class="concept" id="concept-b" role="tabpanel" aria-labelledby="tab-b" hidden>
+      <div class="stage">
+        <header class="site-header"><a class="brand" href="#"><img src="../../public/assets/logo-main.png" alt="善那生活空間"></a><nav class="site-nav" aria-label="主要導覽"><a href="#">近期活動</a><a href="#">課程探索</a><a href="#">個案諮詢</a><a href="#" aria-current="page">文章分享</a><a href="#">關於我們</a></nav></header>
+        <main>
+          <article>
+            <header class="shared-hero">
+              <nav aria-label="麵包屑"><ol class="breadcrumb"><li><a href="#">首頁</a></li><li><a href="#">文章分享</a></li><li aria-current="page">來自尼騰 Neeten 的分享（一）</li></ol></nav>
+              <div class="shared-hero__grid"><aside class="shared-hero__meta"><p>文章資訊</p><ul class="meta"><li>究生命</li><li><span class="tag">靜心</span></li><li><time datetime="2025-09-24">2025.09.24</time></li></ul></aside><div class="shared-hero__main"><div class="shared-hero__copy"><h1 class="article-title">來自尼騰 Neeten 的分享（一）</h1><p class="article-lead">一段從家庭經驗、青春探索到遇見動態靜心的生命分享。文章以一段一段的文字，慢慢展開個人選擇與內在轉變。</p></div><figure class="image-frame shared-cover"><img src="assets/articles-detail/paper-thread.png" alt="暖色手工紙與細線交疊形成的抽象構圖"></figure></div></div>
+            </header>
+            <div class="margin-body">
+              <div class="margin-body__intro"><h2>讓章節標題成為閱讀地標</h2><p>舊站文章的內容本身已有清楚的小標與段落。這一案不新增目錄，而是把原有小標拉到頁邊，讀者捲動時能自然辨認話題轉折，正文仍維持穩定欄寬。</p></div>
+              <section class="margin-chapter"><div class="margin-chapter__heading"><span class="margin-chapter__mark" aria-hidden="true"></span><h2 class="section-title">來自豐盛家庭的童年創傷</h2></div><div class="margin-chapter__copy"><p class="body-copy">尼騰回顧自己的家庭背景。物質生活充足，也有許多美好的共同經驗，但家庭關係中的變化，讓他開始重新理解安全感與歸屬。</p><p class="body-copy">父母在他年少時分開。當原本熟悉的生活結構改變，他也逐漸對既有期待產生疑問，想找出一條不同的路。</p></div></section>
+              <section class="margin-chapter"><div class="margin-chapter__heading"><span class="margin-chapter__mark" aria-hidden="true"></span><h2 class="section-title">在父母的衝突間找出路</h2></div><div class="margin-chapter__copy"><p class="body-copy">站在兩段關係之間，他同時保有對父親與母親的愛，也承受彼此衝突帶來的拉扯。多年以後，才慢慢看見這段經驗如何影響自己。</p><p class="body-copy">那些困難並不只留下負面結果，也推動他持續探索：當熟悉的方法無法回應內在需要時，是否還有別的選擇？</p></div></section>
+              <section class="margin-chapter"><div class="margin-chapter__heading"><span class="margin-chapter__mark" aria-hidden="true"></span><h2 class="section-title">青少年期的啟蒙和覺醒</h2></div><div class="margin-chapter__copy"><p class="body-copy">一本關於瑜伽的書，成為早期探索的入口。他從閱讀與練習開始，把注意力轉向呼吸、身體與日常節奏，也第一次感覺到另一種生活方式。</p><p class="body-copy">這份好奇逐漸與家人的期待拉開距離。離開學校、投入農場學習，既是青春期的選擇，也是他開始為自己的人生負責。</p></div></section>
+              <section class="margin-chapter"><div class="margin-chapter__heading"><span class="margin-chapter__mark" aria-hidden="true"></span><h2 class="section-title">遇見橘袍舞蹈而進入動態靜心</h2></div><div class="margin-chapter__copy"><p class="body-copy">在慕尼黑的生活裡，他遇見一群以舞蹈與呼吸探索內在的人。第一次參與動態靜心時，強烈而直接的經驗打開了新的方向。</p><p class="body-copy">故事仍會繼續，但這個相遇像一道轉折：過往的困惑沒有被抹去，而是開始被放進更大的生命脈絡裡理解。</p></div></section>
+              <div class="margin-close">文章未完，生命的線索仍向前延伸。</div>
+            </div>
+          </article>
+          <section class="related" aria-labelledby="related-b"><div class="related-head"><h2 id="related-b">延伸閱讀</h2><div class="carousel-controls"><button type="button" disabled aria-label="上一筆"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M10 6l-6 6 6 6"/></svg></button><button type="button" aria-label="下一筆"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M14 6l6 6-6 6"/></svg></button></div></div><ul class="related-list"><li class="related-card"><div class="related-card__top"><span>究生命</span><time datetime="2026-09-26">2026.09.26</time></div><h3>為自己的節奏，留一點空白</h3><a href="#">閱讀全文</a></li><li class="related-card"><div class="related-card__top"><span>撫慰心</span><time datetime="2026-09-12">2026.09.12</time></div><h3>從關係之間，看見自己的位置</h3><a href="#">閱讀全文</a></li><li class="related-card"><div class="related-card__top"><span>愛身體</span><time datetime="2026-08-30">2026.08.30</time></div><h3>當感受還沒有名字</h3><a href="#">閱讀全文</a></li></ul></section>
+        </main>
+        <p class="demo-note">B・保留 B 首區，正文改為左右對讀；原有小標就是地標，不建立目錄，也不需要額外圖片。</p>
+        <footer class="site-footer"><strong>善那生活空間</strong><p>版面依舊站文章的長段落結構製作；文案為設計示意，不代表正式核准內容。</p></footer>
+      </div>
+    </section>
+
+    <section class="concept" id="concept-c" role="tabpanel" aria-labelledby="tab-c" hidden>
+      <div class="stage">
+        <header class="site-header"><a class="brand" href="#"><img src="../../public/assets/logo-main.png" alt="善那生活空間"></a><nav class="site-nav" aria-label="主要導覽"><a href="#">近期活動</a><a href="#">課程探索</a><a href="#">個案諮詢</a><a href="#" aria-current="page">文章分享</a><a href="#">關於我們</a></nav></header>
+        <main>
+          <article>
+            <header class="shared-hero">
+              <nav aria-label="麵包屑"><ol class="breadcrumb"><li><a href="#">首頁</a></li><li><a href="#">文章分享</a></li><li aria-current="page">來自尼騰 Neeten 的分享（一）</li></ol></nav>
+              <div class="shared-hero__grid"><aside class="shared-hero__meta"><p>文章資訊</p><ul class="meta"><li>究生命</li><li><span class="tag">靜心</span></li><li><time datetime="2025-09-24">2025.09.24</time></li></ul></aside><div class="shared-hero__main"><div class="shared-hero__copy"><h1 class="article-title">來自尼騰 Neeten 的分享（一）</h1><p class="article-lead">一段從家庭經驗、青春探索到遇見動態靜心的生命分享。文章以一段一段的文字，慢慢展開個人選擇與內在轉變。</p></div><figure class="image-frame shared-cover"><img src="assets/articles-detail/paper-thread.png" alt="暖色手工紙與細線交疊形成的抽象構圖"></figure></div></div>
+            </header>
+            <div class="band-body">
+              <div class="band-intro"><h2>讓純文字也有明確的章節轉場</h2><p>這一案以紙色與深赭色帶切換閱讀情境。每一帶仍只有後台原有的標題與段落，不增加圖像、引言或新的內容欄位。</p></div>
+              <section class="band-chapter"><div class="band-chapter__title"><h2 class="section-title">來自豐盛家庭的童年創傷</h2><span aria-hidden="true"></span></div><div class="band-chapter__copy"><p class="body-copy">尼騰回顧自己的家庭背景。物質生活充足，也有許多美好的共同經驗，但家庭關係中的變化，讓他開始重新理解安全感與歸屬。</p><p class="body-copy">父母在他年少時分開。當原本熟悉的生活結構改變，他也逐漸對既有期待產生疑問，想找出一條不同的路。</p></div></section>
+              <section class="band-chapter"><div class="band-chapter__title"><h2 class="section-title">在父母的衝突間找出路</h2><span aria-hidden="true"></span></div><div class="band-chapter__copy"><p class="body-copy">站在兩段關係之間，他同時保有對父親與母親的愛，也承受彼此衝突帶來的拉扯。多年以後，才慢慢看見這段經驗如何影響自己。</p><p class="body-copy">那些困難並不只留下負面結果，也推動他持續探索：當熟悉的方法無法回應內在需要時，是否還有別的選擇？</p></div></section>
+              <section class="band-chapter"><div class="band-chapter__title"><h2 class="section-title">青少年期的啟蒙和覺醒</h2><span aria-hidden="true"></span></div><div class="band-chapter__copy"><p class="body-copy">一本關於瑜伽的書，成為早期探索的入口。他從閱讀與練習開始，把注意力轉向呼吸、身體與日常節奏，也第一次感覺到另一種生活方式。</p><p class="body-copy">這份好奇逐漸與家人的期待拉開距離。離開學校、投入農場學習，既是青春期的選擇，也是他開始為自己的人生負責。</p></div></section>
+              <section class="band-chapter"><div class="band-chapter__title"><h2 class="section-title">遇見橘袍舞蹈而進入動態靜心</h2><span aria-hidden="true"></span></div><div class="band-chapter__copy"><p class="body-copy">在慕尼黑的生活裡，他遇見一群以舞蹈與呼吸探索內在的人。第一次參與動態靜心時，強烈而直接的經驗打開了新的方向。</p><p class="body-copy">故事仍會繼續，但這個相遇像一道轉折：過往的困惑沒有被抹去，而是開始被放進更大的生命脈絡裡理解。</p></div></section>
+            </div>
+          </article>
+          <section class="related" aria-labelledby="related-c"><div class="related-head"><h2 id="related-c">延伸閱讀</h2><div class="carousel-controls"><button type="button" disabled aria-label="上一筆"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M10 6l-6 6 6 6"/></svg></button><button type="button" aria-label="下一筆"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M14 6l6 6-6 6"/></svg></button></div></div><ul class="related-list"><li class="related-card"><div class="related-card__top"><span>究生命</span><time datetime="2026-09-26">2026.09.26</time></div><h3>為自己的節奏，留一點空白</h3><a href="#">閱讀全文</a></li><li class="related-card"><div class="related-card__top"><span>撫慰心</span><time datetime="2026-09-12">2026.09.12</time></div><h3>從關係之間，看見自己的位置</h3><a href="#">閱讀全文</a></li><li class="related-card"><div class="related-card__top"><span>愛身體</span><time datetime="2026-08-30">2026.08.30</time></div><h3>當感受還沒有名字</h3><a href="#">閱讀全文</a></li></ul></section>
+        </main>
+        <p class="demo-note">C・保留 B 首區，以全幅章節帶建立長篇節奏；純文字仍有明顯轉場，適合段落多、篇幅更長的文章。</p>
+        <footer class="site-footer"><strong>善那生活空間</strong><p>版面依舊站文章的長段落結構製作；文案為設計示意，不代表正式核准內容。</p></footer>
+      </div>
+    </section>
+  </div>
+  <script>
+    const tabs = [...document.querySelectorAll('.tab')]
+    const concepts = [...document.querySelectorAll('.concept')]
+
+    function selectConcept(id, focus = false) {
+      tabs.forEach((tab) => {
+        const active = tab.dataset.concept === id
+        tab.setAttribute('aria-selected', String(active))
+        tab.tabIndex = active ? 0 : -1
+        if (active && focus) tab.focus()
+      })
+      concepts.forEach((concept) => { concept.hidden = concept.id !== `concept-${id}` })
+      const url = new URL(window.location.href)
+      url.searchParams.set('concept', id)
+      history.replaceState({}, '', url)
+      window.scrollTo({ top: 0, behavior: 'instant' })
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => selectConcept(tab.dataset.concept))
+      tab.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return
+        event.preventDefault()
+        const step = event.key === 'ArrowRight' ? 1 : -1
+        const next = tabs[(index + step + tabs.length) % tabs.length]
+        selectConcept(next.dataset.concept, true)
+      })
+    })
+
+    const initial = new URLSearchParams(location.search).get('concept')
+    selectConcept(['a', 'b', 'c'].includes(initial) ? initial : 'a')
+  </script>
+</body>
+</html>

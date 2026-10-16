@@ -38,7 +38,7 @@ Sanity／伺服器內部查詢項目只需 `_key`、`text` 與 `sharerName`，�
 
 同日新增活動詳情 B 的內容接續示意。使用者確認後，心得正文改為與課程介紹相同的 16px／2.1 行距，並完成 390px／320px 手機首版。1440px、390px 與 320px 均無水平溢位、兩則長文與名稱完整、心得區無圖片；證據位於 `docs/design/review/student-testimonial-in-context-desktop/`。其後已建立相同契約的 Vue 原型；本紀錄不代表 schema、API 或 production 內容流已完成。
 
-同日完成 Vue 原型驗證：1440×1000、390×844 與 320×720 三組瀏覽器量測均顯示 2 則心得、2 個 `cite`、0 張圖片與零水平溢位；心得正文和課程介紹同為 16px，桌機標題 38px、手機 32px。元件測試另覆蓋長文完整呈現、無輪播／切換控制與空陣列省略。證據位於 `.impeccable/review/event-detail-frontend-prototype/`；課程詳情與 production 內容流仍未接入。
+同日完成 Vue 原型驗證：1440×1000、390×844 與 320×720 三組瀏覽器量測均顯示 2 則心得、2 個 `cite`、0 張圖片與零水平溢位；心得正文和課程介紹同為 16px。元件標題改為共用 `--detail-section-title-size`，桌機 38px、手機 26px；2026-10-16 另以 390px 活動 fixture 頁確認心得標題為 26px、寬 342px、右界 366px，既有 34px 下內距與底線完整且無水平溢位，最新證據位於 [`review/detail-heading-token-mobile/`](../design/review/detail-heading-token-mobile/README.md)。元件測試另覆蓋長文完整呈現、無輪播／切換控制與空陣列省略；課程詳情與 production 內容流仍未接入。
 
 同日完成活動詳情 production 內容流驗收：已確認更新草稿發布前不會取代公開版本，再次發布後輸出心得文字與分享者名稱。測試文件已完整清除，畫面與流程紀錄位於 `docs/design/review/events-detail-content-flow/`。此結果不代表課程詳情整合已完成。
 

@@ -1,0 +1,9 @@
+Use case: stylized-concept
+Asset type: supporting editorial article image for a desktop website design comp
+Primary request: create a refined abstract tactile composition about breath, pause, and returning attention, using hand-pressed clay impressions, softly folded rice paper, a narrow charcoal line, and one tiny saffron paper marker
+Scene/backdrop: top-down arrangement on warm sand-colored archival board
+Style/medium: high-end editorial still life photography, quiet museum-catalog precision, materially believable, subtle grain
+Composition/framing: landscape 3:2 with a strong diagonal movement and generous breathing room; suitable for a wide image or half-width crop
+Lighting/mood: soft angled daylight, calm and exact
+Color palette: warm ivory, sand, muted clay, deep brown, restrained saffron
+Constraints: no people, no hands, no anatomy, no flowers, no crystals, no typography, no logo, no watermark, no gradients, no rounded UI graphics

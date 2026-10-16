@@ -101,7 +101,7 @@ SEO 不得加入頁面未呈現或未核准的資格、療效、價格與服務�
 
 - 桌面使用主視覺、sticky 資訊側欄與閱讀內容；DOM 順序維持姓名與摘要、服務項目、服務地區、聯繫方式、完整介紹、經歷。`<= 1023px` 回到同順序的單欄，320–390px 不得水平捲動。
 - 延續 `DESIGN.md` 的 paper、sand、ink、clay、saffron、persimmon、night、字體與直角控制項；不直接複製舊站的大型英文標籤，也不使用圓角卡片牆、陰影或柔焦療癒圖像。
-- 與 `/events/[slug]` 及後續相似內容頁共用詳情字級：桌機 `h1` 為 `clamp(44px, 4.8vw, 72px)`、摘要 `17px / 2`、`h2` 為 `38px / 1.4`、正文 `16px / 2.1`；`<= 1023px` 分別為 `42px`、`16px`、`32px`、`16px`。正文閱讀寬度約 `68ch`，不得在單頁另創相近尺寸。
+- 與 `/events/[slug]` 及後續相似內容頁共用詳情字級：桌機 `h1` 為 `clamp(44px, 4.8vw, 72px)`、摘要 `17px / 2`、`h2` 為 `38px / 1.4`、正文 `16px / 2.1`；`<= 1023px` 分別為 `42px`、`16px`、`26px`、`16px`。正文閱讀寬度約 `68ch`，不得在單頁另創相近尺寸。
 - 桌機 fixed／sticky 左側資訊欄不使用 `border-right`，只以 surface 色、留白及欄內分隔建立層級；`<= 1023px` 單欄可保留底線與項目分隔。
 - fixed／sticky 資訊欄沿用活動詳情共用 padding：桌機資料列 `26px clamp(28px, 3.2vw, 50px)`，`<= 1023px` 為 `22px 24px`；服務地區、服務項目與聯繫方式皆使用此資料列 padding。「聯繫方式」標題須與「服務項目」等資訊小標題相同；聯繫內容、輔助標籤與預約按鈕文字統一為 `14px`，聯繫清單不使用 `border-top` 或 `border-bottom`。相似元件不得另訂近似值。
 - 右側連續 `.profile-section` 不使用 `border-top` 或額外 `padding-top`；章節間只以桌機 `76px`、窄版 `64px` 的 margin 維持節奏。
@@ -166,6 +166,8 @@ SEO 不得加入頁面未呈現或未核准的資格、療效、價格與服務�
 2026-10-14 統一詳情側欄聯繫樣式：`.session-detail__contact` 與上方資料列共用 padding；「聯繫方式」改用與「服務項目」相同的 14px 小標題樣式，區塊內容與預約按鈕文字統一為 14px，並移除聯繫清單的上下框線。Session detail 9 項元件／頁面測試、Web typecheck 與 production build 通過，Impeccable layout detector 為 0 findings；typecheck 仍只有既有 `vue-router/volar/sfc-route-blocks` 套件警告。
 
 2026-10-14 依人工調整後實作回查文件：詳情首區標籤採「服務地區」，側欄順序固定為「服務項目 → 服務地區 → 聯繫方式」，窄版維持同一 DOM 閱讀順序，完整介紹與經歷接續其後。同步將公開介面的「服務方法／療法」統一記為「服務項目」；資料欄位 `methods` 與既有 URL query `method` 保持不變。回查後 Web 30 個測試檔共 173 項、Studio 22 項測試、兩端 typecheck 與 production build 均通過；Web typecheck 仍只有既有 `vue-router/volar/sfc-route-blocks` 套件警告。
+
+2026-10-16 共用手機內容章節標題由 32px 統一為 26px。以 390px fixture 頁確認「關於執行師」與「經歷」皆為 `26px / 36.4px`、寬 342px、右界 366px，與後續內容保留 22px 間距，頁面無水平溢位或遮擋；最新截圖與量測位於 [`review/detail-heading-token-mobile/`](../design/review/detail-heading-token-mobile/README.md)。Web 34 個測試檔／190 項測試、typecheck 與 production build 通過。
 
 #### 筆記，不需要執行，可忽略
 
