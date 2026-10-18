@@ -1,6 +1,6 @@
 # 文章分享內頁規格
 
-**狀態：** ui-verified
+**狀態：** cms-integrated
 
 **路由：** `/articles/[slug]`  
 **頁面模式：** Read；閱讀單篇文章並繼續探索編輯者挑選的相關文章  
@@ -26,7 +26,7 @@
 - 已確認：首區採第三輪 A 的暖砂資訊牌，後台可選兩種 banner 樣式。`overlay` 讓右側區域使用橫式代表圖滿版置中裁切、疊半透明黑色遮罩並在原位置呈現標題與摘要；`split` 保留中央標題摘要與最右側圖片窗，橫式代表圖在圖片窗內置中裁切。
 - 已確認：正文採第三輪 B 的圖片破邊與穩定文字軸線，但不顯示區塊分隔線；有圖文章仍需支援左右圖文與單張大圖。
 - 已確認：延伸閱讀使用無獨立底色的圖片型 swiper；每筆顯示圖片、主要分類、標題、最多兩行摘要及閱讀按鈕，不顯示發布日期。
-- 已確認：Sanity 是正式內容來源；目前 `article` schema 只有總覽摘要欄位，尚未有正文、相關文章或 SEO 欄位。詳情頁已完成 fixture 驅動的 Nuxt 前端原型，但尚未串接正式 API。
+- 已確認：Sanity 是正式內容來源；既有 `article` 文件已在本機 schema 擴充正文、相關文章與 SEO 欄位，詳情頁改由 published-only slug API 讀取，不再以 fixture 作為主要資料。遠端 schema 與 production 內容流程尚未驗證。
 - 工作假設：正文由可排序的語意區塊組成；左右位置只是圖文區塊的呈現設定，不建立 `leftImage`、`rightText` 等重複內容欄位。
 - 工作假設：相關文章完全依編輯者選取順序顯示，不依分類、標籤或日期自動補足；未選擇或沒有仍可公開的項目時，整個區塊省略。
 - 工作假設：相關文章不自動循環、不自動播放；按上一筆／下一筆移動，抵達集合頭尾時停用對應控制。
@@ -134,11 +134,11 @@ SEO 不得加入頁面未呈現或未核准的療效、資格與事實。not fou
 ## 依賴、待決事項與下一階段
 
 - 正式文章正文、圖片、替代文字與使用權仍需內容負責人提供並核准；現有總覽文章與 fixture 不自動視為可發布的詳情內容。
-- `article` schema 需新增正文區塊、相關文章與 SEO 欄位；published-only 詳情 query 與嚴格 parser 尚未實作。前端原型已有 404／error 呈現與 fixture metadata，但正式資料來源及無效發布內容處理仍待 CMS 串接階段完成。
+- `article` schema、published-only 詳情 query、嚴格 parser 與前端 API 串接已在本機完成；無資料回應 404，已發布核心內容無效或讀取失敗顯示 error，不回退至 fixture。schema 尚未部署至遠端 dataset。
 - 相關文章區標題先由介面提供固定文案「延伸閱讀」；若內容團隊需要逐篇自訂標題，應在 CMS 串接前改為明確欄位，不由設計階段自行新增。
 - 分享圖的全站預設來源依賴 site settings；若目前沒有可用欄位，第一版可只使用 `shareImage` → `coverImage`，但不得以未核准素材補位。
 - slug 修改後的 301 重新導向、文章內影片／圖庫／附件、作者模型與自動推薦皆為後續範圍。
-- 桌機與手機方向皆已確認，fixture 驅動 Nuxt 原型也已完成 UI 行為驗收：A 暖砂資訊牌、`overlay`／`split` 兩種 Hero、B 破邊正文（無分隔線）、純文字 `richTextSection`，以及無底色、無日期的圖片型延伸閱讀。原型已涵蓋 `split` 缺圖、無相關文章、最大長度、鍵盤 swiper 與無 JavaScript 降級；下一階段為 `integrate-sanity-content`。Sanity schema、正式 API、正式內容與發布流程仍未開始。
+- 桌機與手機方向皆已確認，Nuxt 介面也已完成 UI 行為驗收：A 暖砂資訊牌、`overlay`／`split` 兩種 Hero、B 破邊正文（無分隔線）、純文字 `richTextSection`，以及無底色、無日期的圖片型延伸閱讀。現已接上本機 Sanity schema 與正式 API 契約；下一階段為 `validate-content-flow`。遠端 schema 部署、草稿隔離、匿名發布讀取、真實圖片與正式內容仍未執行。
 
 ## 階段紀錄
 
@@ -152,6 +152,7 @@ SEO 不得加入頁面未呈現或未核准的療效、資格與事實。not fou
 - 2026-10-16：依手機稿檢視修正麵包屑交叉軸對齊、將 `.edge-body` 上內距歸零、把內容章節與延伸閱讀標題統一為 `26px`，並將 swiper 手動切換速度延長為 `1500ms`。同時更新全站詳情標題 token、課程／活動／執行師／心得規格及課程元件引用；Hero 展示標題與引言式 blockquote 不受此章節規則影響。Chromium 於 390px／1440px 量測確認三個麵包屑項目中心一致、無水平溢位、`padding-top: 0px`、標題 26px／38px、transition 1.5s 且 reduced motion 為 0s；Web 34 檔／190 項測試、typecheck 與 production build 通過。
 - 2026-10-16：使用者確認可接續流程後完成 `build-ui-prototype`，狀態更新為 `frontend-ready`。新增共用型別、overlay／split／純文字／長內容 fixtures、`ArticleDetail` 與 `/articles/[slug]`；支援三種正文區塊、loading／error／not found、缺圖、無推薦、最長 30 區塊，以及 1／2／3 欄相關文章 swiper。Chromium 於 320、390、768、1023、1024、1440px 確認無水平溢位、單一 `h1`、圖片 alt 完整、控制至少 44px、正文 `16px / 33.6px`、手機標題 26px、swiper 1500ms／reduced motion 0s；最長 fixture 含 8 標籤、30 區塊、8 推薦，最小 fixture 無代表圖、只有純文字且不顯示推薦。已確認已知 slug 回應 200、未知 slug 回應 404；Web 35 檔／198 項測試、typecheck 與 production build 通過。證據位於 [`review/articles-detail-frontend-prototype/`](../design/review/articles-detail-frontend-prototype/README.md)；下一階段為 `verify-ui-behavior`，Sanity 與正式內容尚未開始。
 - 2026-10-16：完成 `verify-ui-behavior`，狀態更新為 `ui-verified`。修正 swiper 的鍵盤 Tab 範圍、文章切換後索引重設、無 JavaScript 完整網格降級、reduced-motion specificity、狀態播報、SVG 控制圖示及非首屏圖片 lazy loading；新增可重複執行的 Chromium 驗證腳本。320、390、768、1023、1024、1440px 與 720px（1440px／200% 等效）均無水平溢位，單一 `h1`、正文 `33.6px`、手機 h2 26px、桌機 h2 38px、最小控制 44px、圖片 alt 完整，主要文字對比為 5.31–6.44:1。Enter 可切換 swiper、live region 與 disabled／Tab 狀態同步，reduced motion 為 0s；SSR 無 JavaScript 時 5 篇推薦皆可閱讀開啟。已知／未知 slug 分別為 200／404。Impeccable detector 為 0 個反模式，20 個 advisory 為核准的頁面角色字級與既有 Header 色階。Web 35 檔／199 項測試、typecheck、production build 與 `git diff --check` 通過；證據位於 [`review/articles-detail-ui-verified/`](../design/review/articles-detail-ui-verified/README.md)。下一階段為 `integrate-sanity-content`，尚未建立詳情 schema、API 或正式內容。
+- 2026-10-18：完成 `integrate-sanity-content`，狀態更新為 `cms-integrated`。擴充同一份 `article` schema，加入 `heroStyle`、三種可排序正文區塊、受限 Portable Text、安全連結、0–8 篇人工排序延伸閱讀及 SEO／分享圖；新增 published perspective 的 slug GROQ、伺服器 API 與嚴格轉換層。前端不再以 fixture 作為主要資料，能區分 404、已發布核心資料無效與讀取失敗；失效、重複或自我引用的延伸閱讀只會被移除，不自動補位。Studio 26 項測試、Web 37 檔／207 項測試、兩端 typecheck、兩端 production build 與 `git diff --check` 通過；本機測試資料已覆蓋正常、空資料、無效資料、讀取失敗、安全 rich text、`split` 無圖及部分推薦失效。尚未部署 schema、修改遠端 dataset 或建立測試內容；下一階段為 `validate-content-flow`，需取得遠端操作授權後驗證草稿隔離、發布、匿名讀取、前台呈現與清理。
 
 
 #### 筆記，不需要執行，可忽略

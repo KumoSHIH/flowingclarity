@@ -18,7 +18,7 @@ Sanity Studio 用來編輯首頁 Banner、課程、活動、個案諮詢與文�
 - 課程梯次以 stage 與 ISO 日期區間記錄，並可設定城市、場地、時間、名額、費用、報名網址及補充事項；schema 阻止日期倒置、重疊、順序重複或倒退。首日與末日由日期區間推導，不重複儲存。公開且開放報名的梯次必須使用 HTTPS 報名網址。
 - 「活動總覽頁」是固定 ID `events-page` 的單例；「活動」是獨立文件，可選填一門已公開課程。活動使用結構化起訖時間、參與方式、地點、報名狀態、HTTPS 報名網址、保存設定與同時段順序；公開文件 ID 不得包含句點。
 - 「個案諮詢總覽頁」是固定 ID `session-page` 的單例；服務地區與服務項目是可新增 taxonomy，識別碼與順序在同類別內不可重複。執行師可複選服務地區與服務項目，總覽不使用人物照片；`isPublished` 關閉或契約不完整的文件不會出現在前台。
-- 「文章分享總覽頁」是固定 ID `articles-page` 的單例；文章固定 reference 四個課程分類之一，另可選 1–8 個可新增的文章標籤。文章與標籤使用 Sanity draft／published 狀態，不另設公開開關；總覽只讀摘要資料，不查詢正文。
+- 「文章分享總覽頁」是固定 ID `articles-page` 的單例；文章固定 reference 四個課程分類之一，另可選 1–8 個可新增的文章標籤。文章與標籤使用 Sanity draft／published 狀態，不另設公開開關。文章詳情沿用同一文件，可編排純文字、左右圖文與滿寬圖片，並設定首區樣式、延伸閱讀及 SEO；本機 schema 與 API 已完成，遠端 schema 尚未部署。
 
 ## 驗收
 
@@ -34,7 +34,7 @@ Sanity Studio 用來編輯首頁 Banner、課程、活動、個案諮詢與文�
 
 個案諮詢 schema 已部署至 production，並以 7 筆 taxonomy、1 筆總覽與 48 位執行師完成草稿隔離、兩次發布、匿名 published 查詢、分頁、地區篩選、1440px／390px 前台與清理後空狀態驗收。隔離測試內容已精準清除；production 只保留無內容、未發布的 `drafts.session-page`，避免單例在刪除驗收內容後停在不可編輯狀態，匿名前台仍讀不到此草稿。正式總覽文案、taxonomy 與執行師資料仍待內容負責人建立及發布。完整紀錄見 [個案諮詢規格](../web/docs/specs/session.md)。
 
-文章 schema 已部署至 production，並以 10 個標籤、1 筆總覽與 24 篇文章完成草稿隔離、兩次發布、匿名 published 查詢、分類／標籤篩選、三頁分頁、桌機／手機與清理後空狀態驗收。70 個隔離測試文件已精準清除；人工後台測試另發現主要分類 picker 同時顯示新舊分類文件，現已限制為四個正式 `course-category-*` ID 並完成回歸。production 的 `articles-page` 已由 Studio 人工發布，前台 API 可匿名讀取 4 個主要分類、3 個標籤與 3 篇文章，文章總覽規格為 `verified`；單篇文章頁與正式內容核准仍待後續處理。完整紀錄見 [文章分享規格](../web/docs/specs/articles.md)。
+文章總覽 schema 已部署至 production，並以 10 個標籤、1 筆總覽與 24 篇文章完成草稿隔離、兩次發布、匿名 published 查詢、分類／標籤篩選、三頁分頁、桌機／手機與清理後空狀態驗收。70 個隔離測試文件已精準清除；人工後台測試另發現主要分類 picker 同時顯示新舊分類文件，現已限制為四個正式 `course-category-*` ID 並完成回歸。production 的 `articles-page` 已由 Studio 人工發布，前台 API 可匿名讀取 4 個主要分類、3 個標籤與 3 篇文章，文章總覽規格為 `verified`。單篇文章詳情擴充目前只在本機完成，尚未部署或進行遠端內容流驗收；正式內容也仍待核准。完整紀錄見 [文章分享規格](../web/docs/specs/articles.md)與[文章詳情規格](../web/docs/specs/articles-detail.md)。
 
 固定單例若曾被內容流驗收建立後刪除，不要把 published 與 draft 同時為 0 當成最終收尾。先確認兩者都不存在，再建立只含 `_id: drafts.<單例 ID>` 與 `_type` 的空白草稿；這份草稿不可發布，也不可用覆寫操作取代既有內容。Session 使用 `validateSessionFlow.ts`，文章分享使用 `validateArticlesFlow.ts`；在 `studio/` 以 `npx sanity exec scripts/<檔名> --with-user-token -- seed-page-draft` 建立，再以 `verify-page-draft` 確認登入者可見草稿而匿名 published 查詢仍為空。
 

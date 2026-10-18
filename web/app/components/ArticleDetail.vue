@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import ArticleRichTextContent from "./ArticleRichTextContent.vue";
 import type {
   ArticleDetailContent,
   ArticleDetailStatus,
-  ArticleRichContentItem,
 } from "#shared/types/articleDetail";
 
 const props = withDefaults(
@@ -69,11 +69,6 @@ function formatDate(value: string) {
   })
     .format(new Date(value))
     .replaceAll("/", ".");
-}
-
-function itemTag(item: ArticleRichContentItem) {
-  if (item.type !== "heading") return undefined;
-  return item.level === 2 ? "h2" : "h3";
 }
 
 onMounted(() => {
@@ -172,15 +167,7 @@ watch(
             class="article-section article-section--text"
           >
             <h2 v-if="section.heading">{{ section.heading }}</h2>
-            <template v-for="item in section.content" :key="item.key">
-              <component :is="itemTag(item)" v-if="item.type === 'heading'">{{
-                item.text
-              }}</component>
-              <p v-else-if="item.type === 'paragraph'">{{ item.text }}</p>
-              <component :is="item.style === 'number' ? 'ol' : 'ul'" v-else>
-                <li v-for="entry in item.items" :key="entry">{{ entry }}</li>
-              </component>
-            </template>
+            <ArticleRichTextContent :content="section.content" />
           </section>
 
           <section
@@ -205,15 +192,7 @@ watch(
             </figure>
             <div>
               <h2 v-if="section.heading">{{ section.heading }}</h2>
-              <template v-for="item in section.content" :key="item.key">
-                <component :is="itemTag(item)" v-if="item.type === 'heading'">{{
-                  item.text
-                }}</component>
-                <p v-else-if="item.type === 'paragraph'">{{ item.text }}</p>
-                <component :is="item.style === 'number' ? 'ol' : 'ul'" v-else>
-                  <li v-for="entry in item.items" :key="entry">{{ entry }}</li>
-                </component>
-              </template>
+              <ArticleRichTextContent :content="section.content" />
             </div>
           </section>
 

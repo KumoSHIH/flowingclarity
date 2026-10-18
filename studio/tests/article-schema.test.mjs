@@ -4,7 +4,12 @@ import {
   article,
   articleCategoryIds,
   articleCategoryReferenceIsCanonical,
+  validateArticleDetail,
 } from '../schemaTypes/article.ts'
+import {
+  articleDetailSchemaTypes,
+  articleLinkIsSafe,
+} from '../schemaTypes/articleDetail.ts'
 import { articleTag, articleDocumentIdIsSafe } from '../schemaTypes/articleTag.ts'
 import { articlesPage, articlesPageId } from '../schemaTypes/articlesPage.ts'
 
@@ -17,6 +22,7 @@ test('article schemas expose the approved semantic contract', () => {
   assert.deepEqual(articleTag.fields.map(({ name }) => name), ['name', 'slug', 'order', 'description'])
   assert.deepEqual(article.fields.map(({ name }) => name), [
     'title', 'slug', 'category', 'tags', 'excerpt', 'publishedAt', 'coverImage',
+    'heroStyle', 'body', 'relatedArticles', 'seoTitle', 'seoDescription', 'shareImage',
   ])
   const category = article.fields.find(({ name }) => name === 'category')
   assert.equal(category.options.disableNew, true)
@@ -24,6 +30,13 @@ test('article schemas expose the approved semantic contract', () => {
   assert.deepEqual(category.options.filterParams.categoryIds, articleCategoryIds)
   assert.equal(category.to[0].type, 'courseCategory')
   assert.equal(article.fields.find(({ name }) => name === 'tags').of[0].to[0].type, 'articleTag')
+  assert.deepEqual(article.fields.find(({ name }) => name === 'body').of.map(({ type }) => type), [
+    'articleRichTextSection', 'articleSplitMediaSection', 'articleWideImageSection',
+  ])
+  assert.equal(article.fields.find(({ name }) => name === 'relatedArticles').of[0].to[0].type, 'article')
+  assert.deepEqual(articleDetailSchemaTypes.map(({ name }) => name), [
+    'articleContentImage', 'articleRichTextSection', 'articleSplitMediaSection', 'articleWideImageSection',
+  ])
 })
 
 test('article categories only allow the four canonical public documents', () => {
@@ -43,4 +56,22 @@ test('public article documents reject protected ids', () => {
   assert.equal(articleDocumentIdIsSafe({ _id: 'article-safe' }), true)
   assert.match(articleDocumentIdIsSafe({ _id: 'article.unsafe' }), /不得包含句點/)
   assert.equal(article.fields.some(({ name }) => name === 'isPublished'), false)
+})
+
+test('article detail validation enforces hero, body, self-reference, and safe links', () => {
+  assert.equal(validateArticleDetail({
+    _id: 'article-safe',
+    heroStyle: 'split',
+    body: [{ _type: 'articleRichTextSection' }],
+  }), true)
+  assert.deepEqual(validateArticleDetail({
+    _id: 'drafts.article-safe',
+    heroStyle: 'overlay',
+    body: [],
+    relatedArticles: [{ _ref: 'article-safe' }],
+  }).map(({ path }) => path), [['coverImage'], ['body'], ['relatedArticles']])
+  assert.equal(articleLinkIsSafe('/articles/example'), true)
+  assert.equal(articleLinkIsSafe('https://example.com/article'), true)
+  assert.match(articleLinkIsSafe('//example.com/article'), /只接受/)
+  assert.match(articleLinkIsSafe('javascript:alert(1)'), /只接受/)
 })

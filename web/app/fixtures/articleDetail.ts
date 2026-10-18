@@ -118,9 +118,9 @@ export const articleDetailFixture: ArticleDetailContent = {
           type: "list",
           style: "bullet",
           items: [
-            "確認此刻的支撐",
-            "辨認可以停留的位置",
-            "讓回應保有自己的速度",
+            { key: "return-list-1", text: "確認此刻的支撐" },
+            { key: "return-list-2", text: "辨認可以停留的位置" },
+            { key: "return-list-3", text: "讓回應保有自己的速度" },
           ],
         },
       ],

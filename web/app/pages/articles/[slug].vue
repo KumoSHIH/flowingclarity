@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useSiteSettings } from "../../composables/useSiteSettings";
-import { getArticleDetailFixture } from "../../fixtures/articleDetail";
-import type { ArticleDetailStatus } from "#shared/types/articleDetail";
+import type {
+  ArticleDetailApiResponse,
+  ArticleDetailStatus,
+} from "#shared/types/articleDetail";
 
 const route = useRoute();
 const { settings } = useSiteSettings();
@@ -10,10 +12,27 @@ const slug = computed(() => {
   const value = route.params.slug;
   return Array.isArray(value) ? (value[0] ?? "") : String(value ?? "");
 });
-const content = computed(() => getArticleDetailFixture(slug.value));
-const status = computed<ArticleDetailStatus>(() =>
-  content.value ? "ready" : "not-found",
+const {
+  data: response,
+  status: requestStatus,
+  error: requestError,
+  refresh,
+} = useFetch<ArticleDetailApiResponse>(
+  () => `/api/article-detail/${encodeURIComponent(slug.value)}`,
 );
+const content = computed(() => response.value?.content ?? undefined);
+const status = computed<ArticleDetailStatus>(() => {
+  if (requestStatus.value === "pending") return "loading";
+  if (
+    requestStatus.value === "error" &&
+    requestError.value?.statusCode === 404
+  )
+    return "not-found";
+  if (requestStatus.value === "error" || response.value?.state === "error")
+    return "error";
+  if (response.value?.state === "empty") return "not-found";
+  return response.value?.state === "ready" && content.value ? "ready" : "error";
+});
 
 if (import.meta.server && status.value === "not-found") setResponseStatus(404);
 
@@ -59,7 +78,9 @@ useHead(() => ({
     class="article-detail-page mx-auto min-h-screen max-w-[1920px] overflow-clip font-sans"
   >
     <SiteHeader always-visible :settings="settings" current-path="/articles" />
-    <main><ArticleDetail :content="content" :status="status" /></main>
+    <main>
+      <ArticleDetail :content="content" :status="status" @retry="refresh" />
+    </main>
     <SiteFooter
       v-if="settings"
       :content="settings"

@@ -155,16 +155,24 @@ describe("article detail page", () => {
     path: "/articles/prototype-article-01",
   };
   const head = vi.fn();
+  const fetchResponse = ref<unknown>();
+  const fetchStatus = ref("success");
+  const fetchError = ref<{ statusCode?: number }>();
 
   beforeEach(() => {
     head.mockReset();
     route.params.slug = "prototype-article-01";
     route.path = "/articles/prototype-article-01";
+    fetchResponse.value = { state: "ready", content: articleDetailFixture };
+    fetchStatus.value = "success";
+    fetchError.value = undefined;
     vi.stubGlobal("useRoute", () => route);
     vi.stubGlobal("useHead", head);
     vi.stubGlobal("useFetch", () => ({
-      data: ref(undefined),
-      status: ref("success"),
+      data: fetchResponse,
+      status: fetchStatus,
+      error: fetchError,
+      refresh: vi.fn(),
     }));
   });
 
@@ -191,7 +199,7 @@ describe("article detail page", () => {
     });
   }
 
-  it("uses the shared shell, fixture slug, and article navigation state", () => {
+  it("uses the shared shell, API content, and article navigation state", () => {
     const wrapper = mountPage();
     expect(
       wrapper.get("[data-site-header]").attributes("data-current-path"),
@@ -205,9 +213,10 @@ describe("article detail page", () => {
     expect(head).toHaveBeenCalledOnce();
   });
 
-  it("maps unknown fixture slugs to not-found", () => {
+  it("maps an empty API response to not-found", () => {
     route.params.slug = "missing-article";
     route.path = "/articles/missing-article";
+    fetchResponse.value = { state: "empty", content: null };
     const wrapper = mountPage();
     expect(wrapper.get("[data-detail]").attributes("data-status")).toBe(
       "not-found",
@@ -215,5 +224,19 @@ describe("article detail page", () => {
     expect(
       wrapper.get("[data-detail]").attributes("data-title"),
     ).toBeUndefined();
+  });
+
+  it("maps an HTTP 404 fetch result to not-found and other failures to error", () => {
+    fetchResponse.value = undefined;
+    fetchStatus.value = "error";
+    fetchError.value = { statusCode: 404 };
+    expect(mountPage().get("[data-detail]").attributes("data-status")).toBe(
+      "not-found",
+    );
+
+    fetchError.value = { statusCode: 503 };
+    expect(mountPage().get("[data-detail]").attributes("data-status")).toBe(
+      "error",
+    );
   });
 });

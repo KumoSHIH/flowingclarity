@@ -11,10 +11,24 @@ export interface ArticleDetailImage extends ArticleCoverImage {
   objectPosition?: string;
 }
 
+export interface ArticleRichTextSegment {
+  key: string;
+  text: string;
+  strong?: boolean;
+  emphasis?: boolean;
+  href?: string;
+}
+
+export interface ArticleRichTextLine {
+  key: string;
+  text: string;
+  segments?: ArticleRichTextSegment[];
+}
+
 export type ArticleRichContentItem =
-  | { key: string; type: "paragraph"; text: string }
-  | { key: string; type: "heading"; level: 2 | 3; text: string }
-  | { key: string; type: "list"; style: "bullet" | "number"; items: string[] };
+  | ({ type: "paragraph" } & ArticleRichTextLine)
+  | ({ type: "heading"; level: 2 | 3 } & ArticleRichTextLine)
+  | { key: string; type: "list"; style: "bullet" | "number"; items: ArticleRichTextLine[] };
 
 export interface ArticleRichTextSection {
   key: string;
@@ -70,3 +84,7 @@ export interface ArticleDetailContent {
     shareImage?: ArticleDetailImage;
   };
 }
+
+export type ArticleDetailApiResponse =
+  | { state: "ready"; content: ArticleDetailContent }
+  | { state: "empty" | "error"; content: null };
