@@ -154,3 +154,10 @@
 
 #### 筆記，不需要執行，可忽略
 - 使用 `$develop-feature` 從 `docs/specs/session.md` 接續下一個流程
+
+
+#### 待修正項目
+- [] psession-filters__options button 移除下底線，hover 加上 變色文字 (同其他頁)，手機版 font-size 14px
+- [] practitioner-row h3: font-size 桌機版 改30px，手機版 22px
+- [] .practitioner-row > a 手機版 gap: 0 45px
+- []

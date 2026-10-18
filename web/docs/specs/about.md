@@ -1,6 +1,6 @@
 # 關於我們頁面規格
 
-**狀態：** draft
+**狀態：** frontend-ready
 
 **路由：** `/about`
 
@@ -106,8 +106,9 @@
 
 - 內容負責人需提供並核准品牌理念、空間／團隊介紹、聯絡邀請、3–10 張精選片段、圖片替代文字、公開聯絡資料、營業時間及 Google Maps 嵌入／外部網址。
 - 需確認照片授權與可辨識人物的公開同意；此項未完成前不得將相片視為正式內容。
-- Google Maps 第三方載入可能涉及隱私與同意管理；實作前須確認網站的隱私揭露及是否需要先取得同意才載入 iframe。若需要，設計階段應提供地圖占位與啟用按鈕狀態。
-- 使用者已選定 A「顯影室」並完成桌面修訂；手機版設計已開始並產出 390px／768px 候選，下一步待使用者確認手機方向與必要調整。桌面與手機方向都核准後，才更新本規格為 `design-approved`，接續前端原型、`aboutPage` 單例，以及 `siteSettings.contact.businessHours` 與 `siteSettings.contact.map`。目前不修改 production UI、schema 或正式資料。
+- Google Maps 第三方載入可能涉及隱私與同意管理；UI 驗收完成前須確認網站的隱私揭露及是否需要先取得同意才載入 iframe。若需要，CMS 串接前應補上地圖占位與啟用按鈕狀態。
+- `/about` 前端原型已完成，下一階段為 UI 行為驗收；通過後才進入 Sanity 串接。CMS 階段須建立 `aboutPage` 單例、擴充 `siteSettings.contact.businessHours`／`map`，並以共用 `siteSettings` 取代目前僅供原型展示的聯絡 fixture。
+- 內容負責人仍需核准正式文案、人物與照片授權、地址、電話、Email、營業時間、社群及 Google Maps 網址；原型資料不得直接發布。
 
 ## 設計探索狀態
 
@@ -117,10 +118,21 @@
 - 2026-10-18 第三輪修訂依使用者回饋，將品牌理念改為標題在上、正文在下的單欄結構；標題、分隔線與正文整組水平置中，正文維持受控行寬。
 - 2026-10-18 第四輪修訂移除品牌理念標題與正文之間的分隔線，並開始 A 的手機版設計：Header 改用 44px 選單按鈕，各區改為單欄，精選片段依標題、圖片、圖說、控制與正文的自然閱讀順序排列，聯絡資訊與地圖上下堆疊。
 - 三案皆包含品牌理念、空間／團隊、左圖右文精選片段、聯絡資訊、Google Maps 示意及共用 Footer；圖片、人物、地點和文案均為設計示意，不是正式內容。
-- 已完成 A 桌面 1440 × 900，以及手機 390 × 844／平板 768 × 1024 的實際渲染檢查；證據與限制記錄於 [桌面設計檢查](../design/review/about-page-concepts-desktop/README.md) 與 [手機設計檢查](../design/review/about-page-a-mobile/README.md)。尚未確認手機稿或執行完整互動／無障礙驗收，因此狀態維持 `draft`。
+- 已完成 A 桌面 1440 × 900，以及手機 390 × 844／平板 768 × 1024 的實際渲染檢查；證據與限制記錄於 [桌面設計檢查](../design/review/about-page-concepts-desktop/README.md) 與 [手機設計檢查](../design/review/about-page-a-mobile/README.md)。2026-10-18 使用者確認手機稿並同意進入前端原型，因此狀態更新為 `design-approved`；完整互動與無障礙驗收仍屬後續 UI 驗證階段。
+- 2026-10-18 完成 `/about` 前端原型：共用 Header／Footer、A 桌機與手機構圖、垂直置中的品牌理念、空間／團隊、手動精選片段、營業時間、Google Maps、loading／empty／error 與圖片失敗備援均已實作。狀態更新為 `frontend-ready`。
 
 ## 本階段完成與驗證
 
 - 已完成 About 第一版的範圍、內容契約、共用資料關係、狀態、響應式、無障礙及可測試驗收條件。
-- 已比對 `PRODUCT.md`、`DESIGN.md`、Header／Footer／首頁內容規格、現有 `siteSettings` 型別、API 與 Sanity schema；確認 `/about` 尚未建立，且現有聯絡資料由 `siteSettings` 共用。
-- 已新增三款桌面設計候選與四張生成示意圖片；未修改 production Vue、Sanity schema 或正式資料。已執行桌面首屏渲染與一次 detector 檢查，未執行應用測試、typecheck、build、手機設計、遠端寫入或完整人工 UI 驗收。
+- 已比對 `PRODUCT.md`、`DESIGN.md`、Header／Footer／首頁內容規格、現有 `siteSettings` 型別、API 與 Sanity schema；`/about` 前端路由現已建立，正式聯絡資料仍規劃由 `siteSettings` 共用。
+- 已新增三款桌面設計候選與四張生成示意圖片；設計稿已完成 1440px、390px 與 768px 渲染檢查。前端原型未修改 Sanity schema、正式資料或進行遠端寫入。
+- 前端原型新增 `AboutOverview.vue`、`/about` 頁面、共用型別、典型／長內容／缺少選填／空集合 fixtures、四張原型靜態圖片與頁面測試。所有示意資料在頁面明確標註未核准。
+- 已執行 About 測試 7/7、完整 Vitest 218/218、`nuxt typecheck`、production build 與 `git diff --check`，皆為成功；型別檢查仍輸出既有 `vue-router/volar/sfc-route-blocks` 套件相容警告，未造成失敗。production preview 的 `/about` 回應 200，Hero 與精選圖片資產回應 200。
+- 本機環境沒有可用的無頭瀏覽器，因此尚未對 production Vue 實作重新產出 320／390／768／1024／1440px 截圖，也未完成鍵盤、200% 縮放、地圖阻擋及真機觸控人工驗收；這些項目留在下一階段 `verify-ui-behavior`。
+
+
+#### 待修正項目
+- [] about-label 改成 14px
+- [] .about-carousel__figure 移除背景色
+- [] 輪播要可以拖動、自動播放 2000ms、播放動畫時間1500ms
+- [] about-contact__list dt，字級、line-height 對齊 about-contact__list dd

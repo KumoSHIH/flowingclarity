@@ -96,3 +96,4 @@
 - [ ] 學員心得分享區塊：標題移除下底線，blockquote 最後一個不要 border-bottom
 - [ ] 報名按鈕：改成白色的字，右邊的icon是一個箭頭，此按鈕需要使用者互動
 - [ ] 活動流程:event-detail__agenda 移除 border-top
+- [ ] event-row__copy ，hover效果 標題不要出現下底線

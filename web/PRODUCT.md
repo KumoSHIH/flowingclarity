@@ -48,6 +48,7 @@ Sanity 為正式內容管理方式。課程分類與授課形式如下：
 - `/articles/[slug]` 已完成響應式前端、UI 行為驗收與本機 Sanity 整合：同一份 `article` 文件提供 `overlay`／`split` 首區、三種可排序正文區塊、受限 Portable Text、人工排序延伸閱讀與 SEO；published-only slug API 以嚴格 parser 區分 404、無效發布內容及讀取失敗，前端不再以 fixture 作為主要資料。遠端 schema 尚未部署，草稿隔離、匿名發布讀取、真實圖片與 production 內容流程仍待驗證。
 - `/session` 已完成無人物照片的 A「經緯名錄」響應式前端、Sanity 整合與 production 內容流驗收：桌機使用 30%／70% sticky 雙域，手機改為單欄篩選與人物長列；支援服務地區／服務項目多選、URL 還原、每頁 8 筆、狀態處理及後台標題純文字換行契約。遠端 schema 已部署，Studio 提供總覽單例、可新增的服務地區／服務項目 taxonomy 與可複選 references 的執行師文件；草稿隔離、兩次發布、匿名讀取、48 筆分頁、1440px／390px 前台與清理後空狀態均已驗證。隔離測試資料已清除，production 保留一份無內容且未發布的 `drafts.session-page` 供後台直接編輯；正式總覽、taxonomy 與執行師內容仍待內容負責人建立及發布。
 - `/session/[slug]` 已完成 C「靜謐檔案」＋A 單欄經歷的響應式 UI、Sanity schema、published-only API 與 production 內容流程驗收。人物照可由後台選擇限制寬度或滿版裁切，並支援無圖及選填主要預約按鈕；詳情字級與 rail padding 為活動／執行師詳情共用 token。聯繫支援電話、LINE ID、Facebook、LINE 官方連結與預約表單；城市可新增，每筆服務地區可多選 1–6 個城市，地點名稱／完整地址由公開層級控制，`practitioner` 不設對外公開同意欄位。目前為 `verified`；隔離測試資料已清除。
+- `/about` 已完成 A「顯影室」的響應式前端原型：依序呈現品牌理念、空間／團隊、手動精選片段與聯絡資訊，含營業時間、Google Maps、觸控切換與狀態備援。頁面目前由明確標示的型別化示意資料驅動，尚未串接 `aboutPage` 或擴充 `siteSettings`，正式文案、影像授權與聯絡資料仍待核准。
 - Production 正式內容矩陣目前覆蓋 1／6 門；其餘五門缺少核准摘要與 slug，選填代表圖若使用則需替代文字。舊 `courseCategory.*` reference 已確認為 0，舊文件尚未刪除。
 
 ### 待確認事項

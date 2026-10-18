@@ -189,3 +189,6 @@ stages:
 
 #### 筆記，不需要執行，可忽略
 - 使用 `web/.agents/skills/develop-feature/SKILL.md` 從 `docs/specs/course` 接續下一個流程
+
+#### 待修正項目
+[] 有任何問題需要協助嗎？ 這個區塊的連結按鈕 改成連去：/about#聯絡我們

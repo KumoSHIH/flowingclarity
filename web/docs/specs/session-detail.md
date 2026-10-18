@@ -177,4 +177,9 @@ SEO 不得加入頁面未呈現或未核准的資格、療效、價格與服務�
 
 #### 待修正項目
 - [x] 最上方補上麵包屑導覽列；2026-10-18 已使用共用 `DetailBreadcrumb` 完成
-
+- [] 內文左右區域的寬度，比照 event-detail
+- [] session-detail__value: 手機版 font-size 14px
+- [] .session-detail__portrait-stage--cover .session-detail__portrait 手機版 aspect-ratio: 9/8
+- [] profile-section > p 、session-detail__experience li ：手機版 font-size 14px
+- [] session-detail__experience li 移除下底線，改加上和 session-detail__methods li::before 一樣的點點，手機版 padding: 10px 0
+- [] .session-detail__methods li::before 沒有垂直置中
