@@ -21,6 +21,25 @@ interface ArticleDocumentValue {
   relatedArticles?: Array<{ _ref?: string }>
 }
 
+function addDocumentPairIds(ids: Set<string>, id: string | undefined) {
+  if (!id) return
+  const publishedId = id.replace(/^drafts\./, '')
+  ids.add(publishedId)
+  ids.add(`drafts.${publishedId}`)
+}
+
+export function relatedArticleReferenceFilter({ document }: { document: ArticleDocumentValue }) {
+  const excludedIds = new Set<string>()
+  addDocumentPairIds(excludedIds, document._id)
+  document.relatedArticles?.forEach(reference => addDocumentPairIds(excludedIds, reference?._ref))
+
+  return {
+    filter: '!(_id in $excludedIds)',
+    params: { excludedIds: [...excludedIds] },
+    maxFieldDepth: 3,
+  }
+}
+
 function fieldError(message: string, path: Path): ValidationError {
   return { message, path }
 }
@@ -95,8 +114,17 @@ export const article = defineType({
       name: 'relatedArticles',
       title: '延伸閱讀',
       type: 'array',
-      description: '依此處順序顯示；前台會略過未發布或資料不完整的文章。',
-      of: [defineArrayMember({ type: 'reference', to: [{ type: 'article' }], options: { disableNew: true } })],
+      description: '最多 8 篇。可輸入文章標題、分類或網址識別碼搜尋；目前文章與已選文章不會重複出現。可拖曳調整前台順序，未發布或資料不完整的文章會由前台略過。',
+      of: [defineArrayMember({
+        name: 'relatedArticle',
+        title: '推薦文章',
+        type: 'reference',
+        to: [{ type: 'article' }],
+        options: {
+          disableNew: true,
+          filter: relatedArticleReferenceFilter,
+        },
+      })],
       validation: Rule => Rule.max(8).unique(),
     }),
     defineField({ name: 'seoTitle', title: 'SEO 標題', type: 'string', validation: Rule => Rule.min(10).max(60) }),
@@ -111,8 +139,12 @@ export const article = defineType({
   ],
   orderings: [{ title: '發布時間（新到舊）', name: 'publishedAtDesc', by: [{ field: 'publishedAt', direction: 'desc' }] }],
   preview: {
-    select: { title: 'title', category: 'category.name', media: 'coverImage', publishedAt: 'publishedAt' },
-    prepare: ({ title, category, media, publishedAt }) => ({ title, subtitle: [category, publishedAt?.slice(0, 10)].filter(Boolean).join(' · '), media }),
+    select: { title: 'title', subtitle: 'category.name', media: 'coverImage', publishedAt: 'publishedAt', slug: 'slug.current' },
+    prepare: ({ title, subtitle, media, publishedAt, slug }) => ({
+      title,
+      subtitle: [subtitle, publishedAt?.slice(0, 10), slug ? `/articles/${slug}` : undefined].filter(Boolean).join(' · '),
+      media,
+    }),
   },
   validation: Rule => Rule.custom(value => {
     const idCheck = articleDocumentIdIsSafe(value)

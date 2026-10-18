@@ -83,9 +83,16 @@
 - 資料健康：改善驗證定位並移除舊心得同意欄位後，production 最終檢查為 14 valid、0 errors、2 warnings。剩餘兩項為既有 `eventsPage.pastIntro`、`homeBanner.slides` stale-field warnings，與活動草稿發布無關。
 - Studio 簡化：2026-10-13 依使用者決策移除逐筆心得公開同意欄位與相關發布驗證，內容負責人在輸入 CMS 前完成公開授權。活動起訖時間、城市、報名網址、詳情，以及課程代表圖、詳情與梯次報名網址仍以可點擊提示定位到對應欄位。
 - 視覺調整：移除桌機 `.event-detail__facts` 的右框線；平板／手機既有資訊項目分隔與底線維持不變。2026-10-14 起此行為列為相似內容詳情頁共用規則。production preview 可啟動且 build 通過；本次瀏覽器控制程序因本機 sandbox 錯誤無法啟動，因此未新增畫面截圖。
+- 麵包屑：2026-10-18 加入共用 `DetailBreadcrumb`，呈現「首頁／近期活動／目前活動」；目前頁為帶有 `aria-current="page"` 的純文字。Chrome 以 production 內容 `/events/test` 檢查 1440 × 900 與 390 × 844，無水平溢位或錯位；截圖位於 `/private/tmp/event-*-breadcrumb.png`。相關四組詳情測試 37 項、Web 全套 37 檔共 211 項、typecheck 與 production build 均通過；typecheck 僅保留既有 Volar 套件警告。
 - 待處理：正式活動素材審核與發布；課程詳情尚未接入共用心得 schema 與 renderer。
 - 未執行：Safari／Firefox、實體觸控裝置與螢幕閱讀器驗收。
 
 
 #### 筆記，不需要執行，可忽略
 - 使用 `$develop-feature` 從 `docs/specs/events-detail.md` 接續下一個流程
+
+#### 待修正項目
+- [x] 最上方補上麵包屑導覽列；2026-10-18 已使用共用 `DetailBreadcrumb` 完成
+- [ ] 學員心得分享區塊：標題移除下底線，blockquote 最後一個不要 border-bottom
+- [ ] 報名按鈕：改成白色的字，右邊的icon是一個箭頭，此按鈕需要使用者互動
+- [ ] 活動流程:event-detail__agenda 移除 border-top

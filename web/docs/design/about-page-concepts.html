@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>關於我們｜A 顯影室桌機與手機設計</title>
+  <style>
+    @font-face {
+      font-family: "Noto Serif TC";
+      src: url("../../public/fonts/NotoSerifTC-Variable.ttf") format("truetype");
+      font-weight: 200 900;
+      font-display: swap;
+    }
+
+    :root {
+      --paper: #f8f5ef;
+      --sand: #e8dfd2;
+      --ink: #38342e;
+      --muted: #5a534b;
+      --clay: #a46b54;
+      --saffron: #f8bf4c;
+      --oxblood: #392618;
+      --night: #241710;
+      --film: #352319;
+      --bark: #766254;
+      --warm-muted: #d8c7b8;
+      --persimmon: #df5b35;
+      --warm-white: #f7f6f4;
+      --line: rgb(56 52 46 / 24%);
+      --line-light: rgb(247 246 244 / 26%);
+      --edge: clamp(54px, 6vw, 116px);
+      --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+      --sans: "BIZ UDPGothic", "Noto Sans TC", "PingFang TC", sans-serif;
+      --chooser: 72px;
+      --header: 87px;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 1180px; scroll-behavior: smooth; background: var(--night); scrollbar-color: var(--clay) var(--paper); scrollbar-width: thin; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font-family: var(--sans); overflow-wrap: anywhere; }
+    button, a { color: inherit; font: inherit; }
+    button { cursor: pointer; }
+    img { display: block; width: 100%; }
+    h1, h2, h3, p, ul { margin-top: 0; }
+    p { line-height: 2.1; letter-spacing: .025em; }
+    ::selection { color: var(--warm-white); background: var(--persimmon); }
+    :focus-visible { outline: 2px solid var(--persimmon); outline-offset: 5px; }
+
+    .prototype { width: min(100%, 1920px); min-height: 100vh; margin: 0 auto; background: var(--paper); }
+    .prototype-switcher {
+      position: sticky; top: 0; z-index: 100;
+      display: grid; min-height: var(--chooser); grid-template-columns: auto minmax(700px, 860px);
+      align-items: center; justify-content: space-between; gap: 36px;
+      padding: 10px var(--edge); color: var(--warm-white); background: var(--night);
+      border-bottom: 1px solid var(--line-light);
+    }
+    .prototype-switcher p { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .08em; }
+    .prototype-switcher p small { display: block; margin-top: 4px; color: var(--warm-muted); font-size: 11px; font-weight: 400; }
+    .tabs { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .tab { min-height: 50px; padding: 0 18px; color: #ded1c6; background: transparent; border: 0; border-left: 1px solid var(--line-light); text-align: left; }
+    .tab:last-child { border-right: 1px solid var(--line-light); }
+    .tab[aria-selected="true"] { color: var(--ink); background: var(--saffron); }
+    .tab strong { display: block; font-family: var(--serif); font-size: 14px; font-weight: 600; }
+    .tab small { display: block; margin-top: 2px; font-size: 11px; letter-spacing: .045em; }
+
+    .site-header {
+      display: flex; height: var(--header); align-items: center; justify-content: space-between; gap: 40px;
+      padding: 0 var(--edge); background: rgb(248 245 239 / 94%); border-bottom: 1px solid var(--line);
+    }
+    .brand { display: inline-flex; min-height: 48px; align-items: center; }
+    .brand img { width: auto; height: 56px; object-fit: contain; }
+    .site-nav { display: flex; align-items: center; gap: clamp(24px, 2.8vw, 44px); font-size: 12px; font-weight: 600; letter-spacing: .09em; }
+    .site-nav a { display: inline-flex; min-height: 48px; align-items: center; text-decoration: none; }
+    .site-nav a[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 8px; }
+    .site-menu-toggle { display: none; }
+    .mobile-review-title { display: none; }
+
+    .concept[hidden] { display: none; }
+    .concept { overflow: hidden; }
+    .concept:not([hidden]) > main { animation: concept-in 560ms var(--ease) both; }
+    @keyframes concept-in { from { opacity: .45; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    .serif { font-family: var(--serif); }
+    .body-copy { max-width: 68ch; color: var(--muted); font-size: 16px; line-height: 2.1; letter-spacing: .025em; }
+    .section-title { margin-bottom: 36px; font-family: var(--serif); font-size: 38px; font-weight: 400; line-height: 1.4; letter-spacing: .02em; text-wrap: balance; }
+    .section-label { color: var(--oxblood); font-size: 10px; font-weight: 600; line-height: 1.7; letter-spacing: .18em; }
+    .section-label--light { color: var(--paper); }
+    .demo-note { display: flex; justify-content: space-between; gap: 36px; padding: 18px var(--edge); color: #e7dbd1; background: var(--bark); font-size: 12px; line-height: 1.7; }
+    .demo-note strong { color: var(--warm-white); }
+    .demo-note span:last-child { max-width: 70em; text-align: right; }
+
+    .carousel-shell { min-width: 0; }
+    .carousel-stage { position: relative; overflow: hidden; background: var(--sand); }
+    .carousel-stage img { height: 100%; object-fit: cover; }
+    .carousel-caption { min-height: 56px; padding-top: 15px; color: var(--muted); font-size: 12px; line-height: 1.7; letter-spacing: .06em; }
+    .carousel-controls { display: flex; align-items: center; gap: 13px; }
+    .carousel-button { display: grid; width: 52px; height: 52px; place-items: center; padding: 0; color: inherit; background: transparent; border: 1px solid currentColor; }
+    .carousel-button[disabled] { cursor: not-allowed; opacity: .3; }
+    .carousel-button:not([disabled]):hover { color: var(--warm-white); background: var(--persimmon); border-color: var(--persimmon); }
+    .carousel-button svg { width: 20px; height: 20px; }
+    .carousel-count { min-width: 74px; font-size: 12px; font-variant-numeric: tabular-nums; letter-spacing: .14em; text-align: center; }
+
+    .contact-grid { display: grid; grid-template-columns: minmax(0, .82fr) minmax(520px, 1.18fr); min-height: 700px; }
+    .contact-copy { display: flex; flex-direction: column; justify-content: space-between; padding: 94px var(--edge) 76px; }
+    .contact-copy h2 { max-width: 8em; }
+    .contact-list { padding: 0; margin: 46px 0 0; list-style: none; }
+    .contact-list li { display: grid; grid-template-columns: 94px 1fr; align-items: baseline; gap: 22px; padding: 17px 0; border-bottom: 1px solid currentColor; }
+    .contact-list span { font-size: 11px; font-weight: 700; letter-spacing: .14em; }
+    .contact-list a, .contact-list p { margin: 0; color: inherit; font-size: 14px; line-height: 1.8; text-decoration: none; }
+    .map { position: relative; min-height: 700px; background: var(--sand); }
+    .map iframe { width: 100%; height: 100%; min-height: 700px; border: 0; filter: sepia(.35) saturate(.68) contrast(.92); }
+    .map-badge { position: absolute; right: 24px; bottom: 24px; padding: 12px 16px; color: var(--warm-white); background: var(--night); font-size: 11px; letter-spacing: .08em; text-decoration: none; }
+
+    .site-footer { display: grid; min-height: 430px; grid-template-columns: 36% 64%; color: var(--paper); background: var(--bark); }
+    .site-footer__brand { display: flex; flex-direction: column; justify-content: space-between; padding: 48px var(--edge); border-right: 1px solid var(--line-light); }
+    .site-footer__brand img { width: 190px; height: auto; }
+    .site-footer__brand p { max-width: 8em; margin: 0; font-family: var(--serif); font-size: 34px; line-height: 1.45; }
+    .site-footer__main { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 70px; padding: 74px var(--edge) 48px; }
+    .site-footer__statement { align-self: start; grid-column: 1 / -1; max-width: 12em; margin: 0; font-family: var(--serif); font-size: 48px; line-height: 1.22; }
+    .site-footer__main address { font-size: 13px; font-style: normal; line-height: 2; }
+    .site-footer__main ul { padding: 0; margin: 0; list-style: none; }
+    .site-footer__main li { padding: 12px 0; border-bottom: 1px solid var(--line-light); font-size: 12px; }
+
+    /* A — 顯影室 */
+    .a-hero { display: grid; min-height: calc(100vh - var(--chooser) - var(--header)); grid-template-columns: 41% 59%; color: var(--ink); background: var(--sand); }
+    .a-hero__copy { display: flex; flex-direction: column; justify-content: space-between; padding: 82px clamp(44px, 4.8vw, 82px) 64px var(--edge); }
+    .a-hero__copy h1 { max-width: none; margin: 0; font-family: var(--serif); font-size: clamp(44px, 4.8vw, 72px); font-weight: 400; line-height: 1.22; letter-spacing: .025em; white-space: nowrap; }
+    .a-hero__copy p { max-width: 23em; margin: 0; color: var(--muted); font-size: 17px; line-height: 2; letter-spacing: .035em; }
+    .a-hero__image { position: relative; overflow: hidden; background: var(--sand); }
+    .a-hero__image::after { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(232 223 210 / 24%), transparent 28%); content: ""; }
+    .a-hero__image img { height: 100%; object-fit: cover; object-position: 54% center; filter: saturate(.78) contrast(1.04); }
+    .a-hero__index { display: flex; gap: 28px; color: var(--oxblood); font-size: 10px; font-weight: 600; letter-spacing: .18em; }
+    .a-brand { display: grid; grid-template-columns: minmax(0, 68ch); justify-content: center; justify-items: center; row-gap: 36px; padding: 104px var(--edge) 116px; background: var(--paper); text-align: center; }
+    .a-brand__title h2 { max-width: 14em; margin-bottom: 0; }
+    .a-brand__body { width: 100%; max-width: 68ch; }
+    .a-space { display: grid; grid-template-columns: 31% 69%; min-height: 850px; color: var(--ink); background: var(--sand); }
+    .a-space__copy { display: flex; flex-direction: column; justify-content: flex-end; padding: 86px 48px 76px var(--edge); }
+    .a-space__copy p { color: var(--muted); }
+    .a-space__image img { height: 100%; object-fit: cover; object-position: 56% center; filter: saturate(.86); }
+    .a-moments { display: grid; min-height: 930px; grid-template-columns: 64% 36%; grid-template-rows: auto 1fr auto; align-items: stretch; padding: 140px var(--edge); background: #eadfd3; }
+    .a-moments .carousel-shell { grid-column: 1; grid-row: 1 / 4; }
+    .a-moments .carousel-stage { height: 590px; }
+    .a-moments__intro { grid-column: 2; grid-row: 1; padding: 46px 0 0 clamp(54px, 6vw, 100px); }
+    .a-moments__intro .section-title { max-width: 6em; }
+    .a-moments__body { grid-column: 2; grid-row: 2; align-self: start; padding-left: clamp(54px, 6vw, 100px); }
+    .a-moments .carousel-controls { grid-column: 2; grid-row: 3; padding-left: clamp(54px, 6vw, 100px); }
+    .a-contact { color: var(--ink); background: var(--paper); }
+    .a-contact .map { border-left: 1px solid var(--line); }
+
+    /* B — 層景之間 */
+    .b-hero { position: relative; min-height: calc(100vh - var(--chooser) - var(--header)); overflow: hidden; padding: 68px var(--edge); background: var(--sand); }
+    .b-hero h1 { position: absolute; z-index: 3; left: var(--edge); bottom: 62px; max-width: 8em; margin: 0; font-family: var(--serif); font-size: clamp(74px, 8.6vw, 142px); font-weight: 320; line-height: 1.08; letter-spacing: .025em; }
+    .b-hero__intro { position: absolute; z-index: 4; top: 80px; left: var(--edge); max-width: 23em; }
+    .b-hero__plane { position: absolute; overflow: hidden; background: var(--paper); border: 10px solid var(--paper); }
+    .b-hero__plane img { height: 100%; object-fit: cover; }
+    .b-hero__plane--back { top: 62px; right: 7%; width: 40%; height: 60%; transform: translateY(var(--plane-back, 0)); }
+    .b-hero__plane--mid { top: 20%; right: 32%; width: 27%; height: 52%; transform: translateY(var(--plane-mid, 0)); }
+    .b-hero__plane--front { right: 5%; bottom: -7%; width: 30%; height: 43%; transform: translateY(var(--plane-front, 0)); }
+    .b-hero__plane--mid img { object-position: 42% center; }
+    .b-brand { display: grid; min-height: 760px; grid-template-columns: 38% 62%; color: var(--warm-white); background: var(--bark); }
+    .b-brand__title { padding: 112px 48px 90px var(--edge); border-right: 1px solid var(--line-light); }
+    .b-brand__body { display: flex; align-items: center; padding: 100px var(--edge); }
+    .b-brand__body p { max-width: 31em; margin: 0; color: #eee4db; font-family: var(--serif); font-size: clamp(27px, 2.5vw, 40px); line-height: 1.85; }
+    .b-space { padding: 150px var(--edge) 180px; background: var(--paper); }
+    .b-space__heading { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 80px; margin-bottom: 78px; }
+    .b-space__heading p { max-width: 31em; justify-self: end; }
+    .b-space__image { height: min(61vw, 860px); overflow: hidden; }
+    .b-space__image img { height: 100%; object-fit: cover; object-position: 50% center; }
+    .b-moments { display: grid; min-height: 920px; grid-template-columns: 61% 39%; color: var(--warm-white); background: var(--night); }
+    .b-moments__media { padding: 110px 0 110px var(--edge); }
+    .b-moments .carousel-stage { height: 620px; }
+    .b-moments .carousel-caption { color: #d8c7b8; }
+    .b-moments__copy { display: flex; flex-direction: column; justify-content: space-between; padding: 138px var(--edge) 112px 74px; }
+    .b-moments__copy p { color: #d8c7b8; }
+    .b-contact { background: var(--saffron); }
+    .b-contact .body-copy { color: var(--ink); }
+    .b-contact .map { border-left: 1px solid var(--ink); }
+    .b-contact .map iframe { filter: grayscale(.45) sepia(.25) saturate(.6) contrast(.95); }
+
+    /* C — 字的呼吸 */
+    .c-hero { display: grid; min-height: calc(100vh - var(--chooser) - var(--header)); grid-template-columns: 1fr 1fr; background: var(--paper); }
+    .c-hero__title { display: flex; flex-direction: column; justify-content: center; padding: 76px 36px 76px var(--edge); border-right: 1px solid var(--line); }
+    .c-hero__title h1 { margin: 0; font-family: var(--serif); font-size: clamp(94px, 11vw, 176px); font-weight: 250; line-height: 1; letter-spacing: -.02em; }
+    .c-hero__title h1 span { display: block; padding-left: .9em; }
+    .c-hero__copy { display: flex; flex-direction: column; justify-content: space-between; padding: 84px var(--edge) 66px 70px; }
+    .c-hero__copy p { max-width: 26em; }
+    .c-hero__axis { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }
+    .c-hero__axis span { padding-top: 14px; font-size: 11px; letter-spacing: .045em; }
+    .c-brand { display: grid; min-height: 780px; grid-template-columns: 31% 69%; color: var(--warm-white); background: var(--oxblood); }
+    .c-brand__heading { padding: 116px 50px 90px var(--edge); border-right: 1px solid var(--line-light); }
+    .c-brand__body { display: flex; align-items: center; padding: 110px var(--edge); }
+    .c-brand__body p { max-width: 35em; margin: 0; color: var(--warm-white); font-family: var(--serif); font-size: clamp(28px, 2.8vw, 44px); line-height: 1.9; }
+    .c-space { display: grid; min-height: 900px; grid-template-columns: 68% 32%; background: var(--sand); }
+    .c-space__image img { height: 100%; object-fit: cover; object-position: 54% center; }
+    .c-space__copy { display: flex; flex-direction: column; justify-content: flex-end; padding: 96px var(--edge) 86px 54px; }
+    .c-moments { display: grid; min-height: 920px; grid-template-columns: 66% 34%; padding: 140px var(--edge); background: var(--paper); }
+    .c-moments .carousel-stage { height: 600px; }
+    .c-moments__copy { display: flex; flex-direction: column; justify-content: space-between; padding: 30px 0 0 66px; border-left: 1px solid var(--line); }
+    .c-moments__copy .section-title { font-size: clamp(50px, 5vw, 80px); }
+    .c-contact { color: var(--warm-white); background: var(--bark); }
+    .c-contact .map { border-left: 1px solid var(--line-light); }
+
+    @media (max-width: 1023px) {
+      :root { --edge: clamp(24px, 6vw, 48px); --chooser: 64px; --header: 87px; }
+      html { min-width: 0; }
+      .prototype-switcher { position: relative; min-height: var(--chooser); grid-template-columns: 1fr; padding: 10px var(--edge); }
+      .desktop-review-title, .tabs { display: none; }
+      .mobile-review-title { display: inline; }
+      .prototype-switcher p small { max-width: 34em; }
+      .site-header { position: sticky; z-index: 90; top: 0; height: var(--header); padding: 10px var(--edge); }
+      .brand img { height: 54px; }
+      .site-menu-toggle { position: absolute; z-index: 2; top: 50%; right: var(--edge); display: block; width: 44px; height: 44px; padding: 0; color: var(--oxblood); background: transparent; border: 0; transform: translateY(-50%); }
+      .site-menu-toggle svg { display: block; width: 24px; height: 24px; margin: auto; }
+      .site-nav { position: absolute; top: 100%; left: 0; display: flex; width: 100%; max-height: calc(100dvh - var(--header)); flex-direction: column; align-items: stretch; gap: 0; padding: 18px var(--edge) max(24px, env(safe-area-inset-bottom)); overflow-y: auto; color: var(--oxblood); background: rgb(248 245 239 / 98%); opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(-12px); transition: opacity 180ms ease, transform 260ms var(--ease), visibility 0s linear 260ms; }
+      .site-nav.is-open { opacity: 1; visibility: visible; pointer-events: auto; transform: none; transition-delay: 0s; }
+      .site-nav a { min-height: 72px; border-bottom: 1px solid var(--line); font-size: clamp(18px, 3vw, 22px); }
+      .section-title { margin-bottom: 28px; font-size: 26px; line-height: 1.45; }
+      .body-copy { width: 100%; max-width: 68ch; min-width: 0; }
+      .body-copy, .a-hero__copy p { max-inline-size: 100%; white-space: normal; word-break: break-all; }
+      .a-hero { min-height: 0; grid-template-columns: minmax(0, 1fr); }
+      .a-hero__copy { min-width: 0; min-height: 500px; padding: 70px var(--edge) 56px; }
+      .a-hero__copy h1 { font-size: clamp(44px, 10vw, 64px); }
+      .a-hero__copy p { max-width: 28em; font-size: 16px; }
+      .a-hero__image { height: clamp(420px, 72vw, 620px); }
+      .a-hero__image::after { background: linear-gradient(180deg, rgb(232 223 210 / 18%), transparent 24%); }
+      .a-hero__image img { object-position: 58% center; }
+      .a-brand { grid-template-columns: minmax(0, 68ch); row-gap: 28px; padding: 88px var(--edge) 96px; }
+      .a-brand__title h2 { max-width: 13em; }
+      .a-brand__body { max-width: 40em; }
+      .a-space { min-height: 0; grid-template-columns: minmax(0, 1fr); }
+      .a-space__copy { padding: 86px var(--edge) 52px; }
+      .a-space__image { height: clamp(460px, 92vw, 720px); overflow: hidden; }
+      .a-space__image img { height: 100%; object-fit: cover; object-position: 58% center; }
+      .a-moments { min-height: 0; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; row-gap: 0; padding: 88px var(--edge) 96px; }
+      .a-moments__intro, .a-moments .carousel-shell, .a-moments .carousel-controls, .a-moments__body { grid-column: 1; grid-row: auto; padding-left: 0; }
+      .a-moments__intro { padding-top: 0; }
+      .a-moments__intro .section-title { max-width: none; }
+      .a-moments .carousel-shell { margin-top: 10px; }
+      .a-moments .carousel-stage { height: clamp(320px, 76vw, 560px); }
+      .a-moments .carousel-controls { margin: 12px 0 28px; }
+      .a-moments__body { margin-bottom: 0; }
+      .contact-grid { min-height: 0; grid-template-columns: minmax(0, 1fr); }
+      .contact-copy { min-width: 0; padding: 88px var(--edge) 72px; }
+      .contact-copy h2 { max-width: 12em; }
+      .contact-list { margin-top: 42px; }
+      .contact-list li { grid-template-columns: 90px minmax(0, 1fr); }
+      .a-contact .map { min-height: 520px; border-top: 1px solid var(--line); border-left: 0; }
+      .map iframe { min-height: 520px; }
+      .site-footer { min-height: 0; grid-template-columns: minmax(0, 1fr); }
+      .site-footer__brand { min-height: 160px; padding: 42px var(--edge) 0; border-right: 0; }
+      .site-footer__brand img { width: 150px; }
+      .site-footer__brand p { display: none; }
+      .site-footer__main { grid-template-columns: minmax(0, 1fr); gap: 60px; padding: 64px var(--edge) max(42px, env(safe-area-inset-bottom)); }
+      .site-footer__statement { grid-column: 1; font-size: clamp(36px, 8.4vw, 47px); }
+      .site-footer__main li { min-height: 52px; }
+      .demo-note { flex-direction: column; padding: 18px var(--edge); }
+      .demo-note span:last-child { text-align: left; }
+    }
+    @media (max-width: 560px) {
+      .prototype-switcher p { font-size: 11px; }
+      .prototype-switcher p small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .a-hero__copy { min-height: 430px; padding-top: 56px; padding-bottom: 48px; }
+      .a-hero__index { gap: 18px; }
+      .a-hero__image { height: 390px; }
+      .a-brand { padding-top: 78px; padding-bottom: 84px; }
+      .a-space__copy { padding-top: 78px; }
+      .a-space__image { height: 480px; }
+      .a-moments { padding-top: 78px; padding-bottom: 84px; }
+      .a-moments .carousel-stage { height: 330px; }
+      .contact-copy { padding-top: 78px; }
+      .contact-list li { grid-template-columns: 78px minmax(0, 1fr); gap: 16px; }
+      .a-contact .map, .map iframe { min-height: 420px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .concept:not([hidden]) > main { animation: none; }
+      .carousel-button { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="prototype">
+    <header class="prototype-switcher">
+      <p><span class="desktop-review-title">關於我們・三款桌機設計方向</span><span class="mobile-review-title">關於我們・A 顯影室手機設計</span><small>所有文案、人物與地點皆為構圖示意，不代表正式內容</small></p>
+      <div class="tabs" role="tablist" aria-label="選擇關於我們設計方向">
+        <button id="tab-a" class="tab" role="tab" aria-controls="concept-a" aria-selected="true" tabindex="0" data-target="a"><strong>A　顯影室・已選定</strong><small>影像沉浸・淺色層次</small></button>
+        <button id="tab-b" class="tab" role="tab" aria-controls="concept-b" aria-selected="false" tabindex="-1" data-target="b"><strong>B　層景之間</strong><small>空間前後景・人的連結</small></button>
+        <button id="tab-c" class="tab" role="tab" aria-controls="concept-c" aria-selected="false" tabindex="-1" data-target="c"><strong>C　字的呼吸</strong><small>編輯格線・安靜敘事</small></button>
+      </div>
+    </header>
+
+    <div class="site-header">
+      <a class="brand" href="/" aria-label="善那生活空間首頁"><img src="../../public/assets/logo-main.png" alt=""></a>
+      <nav class="site-nav" aria-label="主要導覽"><a href="/events">近期活動</a><a href="/course">課程探索</a><a href="/session">個案諮詢</a><a href="/articles">文章分享</a><a href="/about" aria-current="page">關於我們</a></nav>
+      <button class="site-menu-toggle" type="button" aria-expanded="false" aria-label="開啟主要選單"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.5"/></svg></button>
+    </div>
+
+    <article id="concept-a" class="concept" role="tabpanel" aria-labelledby="tab-a">
+      <main>
+        <section class="a-hero" aria-labelledby="a-title"><div class="a-hero__copy"><div class="a-hero__index"><span>ABOUT</span><span>FLOWING CLARITY</span></div><h1 id="a-title">關於我們</h1><p>我們從身體、感受與創作出發，為每一段靠近自己的練習，留下一個可以慢慢發生的地方。</p></div><div class="a-hero__image"><img src="assets/about/about-team-preparation.png" alt="三位團隊成員在暖光工作室中準備活動的示意影像"></div></section>
+        <section id="a-brand" class="a-brand"><div class="a-brand__title"><p class="section-label">品牌理念</p><h2 class="section-title">讓理解自己，從一段停留開始。</h2></div><div class="a-brand__body"><p class="body-copy">我們相信，身心的學習不急著提供一個標準答案，而是協助每個人重新辨認自己的感受。透過觸碰、對話、觀察與創作，讓選擇逐漸變得清楚。</p><p class="body-copy">這段文字是長度與節奏示意，正式品牌理念仍須由內容負責人核准。</p></div></section>
+        <section class="a-space"><div class="a-space__copy"><p class="section-label">空間與團隊</p><h2 class="section-title">一個讓經驗被好好承接的地方。</h2><p class="body-copy">我們在不同領域學習，也一起照顧空間、課程與每一次相遇。這裡呈現的是構圖示意，不代表正式團隊名單。</p></div><div class="a-space__image"><img src="assets/about/about-team-preparation.png" alt="團隊在木桌旁整理課程材料的示意影像"></div></section>
+        <section class="a-moments" aria-labelledby="a-moments-title"><div class="a-moments__intro"><p class="section-label">精選片段</p><h2 id="a-moments-title" class="section-title">一些發生過的靠近。</h2></div><div class="carousel-shell" data-carousel><div class="carousel-stage"><img src="assets/about/about-moment-mandala.png" alt="幾位參與者一起在手工紙上繪製曼陀羅的示意影像" data-carousel-image></div><p class="carousel-caption" data-carousel-caption>共同創作的片刻，讓每一雙手留下不同的節奏。</p></div><div class="carousel-controls"><button class="carousel-button" type="button" data-carousel-prev aria-label="上一張片段" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 5-7 7 7 7M8 12h12" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="carousel-count" data-carousel-count aria-live="polite">01 / 03</span><button class="carousel-button" type="button" data-carousel-next aria-label="下一張片段"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7M4 12h12" stroke="currentColor" stroke-width="1.5"/></svg></button></div><p class="a-moments__body body-copy">從課程、練習到活動準備，我們留下少量片段，讓還沒來過的人先感受這裡的步調。正式照片上線前須確認授權與人物公開同意。</p></section>
+        <section class="contact-grid a-contact" aria-labelledby="a-contact-title"><div class="contact-copy"><div><p class="section-label">聯絡我們</p><h2 id="a-contact-title" class="section-title">從一段對話，找到適合的入口。</h2><p class="body-copy">以下聯絡內容僅供版面示意，正式頁面由全站設定同步帶入。</p></div><ul class="contact-list"><li><span>地址</span><p>高雄市・正式地址待核准</p></li><li><span>電話</span><p>07 — 000 0000</p></li><li><span>EMAIL</span><p>hello@example.com</p></li><li><span>營業時間</span><p>週二至週日　10:00–18:00<br>採預約制・實際時間待核准</p></li><li><span>社群</span><p>Facebook　／　LINE</p></li></ul></div><div class="map"><iframe title="Google Maps 地點示意" loading="lazy" src="https://www.google.com/maps?q=Kaohsiung%2C+Taiwan&amp;output=embed"></iframe><a class="map-badge" href="https://www.google.com/maps/search/?api=1&amp;query=Kaohsiung%2C%20Taiwan" target="_blank" rel="noopener noreferrer">在 Google Maps 開啟</a></div></section>
+      </main>
+      <aside class="demo-note"><strong>A｜顯影室・已選定</strong><span>保留左文右圖與逐段顯影的節奏，改以暖紙與淺砂色承載閱讀；Banner 標題採單行，品牌理念改為上下置中的單欄排列，字級對齊既有頁面，聯絡區補入營業時間。</span></aside>
+    </article>
+
+    <article id="concept-b" class="concept" role="tabpanel" aria-labelledby="tab-b" hidden>
+      <main>
+        <section class="b-hero" aria-labelledby="b-title"><p class="b-hero__intro body-copy">在不同的練習與相遇之間，慢慢看見自己所在的位置。</p><div class="b-hero__plane b-hero__plane--back"><img src="assets/about/about-team-preparation.png" alt="團隊準備活動的示意影像"></div><div class="b-hero__plane b-hero__plane--mid"><img src="assets/about/about-moment-circle.png" alt="小組圍坐交流的示意影像"></div><div class="b-hero__plane b-hero__plane--front"><img src="assets/about/about-moment-mandala.png" alt="共同創作曼陀羅的示意影像"></div><h1 id="b-title">關於我們</h1></section>
+        <section class="b-brand"><div class="b-brand__title"><p class="section-label section-label--light">品牌理念</p><h2 class="section-title">把每一種感受，放回自己的位置。</h2></div><div class="b-brand__body"><p>我們不急著定義答案，而是讓身體、關係與創作成為不同的入口。當經驗有了可以停留的位置，理解便能慢慢展開。</p></div></section>
+        <section class="b-space"><div class="b-space__heading"><div><p class="section-label">空間與團隊</p><h2 class="section-title">一起照顧空間，也照顧每一次相遇。</h2></div><p class="body-copy">團隊介紹文字示意。我們在不同領域持續學習，並共同整理課程、活動與空間中的每個細節。正式人物與內容仍待核准。</p></div><div class="b-space__image"><img src="assets/about/about-team-preparation.png" alt="三位團隊成員在工作室中整理材料的示意影像"></div></section>
+        <section class="b-moments" aria-labelledby="b-moments-title"><div class="b-moments__media carousel-shell" data-carousel><div class="carousel-stage"><img src="assets/about/about-moment-mandala.png" alt="幾位參與者一起在手工紙上繪製曼陀羅的示意影像" data-carousel-image></div><p class="carousel-caption" data-carousel-caption>共同創作的片刻，讓每一雙手留下不同的節奏。</p></div><div class="b-moments__copy"><div><p class="section-label section-label--light">精選片段</p><h2 id="b-moments-title" class="section-title">片段不是證明，<br>是邀請。</h2><p class="body-copy">透過少量真實影像，讓訪客感受課程與活動的步調，而不是以成果或療效說服。正式照片上線前須確認授權。</p></div><div class="carousel-controls"><button class="carousel-button" type="button" data-carousel-prev aria-label="上一張片段" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 5-7 7 7 7M8 12h12" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="carousel-count" data-carousel-count aria-live="polite">01 / 03</span><button class="carousel-button" type="button" data-carousel-next aria-label="下一張片段"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7M4 12h12" stroke="currentColor" stroke-width="1.5"/></svg></button></div></div></section>
+        <section class="contact-grid b-contact" aria-labelledby="b-contact-title"><div class="contact-copy"><div><p class="section-label">聯絡我們</p><h2 id="b-contact-title" class="section-title">如果你正在尋找一個開始。</h2><p class="body-copy">以下聯絡內容僅供版面示意，正式頁面由全站設定同步帶入。</p></div><ul class="contact-list"><li><span>地址</span><p>高雄市・正式地址待核准</p></li><li><span>電話</span><p>07 — 000 0000</p></li><li><span>EMAIL</span><p>hello@example.com</p></li><li><span>社群</span><p>Facebook　／　LINE</p></li></ul></div><div class="map"><iframe title="Google Maps 地點示意" loading="lazy" src="https://www.google.com/maps?q=Kaohsiung%2C+Taiwan&amp;output=embed"></iframe><a class="map-badge" href="https://www.google.com/maps/search/?api=1&amp;query=Kaohsiung%2C%20Taiwan" target="_blank" rel="noopener noreferrer">在 Google Maps 開啟</a></div></section>
+      </main>
+      <aside class="demo-note"><strong>B｜層景之間</strong><span>最有人情味的一案。以照片前後景建立「走進空間」的感受，首屏辨識度高；代價是疊景構圖對裁切與載入策略要求較高。</span></aside>
+    </article>
+
+    <article id="concept-c" class="concept" role="tabpanel" aria-labelledby="tab-c" hidden>
+      <main>
+        <section class="c-hero" aria-labelledby="c-title"><div class="c-hero__title"><h1 id="c-title">關於<span>我們</span></h1></div><div class="c-hero__copy"><p class="section-label">FLOWING WITH CLARITY</p><p class="body-copy">我們從身體、感受與創作出發，讓每一段靠近自己的練習，都有足夠的時間與空間發生。</p><div class="c-hero__axis"><span>BODY　／　MIND</span><span>SPACE　／　PEOPLE</span></div></div></section>
+        <section class="c-brand"><div class="c-brand__heading"><p class="section-label section-label--light">品牌理念</p><h2 class="section-title">沒有圖片時，仍讓文字完整成立。</h2></div><div class="c-brand__body"><p>理解自己，不一定從答案開始。也許先留意一次呼吸、一個感受，或一段與他人的相遇，就能慢慢找到自己的節奏。</p></div></section>
+        <section class="c-space"><div class="c-space__image"><img src="assets/about/about-team-preparation.png" alt="三位團隊成員在暖光工作室中準備活動的示意影像"></div><div class="c-space__copy"><p class="section-label">空間與團隊</p><h2 class="section-title">在一起工作的日常裡，形成這個地方。</h2><p class="body-copy">空間與團隊文字示意。正式內容可涵蓋共同理念、專業背景與空間如何被使用，不延伸成個人履歷卡片。</p></div></section>
+        <section class="c-moments" aria-labelledby="c-moments-title"><div class="carousel-shell" data-carousel><div class="carousel-stage"><img src="assets/about/about-moment-mandala.png" alt="幾位參與者一起在手工紙上繪製曼陀羅的示意影像" data-carousel-image></div><p class="carousel-caption" data-carousel-caption>共同創作的片刻，讓每一雙手留下不同的節奏。</p></div><div class="c-moments__copy"><div><p class="section-label">精選片段</p><h2 id="c-moments-title" class="section-title">讓片段，保留片段的樣子。</h2><p class="body-copy">不替影像補上誇大的故事，只提供足夠的文字說明發生了什麼。右側敘述固定，左側以手動控制切換三張示意照片。</p></div><div class="carousel-controls"><button class="carousel-button" type="button" data-carousel-prev aria-label="上一張片段" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 5-7 7 7 7M8 12h12" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="carousel-count" data-carousel-count aria-live="polite">01 / 03</span><button class="carousel-button" type="button" data-carousel-next aria-label="下一張片段"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7M4 12h12" stroke="currentColor" stroke-width="1.5"/></svg></button></div></div></section>
+        <section class="contact-grid c-contact" aria-labelledby="c-contact-title"><div class="contact-copy"><div><p class="section-label section-label--light">聯絡我們</p><h2 id="c-contact-title" class="section-title">保持聯絡，也保持一點空間。</h2><p class="body-copy" style="color:#efe3d9">以下聯絡內容僅供版面示意，正式頁面由全站設定同步帶入。</p></div><ul class="contact-list"><li><span>地址</span><p>高雄市・正式地址待核准</p></li><li><span>電話</span><p>07 — 000 0000</p></li><li><span>EMAIL</span><p>hello@example.com</p></li><li><span>社群</span><p>Facebook　／　LINE</p></li></ul></div><div class="map"><iframe title="Google Maps 地點示意" loading="lazy" src="https://www.google.com/maps?q=Kaohsiung%2C+Taiwan&amp;output=embed"></iframe><a class="map-badge" href="https://www.google.com/maps/search/?api=1&amp;query=Kaohsiung%2C%20Taiwan" target="_blank" rel="noopener noreferrer">在 Google Maps 開啟</a></div></section>
+      </main>
+      <aside class="demo-note"><strong>C｜字的呼吸</strong><span>最安靜、最穩定的一案。品牌理念即使沒有圖片仍能成立，長文字適應性最好；代價是情緒較克制，需要正式字體與內容品質支撐。</span></aside>
+    </article>
+
+    <footer class="site-footer"><div class="site-footer__brand"><img src="../../public/assets/logo-main-light.png" alt=""><p>讓身心，慢慢回到自己的節奏。</p></div><div class="site-footer__main"><p class="site-footer__statement" lang="en">Pathways to creative arts and well-being</p><address>高雄市・正式地址待核准<br>聯絡資訊由全站設定帶入</address><nav aria-label="頁尾導覽"><ul><li>近期活動</li><li>課程探索</li><li>個案諮詢</li><li>文章分享</li><li>關於我們</li></ul></nav></div></footer>
+  </div>
+
+  <script>
+    const tabs = [...document.querySelectorAll('[role="tab"]')]
+    const panels = [...document.querySelectorAll('[role="tabpanel"]')]
+    const slides = [
+      { src: 'assets/about/about-moment-mandala.png', alt: '幾位參與者一起在手工紙上繪製曼陀羅的示意影像', caption: '共同創作的片刻，讓每一雙手留下不同的節奏。' },
+      { src: 'assets/about/about-moment-circle.png', alt: '五位參與者坐在暖光空間中交流的示意影像', caption: '圍坐、傾聽與回應，讓經驗在關係之間慢慢被理解。' },
+      { src: 'assets/about/about-moment-bodywork.png', alt: '講師示範肩背觸碰方式、學員在旁觀察的示意影像', caption: '在清楚而尊重的示範中，理解觸碰的分寸與感受。' },
+    ]
+
+    function selectTab(tab, focus = false) {
+      tabs.forEach(item => {
+        const active = item === tab
+        item.setAttribute('aria-selected', String(active))
+        item.tabIndex = active ? 0 : -1
+      })
+      panels.forEach(panel => { panel.hidden = panel.id !== `concept-${tab.dataset.target}` })
+      if (focus) tab.focus()
+      history.replaceState(null, '', `#${tab.dataset.target}`)
+      window.scrollTo({ top: 0, behavior: 'instant' })
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => selectTab(tab))
+      tab.addEventListener('keydown', event => {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return
+        event.preventDefault()
+        const step = event.key === 'ArrowRight' ? 1 : tabs.length - 1
+        selectTab(tabs[(index + step) % tabs.length], true)
+      })
+    })
+
+    const menuButton = document.querySelector('.site-menu-toggle')
+    const siteNav = document.querySelector('.site-nav')
+    menuButton.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') !== 'true'
+      menuButton.setAttribute('aria-expanded', String(open))
+      menuButton.setAttribute('aria-label', open ? '關閉主要選單' : '開啟主要選單')
+      siteNav.classList.toggle('is-open', open)
+    })
+
+    document.querySelectorAll('[data-carousel]').forEach(carousel => {
+      let index = 0
+      const image = carousel.querySelector('[data-carousel-image]')
+      const caption = carousel.querySelector('[data-carousel-caption]')
+      const panel = carousel.closest('.concept')
+      const controls = panel.querySelector('.carousel-controls')
+      const prev = controls.querySelector('[data-carousel-prev]')
+      const next = controls.querySelector('[data-carousel-next]')
+      const count = controls.querySelector('[data-carousel-count]')
+
+      function render() {
+        const slide = slides[index]
+        image.src = slide.src
+        image.alt = slide.alt
+        caption.textContent = slide.caption
+        count.textContent = `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`
+        prev.disabled = index === 0
+        next.disabled = index === slides.length - 1
+      }
+      prev.addEventListener('click', () => { if (index > 0) { index -= 1; render() } })
+      next.addEventListener('click', () => { if (index < slides.length - 1) { index += 1; render() } })
+      render()
+    })
+
+    let ticking = false
+    function updatePlanes() {
+      const hero = document.querySelector('.b-hero')
+      if (!hero || hero.closest('.concept').hidden) { ticking = false; return }
+      const progress = Math.max(-1, Math.min(1, hero.getBoundingClientRect().top / window.innerHeight))
+      hero.style.setProperty('--plane-back', `${progress * 12}px`)
+      hero.style.setProperty('--plane-mid', `${progress * 26}px`)
+      hero.style.setProperty('--plane-front', `${progress * 40}px`)
+      ticking = false
+    }
+    window.addEventListener('scroll', () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || ticking) return
+      ticking = true
+      requestAnimationFrame(updatePlanes)
+    }, { passive: true })
+
+    const requestedConcept = new URLSearchParams(location.search).get('concept')
+    const initial = tabs.find(tab => tab.dataset.target === requestedConcept || `#${tab.dataset.target}` === location.hash)
+    if (initial) selectTab(initial)
+  </script>
+</body>
+</html>

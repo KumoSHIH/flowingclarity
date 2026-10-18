@@ -35,6 +35,10 @@ describe("article detail parser", () => {
         ]),
       });
       expect(textSection.content[1]).toMatchObject({
+        type: "paragraph",
+        text: "",
+      });
+      expect(textSection.content[2]).toMatchObject({
         type: "list",
         style: "bullet",
         items: expect.arrayContaining([
@@ -43,6 +47,31 @@ describe("article detail parser", () => {
       });
     }
     expect(content?.seo?.shareImage?.src).toContain("cdn.sanity.io");
+  });
+
+  it("treats Sanity null list metadata as a normal paragraph", () => {
+    const content = parseArticleDetail(structuredClone(sanityArticleDetail));
+    const section = content?.body[0];
+    expect(section?.type).toBe("richTextSection");
+    if (section?.type === "richTextSection") {
+      expect(section.content[0]?.type).toBe("paragraph");
+    }
+  });
+
+  it("preserves authored blank paragraphs while rejecting blank headings and list items", () => {
+    const content = parseArticleDetail(structuredClone(sanityArticleDetail));
+    const section = content?.body[0];
+    if (section?.type !== "richTextSection") throw new Error("missing rich text section");
+    expect(section.content.some(item => item.type === "paragraph" && item.text === "")).toBe(true);
+
+    const blankHeading = structuredClone(sanityArticleDetail);
+    blankHeading.body[0]!.content![1]!.style = "h2";
+    expect(parseArticleDetail(blankHeading)).toBeNull();
+
+    const blankList = structuredClone(sanityArticleDetail);
+    blankList.body[0]!.content![1]!.listItem = "bullet";
+    blankList.body[0]!.content![1]!.level = 1;
+    expect(parseArticleDetail(blankList)).toBeNull();
   });
 
   it("drops invalid, duplicate, and self-related entries without filling replacements", () => {

@@ -14,6 +14,7 @@ import type {
   CourseDetailGalleryLayout,
   CourseDetailStatus,
 } from "../types/courseDetail";
+import DetailBreadcrumb from "./DetailBreadcrumb.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -212,6 +213,15 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="courseDetailRoot" class="course-detail" :aria-busy="status === 'loading'">
+    <DetailBreadcrumb
+      class="course-detail__breadcrumb"
+      :items="[
+        { label: '首頁', to: '/' },
+        { label: '課程探索', to: '/course' },
+        { label: content?.hero.title.replace('\n', '') ?? '課程內容' },
+      ]"
+    />
+
     <section v-if="status === 'loading'" class="course-detail-state" aria-live="polite">
       <div class="course-detail-state__lines" aria-hidden="true"><span /><span /><span /></div>
       <h1>正在整理課程內容</h1>

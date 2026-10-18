@@ -16,7 +16,7 @@
 
 ## 範圍與非目標
 
-第一版包含共用 `SiteHeader`／`SiteFooter`、返回執行師名錄、姓名與選填英文名、選填人物照、服務取向摘要、完整介紹、經歷、服務地區、服務項目，以及至少一個已核准的站外聯繫入口。總覽與詳情共用同一份 `practitioner` 文件、slug、taxonomy references 與 `isPublished`；詳情必填內容不完整時不得公開。
+第一版包含共用 `SiteHeader`／`SiteFooter`、可返回執行師名錄的麵包屑、姓名與選填英文名、選填人物照、服務取向摘要、完整介紹、經歷、服務地區、服務項目，以及至少一個已核准的站外聯繫入口。總覽與詳情共用同一份 `practitioner` 文件、slug、taxonomy references 與 `isPublished`；詳情必填內容不完整時不得公開。
 
 第一版不包含站內預約、即時可約時段、付款、會員、留言表單、評分、個案紀錄、醫療診斷、療效保證、距離定位或精確地圖。聯繫後的回覆、預約確認、取消與付款流程由外部管道處理；未確認前不在頁面承諾回覆時間。
 
@@ -169,7 +169,12 @@ SEO 不得加入頁面未呈現或未核准的資格、療效、價格與服務�
 
 2026-10-16 共用手機內容章節標題由 32px 統一為 26px。以 390px fixture 頁確認「關於執行師」與「經歷」皆為 `26px / 36.4px`、寬 342px、右界 366px，與後續內容保留 22px 間距，頁面無水平溢位或遮擋；最新截圖與量測位於 [`review/detail-heading-token-mobile/`](../design/review/detail-heading-token-mobile/README.md)。Web 34 個測試檔／190 項測試、typecheck 與 production build 通過。
 
+2026-10-18 詳情頁頂端加入共用 `DetailBreadcrumb`，呈現「首頁／個案諮詢／目前執行師」；目前頁為帶有 `aria-current="page"` 的純文字，並移除首區重複的「返回執行師名錄」入口。Chrome 以 production 內容 `/session/amoda` 檢查 1440 × 900 與 390 × 844，麵包屑、首區及肖像版面無溢位或錯位；最終截圖位於 `/private/tmp/session-*-final.png`。相關四組詳情測試 37 項、Web 全套 37 檔共 211 項及最終 Session detail 9 項回歸測試通過，typecheck 與 production build 亦通過；typecheck 僅保留既有 Volar 套件警告。
+
 #### 筆記，不需要執行，可忽略
 
 - 使用 `$develop-feature` 從 `docs/specs/session-detail.md` 接續下一個流程
+
+#### 待修正項目
+- [x] 最上方補上麵包屑導覽列；2026-10-18 已使用共用 `DetailBreadcrumb` 完成
 

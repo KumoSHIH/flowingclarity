@@ -140,10 +140,11 @@
 - 2026-10-11：修正章節錨點偏移與 active 誤判。點擊改以固定 Header、章節列實際高度及 16px 間距計算目標，平滑捲動期間維持使用者選取；一般捲動以固定列下方的章節邊界判定，手機作用中項目會自動水平置入可視範圍。Chrome CDP 實測 1440px／390px 點擊定位誤差分別約 0.22px／0.44px，後續垂直捲動皆切換至正確章節，手機錨點列水平移動 354px 且 active 完整可見。Web 17 檔、104 項測試、typecheck 與 production build 通過；Impeccable detector 為 0 項 anti-pattern，證據位於 `.impeccable/review/course-detail-anchor-tracking/`。
 - 2026-10-13：新增學員心得共用元件規劃與三款桌機候選稿。Chrome 於 1280px、1440px 檢查六組畫面，皆無水平溢位；C 案方向鍵切換可同步選取、焦點與內容。此階段未修改 production schema、查詢、Vue 元件或測試，手機版待選案後設計。
 - 2026-10-16：手機內容章節標題改用全站共用 `--detail-section-title-size: 26px`，涵蓋介紹、適合對象、圖冊、梯次、課綱、帶領者、影片與報名；Hero 與引言維持原展示字級。390px fixture 頁的 12 個內容 `h2` 均為 `26px / 32.5px`、最右界 368px，長標題可自然換兩行且無水平溢位；完整長頁及淺色長文／深色報名區近照位於 [`review/detail-heading-token-mobile/`](../design/review/detail-heading-token-mobile/README.md)。Web 34 檔／190 項測試、typecheck 與 production build 通過。
+- 2026-10-18：詳情頁頂端加入共用 `DetailBreadcrumb`，呈現「首頁／課程探索／目前課程」；目前頁為帶有 `aria-current="page"` 的純文字。Chrome 以 production 內容 `/course/rebalancing` 檢查 1440 × 900 與 390 × 844，麵包屑、首區及長標題無溢位或錯位；截圖位於 `/private/tmp/course-*-breadcrumb.png`。相關四組詳情測試 37 項、Web 全套 37 檔共 211 項、typecheck 與 production build 均通過；typecheck 僅保留既有 Volar 套件警告。
 
 ## 待處理與下一階段
 
-- 待加入麵包屑
+- 已加入與文章詳情一致的三層麵包屑，提供「首頁／課程探索／目前課程」導覽。
 - 延後項目：待多門課程完成後台資料建置後，集中檢查長短內容、不同區塊組合與缺省資料的呈現，再決定是否調整前台樣式或新增、拆分 Studio 欄位；目前不阻擋下一個單元。
 - 新增規劃：學員心得桌機與手機版型已確認，共享型別與 Vue 元件原型已建立；下一步新增共用 schema、GROQ／查詢、parser、課程 body renderer，並執行 production 回歸與可復原內容流驗收。完成前不得記為已在課程詳情上線。
 - 發布前仍需補真實 iOS／Android 裝置，以及 Safari、Firefox 的交叉驗證；本階段只完成 Chrome headless 驗收。
@@ -152,7 +153,7 @@
 - 使用 `$develop-feature` 從 web/docs/specs/course-detail.md 接續下一個流程
 
 #### 待修正項目
-[] 最上方補上麵包屑導覽列
+- [x] 最上方補上麵包屑導覽列；2026-10-18 已使用共用 `DetailBreadcrumb` 完成
 [x] 內文標題字級太大，需與其他內頁的大標題字級相同；2026-10-16 手機內容章節 `h2` 已統一引用共用 `--detail-section-title-size: 26px`，桌機與 Hero 展示標題維持既有核准構圖
 [] 缺少學員分享的區塊（此區後檯可自由新增，只能有一個），近期活動內頁有相同的元件，用這個就可以
 [] 新增圖片輪播，左：swiper 右：固定文字（後檯可編輯輸入一段文字）

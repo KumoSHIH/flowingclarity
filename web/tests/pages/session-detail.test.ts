@@ -28,6 +28,9 @@ describe('session detail component', () => {
 
     expect(wrapper.findAll('h1')).toHaveLength(1)
     expect(wrapper.get('h1').text()).toBe(sessionDetailFixture.name)
+    expect(wrapper.findAll('.session-detail__breadcrumb li')).toHaveLength(3)
+    expect(wrapper.get('.session-detail__breadcrumb [aria-current="page"]').text()).toBe(sessionDetailFixture.name)
+    expect(wrapper.findAll('.session-detail__breadcrumb a').map(link => link.attributes('href'))).toEqual(['/', '/session'])
     expect(wrapper.findAll('.session-detail__experience li')).toHaveLength(4)
     expect(wrapper.findAll('.session-detail__fact')).toHaveLength(2)
     expect(wrapper.findAll('.session-detail__contact li')).toHaveLength(4)
@@ -109,7 +112,7 @@ describe('session detail component', () => {
       props: { status: 'not-found' },
       global: { stubs: { NuxtLink: NuxtLinkStub } },
     })
-    expect(notFound.get('a').attributes('href')).toBe('/session')
+    expect(notFound.get('.session-detail__state a').attributes('href')).toBe('/session')
   })
 })
 

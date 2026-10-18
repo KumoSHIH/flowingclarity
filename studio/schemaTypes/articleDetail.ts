@@ -53,6 +53,7 @@ const richContentField = () => defineField({
   name: 'content',
   title: '正文',
   type: 'array',
+  description: '可保留空白段落作為段落間留白；每個空白段落會呈現一行正文高度。',
   of: [portableText],
   validation: Rule => Rule.required().min(1).max(40),
 })

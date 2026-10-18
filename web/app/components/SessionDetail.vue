@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import DetailBreadcrumb from "./DetailBreadcrumb.vue";
 import type {
   SessionDetailContent,
   SessionDetailStatus,
@@ -43,6 +44,15 @@ function opensNewTab(href?: string): boolean {
 
 <template>
   <div class="session-detail" :aria-busy="status === 'loading'">
+    <DetailBreadcrumb
+      class="session-detail__breadcrumb"
+      :items="[
+        { label: '首頁', to: '/' },
+        { label: '個案諮詢', to: '/session' },
+        { label: content?.name ?? '執行師資料' },
+      ]"
+    />
+
     <div
       v-if="status === 'loading'"
       class="session-detail__state"
@@ -78,9 +88,6 @@ function opensNewTab(href?: string): boolean {
         :class="{ 'session-detail__hero--without-portrait': !content.portrait }"
       >
         <div class="session-detail__hero-copy">
-          <NuxtLink class="session-detail__back" to="/session"
-            >返回執行師名錄</NuxtLink
-          >
           <div>
             <h1>{{ content.name }}</h1>
             <p v-if="content.englishName" class="session-detail__english-name">
@@ -240,28 +247,11 @@ function opensNewTab(href?: string): boolean {
   display: flex;
   min-width: 0;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 42px clamp(28px, 6vw, 116px) 70px;
 }
-.session-detail__back {
-  display: inline-flex;
-  min-height: 48px;
-  align-items: center;
-  gap: 12px;
-  align-self: flex-start;
-  color: #745142;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-decoration: none;
-}
-.session-detail__back::before {
-  width: 28px;
-  border-top: 1px solid currentcolor;
-  content: "";
-}
 .session-detail__hero-copy > div {
-  padding-top: 66px;
+  padding-top: 0;
 }
 .session-detail h1 {
   max-width: 11em;
@@ -585,6 +575,7 @@ function opensNewTab(href?: string): boolean {
   }
   .session-detail__hero-copy {
     min-height: 0;
+    justify-content: flex-start;
     padding: 34px 24px 68px;
   }
   .session-detail__hero-copy > div {

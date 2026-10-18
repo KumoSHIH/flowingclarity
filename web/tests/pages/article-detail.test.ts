@@ -64,10 +64,15 @@ describe("article detail", () => {
     expect(wrapper.get('[aria-live="polite"]').text()).toBe("");
     expect(controls[0]!.attributes("disabled")).toBeDefined();
     expect(controls[1]!.attributes("disabled")).toBeUndefined();
+    expect(wrapper.get(".article-related__position").text()).toBe("01–01 / 05");
     await controls[1]!.trigger("click");
     expect(wrapper.get('[aria-live="polite"]').text()).toBe(
       "目前顯示第 2 篇，共 5 篇",
     );
+    expect(wrapper.get(".article-related__position").text()).toBe("02–02 / 05");
+    expect(
+      wrapper.get(".article-related__progress span").attributes("style"),
+    ).toContain("translateX(100%)");
     expect(
       wrapper.get(".article-related__track").attributes("style"),
     ).toContain("translateX");
@@ -76,6 +81,30 @@ describe("article detail", () => {
     await controls[1]!.trigger("click");
     await controls[1]!.trigger("click");
     expect(controls[1]!.attributes("disabled")).toBeDefined();
+  });
+
+  it("supports deliberate horizontal touch swipes without hijacking vertical reading", async () => {
+    const wrapper = mountDetail();
+    await wrapper.vm.$nextTick();
+    const viewport = wrapper.get(".article-related__viewport");
+
+    await viewport.trigger("touchstart", {
+      touches: [{ clientX: 260, clientY: 100 }],
+    });
+    await viewport.trigger("touchend", {
+      changedTouches: [{ clientX: 170, clientY: 108 }],
+    });
+    expect(wrapper.get('[aria-live="polite"]').text()).toBe(
+      "目前顯示第 2 篇，共 5 篇",
+    );
+
+    await viewport.trigger("touchstart", {
+      touches: [{ clientX: 170, clientY: 100 }],
+    });
+    await viewport.trigger("touchend", {
+      changedTouches: [{ clientX: 160, clientY: 190 }],
+    });
+    expect(wrapper.get(".article-related__position").text()).toBe("02–02 / 05");
   });
 
   it("keeps only visible carousel links in the enhanced tab order and resets for new content", async () => {
@@ -128,6 +157,17 @@ describe("article detail", () => {
     expect(wrapper.findAll(".article-body > section")).toHaveLength(30);
     expect(wrapper.findAll(".article-related__track > li")).toHaveLength(8);
     expect(wrapper.text()).toContain("長文段落 30");
+  });
+
+  it("renders an authored blank paragraph as one hidden reading-rhythm spacer", () => {
+    const content = structuredClone(articleDetailFixture);
+    const section = content.body.find((item) => item.type === "richTextSection");
+    if (!section || section.type !== "richTextSection") throw new Error("missing rich text section");
+    section.content.splice(1, 0, { key: "blank-line", type: "paragraph", text: "" });
+    const wrapper = mountDetail(content);
+    const spacer = wrapper.get(".article-rich-text__spacer");
+    expect(spacer.element.tagName).toBe("P");
+    expect(spacer.attributes("aria-hidden")).toBe("true");
   });
 
   it("renders loading, error retry, and not-found states without fixture fallback", async () => {

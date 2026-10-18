@@ -20,9 +20,19 @@ function segments(line: ArticleRichTextLine) {
 
 <template>
   <template v-for="item in content" :key="item.key">
+    <p
+      v-if="item.type === 'paragraph' && !item.text"
+      class="article-rich-text__paragraph article-rich-text__spacer"
+      aria-hidden="true"
+    />
     <component
       :is="item.type === 'paragraph' ? 'p' : itemTag(item)"
-      v-if="item.type !== 'list'"
+      v-else-if="item.type !== 'list'"
+      :class="[
+        item.type === 'paragraph'
+          ? 'article-rich-text__paragraph'
+          : 'article-rich-text__heading',
+      ]"
     >
       <component
         :is="segment.href ? 'a' : 'span'"
@@ -38,8 +48,16 @@ function segments(line: ArticleRichTextLine) {
         <template v-else>{{ segment.text }}</template>
       </component>
     </component>
-    <component :is="item.style === 'number' ? 'ol' : 'ul'" v-else>
-      <li v-for="entry in item.items" :key="entry.key">
+    <component
+      :is="item.style === 'number' ? 'ol' : 'ul'"
+      v-else
+      class="article-rich-text__list"
+    >
+      <li
+        v-for="entry in item.items"
+        :key="entry.key"
+        class="article-rich-text__list-item"
+      >
         <component
           :is="segment.href ? 'a' : 'span'"
           v-for="segment in segments(entry)"
@@ -57,3 +75,21 @@ function segments(line: ArticleRichTextLine) {
     </component>
   </template>
 </template>
+
+<style scoped>
+.article-rich-text__paragraph,
+.article-rich-text__list-item {
+  color: #625a51;
+  font-size: var(--detail-body-size);
+  line-height: 2.1;
+  letter-spacing: 0.025em;
+}
+
+.article-rich-text__paragraph {
+  margin: 0;
+}
+
+.article-rich-text__spacer {
+  min-height: calc(var(--detail-body-size) * 2.1);
+}
+</style>

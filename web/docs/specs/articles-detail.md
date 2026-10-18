@@ -58,7 +58,7 @@
 | `coverImage` | 首區與總覽共用的選填代表圖 | 選填；有內容意義時 `alt` 必填 2–120 字 | 編輯者／既有 Sanity image |
 | `heroStyle` | 詳情首區的圖片與標題排列 | 必填 enum：`overlay` 或 `split`；預設 `split` | 編輯者／擴充 Sanity `article` |
 | `body` | 可排序的正文區塊陣列 | 必填；最少 1、典型 4–10、最多 30 個有效區塊 | 編輯者／擴充 Sanity `article` |
-| `relatedArticles` | 編輯者人工挑選的文章 references | 選填且不重複；0–8 筆，不可選自己 | 編輯者／擴充 Sanity `article` |
+| `relatedArticles` | 編輯者人工挑選的文章 references | 選填且不重複；0–8 筆，不可選自己；選取器可依標題、分類或 slug 搜尋，並排除目前與已選文章 | 編輯者／擴充 Sanity `article` |
 
 文章依 Sanity draft／published 狀態決定公開性，不新增 `isPublished` 或詳情專用公開開關。`heroStyle: overlay` 時 `coverImage` 必填；`split` 可省略代表圖並讓文字區自然擴展。`body` 缺少或沒有有效區塊時不得發布；一篇文章可只包含一個以上的 `richTextSection`，不要求任何正文圖片。執行階段若讀到核心契約無效的已發布文件，顯示 error 而非以 fixture、摘要或其他文章補成正文。
 
@@ -70,7 +70,7 @@
 | `splitMediaSection` | 一張圖片搭配一段文字 | `image`、`content`、`mediaSide` 必填；`heading` 選填 4–60 字 | 編輯者／Sanity object |
 | `splitMediaSection.mediaSide` | 圖片相對文字的呈現方向 | enum：`start` 或 `end` | 編輯者／Sanity string |
 | `wideImageSection` | 獨立的大幅圖片段落 | `image` 必填；`caption` 選填 2–160 字 | 編輯者／Sanity object |
-| `content` | 正文富文字 | 支援一般段落、`h2`、`h3`、有序／無序清單、粗體、斜體及連結；不得有空白 block | 編輯者／Portable Text |
+| `content` | 正文富文字 | 支援一般段落、`h2`、`h3`、有序／無序清單、粗體、斜體及連結；一般段落可留白，空白標題與清單項目無效 | 編輯者／Portable Text |
 | `image` | 內容圖片與裁切焦點 | 圖片資產及 `alt` 必填；`alt` 2–160 字，純裝飾圖可明確設空字串 | 編輯者／Sanity image |
 | `caption` | 圖片來源、情境或補充說明 | 選填，2–160 字；不重複 alt 或正文 | 編輯者／Sanity string |
 
@@ -105,14 +105,15 @@ SEO 不得加入頁面未呈現或未核准的療效、資格與事實。not fou
 - 麵包屑各層級以相同的 flex 交叉軸與最小高度置中，連結與目前頁文字基線一致；正文容器 `.edge-body` 的 `padding-top` 固定為 `0`，首段位置只由父層內容節奏控制。
 - 桌機首區左側固定使用暖砂資訊牌。`overlay` 的右側圖片鋪滿可用區並加足以維持文字對比的半透明黑色遮罩；`split` 保留最右側圖片窗。兩者均不拉伸圖片，橫式圖片預設置中裁切，hotspot 可覆寫焦點。
 - 桌機圖文正文使用圖片破出左右頁邊、文字維持內側軸線的節奏，不以水平分隔線切開段落。延伸閱讀沿用頁面暖紙底，不增加深色或卡片底板。
-- 純文字 `richTextSection` 使用與圖文段落相同的內側閱讀軸與約 `68ch` 行寬；所有正文統一使用 `16px / 2.1`（computed `33.6px`），相鄰段落的額外間距固定為 `0px`（原型 token `--paragraph-gap: 0px`）。段落內換行與段落之間因此共用同一個基線節奏，不因是否含圖片而改變段落密度。
+- 純文字 `richTextSection` 使用與圖文段落相同的內側閱讀軸與約 `68ch` 行寬；所有正文統一使用 `16px / 2.1`（computed `33.6px`）及 `0.025em` 字距，相鄰非空段落的額外間距固定為 `0px`（原型 token `--paragraph-gap: 0px`）。編輯者建立的一個空白一般段落保留為一行 `33.6px` 的閱讀留白；連續空白段落逐行保留，且不向輔助科技輸出無意義內容。
 - 桌面左右圖文可使用雙欄；`<= 1023px` 全部正文區塊回到單欄並先圖後文。手機資訊牌改為分類在左、標籤與日期在右；`overlay` 維持遮罩圖上文字，`split` 依序顯示文字與滿寬圖片窗。圖片仍向單側頁邊破出，正文區塊間距縮為 `64px`，swiper 一次顯示一篇。320–390px 的圖片、麵包屑、長網址、標籤及 swiper 不得造成水平捲動。
 - `main` 只有一個 `h1`；正文編輯器只能從 `h2` 開始，並維持 `h2`／`h3` 不跳級。文章使用 `<article>`，正文段落使用 `section` 或具對應語意的內容容器，日期使用 `<time datetime>`，標籤集合與相關文章使用語意清單。
 - 麵包屑使用具名稱的 `<nav>` 與有序清單，目前頁不可成為空連結。相關文章區具有可見 `h2`；每張文章入口不可巢狀多個互相競爭的連結。
 - 有意義圖片使用描述內容的 alt，不重複文章標題或圖說；明確純裝飾圖片使用空 alt。圖說以 `<figcaption>` 關聯圖片，不把重要文字烘焙進圖片。
 - 所有操作目標至少 44 × 44px，鍵盤焦點清楚可見。200% 文字放大後不遮擋內容；swiper 不可鎖住 Tab 焦點或攔截垂直捲動。
 - Swiper 手動切換位移時間為 `1500ms`；`prefers-reduced-motion: reduce` 時移除動畫，但保留目前位置與控制狀態。
-- 尊重 `prefers-reduced-motion`；停用平滑位移及非必要動畫後，正文、控制、目前位置與所有文章入口仍完整可用。swiper 不自動播放，因此不需要暫停控制。
+- 延伸閱讀卡片以整張連結承接 hover／focus：圖片只在既有裁切窗內微幅放大，標題、閱讀連結及箭頭改用陶土色回應；控制按鈕具 hover、focus、active 與 disabled 狀態。多篇內容顯示目前範圍及細線進度，手機支援具方向門檻的水平滑動，不攔截一般垂直閱讀。
+- 尊重 `prefers-reduced-motion`；移除卡片、箭頭、按鈕、進度與 swiper 的空間位移後，仍保留色彩與焦點回饋，正文、控制、目前位置與所有文章入口完整可用。swiper 不自動播放，因此不需要暫停控制。
 
 ## 驗收條件
 
@@ -122,10 +123,10 @@ SEO 不得加入頁面未呈現或未核准的療效、資格與事實。not fou
 4. 編輯者可在 `overlay` 與 `split` 間選擇 banner；前者在右側滿版橫圖上使用半透明黑色遮罩承載標題摘要，後者保留中央文字與最右側圖片窗。兩者的橫式圖片皆以 `cover` 置中裁切，且不拉伸；`overlay` 缺圖不得發布。
 5. 編輯者可新增、刪除及排序富文字、左右圖文與滿寬大圖區塊；相同類型可重複，前台嚴格依後台順序呈現。
 6. `mediaSide: start` 在桌面呈現左圖右文，`end` 呈現右圖左文；桌機區塊不顯示水平分隔線。`<= 1023px` 兩者均轉成先圖後文的單欄，閱讀與鍵盤順序一致。純文字與圖文正文皆為 `16px / 2.1`，相鄰段落額外 margin 為 `0px`；正文區塊 row gap 在桌機為 `96px`、手機為 `64px`。
-7. Portable Text 只輸出核准的標題、段落、清單、強調及安全連結；任意 HTML 與不安全 URL 不會被執行或輸出。
+7. Portable Text 只輸出核准的標題、段落、清單、強調及安全連結；一般空白段落呈現一行正文高度並設為 `aria-hidden`，空白標題與空白清單項目使核心內容驗證失敗；任意 HTML 與不安全 URL 不會被執行或輸出。
 8. 正文圖片具有符合內容的 alt；選填圖說與圖片正確關聯。代表圖或其他選填欄位缺少時，不出現破圖、空標題或多餘留白容器。
-9. 後台可選 0–8 篇不重複且非自己的相關文章；前台保持選取順序，只顯示仍公開且具有圖片、分類、標題、摘要及 slug 的項目，不自動補推薦。
-10. 延伸閱讀沿用頁面底色且不顯示日期；每筆顯示圖片、分類、完整標題、最多兩行摘要及閱讀按鈕。0 筆時整區省略、1 筆時沒有無作用控制、2–8 筆時可用滑鼠、觸控及鍵盤操作，且不自動播放或無限循環；一般切換速度為 `1500ms`。
+9. 後台可選 0–8 篇不重複且非自己的相關文章；候選項支援依標題、分類或 slug 搜尋，以分類、日期與公開路徑協助辨識，並排除目前文章及已選項目。前台保持選取順序，只顯示仍公開且具有圖片、分類、標題、摘要及 slug 的項目，不自動補推薦。
+10. 延伸閱讀沿用頁面底色且不顯示日期；每筆顯示圖片、分類、完整標題、最多兩行摘要及閱讀按鈕。0 筆時整區省略、1 筆時沒有無作用控制、2–8 筆時顯示範圍與進度，可用滑鼠、水平觸控滑動及鍵盤操作；卡片 hover／focus 與控制狀態提供一致回饋，且不自動播放或無限循環。一般切換速度為 `1500ms`，reduced motion 下取消空間位移。
 11. Loading、Error、Not found、無代表圖、無相關文章、部分相關文章失效及最長內容都有清楚呈現；Error 可重試，Not found 可返回 `/articles`。
 12. 320、390、768、1023、1024 與 1440px，以及 200% 文字放大時，標題、正文、圖片、麵包屑與相關文章無水平溢位、遮擋或必要內容裁切。
 13. heading、article、nav、list、link、button、time、figure 與 figcaption 語意正確；所有操作可由鍵盤完成、焦點可見、目標至少 44 × 44px，reduced-motion 不影響功能。
@@ -153,6 +154,11 @@ SEO 不得加入頁面未呈現或未核准的療效、資格與事實。not fou
 - 2026-10-16：使用者確認可接續流程後完成 `build-ui-prototype`，狀態更新為 `frontend-ready`。新增共用型別、overlay／split／純文字／長內容 fixtures、`ArticleDetail` 與 `/articles/[slug]`；支援三種正文區塊、loading／error／not found、缺圖、無推薦、最長 30 區塊，以及 1／2／3 欄相關文章 swiper。Chromium 於 320、390、768、1023、1024、1440px 確認無水平溢位、單一 `h1`、圖片 alt 完整、控制至少 44px、正文 `16px / 33.6px`、手機標題 26px、swiper 1500ms／reduced motion 0s；最長 fixture 含 8 標籤、30 區塊、8 推薦，最小 fixture 無代表圖、只有純文字且不顯示推薦。已確認已知 slug 回應 200、未知 slug 回應 404；Web 35 檔／198 項測試、typecheck 與 production build 通過。證據位於 [`review/articles-detail-frontend-prototype/`](../design/review/articles-detail-frontend-prototype/README.md)；下一階段為 `verify-ui-behavior`，Sanity 與正式內容尚未開始。
 - 2026-10-16：完成 `verify-ui-behavior`，狀態更新為 `ui-verified`。修正 swiper 的鍵盤 Tab 範圍、文章切換後索引重設、無 JavaScript 完整網格降級、reduced-motion specificity、狀態播報、SVG 控制圖示及非首屏圖片 lazy loading；新增可重複執行的 Chromium 驗證腳本。320、390、768、1023、1024、1440px 與 720px（1440px／200% 等效）均無水平溢位，單一 `h1`、正文 `33.6px`、手機 h2 26px、桌機 h2 38px、最小控制 44px、圖片 alt 完整，主要文字對比為 5.31–6.44:1。Enter 可切換 swiper、live region 與 disabled／Tab 狀態同步，reduced motion 為 0s；SSR 無 JavaScript 時 5 篇推薦皆可閱讀開啟。已知／未知 slug 分別為 200／404。Impeccable detector 為 0 個反模式，20 個 advisory 為核准的頁面角色字級與既有 Header 色階。Web 35 檔／199 項測試、typecheck、production build 與 `git diff --check` 通過；證據位於 [`review/articles-detail-ui-verified/`](../design/review/articles-detail-ui-verified/README.md)。下一階段為 `integrate-sanity-content`，尚未建立詳情 schema、API 或正式內容。
 - 2026-10-18：完成 `integrate-sanity-content`，狀態更新為 `cms-integrated`。擴充同一份 `article` schema，加入 `heroStyle`、三種可排序正文區塊、受限 Portable Text、安全連結、0–8 篇人工排序延伸閱讀及 SEO／分享圖；新增 published perspective 的 slug GROQ、伺服器 API 與嚴格轉換層。前端不再以 fixture 作為主要資料，能區分 404、已發布核心資料無效與讀取失敗；失效、重複或自我引用的延伸閱讀只會被移除，不自動補位。Studio 26 項測試、Web 37 檔／207 項測試、兩端 typecheck、兩端 production build 與 `git diff --check` 通過；本機測試資料已覆蓋正常、空資料、無效資料、讀取失敗、安全 rich text、`split` 無圖及部分推薦失效。尚未部署 schema、修改遠端 dataset 或建立測試內容；下一階段為 `validate-content-flow`，需取得遠端操作授權後驗證草稿隔離、發布、匿名讀取、前台呈現與清理。
+- 2026-10-18：production 唯讀診斷確認新文章「心與中線」已發布且 references 可匿名讀取；當時正文的 3 個空白 Portable Text blocks 會被嚴格 parser 視為核心契約無效，因此 SSR 正確顯示通用 error state 並輸出 `noindex`。後續依內容需求調整為正式支援一般空白段落，不再以 Studio validation 禁止此編輯方式。
+- 2026-10-18：重新發布後空白 blocks 已移除，但 production projection 對一般段落未設定的 `listItem`／`level` 回傳 `null`；parser 原先只把 `undefined` 視為未設定，導致普通段落被誤判為無效清單。修正 parser 同時接受 `null` 與 `undefined`，並以 production 相同資料形狀加入回歸測試。此修正只影響前端資料轉換，不需要修改遠端文章內容或 schema。
+- 2026-10-18：依編輯需求正式支援正文空白段落。Sanity 欄位說明標示每個空白一般段落呈現一行正文高度；parser 保留空白一般段落、仍拒絕空白標題與清單項目；前端以 `aria-hidden` 的空白 `<p>` 呈現 `33.6px` 留白。正文段落與清單項目明確套用 `16px`、`line-height: 2.1`、`letter-spacing: 0.025em`，避免跨元件 scoped styles 遺漏。Studio 27 項測試、Web 37 檔／210 項測試、兩端 typecheck 與 production build 均通過；Impeccable 為 0 個反模式，15 個 advisory 均來自既有且已核准的詳情頁角色字級。狀態維持 `cms-integrated`；正式站仍待部署 Web，Studio 欄位說明則待 schema 部署。
+- 2026-10-18：優化 Studio「延伸閱讀」大量文章選取流程。Reference 項目改名為「推薦文章」，欄位說明標示搜尋、上限、排序與前台略過規則；候選清單支援搜尋標題、分類與 slug，自動排除目前文章及所有已選文章的 draft／published 文件組。預覽副標題補充分類、發布日期與 `/articles/{slug}`，方便辨識相似標題。新增 filter 與 schema 回歸測試；Studio 28 項測試、typecheck、production build 與 `git diff --check` 均通過，Impeccable 未回報反模式。狀態維持 `cms-integrated`；尚未部署 schema，部署後仍需以大量正式文章完成 Studio 實機驗收。
+- 2026-10-18：加強前台延伸閱讀互動。卡片新增圖片裁切內縮放、標題／CTA 陶土色、箭頭位移及明確 focus ring；切換控制補齊 hover／active 回饋，多篇內容顯示可動態同步的範圍與細線進度，手機加入 48px 且需以水平位移為主的 swipe 判定，避免攔截垂直捲動。reduced motion 取消所有新增空間位移但保留色彩與焦點。Web 37 檔／211 項測試、typecheck、production build 與 `git diff --check` 通過，Impeccable 為 0 個反模式；本機 production 的 `/articles/heart` 回應 200，但目前正式資料沒有可呈現的延伸閱讀，因此真實內容的瀏覽器互動仍待部署後驗收。
 
 
 #### 筆記，不需要執行，可忽略

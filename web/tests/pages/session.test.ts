@@ -74,7 +74,7 @@ describe('session overview', () => {
     expect(wrapper.text()).toContain('人類圖')
   })
 
-  it('normalizes an out-of-range page and focuses results after controlled navigation', async () => {
+  it('does not focus results during URL normalization, but does after user navigation', async () => {
     const wrapper = mount(SessionOverview, {
       attachTo: document.body,
       props: { content: sessionOverviewFixture, page: 99 },
@@ -85,6 +85,11 @@ describe('session overview', () => {
     }, 2]])
 
     await wrapper.setProps({ page: 2 })
+    await wrapper.vm.$nextTick()
+    expect(document.activeElement).not.toBe(wrapper.get('#session-results-heading').element)
+
+    await wrapper.get('.session-pagination a[rel="prev"]').trigger('click')
+    await wrapper.setProps({ page: 1 })
     await wrapper.vm.$nextTick()
     expect(document.activeElement).toBe(wrapper.get('#session-results-heading').element)
     wrapper.unmount()

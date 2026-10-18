@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { EventDetailContent, EventDetailStatus } from '#shared/types/eventDetail'
+import DetailBreadcrumb from './DetailBreadcrumb.vue'
 import SharedTestimonials from './SharedTestimonials.vue'
 
 withDefaults(defineProps<{
@@ -15,6 +16,15 @@ const emit = defineEmits<{ retry: [] }>()
 
 <template>
   <div class="event-detail" :aria-busy="status === 'loading'">
+    <DetailBreadcrumb
+      class="event-detail__breadcrumb"
+      :items="[
+        { label: '首頁', to: '/' },
+        { label: '近期活動', to: '/events' },
+        { label: content?.hero.title ?? '活動內容' },
+      ]"
+    />
+
     <div v-if="status === 'loading'" class="event-detail__state" role="status">
       <span class="event-detail__skeleton event-detail__skeleton--title" />
       <span v-for="index in 4" :key="index" class="event-detail__skeleton" />

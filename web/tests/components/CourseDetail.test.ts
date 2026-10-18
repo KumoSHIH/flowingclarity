@@ -8,7 +8,10 @@ import {
   minimalCourseDetailFixture,
 } from "../../app/fixtures/courseDetail";
 
-const nuxtLinkStub = { template: "<a><slot /></a>" };
+const nuxtLinkStub = {
+  props: ["to"],
+  template: '<a :href="to"><slot /></a>',
+};
 
 enableAutoUnmount(afterEach);
 
@@ -29,6 +32,15 @@ describe("CourseDetail", () => {
 
     expect(wrapper.findAll("h1")).toHaveLength(1);
     expect(wrapper.get("h1").text()).toContain("日式回春");
+    expect(wrapper.findAll(".course-detail__breadcrumb li")).toHaveLength(3);
+    expect(
+      wrapper.get('.course-detail__breadcrumb [aria-current="page"]').text(),
+    ).toBe(courseDetailFixture.hero.title.replace("\n", ""));
+    expect(
+      wrapper
+        .findAll(".course-detail__breadcrumb a")
+        .map((link) => link.attributes("href")),
+    ).toEqual(["/", "/course"]);
     expect(wrapper.findAll(".primary-action:disabled")).toHaveLength(2);
     expect(wrapper.get(".course-video button").attributes("disabled")).toBeDefined();
   });

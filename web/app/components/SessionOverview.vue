@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import type {
   SessionFilters,
   SessionOverviewContent,
@@ -36,7 +36,7 @@ const emit = defineEmits<{
 }>();
 
 const resultsHeading = ref<HTMLElement | null>(null);
-const mounted = ref(false);
+const shouldFocusResults = ref(false);
 const orderedRegions = computed(() =>
   props.content.regions.toSorted((a, b) => a.order - b.order),
 );
@@ -78,15 +78,18 @@ const hasFilters = computed(
 function toggleFilter(group: keyof SessionFilters, key: string) {
   const next = new Set(filters.value[group]);
   next.has(key) ? next.delete(key) : next.add(key);
+  shouldFocusResults.value = true;
   emit("navigate", { ...filters.value, [group]: [...next] }, 1);
 }
 
 function clearFilters() {
+  shouldFocusResults.value = true;
   emit("navigate", { regions: [], methods: [] }, 1);
 }
 
 function navigate(event: MouseEvent, page: number) {
   event.preventDefault();
+  shouldFocusResults.value = true;
   emit("navigate", filters.value, page);
 }
 
@@ -104,7 +107,8 @@ function methodText(key: string): string {
 watch(
   () => [props.page, props.regions.join(","), props.methods.join(",")] as const,
   async () => {
-    if (!mounted.value) return;
+    if (!shouldFocusResults.value) return;
+    shouldFocusResults.value = false;
     await nextTick();
     resultsHeading.value?.focus({ preventScroll: true });
   },
@@ -119,9 +123,6 @@ watch(
   { immediate: true },
 );
 
-onMounted(() => {
-  mounted.value = true;
-});
 </script>
 
 <template>

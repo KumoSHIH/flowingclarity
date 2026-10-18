@@ -52,6 +52,9 @@ describe('event detail component', () => {
 
     expect(wrapper.findAll('h1')).toHaveLength(1)
     expect(wrapper.get('h1').text()).toBe(content.hero.title)
+    expect(wrapper.findAll('.event-detail__breadcrumb li')).toHaveLength(3)
+    expect(wrapper.get('.event-detail__breadcrumb [aria-current="page"]').text()).toBe(content.hero.title)
+    expect(wrapper.findAll('.event-detail__breadcrumb a').map(link => link.attributes('href'))).toEqual(['/', '/events'])
     expect(wrapper.findAll('.event-detail__fact')).toHaveLength(4)
     expect(wrapper.findAll('.event-detail__agenda li')).toHaveLength(3)
     expect(wrapper.findAll('h2').map(item => item.text())).toEqual([
@@ -89,7 +92,7 @@ describe('event detail component', () => {
       global: { stubs: { NuxtLink: NuxtLinkStub } },
     })
     expect(notFound.get('h1').text()).toBe('找不到這個活動')
-    expect(notFound.get('a').attributes('href')).toBe('/events')
+    expect(notFound.get('.event-detail__state a').attributes('href')).toBe('/events')
   })
 })
 

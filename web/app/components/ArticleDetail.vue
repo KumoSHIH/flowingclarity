@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import ArticleRichTextContent from "./ArticleRichTextContent.vue";
+import DetailBreadcrumb from "./DetailBreadcrumb.vue";
 import type {
   ArticleDetailContent,
   ArticleDetailStatus,
@@ -22,6 +23,7 @@ const currentSlide = ref(0);
 const visibleCount = ref(3);
 const hasMovedRelatedArticles = ref(false);
 const isEnhanced = ref(false);
+const relatedSwipeStart = ref<{ x: number; y: number }>();
 
 const relatedCount = computed(() => props.content?.relatedArticles.length ?? 0);
 const maxSlide = computed(() =>
@@ -38,6 +40,21 @@ const liveMessage = computed(() =>
     ? `目前顯示第 ${currentSlide.value + 1} 篇，共 ${relatedCount.value} 篇`
     : "",
 );
+const relatedRangeLabel = computed(() => {
+  if (!relatedCount.value) return "";
+  const start = currentSlide.value + 1;
+  const end = Math.min(
+    relatedCount.value,
+    currentSlide.value + visibleCount.value,
+  );
+  return `${String(start).padStart(2, "0")}–${String(end).padStart(2, "0")} / ${String(relatedCount.value).padStart(2, "0")}`;
+});
+const relatedProgressStyle = computed(() => ({
+  width: relatedCount.value
+    ? `${(visibleCount.value / relatedCount.value) * 100}%`
+    : "100%",
+  transform: `translateX(${(currentSlide.value / visibleCount.value) * 100}%)`,
+}));
 
 function updateVisibleCount() {
   visibleCount.value =
@@ -58,6 +75,27 @@ function isRelatedArticleVisible(index: number) {
     index >= currentSlide.value &&
     index < currentSlide.value + visibleCount.value
   );
+}
+
+function beginRelatedSwipe(event: TouchEvent) {
+  const touch = event.touches[0];
+  relatedSwipeStart.value = touch
+    ? { x: touch.clientX, y: touch.clientY }
+    : undefined;
+}
+
+function endRelatedSwipe(event: TouchEvent) {
+  const start = relatedSwipeStart.value;
+  const touch = event.changedTouches[0];
+  relatedSwipeStart.value = undefined;
+  if (!start || !touch || maxSlide.value === 0) return;
+
+  const deltaX = touch.clientX - start.x;
+  const deltaY = touch.clientY - start.y;
+  if (Math.abs(deltaX) < 48 || Math.abs(deltaX) <= Math.abs(deltaY) * 1.25) {
+    return;
+  }
+  moveSlide(deltaX > 0 ? -1 : 1);
 }
 
 function formatDate(value: string) {
@@ -88,13 +126,14 @@ watch(
 
 <template>
   <article class="article-detail" :aria-busy="status === 'loading'">
-    <nav class="article-breadcrumb" aria-label="麵包屑">
-      <ol>
-        <li><NuxtLink to="/">首頁</NuxtLink></li>
-        <li><NuxtLink to="/articles">文章分享</NuxtLink></li>
-        <li aria-current="page">{{ content?.title ?? "文章內容" }}</li>
-      </ol>
-    </nav>
+    <DetailBreadcrumb
+      class="article-breadcrumb"
+      :items="[
+        { label: '首頁', to: '/' },
+        { label: '文章分享', to: '/articles' },
+        { label: content?.title ?? '文章內容' },
+      ]"
+    />
 
     <div v-if="status === 'loading'" class="article-state" role="status">
       <div aria-hidden="true" class="article-state__skeletons">
@@ -225,36 +264,43 @@ watch(
       >
         <header>
           <h2 id="article-related-title">延伸閱讀</h2>
-          <div
-            v-if="isEnhanced && maxSlide > 0"
-            class="article-related__controls"
-          >
-            <button
-              type="button"
-              aria-label="上一篇相關文章"
-              aria-controls="article-related-track"
-              :disabled="currentSlide === 0"
-              @click="moveSlide(-1)"
-            >
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <path d="M14.5 5 7.5 12l7 7" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              aria-label="下一篇相關文章"
-              aria-controls="article-related-track"
-              :disabled="currentSlide === maxSlide"
-              @click="moveSlide(1)"
-            >
-              <svg aria-hidden="true" viewBox="0 0 24 24">
-                <path d="m9.5 5 7 7-7 7" />
-              </svg>
-            </button>
+          <div v-if="isEnhanced && maxSlide > 0" class="article-related__tools">
+            <span class="article-related__position" aria-hidden="true">
+              {{ relatedRangeLabel }}
+            </span>
+            <div class="article-related__controls">
+              <button
+                type="button"
+                aria-label="上一篇相關文章"
+                aria-controls="article-related-track"
+                :disabled="currentSlide === 0"
+                @click="moveSlide(-1)"
+              >
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M14.5 5 7.5 12l7 7" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                aria-label="下一篇相關文章"
+                aria-controls="article-related-track"
+                :disabled="currentSlide === maxSlide"
+                @click="moveSlide(1)"
+              >
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="m9.5 5 7 7-7 7" />
+                </svg>
+              </button>
+            </div>
           </div>
         </header>
         <p class="sr-only" aria-live="polite">{{ liveMessage }}</p>
-        <div class="article-related__viewport">
+        <div
+          class="article-related__viewport"
+          @touchstart.passive="beginRelatedSwipe"
+          @touchend.passive="endRelatedSwipe"
+          @touchcancel="relatedSwipeStart = undefined"
+        >
           <ul
             id="article-related-track"
             class="article-related__track"
@@ -270,30 +316,41 @@ watch(
               "
             >
               <NuxtLink
+                class="article-related__link"
                 :to="`/articles/${article.slug}`"
                 :tabindex="
                   isEnhanced && !isRelatedArticleVisible(index) ? -1 : undefined
                 "
               >
-                <img
-                  :src="article.coverImage.src"
-                  :alt="article.coverImage.alt"
-                  :width="article.coverImage.width"
-                  :height="article.coverImage.height"
-                  decoding="async"
-                  loading="lazy"
-                />
+                <span class="article-related__media">
+                  <img
+                    :src="article.coverImage.src"
+                    :alt="article.coverImage.alt"
+                    :width="article.coverImage.width"
+                    :height="article.coverImage.height"
+                    decoding="async"
+                    loading="lazy"
+                  />
+                </span>
                 <small>{{ article.category.name }}</small>
                 <h3>{{ article.title }}</h3>
                 <p>{{ article.excerpt }}</p>
-                <span
-                  >閱讀文章
+                <span class="article-related__action">
+                  閱讀文章
                   <svg aria-hidden="true" viewBox="0 0 24 24">
-                    <path d="m9.5 5 7 7-7 7" /></svg
-                ></span>
+                    <path d="m9.5 5 7 7-7 7" />
+                  </svg>
+                </span>
               </NuxtLink>
             </li>
           </ul>
+        </div>
+        <div
+          v-if="isEnhanced && maxSlide > 0"
+          class="article-related__progress"
+          aria-hidden="true"
+        >
+          <span :style="relatedProgressStyle" />
         </div>
       </section>
 
@@ -312,41 +369,6 @@ watch(
   overflow: clip;
   color: var(--color-ink);
   background: var(--color-paper);
-}
-.article-breadcrumb {
-  padding: 24px var(--article-edge) 14px;
-}
-.article-breadcrumb ol {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  padding: 0;
-  margin: 0;
-  color: var(--color-muted);
-  font-size: 12px;
-  line-height: 1.6;
-  letter-spacing: 0.04em;
-  list-style: none;
-}
-.article-breadcrumb li {
-  display: inline-flex;
-  min-height: 44px;
-  align-items: center;
-}
-.article-breadcrumb li + li::before {
-  margin-right: 10px;
-  color: var(--color-clay);
-  content: "/";
-}
-.article-breadcrumb a {
-  display: inline-flex;
-  min-width: 44px;
-  min-height: 44px;
-  align-items: center;
-  justify-content: center;
-  color: inherit;
-  text-underline-offset: 5px;
 }
 .article-hero {
   display: grid;
@@ -562,6 +584,18 @@ watch(
   font-size: var(--detail-section-title-size);
   font-weight: 400;
 }
+.article-related__tools {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.article-related__position {
+  color: #745142;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
 .article-related__controls {
   display: flex;
   gap: 8px;
@@ -575,9 +609,13 @@ watch(
   color: inherit;
   background: transparent;
   cursor: pointer;
+  transition:
+    color 220ms ease,
+    background-color 220ms ease,
+    transform 140ms ease;
 }
 .article-related__controls svg,
-.article-related a > span svg {
+.article-related__action svg {
   width: 20px;
   height: 20px;
   fill: none;
@@ -585,6 +623,15 @@ watch(
   stroke-linecap: square;
   stroke-linejoin: miter;
   stroke-width: 1.5;
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.article-related__controls button:focus-visible,
+.article-related__link:focus-visible {
+  outline: 2px solid var(--color-clay);
+  outline-offset: 5px;
+}
+.article-related__controls button:not(:disabled):active {
+  transform: scale(0.94);
 }
 .article-related__controls button:disabled {
   opacity: 0.35;
@@ -613,16 +660,24 @@ watch(
   min-width: calc((100% - (var(--visible) - 1) * 30px) / var(--visible));
   flex: 0 0 calc((100% - (var(--visible) - 1) * 30px) / var(--visible));
 }
-.article-related a {
+.article-related__link {
   display: grid;
   color: inherit;
   text-decoration: none;
+}
+.article-related__media {
+  display: block;
+  overflow: hidden;
+  background: #ded3c4;
 }
 .article-related img {
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+  transition:
+    filter 420ms ease,
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 .article-related small {
   margin-top: 18px;
@@ -637,6 +692,7 @@ watch(
   font-size: 25px;
   font-weight: 400;
   line-height: 1.55;
+  transition: color 220ms ease;
 }
 .article-related a > p {
   display: -webkit-box;
@@ -649,7 +705,7 @@ watch(
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
-.article-related a > span {
+.article-related__action {
   display: inline-flex;
   min-height: 48px;
   align-items: center;
@@ -658,9 +714,65 @@ watch(
   margin-top: 18px;
   border-bottom: 1px solid currentcolor;
   font-size: 13px;
+  transition:
+    color 220ms ease,
+    gap 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.article-related__progress {
+  height: 2px;
+  margin-top: 38px;
+  overflow: hidden;
+  background: rgb(116 81 66 / 20%);
+}
+.article-related__progress span {
+  display: block;
+  height: 100%;
+  background: var(--color-clay);
+  transform-origin: left;
+  transition: transform 1500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .article-related b {
   font-weight: 400;
+}
+.article-related__link:focus-visible img {
+  filter: saturate(1.06) contrast(1.025);
+  transform: scale(1.035);
+}
+.article-related__link:focus-visible h3,
+.article-related__link:focus-visible .article-related__action {
+  color: var(--color-clay);
+}
+.article-related__link:focus-visible .article-related__action {
+  gap: 24px;
+}
+.article-related__link:focus-visible .article-related__action svg {
+  transform: translateX(4px);
+}
+@media (hover: hover) and (pointer: fine) {
+  .article-related__controls button:not(:disabled):hover {
+    color: var(--color-warm-white);
+    background: var(--color-bark);
+  }
+  .article-related__controls button:first-child:not(:disabled):hover svg {
+    transform: translateX(-2px);
+  }
+  .article-related__controls button:last-child:not(:disabled):hover svg {
+    transform: translateX(2px);
+  }
+  .article-related__link:hover img {
+    filter: saturate(1.06) contrast(1.025);
+    transform: scale(1.035);
+  }
+  .article-related__link:hover h3,
+  .article-related__link:hover .article-related__action {
+    color: var(--color-clay);
+  }
+  .article-related__link:hover .article-related__action {
+    gap: 24px;
+  }
+  .article-related__link:hover .article-related__action svg {
+    transform: translateX(4px);
+  }
 }
 .article-prototype-notice {
   padding: 24px var(--article-edge);
@@ -730,13 +842,6 @@ watch(
   .article-detail {
     --article-edge: 24px;
     --article-section-gap: 64px;
-  }
-  .article-breadcrumb {
-    padding-top: 18px;
-  }
-  .article-breadcrumb li,
-  .article-breadcrumb a {
-    min-height: 44px;
   }
   .article-hero {
     grid-template-columns: 1fr;
@@ -840,14 +945,36 @@ watch(
   .article-related h3 {
     font-size: 23px;
   }
+  .article-related__position {
+    display: none;
+  }
   .article-related__track {
     grid-template-columns: 1fr;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .article-related--enhanced .article-related__track {
+  .article-related--enhanced .article-related__track,
+  .article-related__controls button,
+  .article-related__controls svg,
+  .article-related img,
+  .article-related h3,
+  .article-related__action,
+  .article-related__action svg,
+  .article-related__progress span {
     transition: none;
+  }
+  .article-related__controls button:not(:disabled):active,
+  .article-related__controls button:not(:disabled):hover svg,
+  .article-related__link:hover img,
+  .article-related__link:focus-visible img,
+  .article-related__link:hover .article-related__action svg,
+  .article-related__link:focus-visible .article-related__action svg {
+    transform: none;
+  }
+  .article-related__link:hover .article-related__action,
+  .article-related__link:focus-visible .article-related__action {
+    gap: 18px;
   }
   .article-state__skeleton {
     animation: none;

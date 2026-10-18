@@ -118,7 +118,7 @@ function parseLine(value: unknown): ArticleRichTextLine | null {
     })
   }
   const plainText = segments.map(segment => segment.text).join('').trim()
-  return plainText ? { key, text: plainText, segments } : null
+  return { key, text: plainText, segments }
 }
 
 function parseRichContent(value: unknown): ArticleRichContentItem[] | null {
@@ -129,8 +129,9 @@ function parseRichContent(value: unknown): ArticleRichContentItem[] | null {
     if (!isRecord(block)) return null
     const line = parseLine(block)
     if (!line) return null
-    if (block.listItem !== undefined) {
+    if (block.listItem !== undefined && block.listItem !== null) {
       if ((block.listItem !== 'bullet' && block.listItem !== 'number') || (block.level !== undefined && block.level !== 1)) return null
+      if (!line.text) return null
       const style = block.listItem as 'bullet' | 'number'
       if (!list || list.style !== style) {
         list = { key: `list-${line.key}`, type: 'list', style, items: [] }
@@ -140,8 +141,8 @@ function parseRichContent(value: unknown): ArticleRichContentItem[] | null {
       continue
     }
     list = undefined
-    if (block.style === undefined || block.style === 'normal') content.push({ ...line, type: 'paragraph' })
-    else if (block.style === 'h2' || block.style === 'h3') content.push({ ...line, type: 'heading', level: block.style === 'h2' ? 2 : 3 })
+    if (block.style === undefined || block.style === null || block.style === 'normal') content.push({ ...line, type: 'paragraph' })
+    else if ((block.style === 'h2' || block.style === 'h3') && line.text) content.push({ ...line, type: 'heading', level: block.style === 'h2' ? 2 : 3 })
     else return null
   }
   return content

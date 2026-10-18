@@ -4,6 +4,7 @@ import {
   article,
   articleCategoryIds,
   articleCategoryReferenceIsCanonical,
+  relatedArticleReferenceFilter,
   validateArticleDetail,
 } from '../schemaTypes/article.ts'
 import {
@@ -33,7 +34,12 @@ test('article schemas expose the approved semantic contract', () => {
   assert.deepEqual(article.fields.find(({ name }) => name === 'body').of.map(({ type }) => type), [
     'articleRichTextSection', 'articleSplitMediaSection', 'articleWideImageSection',
   ])
-  assert.equal(article.fields.find(({ name }) => name === 'relatedArticles').of[0].to[0].type, 'article')
+  const relatedArticles = article.fields.find(({ name }) => name === 'relatedArticles')
+  assert.equal(relatedArticles.of[0].title, '推薦文章')
+  assert.equal(relatedArticles.of[0].to[0].type, 'article')
+  assert.equal(relatedArticles.of[0].options.disableNew, true)
+  assert.equal(relatedArticles.of[0].options.filter, relatedArticleReferenceFilter)
+  assert.equal(article.preview.select.subtitle, 'category.name')
   assert.deepEqual(articleDetailSchemaTypes.map(({ name }) => name), [
     'articleContentImage', 'articleRichTextSection', 'articleSplitMediaSection', 'articleWideImageSection',
   ])
@@ -74,4 +80,35 @@ test('article detail validation enforces hero, body, self-reference, and safe li
   assert.equal(articleLinkIsSafe('https://example.com/article'), true)
   assert.match(articleLinkIsSafe('//example.com/article'), /只接受/)
   assert.match(articleLinkIsSafe('javascript:alert(1)'), /只接受/)
+})
+
+test('related article picker removes the current and already selected document pairs', () => {
+  assert.deepEqual(relatedArticleReferenceFilter({
+    document: {
+      _id: 'drafts.article-current',
+      relatedArticles: [
+        { _ref: 'article-selected' },
+        { _ref: 'drafts.article-another' },
+      ],
+    },
+  }), {
+    filter: '!(_id in $excludedIds)',
+    params: {
+      excludedIds: [
+        'article-current',
+        'drafts.article-current',
+        'article-selected',
+        'drafts.article-selected',
+        'article-another',
+        'drafts.article-another',
+      ],
+    },
+    maxFieldDepth: 3,
+  })
+})
+
+test('article portable text documents authored blank-line behavior', () => {
+  const richText = articleDetailSchemaTypes.find(({ name }) => name === 'articleRichTextSection')
+  const content = richText.fields.find(({ name }) => name === 'content')
+  assert.match(content.description, /空白段落/)
 })
