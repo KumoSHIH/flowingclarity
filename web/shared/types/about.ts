@@ -8,9 +8,23 @@ export interface AboutImage {
   objectPosition?: string
 }
 
+export interface AboutRichTextSegment {
+  key: string
+  text: string
+  strong?: boolean
+  emphasis?: boolean
+  href?: string
+}
+
+export interface AboutRichTextParagraph {
+  key: string
+  text: string
+  segments: AboutRichTextSegment[]
+}
+
 export interface AboutTextSection {
   heading: string
-  body: string[]
+  body: AboutRichTextParagraph[]
   image?: AboutImage
 }
 
@@ -42,7 +56,7 @@ export interface AboutPageContent {
   placeAndTeam: AboutTextSection & { image: AboutImage }
   featuredMoments: {
     heading: string
-    body: string[]
+    body: AboutRichTextParagraph[]
     items: AboutFeaturedMoment[]
   }
   contactHeading: string
@@ -51,3 +65,7 @@ export interface AboutPageContent {
   prototypeNotice?: string
   seo?: { title?: string; description?: string }
 }
+
+export type AboutPageResponse =
+  | { state: 'ready'; content: AboutPageContent }
+  | { state: 'empty' | 'invalid' | 'error' | 'unconfigured'; content: null }

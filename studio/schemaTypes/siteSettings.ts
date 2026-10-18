@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { isEmail, isHttpsUrl, isNavigation, isPhoneUri, siteNavigationItems, siteSettingsId } from '../../web/shared/utils/siteSettingsContract.ts'
+import { isEmail, isGoogleMapsEmbedUrl, isGoogleMapsExternalUrl, isHttpsUrl, isNavigation, isPhoneUri, siteNavigationItems, siteSettingsId } from '../../web/shared/utils/siteSettingsContract.ts'
 
 export { siteSettingsId }
 export const siteSettings = defineType({
@@ -38,6 +38,16 @@ export const siteSettings = defineType({
       { name: 'phone', title: '電話', type: 'object', fields: [
         { name: 'display', title: '顯示電話', type: 'string', validation: Rule => Rule.required().min(8).max(25) },
         { name: 'href', title: '撥號連結', type: 'string', description: '格式：tel:+國碼與號碼，不能有空白。', validation: Rule => Rule.required().custom(value => isPhoneUri(value) || '請填寫 tel:+ 國際電話格式。') },
+      ] },
+      { name: 'businessHours', title: '營業時間', type: 'array', validation: Rule => Rule.min(1).max(3), of: [{ type: 'object', name: 'businessHoursItem', fields: [
+        { name: 'days', title: '日期', type: 'string', validation: Rule => Rule.required().min(2).max(40) },
+        { name: 'hours', title: '時間', type: 'string', validation: Rule => Rule.required().min(2).max(40) },
+      ], preview: { select: { title: 'days', subtitle: 'hours' } } }] },
+      { name: 'businessHoursNote', title: '營業時間補充', type: 'string', validation: Rule => Rule.max(80) },
+      { name: 'map', title: 'Google Maps', type: 'object', fields: [
+        { name: 'placeName', title: '地點名稱', type: 'string', validation: Rule => Rule.required().min(2).max(40) },
+        { name: 'embedUrl', title: '嵌入網址', type: 'url', description: '請貼上 Google Maps embed HTTPS 網址。', validation: Rule => Rule.required().custom(value => isGoogleMapsEmbedUrl(value) || '請提供有效的 Google Maps embed 網址。') },
+        { name: 'externalUrl', title: '外部開啟網址', type: 'url', validation: Rule => Rule.required().custom(value => isGoogleMapsExternalUrl(value) || '請提供有效的 Google Maps 網址。') },
       ] },
     ] }),
     defineField({ name: 'socialLinks', title: '社群入口', type: 'array', group: 'contact', validation: Rule => Rule.max(4).custom(value => !value || new Set(value.map(item => (item as { label?: string }).label)).size === value.length || '社群名稱不得重複。'), of: [{ type: 'object', name: 'siteSocialLink', fields: [

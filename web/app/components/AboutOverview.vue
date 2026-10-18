@@ -1,61 +1,269 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import type { AboutPageContent, AboutPageStatus } from '#shared/types/about'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import type { AboutPageContent, AboutPageStatus } from "#shared/types/about";
+import type { AboutRichTextParagraph } from "#shared/types/about";
 
-const props = withDefaults(defineProps<{
-  content: AboutPageContent
-  status?: AboutPageStatus
-}>(), {
-  status: 'ready',
-})
+const props = withDefaults(
+  defineProps<{
+    content: AboutPageContent;
+    status?: AboutPageStatus;
+  }>(),
+  {
+    status: "ready",
+  },
+);
 
-const emit = defineEmits<{ retry: [] }>()
-const activeIndex = ref(0)
-const touchStartX = ref<number | null>(null)
-const failedImages = ref(new Set<string>())
+const emit = defineEmits<{ retry: [] }>();
+const momentsSection = ref<HTMLElement | null>(null);
+const activeIndex = ref(0);
+const failedImages = ref(new Set<string>());
+const dragStartX = ref<number | null>(null);
+const dragOffset = ref(0);
+const dragging = ref(false);
+const activePointerId = ref<number | null>(null);
+const visualIndex = ref(1);
+const transitionEnabled = ref(true);
+const transitionRunning = ref(false);
+const carouselIsHovered = ref(false);
+const carouselHasFocus = ref(false);
+const carouselIsVisible = ref(true);
+const documentIsVisible = ref(true);
+const reducedMotion = ref(false);
+let autoplayTimer: ReturnType<typeof setInterval> | undefined;
+let transitionTimer: ReturnType<typeof setTimeout> | undefined;
+let carouselObserver: IntersectionObserver | undefined;
+let motionQuery: MediaQueryList | undefined;
+let mounted = false;
 
-const moments = computed(() => props.content.featuredMoments.items)
-const currentMoment = computed(() => moments.value[activeIndex.value])
-const countLabel = computed(() => (
-  `${String(activeIndex.value + 1).padStart(2, '0')} / ${String(moments.value.length).padStart(2, '0')}`
-))
+const AUTOPLAY_DELAY_MS = 2_000;
+const SLIDE_TRANSITION_MS = 1_500;
+const DRAG_THRESHOLD_PX = 48;
 
-watch(() => moments.value.length, length => {
-  if (!length || activeIndex.value >= length) activeIndex.value = 0
-})
+const moments = computed(() => props.content.featuredMoments.items);
+const currentMoment = computed(() => moments.value[activeIndex.value]);
+const renderedMoments = computed(() => {
+  if (moments.value.length < 2) {
+    return moments.value.map((moment, originalIndex) => ({
+      key: moment.id,
+      moment,
+      originalIndex,
+    }));
+  }
+
+  const firstMoment = moments.value[0]!;
+  const lastMoment = moments.value[moments.value.length - 1]!;
+  return [
+    {
+      key: `loop-before-${lastMoment.id}`,
+      moment: lastMoment,
+      originalIndex: moments.value.length - 1,
+    },
+    ...moments.value.map((moment, originalIndex) => ({
+      key: moment.id,
+      moment,
+      originalIndex,
+    })),
+    {
+      key: `loop-after-${firstMoment.id}`,
+      moment: firstMoment,
+      originalIndex: 0,
+    },
+  ];
+});
+const countLabel = computed(
+  () =>
+    `${String(activeIndex.value + 1).padStart(2, "0")} / ${String(moments.value.length).padStart(2, "0")}`,
+);
+const trackStyle = computed(() => ({
+  transform: `translate3d(calc(${-visualIndex.value * 100}% + ${dragOffset.value}px), 0, 0)`,
+}));
+const autoplayCanRun = computed(
+  () =>
+    moments.value.length > 1 &&
+    !carouselIsHovered.value &&
+    !carouselHasFocus.value &&
+    !dragging.value &&
+    carouselIsVisible.value &&
+    documentIsVisible.value &&
+    !reducedMotion.value,
+);
+
+watch(
+  () => moments.value.length,
+  (length) => {
+    if (!length || activeIndex.value >= length) activeIndex.value = 0;
+    visualIndex.value = length > 1 ? activeIndex.value + 1 : 0;
+  },
+  { immediate: true },
+);
+
+watch(autoplayCanRun, syncAutoplay);
 
 function previousMoment() {
-  if (activeIndex.value > 0) activeIndex.value -= 1
+  const length = moments.value.length;
+  if (length < 2 || transitionRunning.value) return;
+  startTransitionTimer();
+  activeIndex.value = (activeIndex.value - 1 + length) % length;
+  visualIndex.value -= 1;
 }
 
 function nextMoment() {
-  if (activeIndex.value < moments.value.length - 1) activeIndex.value += 1
+  const length = moments.value.length;
+  if (length < 2 || transitionRunning.value) return;
+  startTransitionTimer();
+  activeIndex.value = (activeIndex.value + 1) % length;
+  visualIndex.value += 1;
 }
 
-function onTouchStart(event: TouchEvent) {
-  touchStartX.value = event.changedTouches[0]?.clientX ?? null
+function advanceAutomatically() {
+  nextMoment();
 }
 
-function onTouchEnd(event: TouchEvent) {
-  const start = touchStartX.value
-  const end = event.changedTouches[0]?.clientX
-  touchStartX.value = null
-  if (start === null || end === undefined || Math.abs(end - start) < 48) return
-  end < start ? nextMoment() : previousMoment()
+function syncAutoplay() {
+  if (autoplayTimer) clearInterval(autoplayTimer);
+  autoplayTimer = undefined;
+  if (!mounted || !autoplayCanRun.value) return;
+  autoplayTimer = setInterval(advanceAutomatically, AUTOPLAY_DELAY_MS);
+}
+
+function startTransitionTimer() {
+  transitionRunning.value = true;
+  if (transitionTimer) clearTimeout(transitionTimer);
+  transitionTimer = setTimeout(
+    finishTrackTransition,
+    SLIDE_TRANSITION_MS + 50,
+  );
+}
+
+function finishTrackTransition() {
+  if (transitionTimer) clearTimeout(transitionTimer);
+  transitionTimer = undefined;
+  if (moments.value.length < 2) {
+    transitionRunning.value = false;
+    return;
+  }
+
+  const lastRealIndex = moments.value.length;
+  if (visualIndex.value !== 0 && visualIndex.value !== lastRealIndex + 1) {
+    transitionRunning.value = false;
+    return;
+  }
+
+  transitionEnabled.value = false;
+  visualIndex.value = visualIndex.value === 0 ? lastRealIndex : 1;
+  requestAnimationFrame(() => {
+    transitionEnabled.value = true;
+    transitionRunning.value = false;
+  });
+}
+
+function onTrackTransitionEnd(event: TransitionEvent) {
+  if (event.propertyName === "transform") finishTrackTransition();
+}
+
+function onPointerDown(event: PointerEvent) {
+  if (
+    transitionRunning.value ||
+    (event.pointerType === "mouse" && event.button !== 0)
+  )
+    return;
+  dragStartX.value = event.clientX;
+  activePointerId.value = event.pointerId;
+  dragging.value = true;
+  (event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId);
+}
+
+function onPointerMove(event: PointerEvent) {
+  if (
+    !dragging.value ||
+    dragStartX.value === null ||
+    activePointerId.value !== event.pointerId
+  )
+    return;
+  dragOffset.value = event.clientX - dragStartX.value;
+}
+
+function finishDrag(event: PointerEvent) {
+  if (!dragging.value || activePointerId.value !== event.pointerId) return;
+  const completedOffset = dragOffset.value;
+  dragging.value = false;
+  dragStartX.value = null;
+  activePointerId.value = null;
+  dragOffset.value = 0;
+  if (Math.abs(completedOffset) < DRAG_THRESHOLD_PX) return;
+  completedOffset < 0 ? nextMoment() : previousMoment();
+}
+
+function onCarouselFocusOut(event: FocusEvent) {
+  const nextTarget = event.relatedTarget;
+  if (
+    !(nextTarget instanceof Node) ||
+    !(event.currentTarget as HTMLElement).contains(nextTarget)
+  ) {
+    carouselHasFocus.value = false;
+  }
+}
+
+function onVisibilityChange() {
+  documentIsVisible.value = document.visibilityState !== "hidden";
+}
+
+function onMotionPreferenceChange(event: MediaQueryListEvent) {
+  reducedMotion.value = event.matches;
 }
 
 function markImageFailed(src: string) {
-  failedImages.value = new Set(failedImages.value).add(src)
+  failedImages.value = new Set(failedImages.value).add(src);
 }
 
 function imageHasFailed(src: string) {
-  return failedImages.value.has(src)
+  return failedImages.value.has(src);
 }
+
+function paragraphSegments(paragraph: AboutRichTextParagraph) {
+  return paragraph.segments.length
+    ? paragraph.segments
+    : [{ key: `${paragraph.key}-text`, text: paragraph.text }];
+}
+
+onMounted(() => {
+  mounted = true;
+  documentIsVisible.value = document.visibilityState !== "hidden";
+  document.addEventListener("visibilitychange", onVisibilityChange);
+
+  motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  reducedMotion.value = motionQuery.matches;
+  motionQuery.addEventListener("change", onMotionPreferenceChange);
+
+  if ("IntersectionObserver" in window && momentsSection.value) {
+    carouselObserver = new IntersectionObserver(
+      ([entry]) => {
+        carouselIsVisible.value = entry?.isIntersecting ?? true;
+      },
+      { threshold: 0.15 },
+    );
+    carouselObserver.observe(momentsSection.value);
+  }
+  syncAutoplay();
+});
+
+onBeforeUnmount(() => {
+  mounted = false;
+  if (autoplayTimer) clearInterval(autoplayTimer);
+  if (transitionTimer) clearTimeout(transitionTimer);
+  carouselObserver?.disconnect();
+  document.removeEventListener("visibilitychange", onVisibilityChange);
+  motionQuery?.removeEventListener("change", onMotionPreferenceChange);
+});
 </script>
 
 <template>
   <div class="about-overview" :aria-busy="status === 'loading'">
-    <div v-if="status === 'loading'" class="about-state about-state--loading" aria-live="polite">
+    <div
+      v-if="status === 'loading'"
+      class="about-state about-state--loading"
+      aria-live="polite"
+    >
       <span class="about-state__line about-state__line--title" />
       <span v-for="index in 4" :key="index" class="about-state__line" />
       <p>正在整理關於我們的內容…</p>
@@ -76,7 +284,9 @@ function imageHasFailed(src: string) {
             <span>FLOWING CLARITY</span>
           </div>
           <h1>{{ content.title }}</h1>
-          <p v-if="content.introduction" class="about-lead">{{ content.introduction }}</p>
+          <p v-if="content.introduction" class="about-lead">
+            {{ content.introduction }}
+          </p>
           <p v-if="content.prototypeNotice" class="about-prototype-note">
             {{ content.prototypeNotice }}
           </p>
@@ -90,7 +300,7 @@ function imageHasFailed(src: string) {
             :height="content.heroImage.height"
             :style="{ objectPosition: content.heroImage.objectPosition }"
             @error="markImageFailed(content.heroImage.src)"
-          >
+          />
           <p v-else class="about-image-fallback">{{ content.heroImage.alt }}</p>
         </div>
       </header>
@@ -101,7 +311,21 @@ function imageHasFailed(src: string) {
           <h2 id="about-brand-title">{{ content.brandStory.heading }}</h2>
         </div>
         <div class="about-copy about-brand__body">
-          <p v-for="paragraph in content.brandStory.body" :key="paragraph">{{ paragraph }}</p>
+          <p v-for="paragraph in content.brandStory.body" :key="paragraph.key">
+            <component
+              :is="segment.href ? 'a' : 'span'"
+              v-for="segment in paragraphSegments(paragraph)"
+              :key="segment.key"
+              :href="segment.href"
+            >
+              <strong v-if="segment.strong">
+                <em v-if="segment.emphasis">{{ segment.text }}</em>
+                <template v-else>{{ segment.text }}</template>
+              </strong>
+              <em v-else-if="segment.emphasis">{{ segment.text }}</em>
+              <template v-else>{{ segment.text }}</template>
+            </component>
+          </p>
         </div>
         <figure v-if="content.brandStory.image" class="about-brand__media">
           <img
@@ -111,8 +335,10 @@ function imageHasFailed(src: string) {
             :width="content.brandStory.image.width"
             :height="content.brandStory.image.height"
             @error="markImageFailed(content.brandStory.image.src)"
-          >
-          <p v-else class="about-image-fallback">{{ content.brandStory.image.alt }}</p>
+          />
+          <p v-else class="about-image-fallback">
+            {{ content.brandStory.image.alt }}
+          </p>
         </figure>
       </section>
 
@@ -121,7 +347,21 @@ function imageHasFailed(src: string) {
           <p class="about-label">空間與團隊</p>
           <h2 id="about-place-title">{{ content.placeAndTeam.heading }}</h2>
           <div class="about-copy">
-            <p v-for="paragraph in content.placeAndTeam.body" :key="paragraph">{{ paragraph }}</p>
+            <p v-for="paragraph in content.placeAndTeam.body" :key="paragraph.key">
+              <component
+                :is="segment.href ? 'a' : 'span'"
+                v-for="segment in paragraphSegments(paragraph)"
+                :key="segment.key"
+                :href="segment.href"
+              >
+                <strong v-if="segment.strong">
+                  <em v-if="segment.emphasis">{{ segment.text }}</em>
+                  <template v-else>{{ segment.text }}</template>
+                </strong>
+                <em v-else-if="segment.emphasis">{{ segment.text }}</em>
+                <template v-else>{{ segment.text }}</template>
+              </component>
+            </p>
           </div>
         </div>
         <div class="about-place__media">
@@ -131,62 +371,134 @@ function imageHasFailed(src: string) {
             :alt="content.placeAndTeam.image.alt"
             :width="content.placeAndTeam.image.width"
             :height="content.placeAndTeam.image.height"
-            :style="{ objectPosition: content.placeAndTeam.image.objectPosition }"
+            :style="{
+              objectPosition: content.placeAndTeam.image.objectPosition,
+            }"
             @error="markImageFailed(content.placeAndTeam.image.src)"
-          >
-          <p v-else class="about-image-fallback">{{ content.placeAndTeam.image.alt }}</p>
+          />
+          <p v-else class="about-image-fallback">
+            {{ content.placeAndTeam.image.alt }}
+          </p>
         </div>
       </section>
 
-      <section class="about-moments" aria-labelledby="about-moments-title">
+      <section
+        ref="momentsSection"
+        class="about-moments"
+        aria-labelledby="about-moments-title"
+        @mouseenter="carouselIsHovered = true"
+        @mouseleave="carouselIsHovered = false"
+        @focusin="carouselHasFocus = true"
+        @focusout="onCarouselFocusOut"
+      >
         <div class="about-moments__heading">
           <p class="about-label">精選片段</p>
-          <h2 id="about-moments-title">{{ content.featuredMoments.heading }}</h2>
+          <h2 id="about-moments-title">
+            {{ content.featuredMoments.heading }}
+          </h2>
         </div>
 
-        <div v-if="currentMoment" class="about-carousel" role="region" aria-roledescription="carousel" aria-label="精選片段">
+        <div
+          v-if="currentMoment"
+          class="about-carousel"
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="精選片段"
+        >
           <figure
             class="about-carousel__figure"
-            @touchstart.passive="onTouchStart"
-            @touchend.passive="onTouchEnd"
+            :class="{ 'is-dragging': dragging }"
+            @pointerdown="onPointerDown"
+            @pointermove="onPointerMove"
+            @pointerup="finishDrag"
+            @pointercancel="finishDrag"
+            @pointerleave="finishDrag"
           >
             <div class="about-carousel__stage">
-              <img
-                v-if="!imageHasFailed(currentMoment.image.src)"
-                :key="currentMoment.id"
-                :src="currentMoment.image.src"
-                :alt="currentMoment.image.alt"
-                :width="currentMoment.image.width"
-                :height="currentMoment.image.height"
-                :style="{ objectPosition: currentMoment.image.objectPosition }"
-                @error="markImageFailed(currentMoment.image.src)"
+              <div
+                class="about-carousel__track"
+                :class="{
+                  'is-dragging': dragging,
+                  'is-jumping': !transitionEnabled,
+                }"
+                :style="trackStyle"
+                @transitionend.self="onTrackTransitionEnd"
               >
-              <p v-else class="about-image-fallback">{{ currentMoment.image.alt }}</p>
+                <div
+                  v-for="(slide, index) in renderedMoments"
+                  :key="slide.key"
+                  class="about-carousel__slide"
+                  :aria-hidden="index !== visualIndex"
+                >
+                  <img
+                    v-if="!imageHasFailed(slide.moment.image.src)"
+                    :src="slide.moment.image.src"
+                    :alt="slide.moment.image.alt"
+                    :width="slide.moment.image.width"
+                    :height="slide.moment.image.height"
+                    :style="{
+                      objectPosition: slide.moment.image.objectPosition,
+                    }"
+                    :loading="slide.originalIndex === 0 ? 'eager' : 'lazy'"
+                    decoding="async"
+                    draggable="false"
+                    @error="markImageFailed(slide.moment.image.src)"
+                  />
+                  <p v-else class="about-image-fallback">
+                    {{ slide.moment.image.alt }}
+                  </p>
+                </div>
+              </div>
             </div>
-            <figcaption v-if="currentMoment.caption">{{ currentMoment.caption }}</figcaption>
+            <figcaption v-if="currentMoment.caption">
+              {{ currentMoment.caption }}
+            </figcaption>
           </figure>
 
           <div class="about-carousel__controls">
             <button
               type="button"
-              :disabled="activeIndex === 0"
+              :disabled="moments.length < 2"
+              :aria-disabled="transitionRunning ? 'true' : undefined"
               aria-label="上一張片段"
               @click="previousMoment"
             >
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7M8 12h12" /></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m15 5-7 7 7 7M8 12h12" />
+              </svg>
             </button>
-            <span aria-live="polite" aria-atomic="true">{{ countLabel }}</span>
+            <span aria-live="off" aria-atomic="true">{{ countLabel }}</span>
             <button
               type="button"
-              :disabled="activeIndex === moments.length - 1"
+              :disabled="moments.length < 2"
+              :aria-disabled="transitionRunning ? 'true' : undefined"
               aria-label="下一張片段"
               @click="nextMoment"
             >
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7M4 12h12" /></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m9 5 7 7-7 7M4 12h12" />
+              </svg>
             </button>
           </div>
           <div class="about-carousel__copy about-copy">
-            <p v-for="paragraph in content.featuredMoments.body" :key="paragraph">{{ paragraph }}</p>
+            <p
+              v-for="paragraph in content.featuredMoments.body"
+              :key="paragraph.key"
+            >
+              <component
+                :is="segment.href ? 'a' : 'span'"
+                v-for="segment in paragraphSegments(paragraph)"
+                :key="segment.key"
+                :href="segment.href"
+              >
+                <strong v-if="segment.strong">
+                  <em v-if="segment.emphasis">{{ segment.text }}</em>
+                  <template v-else>{{ segment.text }}</template>
+                </strong>
+                <em v-else-if="segment.emphasis">{{ segment.text }}</em>
+                <template v-else>{{ segment.text }}</template>
+              </component>
+            </p>
           </div>
         </div>
         <div v-else class="about-moments__empty">
@@ -212,19 +524,32 @@ function imageHasFailed(src: string) {
               </div>
               <div v-if="content.contact.phone">
                 <dt>電話</dt>
-                <dd><a :href="content.contact.phone.href">{{ content.contact.phone.display }}</a></dd>
+                <dd>
+                  <a :href="content.contact.phone.href">{{
+                    content.contact.phone.display
+                  }}</a>
+                </dd>
               </div>
               <div v-if="content.contact.email">
                 <dt>Email</dt>
-                <dd><a :href="`mailto:${content.contact.email}`">{{ content.contact.email }}</a></dd>
+                <dd>
+                  <a :href="`mailto:${content.contact.email}`">{{
+                    content.contact.email
+                  }}</a>
+                </dd>
               </div>
               <div v-if="content.contact.businessHours.length">
                 <dt>營業時間</dt>
                 <dd>
-                  <p v-for="item in content.contact.businessHours" :key="`${item.days}-${item.hours}`">
+                  <p
+                    v-for="item in content.contact.businessHours"
+                    :key="`${item.days}-${item.hours}`"
+                  >
                     {{ item.days }}　{{ item.hours }}
                   </p>
-                  <p v-if="content.contact.businessHoursNote">{{ content.contact.businessHoursNote }}</p>
+                  <p v-if="content.contact.businessHoursNote">
+                    {{ content.contact.businessHoursNote }}
+                  </p>
                 </dd>
               </div>
               <div v-if="content.contact.socialLinks.length">
@@ -236,12 +561,15 @@ function imageHasFailed(src: string) {
                     :href="social.href"
                     target="_blank"
                     rel="noopener noreferrer"
-                  >{{ social.label }}</a>
+                    >{{ social.label }}</a
+                  >
                 </dd>
               </div>
             </dl>
           </address>
-          <p v-else class="about-contact__unavailable">聯絡資訊暫時無法顯示，請稍後再試。</p>
+          <p v-else class="about-contact__unavailable">
+            聯絡資訊暫時無法顯示，請稍後再試。
+          </p>
         </div>
 
         <div v-if="content.contact?.map" class="about-map">
@@ -255,7 +583,8 @@ function imageHasFailed(src: string) {
             :href="content.contact.map.externalUrl"
             target="_blank"
             rel="noopener noreferrer"
-          >在 Google Maps 開啟</a>
+            >在 Google Maps 開啟</a
+          >
         </div>
       </section>
     </template>
@@ -265,6 +594,16 @@ function imageHasFailed(src: string) {
 <style scoped>
 .about-overview {
   --about-edge: clamp(28px, 6vw, 116px);
+  --about-muted: color-mix(
+    in srgb,
+    var(--color-muted) 60%,
+    var(--color-ink)
+  );
+  --about-label: color-mix(
+    in srgb,
+    var(--color-clay) 60%,
+    var(--color-ink)
+  );
   color: var(--color-ink);
   background: var(--color-paper);
 }
@@ -292,8 +631,8 @@ function imageHasFailed(src: string) {
 
 .about-label {
   margin-bottom: 18px !important;
-  color: var(--color-clay);
-  font-size: 10px;
+  color: var(--about-label);
+  font-size: 14px;
   font-weight: 700;
   line-height: 1.7;
   letter-spacing: 0.18em;
@@ -330,7 +669,7 @@ function imageHasFailed(src: string) {
   justify-content: space-between;
   gap: 24px;
   margin-bottom: clamp(70px, 10vh, 116px);
-  color: var(--color-muted);
+  color: var(--about-muted);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -347,7 +686,7 @@ function imageHasFailed(src: string) {
 .about-prototype-note {
   max-width: 52em;
   margin-top: 36px !important;
-  color: var(--color-muted);
+  color: var(--about-muted);
   font-size: 11px;
   line-height: 1.8;
   letter-spacing: 0.07em;
@@ -380,7 +719,7 @@ function imageHasFailed(src: string) {
   min-height: 280px;
   place-items: center;
   padding: 32px;
-  color: var(--color-muted);
+  color: var(--about-muted);
   text-align: center;
   line-height: 1.8;
 }
@@ -413,6 +752,7 @@ function imageHasFailed(src: string) {
   min-height: 720px;
   grid-template-columns: 42% 58%;
   background: color-mix(in srgb, var(--color-sand) 66%, var(--color-paper));
+  margin-bottom: 250px;
 }
 
 .about-place__copy {
@@ -450,18 +790,41 @@ function imageHasFailed(src: string) {
 .about-carousel__figure {
   grid-area: media;
   min-width: 0;
-  background: var(--color-sand);
+  cursor: grab;
   touch-action: pan-y;
+  user-select: none;
+}
+
+.about-carousel__figure.is-dragging {
+  cursor: grabbing;
 }
 
 .about-carousel__stage {
   aspect-ratio: 3 / 2;
 }
 
+.about-carousel__track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 1500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-carousel__track.is-dragging,
+.about-carousel__track.is-jumping {
+  transition: none;
+}
+
+.about-carousel__slide {
+  width: 100%;
+  height: 100%;
+  flex: 0 0 100%;
+}
+
 .about-carousel__figure figcaption {
   min-height: 76px;
   padding: 20px var(--about-edge) 20px;
-  color: var(--color-muted);
+  color: var(--about-muted);
   font-size: 12px;
   line-height: 1.8;
   letter-spacing: 0.05em;
@@ -499,6 +862,11 @@ function imageHasFailed(src: string) {
   opacity: 0.34;
 }
 
+.about-carousel__controls button[aria-disabled="true"] {
+  cursor: wait;
+  opacity: 0.6;
+}
+
 .about-carousel__controls svg {
   width: 22px;
   fill: none;
@@ -508,7 +876,7 @@ function imageHasFailed(src: string) {
 
 .about-carousel__controls span {
   min-width: 64px;
-  color: var(--color-muted);
+  color: var(--about-muted);
   font-size: 12px;
   letter-spacing: 0.14em;
   text-align: center;
@@ -520,12 +888,13 @@ function imageHasFailed(src: string) {
   min-height: 340px;
   place-items: center;
   padding: 48px var(--about-edge);
-  color: var(--color-muted);
+  color: var(--about-muted);
   background: var(--color-sand);
 }
 
 .about-contact {
   display: grid;
+  margin-top: 150px;
   min-height: 760px;
   grid-template-columns: 48% 52%;
   background: color-mix(in srgb, var(--color-sand) 72%, var(--color-paper));
@@ -561,13 +930,14 @@ function imageHasFailed(src: string) {
 }
 
 .about-contact__list dl > div:last-child {
-  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
+  border-bottom: 0;
 }
 
 .about-contact__list dt {
-  color: var(--color-muted);
-  font-size: 10px;
+  color: var(--about-muted);
+  font-size: 14px;
   font-weight: 700;
+  line-height: 1.9;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
@@ -581,6 +951,13 @@ function imageHasFailed(src: string) {
   overflow-wrap: anywhere;
 }
 
+.about-contact__list a {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+}
+
 .about-contact__socials {
   display: flex;
   flex-wrap: wrap;
@@ -590,7 +967,7 @@ function imageHasFailed(src: string) {
 .about-contact__unavailable {
   padding: 24px 0;
   border-block: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
-  color: var(--color-muted);
+  color: var(--about-muted);
   line-height: 1.9;
 }
 
@@ -710,6 +1087,7 @@ function imageHasFailed(src: string) {
   .about-place {
     min-height: 0;
     grid-template-columns: 1fr;
+    margin-bottom: 0px;
   }
 
   .about-place__copy {
@@ -762,6 +1140,7 @@ function imageHasFailed(src: string) {
   }
 
   .about-contact {
+    margin-top: 50px;
     min-height: 0;
     grid-template-columns: 1fr;
   }
@@ -798,12 +1177,8 @@ function imageHasFailed(src: string) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .about-overview *,
-  .about-overview *::before,
-  .about-overview *::after {
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
+  .about-carousel__track {
+    transition-duration: 1ms;
   }
 }
 </style>

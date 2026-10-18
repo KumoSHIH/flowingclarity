@@ -19,6 +19,7 @@ Sanity Studio 用來編輯首頁 Banner、課程、活動、個案諮詢與文�
 - 「活動總覽頁」是固定 ID `events-page` 的單例；「活動」是獨立文件，可選填一門已公開課程。活動使用結構化起訖時間、參與方式、地點、報名狀態、HTTPS 報名網址、保存設定與同時段順序；公開文件 ID 不得包含句點。
 - 「個案諮詢總覽頁」是固定 ID `session-page` 的單例；服務地區與服務項目是可新增 taxonomy，識別碼與順序在同類別內不可重複。執行師可複選服務地區與服務項目，總覽不使用人物照片；`isPublished` 關閉或契約不完整的文件不會出現在前台。
 - 「文章分享總覽頁」是固定 ID `articles-page` 的單例；文章固定 reference 四個課程分類之一，另可選 1–8 個可新增的文章標籤。文章與標籤使用 Sanity draft／published 狀態，不另設公開開關。文章詳情沿用同一文件，可編排純文字、左右圖文與滿寬圖片，並設定首區樣式、延伸閱讀及 SEO；本機 schema 與 API 已完成，遠端 schema 尚未部署。
+- 「關於我們」是固定 ID `about-page` 的單例，管理頁面首區、品牌理念、空間與團隊、3–10 張精選片段、聯絡引導及 SEO；地址、電話、社群、營業時間與 Google Maps 繼續由 `siteSettings` 共用，避免重複維護。
 
 ## 驗收
 
@@ -33,6 +34,8 @@ Sanity Studio 用來編輯首頁 Banner、課程、活動、個案諮詢與文�
 活動 schema 已部署至 production，並以 48 筆隔離文件完成草稿隔離、兩次發布、匿名 published 查詢、長內容、分頁、近期／過去分類與清理驗收。登入 Studio 後亦已確認活動總覽欄位說明、活動 preview、無效草稿的 inline validation 與停用發布狀態；隔離活動草稿已精準清除，活動規格為 `verified`。2026-10-12 20:24 另看到一筆非驗收腳本建立的既有「活動測試」，驗收未修改或刪除。20:41 已建立空白、未發布的 `drafts.events-page`，後台表單可正常編輯；20:53 移除未使用的「過去活動說明」、將「近期活動空狀態」調整為 3–80 字，並重新部署 production schema 1/1 成功。正式活動總覽文案仍待內容負責人填寫與發布。完整紀錄見 [活動規格](../web/docs/specs/events.md)。
 
 個案諮詢 schema 已部署至 production，並以 7 筆 taxonomy、1 筆總覽與 48 位執行師完成草稿隔離、兩次發布、匿名 published 查詢、分頁、地區篩選、1440px／390px 前台與清理後空狀態驗收。隔離測試內容已精準清除；production 只保留無內容、未發布的 `drafts.session-page`，避免單例在刪除驗收內容後停在不可編輯狀態，匿名前台仍讀不到此草稿。正式總覽文案、taxonomy 與執行師資料仍待內容負責人建立及發布。完整紀錄見 [個案諮詢規格](../web/docs/specs/session.md)。
+
+關於我們 schema 已部署至 production。2026-10-18 已上傳 4 張目前原型圖片並建立 `drafts.about-page`；另由既有 published `site-settings` 建立未發布更新草稿，只補入原型營業時間與 Google Maps 示意，沒有覆寫或發布正式設定。匿名前台查詢確認讀不到 About 草稿；正式發布與前台內容流仍待文案、照片授權及聯絡資料核准後驗收。完整紀錄見 [關於我們規格](../web/docs/specs/about.md)。
 
 文章總覽 schema 已部署至 production，並以 10 個標籤、1 筆總覽與 24 篇文章完成草稿隔離、兩次發布、匿名 published 查詢、分類／標籤篩選、三頁分頁、桌機／手機與清理後空狀態驗收。70 個隔離測試文件已精準清除；人工後台測試另發現主要分類 picker 同時顯示新舊分類文件，現已限制為四個正式 `course-category-*` ID 並完成回歸。production 的 `articles-page` 已由 Studio 人工發布，前台 API 可匿名讀取 4 個主要分類、3 個標籤與 3 篇文章，文章總覽規格為 `verified`。單篇文章詳情擴充目前只在本機完成，尚未部署或進行遠端內容流驗收；正式內容也仍待核准。完整紀錄見 [文章分享規格](../web/docs/specs/articles.md)與[文章詳情規格](../web/docs/specs/articles-detail.md)。
 

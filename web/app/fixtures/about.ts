@@ -1,5 +1,13 @@
 import type { AboutPageContent } from '#shared/types/about'
 
+function paragraphs(prefix: string, values: string[]) {
+  return values.map((text, index) => ({
+    key: `${prefix}-${index + 1}`,
+    text,
+    segments: [{ key: `${prefix}-${index + 1}-span`, text }],
+  }))
+}
+
 const teamImage = {
   src: '/assets/about/about-team-preparation.png',
   alt: '三位團隊成員在暖光工作室中準備活動的示意影像',
@@ -13,16 +21,16 @@ export const aboutPageFixture: AboutPageContent = {
   heroImage: teamImage,
   brandStory: {
     heading: '讓理解自己，從一段停留開始。',
-    body: [
+    body: paragraphs('brand', [
       '我們相信，身心的學習不急著提供一個標準答案，而是協助每個人重新辨認自己的感受。透過觸碰、對話、觀察與創作，讓選擇逐漸變得清楚。',
       '這段文字是長度與節奏示意，正式品牌理念仍須由內容負責人核准。',
-    ],
+    ]),
   },
   placeAndTeam: {
     heading: '一個讓經驗被好好承接的地方。',
-    body: [
+    body: paragraphs('place', [
       '我們在不同領域學習，也一起照顧空間、課程與每一次相遇。這裡呈現的是構圖示意，不代表正式團隊名單。',
-    ],
+    ]),
     image: {
       ...teamImage,
       alt: '團隊在木桌旁整理課程材料的示意影像',
@@ -30,9 +38,9 @@ export const aboutPageFixture: AboutPageContent = {
   },
   featuredMoments: {
     heading: '一些發生過的靠近。',
-    body: [
+    body: paragraphs('moments', [
       '從課程、練習到活動準備，我們留下少量片段，讓還沒來過的人先感受這裡的步調。正式照片上線前須確認授權與人物公開同意。',
-    ],
+    ]),
     items: [
       {
         id: 'mandala',
@@ -97,11 +105,11 @@ export const aboutPageLongFixture: AboutPageContent = {
   brandStory: {
     ...aboutPageFixture.brandStory,
     heading: '讓每一種感受與經驗，都能在足夠的時間裡慢慢被理解。',
-    body: ['較長品牌理念內容。'.repeat(45)],
+    body: paragraphs('long-brand', ['較長品牌理念內容。'.repeat(45)]),
   },
   placeAndTeam: {
     ...aboutPageFixture.placeAndTeam,
-    body: ['較長空間與團隊介紹內容。'.repeat(45)],
+    body: paragraphs('long-place', ['較長空間與團隊介紹內容。'.repeat(45)]),
   },
   featuredMoments: {
     ...aboutPageFixture.featuredMoments,

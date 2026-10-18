@@ -1,0 +1,159 @@
+{
+  "generatedAt": "2026-10-18T15:10:49.239Z",
+  "origin": "http://127.0.0.1:3012",
+  "viewport": {
+    "name": "final-320",
+    "innerWidth": 320,
+    "clientWidth": 320,
+    "scrollWidth": 320,
+    "scrollHeight": 5003,
+    "h1Count": 1,
+    "headings": [
+      {
+        "level": "H1",
+        "text": "關於我們"
+      },
+      {
+        "level": "H2",
+        "text": "讓理解自己，從一段停留開始。"
+      },
+      {
+        "level": "H2",
+        "text": "一個讓經驗被好好承接的地方。"
+      },
+      {
+        "level": "H2",
+        "text": "一些發生過的靠近。"
+      },
+      {
+        "level": "H2",
+        "text": "從一段對話，找到適合的入口。"
+      }
+    ],
+    "missingAlt": 0,
+    "imageFailures": [],
+    "controls": [
+      {
+        "label": "上一張片段",
+        "width": 48,
+        "height": 48
+      },
+      {
+        "label": "下一張片段",
+        "width": 48,
+        "height": 48
+      },
+      {
+        "label": "07 — 000 0000",
+        "width": 99.17,
+        "height": 44
+      },
+      {
+        "label": "hello@example.com",
+        "width": 143,
+        "height": 44
+      },
+      {
+        "label": "Facebook",
+        "width": 67.39,
+        "height": 44
+      },
+      {
+        "label": "LINE",
+        "width": 44,
+        "height": 44
+      },
+      {
+        "label": "在 Google Maps 開啟",
+        "width": 172.53,
+        "height": 48
+      }
+    ],
+    "undersizedControls": [],
+    "typography": {
+      "h1": "42px",
+      "h2": "26px",
+      "body": "16px",
+      "bodyLineHeight": "33.6px"
+    },
+    "layout": {
+      "heroColumns": "320px",
+      "momentsDisplay": "block",
+      "placeMarginBottom": "0px",
+      "contactMarginTop": "50px",
+      "hero": {
+        "top": 87,
+        "bottom": 752.828125,
+        "width": 320,
+        "height": 665.828125
+      },
+      "brand": {
+        "top": 752.828125,
+        "bottom": 1276.96875,
+        "width": 320,
+        "height": 524.140625
+      },
+      "place": {
+        "top": 1276.96875,
+        "bottom": 1904.328125,
+        "width": 320,
+        "height": 627.359375
+      },
+      "moments": {
+        "top": 1904.328125,
+        "bottom": 2700.484375,
+        "width": 320,
+        "height": 796.15625
+      },
+      "contact": {
+        "top": 2750.484375,
+        "bottom": 3980.390625,
+        "width": 320,
+        "height": 1229.90625
+      }
+    },
+    "carousel": {
+      "count": "01 / 03",
+      "transitionDuration": "1.5s",
+      "buttons": 2,
+      "playbackButtons": 0
+    },
+    "currentNavigation": "關於我們"
+  },
+  "carousel": {
+    "initial": "01 / 03",
+    "whileFocused": "01 / 03",
+    "whileHovered": "01 / 03",
+    "afterResume": "02 / 03",
+    "afterForwardLoop": "01 / 03",
+    "afterPrevious": "03 / 03",
+    "transform": "translate3d(calc(-300% + 0px), 0px, 0px)",
+    "focusedControl": "下一張片段",
+    "focusOutline": {
+      "style": "solid",
+      "width": "2px",
+      "offset": "6px"
+    }
+  },
+  "reducedMotion": {
+    "initial": "01 / 03",
+    "afterDelay": "01 / 03",
+    "transitionDuration": "0.001s"
+  },
+  "longContent": {
+    "clientWidth": 320,
+    "scrollWidth": 320,
+    "overflow": [
+      "about-carousel__track",
+      "about-carousel__slide",
+      "IMG",
+      "about-carousel__slide",
+      "IMG",
+      "about-carousel__slide",
+      "IMG",
+      "about-carousel__slide",
+      "IMG"
+    ],
+    "emailWrap": "anywhere"
+  }
+}

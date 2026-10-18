@@ -1,12 +1,21 @@
 <script setup lang="ts">
-import { aboutPageFixture } from '../fixtures/about'
+import { computed } from 'vue'
 import { useSiteSettings } from '../composables/useSiteSettings'
+import type { AboutPageResponse, AboutPageStatus } from '#shared/types/about'
+import { emptyAboutPageContent } from '#shared/utils/about'
 
 const { settings } = useSiteSettings()
+const { data: response, status: requestStatus, refresh } = useFetch<AboutPageResponse>('/api/about')
+const content = computed(() => response.value?.content ?? emptyAboutPageContent)
+const aboutStatus = computed<AboutPageStatus>(() => {
+  if (requestStatus.value === 'pending') return 'loading'
+  if (requestStatus.value === 'error' || response.value?.state !== 'ready') return 'error'
+  return 'ready'
+})
 
 useSeoMeta({
-  title: aboutPageFixture.seo?.title,
-  description: aboutPageFixture.seo?.description,
+  title: () => content.value.seo?.title || '關於我們｜Flowing Clarity',
+  description: () => content.value.seo?.description,
 })
 </script>
 
@@ -15,7 +24,7 @@ useSeoMeta({
     <SiteHeader always-visible :settings="settings" current-path="/about" />
 
     <main>
-      <AboutOverview :content="aboutPageFixture" />
+      <AboutOverview :content="content" :status="aboutStatus" @retry="refresh" />
     </main>
 
     <SiteFooter v-if="settings" :content="settings" current-path="/about" />

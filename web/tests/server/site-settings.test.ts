@@ -63,4 +63,18 @@ describe('site settings content boundary', () => {
     expect(parseSiteSettings({ ...raw, brandLogo: header, footerLogo: footer })).toMatchObject({ brandLogo: header, footerLogo: footer })
     expect(parseSiteSettings({ ...raw, brandLogo: header, footerLogo: null })?.footerLogo).toBeUndefined()
   })
+  it('maps valid business hours and Google Maps while rejecting unsafe map hosts', () => {
+    const contact = {
+      ...raw.contact,
+      businessHours: [{ days: '週二至週日', hours: '10:00–18:00' }],
+      businessHoursNote: '採預約制',
+      map: {
+        placeName: 'Flowing Clarity',
+        embedUrl: 'https://www.google.com/maps?q=Kaohsiung&output=embed',
+        externalUrl: 'https://www.google.com/maps/search/?api=1&query=Kaohsiung',
+      },
+    }
+    expect(parseSiteSettings({ ...raw, contact })?.contact).toMatchObject(contact)
+    expect(parseSiteSettings({ ...raw, contact: { ...contact, map: { ...contact.map, embedUrl: 'https://example.com/maps?output=embed' } } })).toBeNull()
+  })
 })

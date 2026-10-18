@@ -11,6 +11,11 @@ import {
 } from '../../app/fixtures/about'
 
 describe('about overview', () => {
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.restoreAllMocks()
+  })
+
   it('renders the approved section order, headings, contact details, and map fallback link', () => {
     const wrapper = mount(AboutOverview, { props: { content: aboutPageFixture } })
 
@@ -34,40 +39,93 @@ describe('about overview', () => {
     expect(wrapper.text()).toContain('前端原型示意')
   })
 
-  it('moves between moments without looping and updates image, caption, and count', async () => {
+  it('loops through moments and updates image, caption, and count', async () => {
     const wrapper = mount(AboutOverview, { props: { content: aboutPageFixture } })
     const controls = wrapper.findAll('.about-carousel__controls button')
 
-    expect(controls[0]!.attributes('disabled')).toBeDefined()
+    expect(controls).toHaveLength(2)
+    expect(controls[0]!.attributes('disabled')).toBeUndefined()
     expect(controls[1]!.attributes('disabled')).toBeUndefined()
     expect(wrapper.get('.about-carousel__controls span').text()).toBe('01 / 03')
-    expect(wrapper.get('.about-carousel__stage img').attributes('src')).toContain('mandala')
+    expect(wrapper.get('.about-carousel__slide:not([aria-hidden="true"]) img').attributes('src')).toContain('mandala')
 
     await controls[1]!.trigger('click')
     expect(wrapper.get('.about-carousel__controls span').text()).toBe('02 / 03')
-    expect(wrapper.get('.about-carousel__stage img').attributes('src')).toContain('circle')
+    expect(controls[1]!.attributes('disabled')).toBeUndefined()
+    expect(controls[1]!.attributes('aria-disabled')).toBe('true')
+    expect(wrapper.get('.about-carousel__slide:not([aria-hidden="true"]) img').attributes('src')).toContain('circle')
     expect(wrapper.get('figcaption').text()).toContain('圍坐、傾聽與回應')
 
     await controls[1]!.trigger('click')
+    expect(wrapper.get('.about-carousel__controls span').text()).toBe('02 / 03')
+    await wrapper.get('.about-carousel__track').trigger('transitionend', { propertyName: 'transform' })
+    await controls[1]!.trigger('click')
     expect(wrapper.get('.about-carousel__controls span').text()).toBe('03 / 03')
-    expect(controls[1]!.attributes('disabled')).toBeDefined()
+    await wrapper.get('.about-carousel__track').trigger('transitionend', { propertyName: 'transform' })
+    await controls[1]!.trigger('click')
+    expect(wrapper.get('.about-carousel__controls span').text()).toBe('01 / 03')
+
+    const backwardLoop = mount(AboutOverview, { props: { content: aboutPageFixture } })
+    await backwardLoop.get('button[aria-label="上一張片段"]').trigger('click')
+    expect(backwardLoop.get('.about-carousel__controls span').text()).toBe('03 / 03')
   })
 
-  it('supports horizontal touch gestures without intercepting short movement', async () => {
+  it('supports pointer dragging without changing slides for short movement', async () => {
     const wrapper = mount(AboutOverview, { props: { content: aboutPageFixture } })
     const figure = wrapper.get('.about-carousel__figure')
 
-    await figure.trigger('touchstart', { changedTouches: [{ clientX: 240 }] })
-    await figure.trigger('touchend', { changedTouches: [{ clientX: 120 }] })
+    await figure.trigger('pointerdown', { clientX: 240, pointerId: 1, pointerType: 'touch', button: 0 })
+    await figure.trigger('pointermove', { clientX: 120, pointerId: 1, pointerType: 'touch' })
+    expect(wrapper.get('.about-carousel__track').attributes('style')).toContain('-120px')
+    await figure.trigger('pointerup', { clientX: 120, pointerId: 1, pointerType: 'touch' })
+    expect(wrapper.get('.about-carousel__controls span').text()).toBe('02 / 03')
+    await wrapper.get('.about-carousel__track').trigger('transitionend', { propertyName: 'transform' })
+
+    await figure.trigger('pointerdown', { clientX: 120, pointerId: 2, pointerType: 'mouse', button: 0 })
+    await figure.trigger('pointermove', { clientX: 140, pointerId: 2, pointerType: 'mouse' })
+    await figure.trigger('pointerup', { clientX: 140, pointerId: 2, pointerType: 'mouse' })
     expect(wrapper.get('.about-carousel__controls span').text()).toBe('02 / 03')
 
-    await figure.trigger('touchstart', { changedTouches: [{ clientX: 120 }] })
-    await figure.trigger('touchend', { changedTouches: [{ clientX: 140 }] })
-    expect(wrapper.get('.about-carousel__controls span').text()).toBe('02 / 03')
-
-    await figure.trigger('touchstart', { changedTouches: [{ clientX: 100 }] })
-    await figure.trigger('touchend', { changedTouches: [{ clientX: 220 }] })
+    await figure.trigger('pointerdown', { clientX: 100, pointerId: 3, pointerType: 'mouse', button: 0 })
+    await figure.trigger('pointermove', { clientX: 220, pointerId: 3, pointerType: 'mouse' })
+    await figure.trigger('pointerup', { clientX: 220, pointerId: 3, pointerType: 'mouse' })
     expect(wrapper.get('.about-carousel__controls span').text()).toBe('01 / 03')
+  })
+
+  it('autoplays every two seconds, loops, and has no playback toggle', async () => {
+    vi.useFakeTimers()
+    const wrapper = mount(AboutOverview, { props: { content: aboutPageFixture } })
+
+    await vi.advanceTimersByTimeAsync(2_000)
+    expect(wrapper.get('.about-carousel__controls span').text()).toBe('02 / 03')
+    await vi.advanceTimersByTimeAsync(4_000)
+    expect(wrapper.get('.about-carousel__controls span').text()).toBe('01 / 03')
+
+    expect(wrapper.find('button[aria-label="暫停精選片段"]').exists()).toBe(false)
+    expect(wrapper.find('button[aria-label="播放精選片段"]').exists()).toBe(false)
+    expect(wrapper.get('.about-carousel__controls span').attributes('aria-live')).toBe('off')
+
+    wrapper.unmount()
+  })
+
+  it('does not autoplay when reduced motion is requested', async () => {
+    vi.useFakeTimers()
+    vi.spyOn(window, 'matchMedia').mockReturnValue({
+      matches: true,
+      media: '(prefers-reduced-motion: reduce)',
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })
+    const wrapper = mount(AboutOverview, { props: { content: aboutPageFixture } })
+
+    await vi.advanceTimersByTimeAsync(6_000)
+    expect(wrapper.get('.about-carousel__controls span').text()).toBe('01 / 03')
+
+    wrapper.unmount()
   })
 
   it('keeps optional content absent without empty wrappers and supports the longest fixture', () => {
@@ -93,8 +151,8 @@ describe('about overview', () => {
     expect(withoutContact.find('iframe').exists()).toBe(false)
 
     const imageFailure = mount(AboutOverview, { props: { content: aboutPageFixture } })
-    await imageFailure.get('.about-carousel__stage img').trigger('error')
-    expect(imageFailure.get('.about-carousel__stage .about-image-fallback').text()).toContain('曼陀羅')
+    await imageFailure.get('.about-carousel__slide:not([aria-hidden="true"]) img').trigger('error')
+    expect(imageFailure.get('.about-carousel__slide:not([aria-hidden="true"]) .about-image-fallback').text()).toContain('曼陀羅')
 
     const error = mount(AboutOverview, { props: { content: aboutPageFixture, status: 'error' } })
     await error.get('button').trigger('click')
@@ -116,7 +174,9 @@ describe('about page', () => {
   })
 
   beforeEach(() => {
-    vi.stubGlobal('useFetch', () => ({ data: ref({ state: 'empty', content: null }) }))
+    vi.stubGlobal('useFetch', (url: string) => url === '/api/about'
+      ? { data: ref({ state: 'ready', content: aboutPageFixture }), status: ref('success'), refresh: vi.fn() }
+      : { data: ref({ state: 'empty', content: null }) })
     vi.stubGlobal('useSeoMeta', vi.fn())
   })
 

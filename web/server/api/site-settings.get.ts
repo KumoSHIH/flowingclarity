@@ -8,7 +8,7 @@ export const siteSettingsQuery = `*[_id == $id && _type == "siteSettings"][0]{
   "brandLogo": brandLogo.asset->{"src": url, "width": metadata.dimensions.width, "height": metadata.dimensions.height},
   "footerLogo": footerLogo.asset->{"src": url, "width": metadata.dimensions.width, "height": metadata.dimensions.height},
   brandMessages{englishStatement, closingStatement},
-  contact{address, email, phone{display, href}},
+  contact{address, email, phone{display, href}, businessHours[]{days, hours}, businessHoursNote, map{placeName, embedUrl, externalUrl}},
   socialLinks[]{label, href}, navigationItems[]{label, destination, accessibleLabel},
   legal{copyrightText}
 }`

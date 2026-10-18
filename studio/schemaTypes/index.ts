@@ -16,6 +16,7 @@ import { article } from './article.ts'
 import { articleDetailSchemaTypes } from './articleDetail.ts'
 import { articleTag } from './articleTag.ts'
 import { articlesPage } from './articlesPage.ts'
+import { aboutPage } from './aboutPage.ts'
 
 export const schemaTypes = [
   siteSettings,
@@ -40,4 +41,5 @@ export const schemaTypes = [
   articleTag,
   ...articleDetailSchemaTypes,
   article,
+  aboutPage,
 ]

@@ -4,6 +4,7 @@ import { siteSettingsId } from './schemaTypes/siteSettings.ts'
 import { eventsPageId } from './schemaTypes/eventsPage.ts'
 import { sessionPageId } from './schemaTypes/sessionPage.ts'
 import { articlesPageId } from './schemaTypes/articlesPage.ts'
+import { aboutPageId } from './schemaTypes/aboutPage.ts'
 
 const courseCategories = Object.values(courseCategoryDefinitions)
 
@@ -152,5 +153,9 @@ export const structure: StructureResolver = (S) =>
       ),
       S.listItem().id('articles').title('文章').child(
         S.documentList().id('articles').title('文章').apiVersion('2026-03-01').filter('_type == "article"'),
+      ),
+      S.divider(),
+      S.listItem().id('about-page').title('關於我們').child(
+        S.document().id(aboutPageId).schemaType('aboutPage').documentId(aboutPageId),
       ),
     ])

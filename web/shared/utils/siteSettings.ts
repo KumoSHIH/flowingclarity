@@ -1,5 +1,5 @@
 import type { SiteSettings } from '../types/siteSettings'
-import { isEmail, isHttpsUrl, isNavigation, isPhoneUri } from './siteSettingsContract'
+import { isEmail, isGoogleMapsEmbedUrl, isGoogleMapsExternalUrl, isHttpsUrl, isNavigation, isPhoneUri } from './siteSettingsContract'
 
 function object(value: unknown): Record<string, unknown> | null {
   return value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : null
@@ -48,6 +48,29 @@ export function parseSiteSettings(value: unknown): SiteSettings | null {
       const phone = object(contact.phone)
       if (!phone || !text(phone.display, 8, 25) || !isPhoneUri(phone.href)) return null
       content.contact.phone = { display: phone.display.trim(), href: phone.href }
+    }
+    if (contact.businessHours != null) {
+      if (!Array.isArray(contact.businessHours) || contact.businessHours.length < 1 || contact.businessHours.length > 3) return null
+      const businessHours: { days: string; hours: string }[] = []
+      for (const raw of contact.businessHours) {
+        const item = object(raw)
+        if (!item || !text(item.days, 2, 40) || !text(item.hours, 2, 40)) return null
+        businessHours.push({ days: item.days.trim(), hours: item.hours.trim() })
+      }
+      content.contact.businessHours = businessHours
+    }
+    if (contact.businessHoursNote != null) {
+      if (!text(contact.businessHoursNote, 1, 80)) return null
+      content.contact.businessHoursNote = contact.businessHoursNote.trim()
+    }
+    if (contact.map != null) {
+      const map = object(contact.map)
+      if (!map || !text(map.placeName, 2, 40) || !isGoogleMapsEmbedUrl(map.embedUrl) || !isGoogleMapsExternalUrl(map.externalUrl)) return null
+      content.contact.map = {
+        placeName: map.placeName.trim(),
+        embedUrl: map.embedUrl,
+        externalUrl: map.externalUrl,
+      }
     }
   }
   if (doc.socialLinks != null) {

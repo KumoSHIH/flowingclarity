@@ -1,6 +1,6 @@
 # 關於我們頁面規格
 
-**狀態：** frontend-ready
+**狀態：** cms-integrated
 
 **路由：** `/about`
 
@@ -13,7 +13,7 @@
 ## 已確認方向與合理假設
 
 - **已確認：** 頁面依序包含「品牌理念」、「空間／團隊介紹」、「精選片段」及「聯絡我們」四區；品牌理念圖片可省略，空間／團隊圖片必填；精選片段在桌面採左側圖片 Swiper、右側文字；聯絡區沿用現有聯絡資料、營業時間並顯示 Google Maps 地圖。桌面設計選定 A「顯影室」，頁面內容區改採暖紙與淺砂色，標題及正文沿用既有網站字級。
-- **合理假設：** 精選片段為一組共用敘述搭配少量圖片，不建立獨立花絮文章；Swiper 只由使用者手動切換，不自動播放；About 內容以 `aboutPage` 單例管理，聯絡與地圖定位由 `siteSettings.contact` 提供，避免和 Footer 重複維護。
+- **合理假設：** 精選片段為一組共用敘述搭配少量圖片，不建立獨立花絮文章；Swiper 支援按鈕與拖曳，並以 2,000ms 間隔、1,500ms 位移轉場自動循環；About 內容以 `aboutPage` 單例管理，聯絡與地圖定位由 `siteSettings.contact` 提供，避免和 Footer 重複維護。
 - **尚非正式內容：** 現有首頁、Footer、舊稿或 fixture 中的品牌文案、人物、地址、電話、Email、社群及照片，未經內容負責人核准前皆不得直接發布。
 
 ## 範圍與非目標
@@ -39,6 +39,8 @@
 | --- | --- | --- | --- | --- |
 | `title` | 頁面主標題；純文字 | 必填；2–20 個中文字 | 品牌／內容負責人 | `aboutPage` |
 | `introduction` | 頁面導言；純文字 | 選填；30–160 個中文字 | 內容負責人 | `aboutPage` |
+| `heroImage` | 頁面首區代表圖片，含 hotspot | 必填；1 張 | 內容負責人 | Sanity image asset |
+| `heroImage.alt` | 首圖替代文字；純文字 | 必填；2–120 個中文字 | 內容負責人 | `aboutPage` |
 | `brandStory.heading` | 品牌理念區標題；純文字 | 必填；2–20 個中文字 | 品牌負責人 | `aboutPage` |
 | `brandStory.body` | 品牌理念；受限 Portable Text，只允許段落、強調與安全連結 | 必填；1–5 段，建議 120–800 個中文字 | 品牌負責人 | `aboutPage` |
 | `brandStory.image` | 支持品牌理念的圖片 | 選填；0–1 張 | 品牌／內容負責人 | Sanity image asset |
@@ -77,7 +79,8 @@
 
 - 頁面以伺服器端 published-only 資料渲染，不呈現獨立 loading 骨架，避免首屏位移。`aboutPage` 不存在、必要欄位缺失或查詢失敗時顯示中性「頁面內容暫時無法顯示」狀態，不回退到示範文案。
 - 品牌理念圖片缺少時移除圖片容器，文字自然使用可用寬度；空間／團隊圖片及少於 3 張精選片段屬無效發布內容。
-- Swiper 預設顯示第一張，提供上一張、下一張、目前張數與總張數；到達首尾時控制項保持可理解的 disabled 狀態。切換只改變圖片及其圖說，右側共用文字不變，不自動輪播、不循環，也不攔截頁面垂直捲動。
+- Swiper 預設顯示第一張，提供上一張、下一張、目前張數與總張數；按鈕、拖曳與自動播放皆採首尾無限循環，不顯示播放／暫停按鈕。自動播放每 2,000ms 前進，位移轉場為 1,500ms；切換只改變圖片及其圖說，右側共用文字不變，也不攔截頁面垂直捲動。
+- 輪播在離開視窗、頁籤隱藏、滑鼠停留、控制項取得焦點或系統偏好 reduced motion 時停止自動播放；自動切換期間計數不使用 live region，避免持續打斷輔助科技。
 - 圖片載入失敗時保留替代文字與固定比例空間，其他內容仍可閱讀；單張失敗不應使整個頁面崩潰。
 - `siteSettings` 讀取失敗時，其餘 About 內容仍顯示；聯絡區改呈中性 unavailable 訊息並省略地圖，不顯示未核准備援資料。地圖載入失敗時仍保留地址與「在 Google Maps 開啟」連結。
 - 選填導言、品牌理念圖片、圖片圖說或聯絡邀請缺少時，移除對應元素與間距，不留下空標題或空控制項。長文字允許自然換行，正文維持合理行寬，不截斷核心資訊。
@@ -85,6 +88,7 @@
 ## 響應式與無障礙
 
 - 桌面版精選片段維持圖片在左、文字在右；`<= 1023px` 改為單欄，依序顯示標題、圖片與控制、圖說、共用文字。其他圖文區在窄螢幕也維持 DOM 閱讀順序，不以 CSS 視覺重排造成鍵盤與閱讀順序不一致。
+- 桌面版「空間／團隊」與「精選片段」之間保留 `250px` 區隔，`<= 1023px` 回到 `0`；聯絡區上方間距為桌機 `150px`、`<= 1023px` 為 `50px`，使手機維持緊湊的單欄節奏。
 - 320px 起不得出現內容水平捲動；圖片維持已定義比例與焦點裁切，正文遵守 `DESIGN.md` 的字級、行距及主要頁面留白。所有控制與連結的觸控區至少 44 × 44px。
 - 頁面只使用一個 `h1`；四個內容區使用具可讀標題的 `section` 與 `h2`。聯絡資料使用 `address`；Google Maps iframe 使用明確 `title`、`loading="lazy"` 並位於有標題的地標區域。
 - Swiper 使用具名稱的 carousel／region 語意。上一張與下一張使用原生 `button`，具狀態相關名稱；鍵盤可操作，焦點清楚可見，切換後以非干擾方式更新目前張數，不強制搬移焦點。圖片順序也是不支援 JavaScript 時的內容順序。
@@ -94,7 +98,7 @@
 
 1. `/about` 依序呈現頁面首區、品牌理念、空間／團隊介紹、精選片段與聯絡我們，並使用全站共用 Header 與 Footer；導覽中的「關於我們」正確標記目前頁。
 2. 品牌理念在有圖與無圖資料下均保持完整閱讀；空間／團隊必須有圖片與替代文字，必要內容不完整時不得被 parser 視為 ready。
-3. 精選片段可用滑鼠、觸控及鍵盤逐張切換，首尾 disabled、張數、圖說及替代文字正確；沒有自動播放、無限循環或垂直捲動攔截。
+3. 精選片段可用滑鼠拖曳、觸控拖曳、按鈕及鍵盤逐張切換，手動與自動播放皆可首尾循環，張數、圖說及替代文字正確；自動播放間隔 2,000ms、轉場 1,500ms，不顯示播放／暫停按鈕，且不攔截垂直捲動。
 4. About 聯絡資訊與 Footer 來自同一份 `siteSettings`；About 額外顯示共用聯絡資料中的營業時間。修改已發布的地址、電話、Email、營業時間或社群後，所有使用該欄位的位置同步，頁面不存在第二份正式聯絡欄位。
 5. Google Maps 對應公開地址，iframe 有可讀名稱且延遲載入；地圖失敗或被封鎖時，地址及外部 Google Maps 連結仍可操作，網址不是 `#` 或任意 iframe HTML。
 6. 測試涵蓋 ready、empty、invalid、error、品牌圖缺少、最少／最多片段、圖片失敗、聯絡資料失敗及地圖失敗；任何狀態都不洩漏 fixture 或草稿內容。
@@ -106,8 +110,9 @@
 
 - 內容負責人需提供並核准品牌理念、空間／團隊介紹、聯絡邀請、3–10 張精選片段、圖片替代文字、公開聯絡資料、營業時間及 Google Maps 嵌入／外部網址。
 - 需確認照片授權與可辨識人物的公開同意；此項未完成前不得將相片視為正式內容。
-- Google Maps 第三方載入可能涉及隱私與同意管理；UI 驗收完成前須確認網站的隱私揭露及是否需要先取得同意才載入 iframe。若需要，CMS 串接前應補上地圖占位與啟用按鈕狀態。
-- `/about` 前端原型已完成，下一階段為 UI 行為驗收；通過後才進入 Sanity 串接。CMS 階段須建立 `aboutPage` 單例、擴充 `siteSettings.contact.businessHours`／`map`，並以共用 `siteSettings` 取代目前僅供原型展示的聯絡 fixture。
+- Google Maps 第三方載入可能涉及隱私與同意管理；正式發布前須確認網站的隱私揭露及是否需要先取得同意才載入 iframe。若需要，內容流驗收前應補上地圖占位與啟用按鈕狀態。
+- `/about` 的前端、UI 驗收與 Sanity 串接已完成；下一階段為 `validate-content-flow`。正式發布前須以核准資料驗證草稿隔離、About 與 `siteSettings` 的發布順序、前台更新、回復草稿及地圖失敗備援。
+- 目前原型文案與圖片已依使用者要求保留為後台初始草稿，供後續編修與核准；沒有自動發布。公開查詢在正式資料核准前讀不到此草稿，前台會顯示規格中的中性 unavailable 狀態，不回退到示意內容。
 - 內容負責人仍需核准正式文案、人物與照片授權、地址、電話、Email、營業時間、社群及 Google Maps 網址；原型資料不得直接發布。
 
 ## 設計探索狀態
@@ -119,20 +124,27 @@
 - 2026-10-18 第四輪修訂移除品牌理念標題與正文之間的分隔線，並開始 A 的手機版設計：Header 改用 44px 選單按鈕，各區改為單欄，精選片段依標題、圖片、圖說、控制與正文的自然閱讀順序排列，聯絡資訊與地圖上下堆疊。
 - 三案皆包含品牌理念、空間／團隊、左圖右文精選片段、聯絡資訊、Google Maps 示意及共用 Footer；圖片、人物、地點和文案均為設計示意，不是正式內容。
 - 已完成 A 桌面 1440 × 900，以及手機 390 × 844／平板 768 × 1024 的實際渲染檢查；證據與限制記錄於 [桌面設計檢查](../design/review/about-page-concepts-desktop/README.md) 與 [手機設計檢查](../design/review/about-page-a-mobile/README.md)。2026-10-18 使用者確認手機稿並同意進入前端原型，因此狀態更新為 `design-approved`；完整互動與無障礙驗收仍屬後續 UI 驗證階段。
-- 2026-10-18 完成 `/about` 前端原型：共用 Header／Footer、A 桌機與手機構圖、垂直置中的品牌理念、空間／團隊、手動精選片段、營業時間、Google Maps、loading／empty／error 與圖片失敗備援均已實作。狀態更新為 `frontend-ready`。
+- 2026-10-18 完成 `/about` 前端原型：共用 Header／Footer、A 桌機與手機構圖、垂直置中的品牌理念、空間／團隊、可拖曳與自動播放的精選片段、營業時間、Google Maps、loading／empty／error 與圖片失敗備援均已實作。
+- 2026-10-18 完成 production browser UI 驗收：320／390／768／1024／1440px 與 200% 縮放等效寬度均無內容水平溢位；輪播循環、轉場鎖定、焦點、暫停條件、reduced motion、圖片與 44px 操作區皆通過，狀態更新為 `ui-verified`。證據見 [About UI 驗收](../design/review/about-ui-verified/README.md)。
+- 2026-10-18 完成 CMS 串接：新增 `aboutPage` 單例、受限 Portable Text、圖片／SEO validation、published-only GROQ、轉換與失敗狀態；`siteSettings.contact` 擴充營業時間與 Google Maps。Web 不再以 fixture 作為主要內容來源，狀態更新為 `cms-integrated`。
+- 2026-10-18 已部署 production schema 1/1，並在遠端建立未發布的 `drafts.about-page` 與 `drafts.site-settings`。About 草稿保留目前文案及 4 張圖片；共用設定草稿由既有 published 文件複製後，只補入示意營業時間與地圖。匿名前台確認讀不到 About 草稿，兩份草稿皆未發布。
 
 ## 本階段完成與驗證
 
 - 已完成 About 第一版的範圍、內容契約、共用資料關係、狀態、響應式、無障礙及可測試驗收條件。
 - 已比對 `PRODUCT.md`、`DESIGN.md`、Header／Footer／首頁內容規格、現有 `siteSettings` 型別、API 與 Sanity schema；`/about` 前端路由現已建立，正式聯絡資料仍規劃由 `siteSettings` 共用。
-- 已新增三款桌面設計候選與四張生成示意圖片；設計稿已完成 1440px、390px 與 768px 渲染檢查。前端原型未修改 Sanity schema、正式資料或進行遠端寫入。
+- 已新增三款桌面設計候選與四張生成示意圖片；設計稿已完成 1440px、390px 與 768px 渲染檢查。
 - 前端原型新增 `AboutOverview.vue`、`/about` 頁面、共用型別、典型／長內容／缺少選填／空集合 fixtures、四張原型靜態圖片與頁面測試。所有示意資料在頁面明確標註未核准。
-- 已執行 About 測試 7/7、完整 Vitest 218/218、`nuxt typecheck`、production build 與 `git diff --check`，皆為成功；型別檢查仍輸出既有 `vue-router/volar/sfc-route-blocks` 套件相容警告，未造成失敗。production preview 的 `/about` 回應 200，Hero 與精選圖片資產回應 200。
-- 本機環境沒有可用的無頭瀏覽器，因此尚未對 production Vue 實作重新產出 320／390／768／1024／1440px 截圖，也未完成鍵盤、200% 縮放、地圖阻擋及真機觸控人工驗收；這些項目留在下一階段 `verify-ui-behavior`。
+- 已執行 About 測試 9/9、完整 Vitest 220/220、`nuxt typecheck`、production build、Impeccable detector 與 `git diff --check`；測試、型別及 build 均成功，detector 為 0 個 anti-pattern。型別檢查仍輸出既有 `vue-router/volar/sfc-route-blocks` 套件相容警告，未造成失敗；detector 另提示原型註記、輪播控制及地圖按鈕的 11px／12px 輔助字級不在主字級階梯，未視為阻擋。production preview 的 `/about` 回應 200，Hero 與精選圖片資產回應 200。
+- 已以 production build 搭配 Chromium 完成 320／390／768／1024／1440px、200% 縮放等效寬度、鍵盤焦點、輪播循環與暫停、reduced motion、長內容及地圖備援檢查。390px／1440px 截圖與量測資料存於 `docs/design/review/about-ui-verified/`；未執行 Safari、Firefox、實體觸控裝置與螢幕閱讀器人工驗收。
+- CMS 階段新增 About 與共用聯絡 schema、Studio 單例入口、伺服器 API、資料 parser、rich-text 安全連結呈現、草稿 seed／驗證腳本及回歸測試。Web 225/225、Studio 31/31 測試、兩端 typecheck、Web／Studio production build 與 schema deploy 均成功；Web build 只保留既有字型解析與 sourcemap 警告。
+- Sanity 全 dataset validation 檢查 35 份文件，其中 34 份有效；唯一錯誤為既有 `article` 文件 `ac387124-91ae-4143-8492-8d1894fce00c` 缺少 `heroStyle` 與 `body`，與本次 About 變更無關。新草稿已另以 reference、欄位狀態及匿名 published 查詢完成驗證。
 
 
 #### 待修正項目
-- [] about-label 改成 14px
-- [] .about-carousel__figure 移除背景色
-- [] 輪播要可以拖動、自動播放 2000ms、播放動畫時間1500ms
-- [] about-contact__list dt，字級、line-height 對齊 about-contact__list dd
+- [x] `about-label` 改為 14px。
+- [x] `.about-carousel__figure` 移除背景色。
+- [x] 輪播支援滑鼠／觸控拖動、自動播放 2,000ms、位移轉場 1,500ms、首尾無限循環及 reduced-motion 行為；移除播放／暫停按鈕。
+- [x] `.about-contact__list dt` 的字級與 line-height 對齊 `.about-contact__list dd`。
+- [x] `.about-contact` 上方間距調整為桌機 `150px`、手機 `50px`。
+- [x] `.about-place` 下方間距調整為桌機 `250px`、`<= 1023px` 為 `0`。

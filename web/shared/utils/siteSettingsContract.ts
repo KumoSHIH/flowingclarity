@@ -20,6 +20,22 @@ export function isEmail(value: unknown): value is string {
   return typeof value === 'string' && value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && !/[\r\n?#]/.test(value)
 }
 
+export function isGoogleMapsEmbedUrl(value: unknown): value is string {
+  if (!isHttpsUrl(value)) return false
+  const url = new URL(value)
+  return (url.hostname === 'www.google.com' || url.hostname === 'google.com')
+    && url.pathname.startsWith('/maps')
+    && url.searchParams.get('output') === 'embed'
+}
+
+export function isGoogleMapsExternalUrl(value: unknown): value is string {
+  if (!isHttpsUrl(value)) return false
+  const url = new URL(value)
+  return url.hostname === 'maps.app.goo.gl'
+    || ((url.hostname === 'www.google.com' || url.hostname === 'google.com')
+      && url.pathname.startsWith('/maps'))
+}
+
 export function isNavigation(value: unknown): boolean {
   return Array.isArray(value) && value.length === 5 && value.every((item, index) =>
     item && item.label === siteNavigationItems[index]?.label && item.destination === siteNavigationItems[index]?.href)
