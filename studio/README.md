@@ -35,7 +35,7 @@ Sanity Studio 用來編輯首頁 Banner、課程、活動、個案諮詢與文�
 
 個案諮詢 schema 已部署至 production，並以 7 筆 taxonomy、1 筆總覽與 48 位執行師完成草稿隔離、兩次發布、匿名 published 查詢、分頁、地區篩選、1440px／390px 前台與清理後空狀態驗收。隔離測試內容已精準清除；production 只保留無內容、未發布的 `drafts.session-page`，避免單例在刪除驗收內容後停在不可編輯狀態，匿名前台仍讀不到此草稿。正式總覽文案、taxonomy 與執行師資料仍待內容負責人建立及發布。完整紀錄見 [個案諮詢規格](../web/docs/specs/session.md)。
 
-關於我們 schema 已部署至 production。2026-10-18 已上傳 4 張目前原型圖片並建立 `drafts.about-page`；另由既有 published `site-settings` 建立未發布更新草稿，只補入原型營業時間與 Google Maps 示意，沒有覆寫或發布正式設定。匿名前台查詢確認讀不到 About 草稿；正式發布與前台內容流仍待文案、照片授權及聯絡資料核准後驗收。完整紀錄見 [關於我們規格](../web/docs/specs/about.md)。
+關於我們 schema 已部署至 production。2026-10-19 驗收時 `about-page` 與 `site-settings` 已由外部流程發布且無殘留草稿；匿名 published 查詢、前台 parser、5 個圖片資產、Nuxt API、SSR 與 production browser 回歸皆通過，技術狀態為 `verified`。驗收本身未修改或發布遠端文件；現行內容仍含示意／待核准字樣，照片授權、人物同意與地圖隱私揭露仍待內容負責人確認。完整紀錄見 [關於我們規格](../web/docs/specs/about.md)。
 
 文章總覽 schema 已部署至 production，並以 10 個標籤、1 筆總覽與 24 篇文章完成草稿隔離、兩次發布、匿名 published 查詢、分類／標籤篩選、三頁分頁、桌機／手機與清理後空狀態驗收。70 個隔離測試文件已精準清除；人工後台測試另發現主要分類 picker 同時顯示新舊分類文件，現已限制為四個正式 `course-category-*` ID 並完成回歸。production 的 `articles-page` 已由 Studio 人工發布，前台 API 可匿名讀取 4 個主要分類、3 個標籤與 3 篇文章，文章總覽規格為 `verified`。單篇文章詳情擴充目前只在本機完成，尚未部署或進行遠端內容流驗收；正式內容也仍待核准。完整紀錄見 [文章分享規格](../web/docs/specs/articles.md)與[文章詳情規格](../web/docs/specs/articles-detail.md)。
 

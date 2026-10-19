@@ -75,6 +75,7 @@ describe('site settings content boundary', () => {
       },
     }
     expect(parseSiteSettings({ ...raw, contact })?.contact).toMatchObject(contact)
+    expect(parseSiteSettings({ ...raw, contact: { ...contact, map: { ...contact.map, embedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3734' } } })?.contact?.map?.embedUrl).toContain('/maps/embed?pb=')
     expect(parseSiteSettings({ ...raw, contact: { ...contact, map: { ...contact.map, embedUrl: 'https://example.com/maps?output=embed' } } })).toBeNull()
   })
 })

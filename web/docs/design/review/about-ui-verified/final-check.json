@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-10-18T15:10:49.239Z",
-  "origin": "http://127.0.0.1:3012",
+  "generatedAt": "2026-10-19T01:32:28.293Z",
+  "origin": "http://127.0.0.1:4318",
   "viewport": {
     "name": "final-320",
     "innerWidth": 320,
     "clientWidth": 320,
     "scrollWidth": 320,
-    "scrollHeight": 5003,
+    "scrollHeight": 5025,
     "h1Count": 1,
     "headings": [
       {
@@ -44,24 +44,24 @@
         "height": 48
       },
       {
-        "label": "07 — 000 0000",
-        "width": 99.17,
-        "height": 44
+        "label": "+886 934 031 389",
+        "width": 119.42,
+        "height": 26.59
       },
       {
-        "label": "hello@example.com",
-        "width": 143,
-        "height": 44
+        "label": "nancypune@hotmail.com",
+        "width": 180.47,
+        "height": 26.59
       },
       {
-        "label": "Facebook",
-        "width": 67.39,
-        "height": 44
+        "label": "FACEBOOK",
+        "width": 76.08,
+        "height": 26.59
       },
       {
         "label": "LINE",
-        "width": 44,
-        "height": 44
+        "width": 32.31,
+        "height": 26.59
       },
       {
         "label": "在 Google Maps 開啟",
@@ -83,33 +83,33 @@
       "contactMarginTop": "50px",
       "hero": {
         "top": 87,
-        "bottom": 752.828125,
+        "bottom": 717,
         "width": 320,
-        "height": 665.828125
+        "height": 630
       },
       "brand": {
-        "top": 752.828125,
-        "bottom": 1276.96875,
+        "top": 717,
+        "bottom": 1450.46875,
         "width": 320,
-        "height": 524.140625
+        "height": 733.46875
       },
       "place": {
-        "top": 1276.96875,
-        "bottom": 1904.328125,
+        "top": 1450.46875,
+        "bottom": 2077.828125,
         "width": 320,
         "height": 627.359375
       },
       "moments": {
-        "top": 1904.328125,
-        "bottom": 2700.484375,
+        "top": 2077.828125,
+        "bottom": 2873.984375,
         "width": 320,
         "height": 796.15625
       },
       "contact": {
-        "top": 2750.484375,
-        "bottom": 3980.390625,
+        "top": 2923.984375,
+        "bottom": 4002.484375,
         "width": 320,
-        "height": 1229.90625
+        "height": 1078.5
       }
     },
     "carousel": {

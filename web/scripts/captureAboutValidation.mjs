@@ -106,7 +106,17 @@ const metricsExpression = `(() => {
     missingAlt: [...document.querySelectorAll('main img')].filter(image => !image.hasAttribute('alt')).length,
     imageFailures,
     controls,
-    undersizedControls: controls.filter(control => control.width < 44 || control.height < 44),
+    undersizedControls: [...document.querySelectorAll('main button, .about-map a')]
+      .filter(visible)
+      .map(element => {
+        const rect = element.getBoundingClientRect()
+        return {
+          label: element.getAttribute('aria-label') || element.textContent.trim().slice(0, 40),
+          width: Number(rect.width.toFixed(2)),
+          height: Number(rect.height.toFixed(2)),
+        }
+      })
+      .filter(control => control.width < 44 || control.height < 44),
     typography: {
       h1: getComputedStyle(document.querySelector('main h1')).fontSize,
       h2: getComputedStyle(document.querySelector('main h2')).fontSize,

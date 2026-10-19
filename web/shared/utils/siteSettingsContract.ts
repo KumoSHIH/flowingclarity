@@ -23,9 +23,9 @@ export function isEmail(value: unknown): value is string {
 export function isGoogleMapsEmbedUrl(value: unknown): value is string {
   if (!isHttpsUrl(value)) return false
   const url = new URL(value)
-  return (url.hostname === 'www.google.com' || url.hostname === 'google.com')
-    && url.pathname.startsWith('/maps')
-    && url.searchParams.get('output') === 'embed'
+  if (url.hostname !== 'www.google.com' && url.hostname !== 'google.com') return false
+  return (url.pathname === '/maps/embed' && Boolean(url.searchParams.get('pb')))
+    || (url.pathname === '/maps' && url.searchParams.get('output') === 'embed')
 }
 
 export function isGoogleMapsExternalUrl(value: unknown): value is string {

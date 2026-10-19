@@ -1,6 +1,6 @@
 # 關於我們頁面規格
 
-**狀態：** cms-integrated
+**狀態：** verified
 
 **路由：** `/about`
 
@@ -14,7 +14,7 @@
 
 - **已確認：** 頁面依序包含「品牌理念」、「空間／團隊介紹」、「精選片段」及「聯絡我們」四區；品牌理念圖片可省略，空間／團隊圖片必填；精選片段在桌面採左側圖片 Swiper、右側文字；聯絡區沿用現有聯絡資料、營業時間並顯示 Google Maps 地圖。桌面設計選定 A「顯影室」，頁面內容區改採暖紙與淺砂色，標題及正文沿用既有網站字級。
 - **合理假設：** 精選片段為一組共用敘述搭配少量圖片，不建立獨立花絮文章；Swiper 支援按鈕與拖曳，並以 2,000ms 間隔、1,500ms 位移轉場自動循環；About 內容以 `aboutPage` 單例管理，聯絡與地圖定位由 `siteSettings.contact` 提供，避免和 Footer 重複維護。
-- **尚非正式內容：** 現有首頁、Footer、舊稿或 fixture 中的品牌文案、人物、地址、電話、Email、社群及照片，未經內容負責人核准前皆不得直接發布。
+- **內容治理提醒：** 現行 production 內容仍包含「示意／待核准」字樣；技術發布流程已驗證，但正式文案、人物與照片授權、聯絡資料及地圖隱私揭露仍須由內容負責人確認。
 
 ## 範圍與非目標
 
@@ -89,7 +89,7 @@
 
 - 桌面版精選片段維持圖片在左、文字在右；`<= 1023px` 改為單欄，依序顯示標題、圖片與控制、圖說、共用文字。其他圖文區在窄螢幕也維持 DOM 閱讀順序，不以 CSS 視覺重排造成鍵盤與閱讀順序不一致。
 - 桌面版「空間／團隊」與「精選片段」之間保留 `250px` 區隔，`<= 1023px` 回到 `0`；聯絡區上方間距為桌機 `150px`、`<= 1023px` 為 `50px`，使手機維持緊湊的單欄節奏。
-- 320px 起不得出現內容水平捲動；圖片維持已定義比例與焦點裁切，正文遵守 `DESIGN.md` 的字級、行距及主要頁面留白。所有控制與連結的觸控區至少 44 × 44px。
+- 320px 起不得出現內容水平捲動；圖片維持已定義比例與焦點裁切，正文遵守 `DESIGN.md` 的字級、行距及主要頁面留白。輪播按鈕與地圖行動按鈕的觸控區至少 44 × 44px；電話、Email 與社群文字連結維持文字行高，不強制加入最小寬高。
 - 頁面只使用一個 `h1`；四個內容區使用具可讀標題的 `section` 與 `h2`。聯絡資料使用 `address`；Google Maps iframe 使用明確 `title`、`loading="lazy"` 並位於有標題的地標區域。
 - Swiper 使用具名稱的 carousel／region 語意。上一張與下一張使用原生 `button`，具狀態相關名稱；鍵盤可操作，焦點清楚可見，切換後以非干擾方式更新目前張數，不強制搬移焦點。圖片順序也是不支援 JavaScript 時的內容順序。
 - 動畫與切換遵守 `prefers-reduced-motion`；減少動態時取消滑動位移，改為立即或淡入切換。Google Maps 為第三方嵌入內容，不得阻擋使用者閱讀地址與聯絡方式。
@@ -111,9 +111,9 @@
 - 內容負責人需提供並核准品牌理念、空間／團隊介紹、聯絡邀請、3–10 張精選片段、圖片替代文字、公開聯絡資料、營業時間及 Google Maps 嵌入／外部網址。
 - 需確認照片授權與可辨識人物的公開同意；此項未完成前不得將相片視為正式內容。
 - Google Maps 第三方載入可能涉及隱私與同意管理；正式發布前須確認網站的隱私揭露及是否需要先取得同意才載入 iframe。若需要，內容流驗收前應補上地圖占位與啟用按鈕狀態。
-- `/about` 的前端、UI 驗收與 Sanity 串接已完成；下一階段為 `validate-content-flow`。正式發布前須以核准資料驗證草稿隔離、About 與 `siteSettings` 的發布順序、前台更新、回復草稿及地圖失敗備援。
-- 目前原型文案與圖片已依使用者要求保留為後台初始草稿，供後續編修與核准；沒有自動發布。公開查詢在正式資料核准前讀不到此草稿，前台會顯示規格中的中性 unavailable 狀態，不回退到示意內容。
-- 內容負責人仍需核准正式文案、人物與照片授權、地址、電話、Email、營業時間、社群及 Google Maps 網址；原型資料不得直接發布。
+- `/about` 的前端、UI、Sanity 串接與 production 內容流驗收已完成；後續內容更新應先保留草稿並預覽，發布後重跑 `validateAboutFlow.ts` 與 production browser 回歸。
+- 2026-10-19 驗收開始時，先前草稿已由外部流程發布為 `about-page` 與 `site-settings`，兩者皆無殘留草稿；本次驗收只讀取狀態，沒有自動修改或發布遠端資料。
+- 內容負責人仍需核准正式文案、人物與照片授權、地址、電話、Email、營業時間、社群及 Google Maps 隱私揭露；目前技術驗收通過不代表這些內容治理事項已完成。
 
 ## 設計探索狀態
 
@@ -128,6 +128,8 @@
 - 2026-10-18 完成 production browser UI 驗收：320／390／768／1024／1440px 與 200% 縮放等效寬度均無內容水平溢位；輪播循環、轉場鎖定、焦點、暫停條件、reduced motion、圖片與 44px 操作區皆通過，狀態更新為 `ui-verified`。證據見 [About UI 驗收](../design/review/about-ui-verified/README.md)。
 - 2026-10-18 完成 CMS 串接：新增 `aboutPage` 單例、受限 Portable Text、圖片／SEO validation、published-only GROQ、轉換與失敗狀態；`siteSettings.contact` 擴充營業時間與 Google Maps。Web 不再以 fixture 作為主要內容來源，狀態更新為 `cms-integrated`。
 - 2026-10-18 已部署 production schema 1/1，並在遠端建立未發布的 `drafts.about-page` 與 `drafts.site-settings`。About 草稿保留目前文案及 4 張圖片；共用設定草稿由既有 published 文件複製後，只補入示意營業時間與地圖。匿名前台確認讀不到 About 草稿，兩份草稿皆未發布。
+- 2026-10-18 Google Maps embed 驗證已支援官方 `/maps/embed?pb=...` 分享格式及既有 `output=embed` 格式；共用設定草稿改用內容負責人提供的正式 embed 網址，published 設定不變。
+- 2026-10-19 完成 production 內容流驗收：`about-page` 與 `site-settings` 已發布且無草稿，匿名 published 查詢與前台 parser 成功取得 3 張精選片段、1 組營業時間、Google Maps 與 5 個可公開讀取的圖片資產；Nuxt API 回傳 `ready`，SSR 與 320px production browser 回歸通過。證據見 [About 內容流驗收](../design/review/about-content-flow/README.md)。
 
 ## 本階段完成與驗證
 
@@ -139,6 +141,7 @@
 - 已以 production build 搭配 Chromium 完成 320／390／768／1024／1440px、200% 縮放等效寬度、鍵盤焦點、輪播循環與暫停、reduced motion、長內容及地圖備援檢查。390px／1440px 截圖與量測資料存於 `docs/design/review/about-ui-verified/`；未執行 Safari、Firefox、實體觸控裝置與螢幕閱讀器人工驗收。
 - CMS 階段新增 About 與共用聯絡 schema、Studio 單例入口、伺服器 API、資料 parser、rich-text 安全連結呈現、草稿 seed／驗證腳本及回歸測試。Web 225/225、Studio 31/31 測試、兩端 typecheck、Web／Studio production build 與 schema deploy 均成功；Web build 只保留既有字型解析與 sourcemap 警告。
 - Sanity 全 dataset validation 檢查 35 份文件，其中 34 份有效；唯一錯誤為既有 `article` 文件 `ac387124-91ae-4143-8492-8d1894fce00c` 缺少 `heroStyle` 與 `body`，與本次 About 變更無關。新草稿已另以 reference、欄位狀態及匿名 published 查詢完成驗證。
+- 2026-10-19 重驗 Sanity production 34 份文件，其中 33 份有效；同一筆既有 article 仍是唯一錯誤。About 發布內容流、Web 226/226、Studio 31/31、兩端 typecheck、兩端 production build 及瀏覽器回歸均成功，狀態更新為 `verified`。
 
 
 #### 待修正項目

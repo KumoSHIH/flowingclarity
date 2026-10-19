@@ -36,6 +36,8 @@ test('contact validators reject placeholder or executable links', () => {
   for (const url of ['#', '//example.com', 'javascript:alert(1)', 'https://user:pass@example.com']) assert.equal(isHttpsUrl(url), false)
   assert.equal(isHttpsUrl('https://example.com/line'), true)
   assert.equal(isGoogleMapsEmbedUrl('https://www.google.com/maps?q=Kaohsiung&output=embed'), true)
+  assert.equal(isGoogleMapsEmbedUrl('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3734'), true)
+  assert.equal(isGoogleMapsEmbedUrl('https://www.google.com/maps/embed'), false)
   assert.equal(isGoogleMapsEmbedUrl('https://example.com/maps?output=embed'), false)
   assert.equal(isGoogleMapsExternalUrl('https://www.google.com/maps/search/?api=1&query=Kaohsiung'), true)
   assert.equal(isGoogleMapsExternalUrl('https://example.com/maps'), false)

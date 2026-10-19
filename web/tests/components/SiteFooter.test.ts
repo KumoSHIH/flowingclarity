@@ -49,6 +49,16 @@ describe('SiteFooter', () => {
     expect(wrapper.get('a[href^="tel:"]').attributes('href')).toBe('tel:+886934031389')
     expect(wrapper.get('a[href^="mailto:"]').attributes('href')).toBe('mailto:nancypune@hotmail.com')
     expect(wrapper.find('a[href="#"]').exists()).toBe(false)
+    expect(wrapper.get('.site-footer__legal').text()).toBe(`Copyright © ${new Date().getFullYear()} Flowing with Clarity. All Rights Reserved.`)
+  })
+  it('replaces an authored year instead of rendering a duplicate year', () => {
+    const wrapper = render({
+      ...siteSettingsFixture,
+      legal: { copyrightText: 'Copyright © 2020 Flowing with Clarity. All Rights Reserved.' },
+    })
+    const year = new Date().getFullYear()
+    expect(wrapper.get('.site-footer__legal').text()).toContain(`© ${year} Flowing with Clarity`)
+    expect(wrapper.get('.site-footer__legal').text()).not.toContain('2020')
   })
   it('omits empty contact collections and retains readable branding without a logo', () => {
     const wrapper = render(minimalSiteSettingsFixture)

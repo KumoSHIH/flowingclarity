@@ -13,6 +13,20 @@ watch(
   },
 );
 const { flowing, reduced } = useFooterMotion(root);
+const copyrightText = computed(() => {
+  const year = new Date().getFullYear();
+  const text = props.content.legal.copyrightText.trim();
+  if (/©\s*(?:\d{4}(?:\s*[-–—]\s*\d{4})?\s*)?/.test(text)) {
+    return text.replace(
+      /©\s*(?:\d{4}(?:\s*[-–—]\s*\d{4})?\s*)?/,
+      `© ${year} `,
+    );
+  }
+  if (/^copyright\b/i.test(text)) {
+    return text.replace(/^copyright\b\s*/i, `Copyright © ${year} `);
+  }
+  return `${text} © ${year}`;
+});
 const hasContact = computed(() =>
   Boolean(
     props.content.contact?.address ||
@@ -154,7 +168,7 @@ const paths = [
               </ul>
             </nav>
           </div>
-          <p class="site-footer__legal">{{ content.legal.copyrightText }}</p>
+          <p class="site-footer__legal">{{ copyrightText }}</p>
         </div>
       </div>
     </div>

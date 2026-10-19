@@ -129,10 +129,7 @@ function syncAutoplay() {
 function startTransitionTimer() {
   transitionRunning.value = true;
   if (transitionTimer) clearTimeout(transitionTimer);
-  transitionTimer = setTimeout(
-    finishTrackTransition,
-    SLIDE_TRANSITION_MS + 50,
-  );
+  transitionTimer = setTimeout(finishTrackTransition, SLIDE_TRANSITION_MS + 50);
 }
 
 function finishTrackTransition() {
@@ -347,7 +344,10 @@ onBeforeUnmount(() => {
           <p class="about-label">空間與團隊</p>
           <h2 id="about-place-title">{{ content.placeAndTeam.heading }}</h2>
           <div class="about-copy">
-            <p v-for="paragraph in content.placeAndTeam.body" :key="paragraph.key">
+            <p
+              v-for="paragraph in content.placeAndTeam.body"
+              :key="paragraph.key"
+            >
               <component
                 :is="segment.href ? 'a' : 'span'"
                 v-for="segment in paragraphSegments(paragraph)"
@@ -594,16 +594,8 @@ onBeforeUnmount(() => {
 <style scoped>
 .about-overview {
   --about-edge: clamp(28px, 6vw, 116px);
-  --about-muted: color-mix(
-    in srgb,
-    var(--color-muted) 60%,
-    var(--color-ink)
-  );
-  --about-label: color-mix(
-    in srgb,
-    var(--color-clay) 60%,
-    var(--color-ink)
-  );
+  --about-muted: color-mix(in srgb, var(--color-muted) 60%, var(--color-ink));
+  --about-label: color-mix(in srgb, var(--color-clay) 60%, var(--color-ink));
   color: var(--color-ink);
   background: var(--color-paper);
 }
@@ -953,8 +945,6 @@ onBeforeUnmount(() => {
 
 .about-contact__list a {
   display: inline-flex;
-  min-width: 44px;
-  min-height: 44px;
   align-items: center;
 }
 

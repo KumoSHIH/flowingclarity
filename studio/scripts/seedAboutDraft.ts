@@ -15,6 +15,9 @@ const sourceImages = {
   bodywork: 'about-moment-bodywork.png',
 } as const
 
+const approvedEmbedUrl = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3734.1234201130032!2d120.30924848181711!3d22.62724635065776!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e049029005659%3A0x8d8f788cee2cfff8!2zODAw6auY6ZuE5biC5paw6IiI5Y2A5b6355Sf6YeM5rCR55Sf5LiA6LevMjAx6JmfYSAy!5e0!3m2!1szh-TW!2stw!4v1792337523424!5m2!1szh-TW!2stw'
+const prototypeEmbedUrl = 'https://www.google.com/maps?q=Kaohsiung%2C+Taiwan&output=embed'
+
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID
 const dataset = process.env.SANITY_STUDIO_DATASET || 'production'
 if (!projectId) throw new Error('SANITY_STUDIO_PROJECT_ID is required')
@@ -113,7 +116,7 @@ async function seedContactDraft() {
       businessHoursNote: '採預約制・實際時間待核准',
       map: {
         placeName: '高雄市示意地點',
-        embedUrl: 'https://www.google.com/maps?q=Kaohsiung%2C+Taiwan&output=embed',
+        embedUrl: approvedEmbedUrl,
         externalUrl: 'https://www.google.com/maps/search/?api=1&query=Kaohsiung%2C%20Taiwan',
       },
     },
@@ -121,9 +124,26 @@ async function seedContactDraft() {
   console.log('created drafts.site-settings from the published document with prototype business hours and map; content remains unpublished')
 }
 
+async function updateMapEmbed() {
+  const [published, draft] = await client.getDocuments(['site-settings', 'drafts.site-settings'])
+  if (!published || !draft) throw new Error('Both published and draft site-settings must exist before updating the draft map.')
+  const contact = (draft as { contact?: { map?: { embedUrl?: string } } }).contact
+  const current = contact?.map?.embedUrl
+  if (current === approvedEmbedUrl) {
+    console.log('drafts.site-settings already uses the approved Google Maps embed URL')
+    return
+  }
+  if (current !== prototypeEmbedUrl) {
+    throw new Error('The site-settings draft map has changed; refusing to overwrite an unexpected embed URL.')
+  }
+  await client.patch('drafts.site-settings').set({ 'contact.map.embedUrl': approvedEmbedUrl }).commit()
+  console.log('updated drafts.site-settings with the approved Google Maps embed URL; published settings remain unchanged')
+}
+
 const phase = process.argv.at(-1)
 if (phase === 'inspect') await inspect()
 else if (phase === 'seed') await seed()
 else if (phase === 'verify') await verify()
 else if (phase === 'seed-contact-draft') await seedContactDraft()
-else throw new Error('Use phase "inspect", "seed", "seed-contact-draft", or "verify".')
+else if (phase === 'update-map-embed') await updateMapEmbed()
+else throw new Error('Use phase "inspect", "seed", "seed-contact-draft", "update-map-embed", or "verify".')

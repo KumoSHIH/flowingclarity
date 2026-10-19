@@ -55,7 +55,7 @@ export const siteSettings = defineType({
       { name: 'href', title: 'HTTPS 網址', type: 'url', validation: Rule => Rule.required().custom(value => isHttpsUrl(value) || '請提供有效 HTTPS 網址，不能使用占位連結。') },
     ], preview: { select: { title: 'label', subtitle: 'href' } } }] }),
     defineField({ name: 'legal', title: '版權資訊', type: 'object', group: 'legal', validation: Rule => Rule.required(), fields: [
-      { name: 'copyrightText', title: '版權聲明', type: 'string', description: '請填入已核准完整文字；不自動加入年份。', validation: Rule => Rule.required().min(10).max(100) },
+      { name: 'copyrightText', title: '版權聲明', type: 'string', description: '請填入不含年份的版權文字；前台會自動加入目前年份。若既有文字含年份，前台會以目前年份取代。', validation: Rule => Rule.required().min(10).max(100) },
     ] }),
   ],
   preview: { select: { subtitle: 'brandName' }, prepare: ({ subtitle }) => ({ title: '全站共用設定', subtitle }) },

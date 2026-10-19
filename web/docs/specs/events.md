@@ -206,3 +206,7 @@
 
 #### 筆記，不需要執行，可忽略
 - 使用 `$develop-feature` 從 web/docs/specs/events.md 接續下一個流程
+
+
+## 人工測試後修正清單
+- [] 一進去該單元的網址為 .../events?view=upcoming&page=1，這樣是正常的嗎？

@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-10-19T01:34:01.918Z",
+  "environment": {
+    "dataset": "production",
+    "perspective": "published",
+    "anonymous": true
+  },
+  "content": {
+    "id": "about-page",
+    "state": "published",
+    "title": "關於我們",
+    "moments": 3,
+    "uniqueImages": 5,
+    "contactReady": true,
+    "businessHours": 1,
+    "mapHost": "www.google.com"
+  },
+  "documents": {
+    "about": {
+      "published": true,
+      "draft": false
+    },
+    "siteSettings": {
+      "published": true,
+      "draft": false
+    }
+  },
+  "assets": {
+    "checked": 5,
+    "publiclyReadable": true
+  },
+  "result": "published-flow-passed"
+}
