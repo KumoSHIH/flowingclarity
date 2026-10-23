@@ -11,5 +11,5 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["sanity.config.ts", "sanity.cli.ts", "structure.ts", "schemaTypes/**/*.ts"]
+  "include": ["sanity.config.ts", "sanity.cli.ts", "structure.ts", "components/**/*.ts", "components/**/*.tsx", "schemaTypes/**/*.ts"]
 }

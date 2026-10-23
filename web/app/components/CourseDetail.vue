@@ -15,6 +15,9 @@ import type {
   CourseDetailStatus,
 } from "../types/courseDetail";
 import DetailBreadcrumb from "./DetailBreadcrumb.vue";
+import SharedImageTextCarousel from "./SharedImageTextCarousel.vue";
+import SharedRelatedArticles from "./SharedRelatedArticles.vue";
+import SharedTestimonials from "./SharedTestimonials.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -34,6 +37,8 @@ const chapterLabels: Record<CourseDetailBodyBlock["type"], string> = {
   curriculum: "課程架構",
   video: "課程影片",
   audience: "適合對象",
+  testimonials: "學員心得分享",
+  carousel: "圖片輪播",
 };
 const galleryLayoutLabels: Record<CourseDetailGalleryLayout, string> = {
   collage: "編輯拼貼",
@@ -413,6 +418,28 @@ onBeforeUnmount(() => {
             <p v-else class="inline-empty">適合對象資訊仍在整理中。</p>
           </div>
         </section>
+
+        <div
+          v-else-if="block.type === 'testimonials'"
+          :id="blockId(block.key)"
+          :ref="setObservedSection"
+          class="course-testimonials"
+        >
+          <SharedTestimonials :id="`course-testimonials-${block.key}`" :title="block.title" :items="block.items" />
+        </div>
+
+        <div
+          v-else-if="block.type === 'carousel'"
+          :id="blockId(block.key)"
+          :ref="setObservedSection"
+          class="course-carousel"
+        >
+          <SharedImageTextCarousel :items="block.items" :label="block.title">
+            <template #heading><h2>{{ block.title }}</h2></template>
+            <template #copy><p class="body-copy preserve-lines">{{ block.text }}</p></template>
+            <template #empty><p>輪播圖片仍在整理中。</p></template>
+          </SharedImageTextCarousel>
+        </div>
       </template>
 
       <section id="schedule" :ref="setObservedSection" class="course-schedule">
@@ -433,13 +460,19 @@ onBeforeUnmount(() => {
         </div>
         <figure v-if="content.registration.image"><img :src="content.registration.image.src" :alt="content.registration.image.alt" loading="lazy"><figcaption v-if="content.registration.image.label" class="asset-label">{{ content.registration.image.label }}</figcaption></figure>
       </section>
+
+      <SharedRelatedArticles
+        :items="content.relatedArticles"
+        id-base="course-related"
+        class="course-related"
+      />
     </template>
   </div>
 </template>
 
 <style scoped>
 .course-detail { --chapter-height: 68px; --line: #cec3b5; --local-muted: #696158; color: var(--color-ink); background: var(--color-paper); line-height: 1.9; letter-spacing: .045em; }
-.course-detail :is(section[id^="content-"], #schedule, #registration) { scroll-margin-top: calc(var(--home-header-height) + var(--chapter-height) + 16px); }
+.course-detail :is([id^="content-"], #schedule, #registration) { scroll-margin-top: calc(var(--home-header-height) + var(--chapter-height) + 16px); }
 .course-detail :is(h1, h2, h3, blockquote) { margin: 0; font-family: var(--font-display); font-weight: 400; line-height: 1.25; text-wrap: balance; }
 .course-detail img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .preserve-lines { white-space: pre-line; }
@@ -518,6 +551,10 @@ onBeforeUnmount(() => {
 .course-teacher__portrait::after { width: 76px; height: 76px; }
 .course-teacher__copy { display: flex; flex-direction: column; justify-content: center; padding: 90px clamp(60px, 8vw, 150px); }
 .course-teacher h2 { margin-bottom: 28px; font-size: clamp(48px, 4.6vw, 74px); }
+.course-carousel { --carousel-edge: clamp(42px, 7vw, 112px); --carousel-muted: var(--local-muted); background: var(--color-paper); }
+.course-carousel :deep(.about-carousel__copy) { align-self: start; }
+.course-testimonials { background: var(--color-paper); }
+.course-related { --related-edge: clamp(42px, 7vw, 112px); }
 .course-teacher h2 small { display: block; margin-top: 10px; font: inherit; font-size: .48em; }
 .course-teacher .lede { max-width: 31ch; margin-bottom: 22px; }
 .course-quote { display: grid; min-height: 520px; place-items: center; padding: 90px 9vw; color: var(--color-warm-white); text-align: center; background: var(--color-bark); }
@@ -556,6 +593,7 @@ onBeforeUnmount(() => {
 .course-registration { display: grid; grid-template-columns: 1fr 1fr; min-height: 600px; color: var(--color-warm-white); background: var(--color-night); }
 .course-registration > div { display: flex; flex-direction: column; justify-content: space-between; padding: 90px clamp(42px, 7vw, 112px); }
 .course-registration h2 { margin-bottom: 26px; font-size: clamp(48px, 4.7vw, 76px); }
+.course-detail :is(.course-intro, .course-gallery, .course-teacher, .course-curriculum, .course-video, .course-audience, .course-schedule, .course-registration, .course-carousel) h2 { font-size: var(--detail-section-title-size); line-height: 1.4; letter-spacing: .02em; }
 .course-registration p { max-width: 68ch; color: var(--color-warm-muted); }
 .course-registration figure { position: relative; min-height: 600px; margin: 0; }
 .course-registration .primary-action { max-width: 520px; margin-top: 60px; }

@@ -232,6 +232,43 @@ export const courseDetailAudience = defineType({
   },
 })
 
+export const courseDetailCarouselItem = defineType({
+  name: 'courseDetailCarouselItem',
+  title: '輪播圖片',
+  type: 'object',
+  fields: [
+    defineField({
+      name: 'image',
+      title: '圖片',
+      type: 'image',
+      options: { hotspot: true },
+      fields: [requiredAltField],
+      validation: Rule => Rule.required(),
+    }),
+    defineField({ name: 'caption', title: '圖說（選填）', type: 'string', validation: Rule => Rule.max(120) }),
+  ],
+  preview: { select: { title: 'caption', media: 'image' }, prepare: ({ title, media }) => ({ title: title ?? '輪播圖片', media }) },
+})
+
+export const courseDetailCarousel = defineType({
+  name: 'courseDetailCarousel',
+  title: '圖片輪播',
+  type: 'object',
+  description: '左側圖片輪播、右側固定文字；可在內容編排中重複新增。',
+  fields: [
+    defineField({ name: 'title', title: '標題', type: 'string', validation: Rule => Rule.required().min(4).max(100) }),
+    defineField({ name: 'text', title: '固定文字', type: 'text', rows: 6, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.required().min(10).max(800) }),
+    defineField({
+      name: 'items',
+      title: '輪播圖片',
+      type: 'array',
+      of: [defineArrayMember({ type: 'courseDetailCarouselItem' })],
+      validation: Rule => Rule.required().min(1).max(10),
+    }),
+  ],
+  preview: { select: { title: 'title', items: 'items', media: 'items.0.image' }, prepare: ({ title, items, media }) => ({ title: title ?? '未命名圖片輪播', subtitle: `${Array.isArray(items) ? items.length : 0} 張`, media }) },
+})
+
 export const courseDetailSchedule = defineType({
   name: 'courseDetailSchedule',
   title: '課程梯次區塊',
@@ -276,6 +313,8 @@ export function validateCourseDetailBody(value: unknown): true | string {
     .filter(item => item && typeof item === 'object' && '_type' in item)
     .map(item => (item as { _type?: string })._type)
   const missing = requiredBodyBlockTypes.filter(type => !types.includes(type))
+  const testimonialCount = types.filter(type => type === 'sharedTestimonialBlock').length
+  if (testimonialCount > 1) return '學員心得分享只能新增一個。'
   if (missing.length === 0) return true
   const labels: Record<string, string> = {
     courseDetailIntroduction: '課程介紹',
@@ -297,7 +336,7 @@ export const courseDetailContent = defineType({
       name: 'body',
       title: '內容編排',
       type: 'array',
-      description: '拖曳即可調整前台順序。圖文版型可重複新增，每個區塊各自選擇版型與內容。',
+      description: '拖曳即可調整前台順序。圖文版型與圖片輪播可重複新增；學員心得分享最多一個。',
       of: [
         defineArrayMember({ type: 'courseDetailIntroduction' }),
         defineArrayMember({ type: 'courseDetailGallery' }),
@@ -306,11 +345,21 @@ export const courseDetailContent = defineType({
         defineArrayMember({ type: 'courseDetailCurriculum' }),
         defineArrayMember({ type: 'courseDetailVideo' }),
         defineArrayMember({ type: 'courseDetailAudience' }),
+        defineArrayMember({ type: 'sharedTestimonialBlock' }),
+        defineArrayMember({ type: 'courseDetailCarousel' }),
       ],
       validation: Rule => Rule.required().min(4).max(20).custom(validateCourseDetailBody),
     }),
     defineField({ name: 'schedule', title: '課程梯次', type: 'courseDetailSchedule', validation: Rule => Rule.required() }),
     defineField({ name: 'registration', title: '報名區塊', type: 'courseDetailRegistration', validation: Rule => Rule.required() }),
+    defineField({
+      name: 'relatedArticles',
+      title: '延伸閱讀',
+      type: 'array',
+      description: '選填 0–8 篇文章；可拖曳調整順序。未發布或資料不完整的文章會由前台略過，區塊固定顯示在頁面最下方。',
+      of: [defineArrayMember({ type: 'reference', to: [{ type: 'article' }], options: { disableNew: true } })],
+      validation: Rule => Rule.max(8).unique(),
+    }),
   ],
 })
 
@@ -324,6 +373,8 @@ export const courseDetailSchemaTypes = [
   courseDetailCurriculum,
   courseDetailVideo,
   courseDetailAudience,
+  courseDetailCarouselItem,
+  courseDetailCarousel,
   courseDetailSchedule,
   courseDetailRegistration,
   courseDetailContent,

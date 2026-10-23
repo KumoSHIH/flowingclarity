@@ -1,5 +1,6 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
+import { CharacterCountInput } from './components/CharacterCountInput'
 import { schemaTypes } from './schemaTypes'
 import { structure } from './structure'
 
@@ -17,6 +18,11 @@ export default defineConfig({
   plugins: [
     structureTool({ structure }),
   ],
+  form: {
+    components: {
+      input: CharacterCountInput,
+    },
+  },
   document: {
     actions: (prev, context) => ['siteSettings', 'eventsPage', 'sessionPage', 'articlesPage', 'aboutPage'].includes(context.schemaType)
       ? prev.filter(action => !['duplicate', 'delete', 'unpublish'].includes(action.action ?? ''))

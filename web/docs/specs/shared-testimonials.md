@@ -1,10 +1,10 @@
 # 學員心得分享共用元件規格
 
-**狀態：** 活動詳情已完成 production 驗收；桌機與手機版型、共用 Vue 元件、schema、GROQ 與 API 已於活動內頁驗證，課程詳情整合仍待處理。
+**狀態：** 活動詳情已完成 production 驗收；課程詳情的共用 Vue 元件、schema、GROQ、parser 與 renderer 已於本機完成，更新後的 production 內容流仍待驗證。
 
 ## 使用範圍與前台契約
 
-`sharedTestimonialBlock` 可加入活動詳情與課程詳情的可排序內容陣列，並可在同一頁自由新增多次。每個區塊固定顯示「學員心得分享」，公開內容只包含心得文字與分享者名稱；不顯示照片、評分、身分、課程名稱或成效標籤。區塊依頁面編排順序出現，無有效心得時整段省略，不留下空標題。
+`sharedTestimonialBlock` 可加入活動詳情與課程詳情的可排序內容陣列。活動可依內容需要重複新增，課程每頁最多一個。每個區塊固定顯示「學員心得分享」，公開內容只包含心得文字與分享者名稱；不顯示照片、評分、身分、課程名稱或成效標籤。區塊依頁面編排順序出現，無有效心得時整段省略，不留下空標題。
 
 桌機三款決策稿位於 `docs/design/student-testimonial-concepts.html`：A「連續長卷」依序呈現所有心得；B「雙欄書頁」以兩欄閱讀；C「姓名索引」由姓名切換單則內容。三款使用相同 DOM 資料契約；桌機最終選用內嵌式單欄連續閱讀。
 
@@ -26,11 +26,11 @@
 
 Sanity／伺服器內部查詢項目只需 `_key`、`text` 與 `sharerName`，供排序、驗證與穩定渲染使用；公開 API 的 `items[]` 必須恰好只有 `{ text, sharerName }`，不得輸出其他欄位。前端使用 `section`、區塊 `h2`、`blockquote` 與 `cite`，單欄排列不加入額外切換操作。
 
-心得可能涉及個人經驗，內容不得補寫療效、資格、疾病或可識別個資；內容負責人須在輸入 CMS 前完成公開授權與文案核准。活動詳情已驗證草稿隔離、兩次發布、匿名讀取與內容清除；課程詳情仍需驗證可排序混排、長短文字、1／12 筆、重複拒絕、既有文件相容性及完整還原。
+心得可能涉及個人經驗，內容不得補寫療效、資格、疾病或可識別個資；內容負責人須在輸入 CMS 前完成公開授權與文案核准。活動詳情已驗證草稿隔離、兩次發布、匿名讀取與內容清除；課程詳情已於本機驗證混排、單一區塊限制與解析，仍需在 production 驗證長短文字、1／12 筆、重複拒絕、既有文件相容性及完整還原。
 
 ## 下一階段
 
-活動詳情已完成 Studio schema、GROQ 投影、parser、published-only API 與 production 內容流驗收；`sharedTestimonialBlock` 可在活動內頁編排中重複加入，前台只投影心得文字與分享者名稱。課程詳情仍未接入此 schema 與 renderer；既有 production 課程文件的相容性必須在該階段另行驗證。
+活動詳情已完成 Studio schema、GROQ 投影、parser、published-only API 與 production 內容流驗收；`sharedTestimonialBlock` 可在活動內頁編排中重複加入，前台只投影心得文字與分享者名稱。課程詳情已在本機接入同一 schema 與 renderer，並限制每頁最多一個；下一步是部署 schema 並以隔離內容驗證既有 production 課程文件相容性。
 
 ## 驗證紀錄
 
@@ -40,6 +40,10 @@ Sanity／伺服器內部查詢項目只需 `_key`、`text` 與 `sharerName`，�
 
 同日完成 Vue 原型驗證：1440×1000、390×844 與 320×720 三組瀏覽器量測均顯示 2 則心得、2 個 `cite`、0 張圖片與零水平溢位；心得正文和課程介紹同為 16px。元件標題改為共用 `--detail-section-title-size`，桌機 38px、手機 26px；2026-10-16 另以 390px 活動 fixture 頁確認心得標題為 26px、寬 342px、右界 366px，既有 34px 下內距與底線完整且無水平溢位，最新證據位於 [`review/detail-heading-token-mobile/`](../design/review/detail-heading-token-mobile/README.md)。元件測試另覆蓋長文完整呈現、無輪播／切換控制與空陣列省略；課程詳情與 production 內容流仍未接入。
 
+2026-10-22 依活動詳情修正清單移除共用元件標題下底線，並讓最後一筆 `blockquote` 不顯示下分隔線；此變更同步套用活動與課程詳情。回歸測試與 Web 全套 242 項測試、typecheck、production build 均通過；因 Computer Use 服務無法啟動，既有 2026-10-16 截圖不代表新版分隔線狀態，桌機／手機畫面仍待重驗。
+
 同日完成活動詳情 production 內容流驗收：已確認更新草稿發布前不會取代公開版本，再次發布後輸出心得文字與分享者名稱。測試文件已完整清除，畫面與流程紀錄位於 `docs/design/review/events-detail-content-flow/`。此結果不代表課程詳情整合已完成。
 
 同日依後台使用回饋移除「已確認公開同意」欄位及發布驗證；既有 production 文件中的舊欄位已清除。公開授權仍是內容核准責任，但不再於每則心得重複設定 CMS 開關。
+
+2026-10-20 完成課程詳情本機整合：`courseDetailContent.body` 接受 `sharedTestimonialBlock`，自訂驗證阻擋第二個心得區塊；GROQ、共用型別、parser 與 `SharedTestimonials` renderer 均已接入。Web 與 Studio 回歸測試通過，Chrome 於 1440px／390px 確認版面無水平溢位；尚未部署更新後 schema 或執行 production 內容流。

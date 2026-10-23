@@ -30,7 +30,7 @@ useHead(() => ({
 
 <template>
   <div class="event-detail-page mx-auto min-h-screen max-w-[1920px] overflow-clip font-sans">
-    <SiteHeader always-visible :settings="settings" />
+    <SiteHeader always-visible :settings="settings" current-path="/events" />
     <main><EventDetail :content="content" :status="status" @retry="refresh" /></main>
     <SiteFooter v-if="settings" :content="settings" :current-path="route.path" />
     <SiteFooterUnavailable v-else />

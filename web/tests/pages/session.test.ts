@@ -9,8 +9,8 @@ import {
 } from '../../app/fixtures/session'
 
 const SiteHeaderStub = defineComponent({
-  props: { alwaysVisible: Boolean },
-  template: '<header data-site-header :data-always-visible="String(alwaysVisible)" />',
+  props: { alwaysVisible: Boolean, currentPath: String },
+  template: '<header data-site-header :data-always-visible="String(alwaysVisible)" :data-current-path="currentPath" />',
 })
 
 describe('session overview', () => {
@@ -169,6 +169,7 @@ describe('session page', () => {
     })
 
     expect(wrapper.get('[data-site-header]').attributes('data-always-visible')).toBe('true')
+    expect(wrapper.get('[data-site-header]').attributes('data-current-path')).toBe('/session')
     expect(wrapper.get('main h1').text()).toBe('尋找\n執行師')
     const north = wrapper.findAll('.session-filters__options button').find(button => button.text() === '北部')!
     await north.trigger('click')

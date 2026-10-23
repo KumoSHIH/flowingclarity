@@ -12,8 +12,8 @@ const NuxtLinkStub = {
   template: '<a :href="to"><slot /></a>',
 }
 const SiteHeaderStub = {
-  props: ['alwaysVisible'],
-  template: '<header data-site-header :data-always-visible="String(alwaysVisible)" />',
+  props: ['alwaysVisible', 'currentPath'],
+  template: '<header data-site-header :data-always-visible="String(alwaysVisible)" :data-current-path="currentPath" />',
 }
 
 describe('shared testimonials', () => {
@@ -94,6 +94,31 @@ describe('event detail component', () => {
     expect(notFound.get('h1').text()).toBe('找不到這個活動')
     expect(notFound.get('.event-detail__state a').attributes('href')).toBe('/events')
   })
+
+  it('renders an open registration as an external primary action with an arrow', () => {
+    const openContent = {
+      ...content,
+      registration: {
+        ...content.registration,
+        status: 'open' as const,
+        actionLabel: '前往報名',
+        actionUrl: 'https://example.com/register',
+      },
+    }
+    const wrapper = mount(EventDetail, {
+      props: { content: openContent, status: 'ready' },
+      global: { stubs: { NuxtLink: NuxtLinkStub } },
+    })
+    const action = wrapper.get('.event-detail__action')
+
+    expect(action.element.tagName).toBe('A')
+    expect(action.classes()).toContain('button-primary')
+    expect(action.attributes('href')).toBe('https://example.com/register')
+    expect(action.attributes('target')).toBe('_blank')
+    expect(action.attributes('rel')).toBe('noopener noreferrer')
+    expect(action.attributes('aria-label')).toBe('前往報名（另開新視窗）')
+    expect(action.get('svg').classes()).toContain('button-primary__icon')
+  })
 })
 
 describe('event detail page', () => {
@@ -129,6 +154,7 @@ describe('event detail page', () => {
   it('renders published API content and uses its SEO metadata', () => {
     const wrapper = mountPage('prototype-event-01')
     expect(wrapper.get('[data-site-header]').attributes('data-always-visible')).toBeDefined()
+    expect(wrapper.get('[data-site-header]').attributes('data-current-path')).toBe('/events')
     expect(wrapper.get('[data-detail]').attributes('data-status')).toBe('ready')
     expect(wrapper.get('[data-detail]').attributes('data-title')).toBe('身體覺察一日工作坊')
 

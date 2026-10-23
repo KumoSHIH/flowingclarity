@@ -78,6 +78,19 @@ export const sanityCourseDetail = {
           description: '適合希望完整學習觸碰方法並理解操作界線的人。',
           items: ['對按摩與身體工作感興趣的人'],
         },
+        {
+          key: 'testimonials',
+          type: 'testimonials',
+          title: '學員心得分享',
+          items: [{ text: '這段測試心得用來驗證課程詳情能安全呈現共用學員分享內容。', sharerName: '測試分享者' }],
+        },
+        {
+          key: 'practice-carousel',
+          type: 'carousel',
+          title: '練習中的片段',
+          text: '固定文字說明這組圖片所呈現的學習脈絡與觀察重點。',
+          items: [{ key: 'carousel-one', caption: '支撐練習', image: image('carousel-one', '肩頸支撐練習') }],
+        },
       ],
       schedule: {
         title: '把參與條件看清楚，再安心決定。',
@@ -90,6 +103,14 @@ export const sanityCourseDetail = {
         closedActionLabel: '報名尚未開放',
         image: image('registration', '課程練習中的人物特寫'),
       },
+      relatedArticles: [{
+        id: 'article-course-related',
+        title: '從呼吸開始整理觸碰的節奏',
+        slug: 'breath-and-touch',
+        excerpt: '以一段完整文章整理呼吸、支撐與觸碰之間的關係，作為進入課程前的延伸閱讀。',
+        category: { key: 'body', name: '愛身體', order: 1 },
+        coverImage: { ...image('article-related', '肩頸支撐與觸碰練習'), width: 1200, height: 900 },
+      }],
     },
   },
   runs: [{

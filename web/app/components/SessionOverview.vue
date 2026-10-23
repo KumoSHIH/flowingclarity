@@ -320,7 +320,7 @@ watch(
   --session-muted: color-mix(in srgb, var(--color-muted) 78%, var(--color-ink));
   --session-clay: color-mix(in srgb, var(--color-clay) 72%, var(--color-ink));
   display: grid;
-  grid-template-columns: minmax(340px, 30%) minmax(0, 70%);
+  grid-template-columns: var(--split-layout-rail-width) minmax(0, 1fr);
   align-items: start;
   min-height: calc(100svh - var(--home-header-height));
   color: var(--color-ink);
@@ -445,6 +445,7 @@ watch(
 }
 
 .session-results {
+  width: 100%;
   min-width: 0;
 }
 

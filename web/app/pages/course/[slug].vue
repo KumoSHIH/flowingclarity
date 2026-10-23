@@ -41,7 +41,7 @@ useHead(() => ({
 
 <template>
   <div class="course-detail-page mx-auto min-h-screen max-w-[1920px] overflow-clip font-sans">
-    <SiteHeader always-visible :settings="settings" />
+    <SiteHeader always-visible :settings="settings" current-path="/course" />
     <main>
       <CourseDetail :content="content" :status="status" @retry="refresh" />
     </main>

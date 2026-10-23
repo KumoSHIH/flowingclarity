@@ -53,7 +53,7 @@ useHead({ title: '近期活動｜Flowing Clarity' })
 
 <template>
   <div class="events-page mx-auto min-h-screen max-w-[1920px] overflow-clip font-sans">
-    <SiteHeader always-visible :settings="settings" />
+    <SiteHeader always-visible :settings="settings" current-path="/events" />
 
     <main>
       <EventOverview

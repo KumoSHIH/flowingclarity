@@ -1,6 +1,8 @@
 import type {
   CourseDetailAudienceBlock,
   CourseDetailBodyBlock,
+  CourseDetailCarouselBlock,
+  CourseDetailCarouselItem,
   CourseDetailContent,
   CourseDetailCurriculumBlock,
   CourseDetailGalleryBlock,
@@ -11,8 +13,11 @@ import type {
   CourseDetailQuoteBlock,
   CourseDetailSession,
   CourseDetailTeacherBlock,
+  CourseDetailTestimonialBlock,
   CourseDetailVideoBlock,
 } from '../types/courseDetail'
+import type { SharedTestimonialItem } from '../types/content'
+import { parseRelatedArticle } from './articleDetail'
 
 const courseSlugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/
@@ -264,6 +269,40 @@ function parseAudienceBlock(value: Record<string, unknown>, key: string): Course
     : null
 }
 
+function parseTestimonialBlock(value: Record<string, unknown>, key: string): CourseDetailTestimonialBlock | null {
+  const title = textInRange(value.title, 2, 80)
+  const items = Array.isArray(value.items)
+    ? value.items.map((item): SharedTestimonialItem | null => {
+        if (!isRecord(item)) return null
+        const itemText = textInRange(item.text, 20, 2000)
+        const sharerName = textInRange(item.sharerName, 2, 60)
+        return itemText && sharerName ? { text: itemText, sharerName } : null
+      })
+    : []
+  return title && items.length >= 1 && items.length <= 12 && !items.some(item => !item)
+    ? { key, type: 'testimonials', title, items: items as SharedTestimonialItem[] }
+    : null
+}
+
+function parseCarouselBlock(value: Record<string, unknown>, key: string): CourseDetailCarouselBlock | null {
+  const title = textInRange(value.title, 4, 100)
+  const blockText = textInRange(value.text, 10, 800)
+  const items = Array.isArray(value.items)
+    ? value.items.map((item): CourseDetailCarouselItem | null => {
+        if (!isRecord(item)) return null
+        const id = textInRange(item.key, 1, 120)
+        const image = parseImage(item.image)
+        const caption = optionalText(item.caption, 1, 120)
+        return id && image && caption !== null ? { id, image, caption } : null
+      })
+    : []
+  const itemIds = items.flatMap(item => item ? [item.id] : [])
+  return title && blockText && items.length >= 1 && items.length <= 10 && !items.some(item => !item)
+    && new Set(itemIds).size === itemIds.length
+    ? { key, type: 'carousel', title, text: blockText, items: items as CourseDetailCarouselItem[] }
+    : null
+}
+
 function parseBodyBlock(value: unknown): CourseDetailBodyBlock | null {
   if (!isRecord(value)) return null
   const key = textInRange(value.key, 1, 120)
@@ -276,6 +315,8 @@ function parseBodyBlock(value: unknown): CourseDetailBodyBlock | null {
   if (type === 'curriculum') return parseCurriculumBlock(value, key)
   if (type === 'video') return parseVideoBlock(value, key)
   if (type === 'audience') return parseAudienceBlock(value, key)
+  if (type === 'sharedtestimonialblock' || type === 'testimonials') return parseTestimonialBlock(value, key)
+  if (type === 'carousel') return parseCarouselBlock(value, key)
   return null
 }
 
@@ -304,6 +345,7 @@ export function parseCourseDetail(value: unknown, expectedSlug?: string): Course
   const bodyKeys = body.map(block => block?.key).filter((key): key is string => Boolean(key))
   const requiredBodyTypes = ['introduction', 'gallery', 'curriculum', 'audience']
   if (body.length < 1 || body.some(block => !block) || new Set(bodyKeys).size !== bodyKeys.length
+    || body.filter(block => block?.type === 'testimonials').length > 1
     || requiredBodyTypes.some(type => !body.some(block => block?.type === type))) return null
 
   const scheduleTitle = textInRange(detail.schedule.title, 4, 100)
@@ -313,6 +355,10 @@ export function parseCourseDetail(value: unknown, expectedSlug?: string): Course
   const openActionLabel = textInRange(detail.registration.openActionLabel, 2, 30)
   const closedActionLabel = textInRange(detail.registration.closedActionLabel, 2, 40)
   const registrationImage = parseImage(detail.registration.image, false)
+  const relatedArticles = Array.isArray(detail.relatedArticles)
+    ? detail.relatedArticles.slice(0, 8).map(parseRelatedArticle).filter(article => article !== null)
+    : []
+  const relatedIds = relatedArticles.map(article => article.id)
 
   if (!scheduleTitle || !scheduleDescription
     || !registrationTitle || !registrationDescription || !openActionLabel || !closedActionLabel
@@ -362,5 +408,6 @@ export function parseCourseDetail(value: unknown, expectedSlug?: string): Course
       actionUrl: firstOpenRun?.registrationUrl,
       image: registrationImage,
     },
+    relatedArticles: relatedArticles.filter((article, index) => relatedIds.indexOf(article.id) === index),
   }
 }

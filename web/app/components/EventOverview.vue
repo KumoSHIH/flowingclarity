@@ -397,13 +397,14 @@ onBeforeUnmount(() => {
                   <span class="event-row__status">{{ statusLabel(item) }}</span>
                   <a
                     v-if="registrationIsAvailable(item)"
+                    class="button-primary"
                     :href="item.registrationUrl"
                     target="_blank"
                     rel="noopener noreferrer"
                     :aria-label="`${item.title}：前往報名（另開新視窗）`"
                   >
                     <span>前往報名</span>
-                    <svg viewBox="0 0 20 20" aria-hidden="true">
+                    <svg class="button-primary__icon" viewBox="0 0 20 20" aria-hidden="true">
                       <path d="M4 10h11M11 6l4 4-4 4" />
                     </svg>
                   </a>
@@ -477,10 +478,8 @@ onBeforeUnmount(() => {
 .event-directory {
   --event-text-muted: color-mix(in srgb, var(--color-muted) 80%, var(--color-ink));
   --event-text-clay: color-mix(in srgb, var(--color-clay) 80%, var(--color-ink));
-  --event-action: color-mix(in srgb, var(--color-persimmon) 75%, var(--color-ink));
-  --event-action-hover: color-mix(in srgb, var(--color-persimmon) 65%, var(--color-ink));
   display: grid;
-  grid-template-columns: minmax(300px, 30%) minmax(0, 70%);
+  grid-template-columns: var(--split-layout-rail-width) minmax(0, 1fr);
   align-items: start;
   color: var(--color-ink);
   background: var(--color-paper);
@@ -563,6 +562,7 @@ onBeforeUnmount(() => {
 }
 
 .event-directory__content {
+  width: 100%;
   min-width: 0;
   min-height: calc(100svh - var(--home-header-height));
   padding-top: 30px;
@@ -689,16 +689,11 @@ onBeforeUnmount(() => {
   line-height: 1.45;
   letter-spacing: 0.04em;
   overflow-wrap: anywhere;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 7px;
-  transition: color 180ms ease, text-decoration-color 180ms ease;
+  transition: color 180ms ease;
 }
 
 .event-row__copy:is(:hover, :focus-visible) h4 {
-  color: var(--color-clay);
-  text-decoration-color: currentColor;
+  color: var(--interactive-title-hover);
 }
 
 .event-row__meta {
@@ -735,29 +730,7 @@ onBeforeUnmount(() => {
   text-align: center;
 }
 
-.event-row__action > a:not(.event-row__course-link) {
-  display: flex;
-  min-height: 52px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 0 20px;
-  color: var(--color-warm-white);
-  background: var(--event-action);
-  text-decoration: none;
-  font-size: 15px;
-  letter-spacing: 0.1em;
-  transition: background 180ms ease;
-}
-
-.event-row__action > a:not(.event-row__course-link):hover {
-  background: var(--event-action-hover);
-}
-
 .event-row__action svg {
-  width: 20px;
-  height: 20px;
-  flex: 0 0 auto;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.5;
@@ -1089,8 +1062,5 @@ onBeforeUnmount(() => {
     transition: none;
   }
 
-  .event-row__action > a:not(.event-row__course-link) {
-    transition: none;
-  }
 }
 </style>

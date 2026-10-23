@@ -3,6 +3,8 @@ export type {
   CourseDetailApiState,
   CourseDetailAudienceBlock,
   CourseDetailBodyBlock,
+  CourseDetailCarouselBlock,
+  CourseDetailCarouselItem,
   CourseDetailContent,
   CourseDetailCurriculumBlock,
   CourseDetailCurriculumUnit,
@@ -15,5 +17,6 @@ export type {
   CourseDetailSession,
   CourseDetailStatus,
   CourseDetailTeacherBlock,
+  CourseDetailTestimonialBlock,
   CourseDetailVideoBlock,
 } from '../../shared/types/courseDetail'

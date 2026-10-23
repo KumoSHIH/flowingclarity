@@ -6,8 +6,8 @@ import { courseDetailFixture } from "../../app/fixtures/courseDetail";
 import type { CourseDetailApiResponse } from "../../app/types/courseDetail";
 
 const SiteHeaderStub = {
-  props: ["alwaysVisible"],
-  template: '<header data-site-header :data-always-visible="String(alwaysVisible)" />',
+  props: ["alwaysVisible", "currentPath"],
+  template: '<header data-site-header :data-always-visible="String(alwaysVisible)" :data-current-path="currentPath" />',
 };
 
 describe("course detail page", () => {
@@ -52,6 +52,7 @@ describe("course detail page", () => {
     });
 
     expect(wrapper.get("[data-site-header]").attributes("data-always-visible")).toBeDefined();
+    expect(wrapper.get("[data-site-header]").attributes("data-current-path")).toBe("/course");
     expect(wrapper.get("[data-detail]").attributes("data-status")).toBe("ready");
     expect(wrapper.get("[data-detail]").attributes("data-title")).toContain("日式回春");
     const endpoint = useFetchMock.mock.calls.find(([request]) => typeof request === "function")?.[0] as () => string;

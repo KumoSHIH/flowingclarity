@@ -1,11 +1,7 @@
 import type { EventImage, EventRegistrationStatus } from './event'
+import type { SharedTestimonialItem } from './content'
 
 export type EventDetailStatus = 'loading' | 'ready' | 'not-found' | 'error'
-
-export interface SharedTestimonialItem {
-  text: string
-  sharerName: string
-}
 
 export interface EventDetailAgendaItem {
   key: string

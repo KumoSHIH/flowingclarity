@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SharedTestimonialItem } from '#shared/types/eventDetail'
+import type { SharedTestimonialItem } from '#shared/types/content'
 
 defineProps<{
   title?: string
@@ -29,7 +29,6 @@ defineProps<{
   max-width: 14em;
   padding-bottom: 34px;
   margin: 0;
-  border-bottom: 1px solid var(--color-ink);
   font-family: var(--font-display);
   font-size: var(--detail-section-title-size);
   font-weight: 400;
@@ -45,6 +44,10 @@ blockquote {
   padding: 54px 0 58px;
   margin: 0;
   border-bottom: 1px solid rgb(56 52 46 / 24%);
+}
+
+blockquote:last-child {
+  border-bottom: 0;
 }
 
 blockquote p {

@@ -29,6 +29,15 @@ Sanity Studio 用來編輯首頁 Banner、課程、活動、個案諮詢與文�
 
 無法發布時，先開啟 Studio 的驗證清單並點選錯誤；跨欄位規則會直接定位到需修正的欄位。心得只填寫已核准的文字與分享者名稱，不另設逐筆公開同意開關。
 
+所有設定最少或最多字數的單行、多行文字欄位，會在輸入框上方顯示允許範圍與即時字數，例如「請輸入 2–20 字」及 `2/20`。超過上限時，計數會切換為錯誤色，原有 schema validation 仍負責阻止無效內容發布；網址、日期與未限制字數的欄位不顯示計數。
+
+### 後台字數提示修正（2026-10-22）
+
+- 目前狀態：已完成共用輸入元件與 Studio 全域掛載，本機驗證通過；尚未部署遠端 Studio。
+- 已完成：自動讀取既有 schema 的 `min`、`max` 與 `length` 規則，顯示中文提示、即時字數及超限狀態，並把提示關聯到輸入欄位的無障礙說明。
+- 實際驗證：`npm run test -w studio`、`npm run typecheck -w studio`、`npm run build -w studio` 與 `git diff --check`。
+- 待處理與下一階段：本機開發伺服器受檔案監看上限阻擋，且本次環境沒有可用瀏覽器，因此仍須由內容編輯者在桌機與窄版視窗抽查單行、多行及陣列文字欄位；遠端部署與人工登入驗收不得視為本次已完成。
+
 課程總覽與課程詳情皆已完成 schema、Studio 結構、網站串接及 production 內容流驗收；遠端 schema 與分類公開 ID migration 已部署。課程與活動各自只使用一個 `isPublished`：公開前必須通過詳情完整性驗證，前台總覽與詳情頁使用相同狀態。課程詳情已驗證草稿隔離、兩次發布、匿名 published 查詢、五款圖文版型混排與測試內容清除；正式內容仍待內容負責人核准。舊 `courseCategory.*` reference 已確認為 0，舊文件保留至獨立清理變更。完整紀錄見 [Banner 規格](../web/docs/specs/home-banner.md)、[課程總覽規格](../web/docs/specs/course.md)與[課程內頁規格](../web/docs/specs/course-detail.md)。
 
 活動 schema 已部署至 production，並以 48 筆隔離文件完成草稿隔離、兩次發布、匿名 published 查詢、長內容、分頁、近期／過去分類與清理驗收。登入 Studio 後亦已確認活動總覽欄位說明、活動 preview、無效草稿的 inline validation 與停用發布狀態；隔離活動草稿已精準清除，活動規格為 `verified`。2026-10-12 20:24 另看到一筆非驗收腳本建立的既有「活動測試」，驗收未修改或刪除。20:41 已建立空白、未發布的 `drafts.events-page`，後台表單可正常編輯；20:53 移除未使用的「過去活動說明」、將「近期活動空狀態」調整為 3–80 字，並重新部署 production schema 1/1 成功。正式活動總覽文案仍待內容負責人填寫與發布。完整紀錄見 [活動規格](../web/docs/specs/events.md)。

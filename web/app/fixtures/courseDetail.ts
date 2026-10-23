@@ -149,6 +149,21 @@ export const courseDetailFixture: CourseDetailContent = {
       ],
     },
     {
+      key: "testimonials",
+      type: "testimonials",
+      title: "學員心得分享",
+      items: [
+        { text: "這段示意文字用來確認課程頁能以共用元件呈現經核准的學員分享。", sharerName: "測試分享者" },
+      ],
+    },
+    {
+      key: "practice-carousel",
+      type: "carousel",
+      title: "在練習之間，看見方法如何落地。",
+      text: "圖片可以依課程內容排序，右側文字在切換時維持固定，讓閱讀者專注比較不同練習片段。",
+      items: galleryItems.slice(0, 3).map(item => ({ id: item.key, image: item.image, caption: item.title })),
+    },
+    {
       key: "folio",
       type: "gallery",
       title: "把練習整理成一冊。",
@@ -192,6 +207,14 @@ export const courseDetailFixture: CourseDetailContent = {
     actionLabel: "報名資訊待確認",
     image: image("facial-portrait-1.jpg", "人物臉部特寫示意"),
   },
+  relatedArticles: [{
+    id: "article-course-related",
+    title: "從呼吸開始整理觸碰的節奏",
+    slug: "breath-and-touch",
+    excerpt: "以一段完整文章整理呼吸、支撐與觸碰之間的關係，作為進入課程前的延伸閱讀。",
+    category: { key: "body", name: "愛身體", order: 1 },
+    coverImage: { src: "/images/course-detail/facial-class.jpg", alt: "肩頸支撐與觸碰練習", width: 1200, height: 900 },
+  }],
 };
 
 export const longCourseDetailFixture: CourseDetailContent = {
@@ -206,9 +229,10 @@ export const minimalCourseDetailFixture: CourseDetailContent = {
   ...courseDetailFixture,
   slug: "minimal-course",
   body: courseDetailFixture.body.filter((block) =>
-    !["teacher", "quote", "video"].includes(block.type)
+    !["teacher", "quote", "video", "testimonials", "carousel"].includes(block.type)
     && (block.type !== "gallery" || block.key === "collage")),
   registration: { ...courseDetailFixture.registration, image: undefined },
+  relatedArticles: [],
 };
 
 export const emptyCourseDetailFixture: CourseDetailContent = {

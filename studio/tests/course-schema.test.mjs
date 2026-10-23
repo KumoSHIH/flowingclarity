@@ -32,6 +32,8 @@ test('course content types are registered with their required semantic fields', 
       'courseDetailCurriculum',
       'courseDetailVideo',
       'courseDetailAudience',
+      'courseDetailCarouselItem',
+      'courseDetailCarousel',
       'courseDetailSchedule',
       'courseDetailRegistration',
       'courseDetailContent',
@@ -108,6 +110,7 @@ test('course content types are registered with their required semantic fields', 
     'body',
     'schedule',
     'registration',
+    'relatedArticles',
   ])
   assert.deepEqual(
     courseDetailContent.fields.find(({ name }) => name === 'body').of.map(({ type }) => type),
@@ -119,6 +122,8 @@ test('course content types are registered with their required semantic fields', 
       'courseDetailCurriculum',
       'courseDetailVideo',
       'courseDetailAudience',
+      'sharedTestimonialBlock',
+      'courseDetailCarousel',
     ],
   )
   assert.deepEqual(
@@ -129,7 +134,7 @@ test('course content types are registered with their required semantic fields', 
     .filter(({ name }) => name.startsWith('courseDetail'))
     .flatMap(({ fields = [] }) => fields.flatMap(field => [field, ...(field.of ?? [])]))
     .filter(({ type }) => type === 'text')
-  assert.equal(multilineFields.length, 13)
+  assert.equal(multilineFields.length, 14)
   assert.equal(multilineFields.every(({ description }) => description === '可按 Enter 換行，前台會保留段落。'), true)
 })
 
@@ -142,6 +147,11 @@ test('course detail body supports ordered mixed blocks and requires core content
   ]
   assert.equal(validateCourseDetailBody(coreBlocks), true)
   assert.match(validateCourseDetailBody(coreBlocks.slice(0, 3)), /適合對象/)
+  assert.match(validateCourseDetailBody([
+    ...coreBlocks,
+    { _type: 'sharedTestimonialBlock' },
+    { _type: 'sharedTestimonialBlock' },
+  ]), /只能新增一個/)
   assert.equal(courseDetailGallery.title, '圖文版型區塊')
 })
 

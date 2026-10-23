@@ -1,3 +1,6 @@
+import type { RelatedArticleItem } from './articleDetail'
+import type { SharedTestimonialItem } from './content'
+
 export type CourseDetailStatus = 'loading' | 'ready' | 'not-found' | 'error'
 
 export interface CourseDetailImage {
@@ -98,6 +101,27 @@ export interface CourseDetailAudienceBlock {
   items: string[]
 }
 
+export interface CourseDetailTestimonialBlock {
+  key: string
+  type: 'testimonials'
+  title: string
+  items: SharedTestimonialItem[]
+}
+
+export interface CourseDetailCarouselItem {
+  id: string
+  image: CourseDetailImage
+  caption?: string
+}
+
+export interface CourseDetailCarouselBlock {
+  key: string
+  type: 'carousel'
+  title: string
+  text: string
+  items: CourseDetailCarouselItem[]
+}
+
 export type CourseDetailBodyBlock =
   | CourseDetailIntroductionBlock
   | CourseDetailGalleryBlock
@@ -106,6 +130,8 @@ export type CourseDetailBodyBlock =
   | CourseDetailCurriculumBlock
   | CourseDetailVideoBlock
   | CourseDetailAudienceBlock
+  | CourseDetailTestimonialBlock
+  | CourseDetailCarouselBlock
 
 export interface CourseDetailContent {
   slug: string
@@ -132,6 +158,7 @@ export interface CourseDetailContent {
     actionUrl?: string
     image?: CourseDetailImage
   }
+  relatedArticles: RelatedArticleItem[]
 }
 
 export type CourseDetailApiState = 'ready' | 'empty' | 'error'

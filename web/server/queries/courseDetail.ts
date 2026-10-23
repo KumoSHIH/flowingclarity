@@ -71,7 +71,26 @@ export const courseDetailQuery = `{
             hotspot{x, y}
           }
         },
-        _type == "courseDetailAudience" => {title, description, items}
+        _type == "courseDetailAudience" => {title, description, items},
+        _type == "sharedTestimonialBlock" => {
+          title,
+          items[]{text, sharerName}
+        },
+        _type == "courseDetailCarousel" => {
+          title,
+          text,
+          items[]{
+            "key": _key,
+            caption,
+            image{
+              "src": asset->url,
+              "width": asset->metadata.dimensions.width,
+              "height": asset->metadata.dimensions.height,
+              alt,
+              hotspot{x, y}
+            }
+          }
+        }
       },
       schedule{title, description},
       registration{
@@ -81,6 +100,22 @@ export const courseDetailQuery = `{
         closedActionLabel,
         image{
           "src": asset->url,
+          alt,
+          hotspot{x, y}
+        }
+      },
+      "relatedArticles": relatedArticles[]->[
+        defined(_id) && defined(slug.current) && defined(category->key) && defined(coverImage.asset)
+      ]{
+        "id": _id,
+        title,
+        "slug": slug.current,
+        excerpt,
+        category->{key, name, order},
+        "coverImage": coverImage{
+          "src": asset->url,
+          "width": asset->metadata.dimensions.width,
+          "height": asset->metadata.dimensions.height,
           alt,
           hotspot{x, y}
         }

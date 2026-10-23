@@ -173,7 +173,7 @@ function parseSection(value: unknown): ArticleDetailSection | null {
   return null
 }
 
-function parseRelatedArticle(value: unknown): RelatedArticleItem | null {
+export function parseRelatedArticle(value: unknown): RelatedArticleItem | null {
   if (!isRecord(value)) return null
   const id = text(value.id, 1, 200)
   const title = text(value.title, 4, 50)

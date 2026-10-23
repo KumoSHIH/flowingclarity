@@ -138,8 +138,8 @@ describe('rose atlas canvas', () => {
     for (let index = 0; index < 20; index++) {
       await buttons[index % 4]!.trigger('click', { detail: 0 })
     }
-    expect(buttons[3]!.attributes('aria-pressed')).toBe('true')
-    expect(buttons[0]!.attributes('aria-pressed')).toBe('false')
+    expect(buttons[3]!.classes()).toContain('is-active')
+    expect(buttons[0]!.classes()).not.toContain('is-active')
     expect(frames.size).toBe(1)
     step(0)
     expect(context.stroke).toHaveBeenCalledTimes(4)
@@ -172,7 +172,7 @@ describe('rose atlas canvas', () => {
     vi.mocked(HTMLCanvasElement.prototype.getContext).mockReturnValue(null)
     wrapper = mount(HomeBanner)
     await wrapper.get('.atlas-category--heart').trigger('click')
-    expect(wrapper.get('.atlas-category--heart').attributes('aria-pressed')).toBe('true')
+    expect(wrapper.get('.atlas-category--heart').classes()).toContain('is-active')
     expect(frames.size).toBe(0)
   })
 })

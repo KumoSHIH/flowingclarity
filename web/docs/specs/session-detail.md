@@ -99,7 +99,7 @@ SEO 不得加入頁面未呈現或未核准的資格、療效、價格與服務�
 
 ## 響應式、語意與無障礙
 
-- 桌面使用主視覺、sticky 資訊側欄與閱讀內容；DOM 順序維持姓名與摘要、服務項目、服務地區、聯繫方式、完整介紹、經歷。`<= 1023px` 回到同順序的單欄，320–390px 不得水平捲動。
+- 桌面 hero 使用最大 `1500px` 的置中雙欄構圖，banner 不設左右 padding；下方內容外層保持全寬，但以 `1500px` 置中基準的左側 gutter 對齊活動詳情，sticky 資訊側欄固定 `400px`，雙欄外層不使用 `border-top`。Hero 上下與主要內容間距沿用詳情頁 token；`<= 1023px` 的 banner 左右 padding 為 `24px`。正文及經歷清單以 `68ch` 控制閱讀寬度。DOM 順序維持姓名與摘要、服務項目、服務地區、聯繫方式、完整介紹、經歷。窄版回到同順序的單欄，320–390px 不得水平捲動。
 - 延續 `DESIGN.md` 的 paper、sand、ink、clay、saffron、persimmon、night、字體與直角控制項；不直接複製舊站的大型英文標籤，也不使用圓角卡片牆、陰影或柔焦療癒圖像。
 - 與 `/events/[slug]` 及後續相似內容頁共用詳情字級：桌機 `h1` 為 `clamp(44px, 4.8vw, 72px)`、摘要 `17px / 2`、`h2` 為 `38px / 1.4`、正文 `16px / 2.1`；`<= 1023px` 分別為 `42px`、`16px`、`26px`、`16px`。正文閱讀寬度約 `68ch`，不得在單頁另創相近尺寸。
 - 桌機 fixed／sticky 左側資訊欄不使用 `border-right`，只以 surface 色、留白及欄內分隔建立層級；`<= 1023px` 單欄可保留底線與項目分隔。
@@ -171,13 +171,25 @@ SEO 不得加入頁面未呈現或未核准的資格、療效、價格與服務�
 
 2026-10-18 詳情頁頂端加入共用 `DetailBreadcrumb`，呈現「首頁／個案諮詢／目前執行師」；目前頁為帶有 `aria-current="page"` 的純文字，並移除首區重複的「返回執行師名錄」入口。Chrome 以 production 內容 `/session/amoda` 檢查 1440 × 900 與 390 × 844，麵包屑、首區及肖像版面無溢位或錯位；最終截圖位於 `/private/tmp/session-*-final.png`。相關四組詳情測試 37 項、Web 全套 37 檔共 211 項及最終 Session detail 9 項回歸測試通過，typecheck 與 production build 亦通過；typecheck 僅保留既有 Volar 套件警告。
 
+2026-10-21 修正「內文左右區域的寬度，比照 event-detail」的解讀：執行師詳情共用固定 `400px` 左欄與 `1500px` 置中起點，但不限制外層右界；正文維持 `68ch` 閱讀寬度。驗證結果與證據見 [`review/split-layout-2026-10-21/`](../design/review/split-layout-2026-10-21/README.md)。下列其餘人工修正項目未在本次執行，維持待處理；下一步依清單順序另行修正與驗收。
+
+2026-10-21 依截圖回查後，曾將「banner、content 間距比照 events-detail」修正為整體構圖同步，而非只同步 padding 數值：該輪兩頁 hero 共用 `1460px` 置中容器、30% 圖片欄、`560px` 最低高度與相同 gap；1920px 時兩頁左欄同為 `x=202.5px`、主內容同為 `x=602.5px`。執行師內容外層仍保持全寬，正文與經歷清單以 `68ch` 控制閱讀寬度。Chrome 於 390、1024、1440、1920px 驗證無水平溢位；證據沿用並更新於 [`review/split-layout-2026-10-21/`](../design/review/split-layout-2026-10-21/README.md)。
+
+2026-10-21 依最新人工驗收修正：共用 `--detail-hero-max-width` 更新為 `1500px`，執行師桌機 banner 移除左右 padding，`.session-detail__layout` 移除 `border-top`。原先與活動詳情共用桌機水平 hero padding 的紀錄已由本規則取代；上下間距與 content padding 維持既有詳情頁節奏。
+
+2026-10-21 手機版追補：桌機 banner 左右 padding 維持 `0`，`<= 1023px` 改回共用 token 的 `24px`，避免窄螢幕文字貼齊視窗邊緣。Chrome 量測確認 390px 為 `24px`、1024／1440／1920px 為 `0px`，四個尺寸皆無水平溢位；Web 40 個測試檔／237 項測試、typecheck、production build、layout detector 與 `git diff --check` 通過。
+
 #### 筆記，不需要執行，可忽略
 
 - 使用 `$develop-feature` 從 `docs/specs/session-detail.md` 接續下一個流程
 
 #### 待修正項目
 - [x] 最上方補上麵包屑導覽列；2026-10-18 已使用共用 `DetailBreadcrumb` 完成
-- [] 內文左右區域的寬度，比照 event-detail
+- [x] 內文左右區域的左欄固定為 `400px`；最外層保持全寬，左欄使用 `1500px` 置中基準與活動詳情起點對齊，並完成 390／1024／1440／1920px Chrome 驗證
+- [x] banner、content 間距比照 events-detail；2026-10-21 已同步 hero 容器、欄比例、圖片高度、gap 與下方內容起點，後續依最新驗收要求將 session 桌機 banner 水平 padding 改為 `0`
+- [x] 桌機 banner 區域移除左右 padding，並將 `--detail-hero-max-width` 更新為 `1500px`
+- [x] `.session-detail__layout` 移除 `border-top`
+- [x] 手機版 banner 補回左右 padding `24px`
 - [] session-detail__value: 手機版 font-size 14px
 - [] .session-detail__portrait-stage--cover .session-detail__portrait 手機版 aspect-ratio: 9/8
 - [] profile-section > p 、session-detail__experience li ：手機版 font-size 14px

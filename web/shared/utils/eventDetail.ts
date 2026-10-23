@@ -9,8 +9,8 @@ import type {
   EventDetailQuoteBlock,
   EventDetailTestimonialBlock,
   EventDetailTextBlock,
-  SharedTestimonialItem,
 } from '../types/eventDetail'
+import type { SharedTestimonialItem } from '../types/content'
 import type { EventImage, EventRegistrationStatus } from '../types/event'
 
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/

@@ -1,0 +1,62 @@
+{
+  "desktop": [
+    {
+      "path": "/events",
+      "currentLabel": "近期活動",
+      "currentCount": 1,
+      "textDecorationLine": "underline",
+      "headerVisible": true,
+      "horizontalOverflow": false
+    },
+    {
+      "path": "/events/prototype-event-01",
+      "currentLabel": "近期活動",
+      "currentCount": 1,
+      "textDecorationLine": "underline",
+      "headerVisible": true,
+      "horizontalOverflow": false
+    },
+    {
+      "path": "/course",
+      "currentLabel": "課程探索",
+      "currentCount": 1,
+      "textDecorationLine": "underline",
+      "headerVisible": true,
+      "horizontalOverflow": false
+    },
+    {
+      "path": "/course/japanese-facial-massage",
+      "currentLabel": "課程探索",
+      "currentCount": 1,
+      "textDecorationLine": "underline",
+      "headerVisible": true,
+      "horizontalOverflow": false
+    },
+    {
+      "path": "/session",
+      "currentLabel": "個案諮詢",
+      "currentCount": 1,
+      "textDecorationLine": "underline",
+      "headerVisible": true,
+      "horizontalOverflow": false
+    },
+    {
+      "path": "/session/prototype-practitioner-01",
+      "currentLabel": "個案諮詢",
+      "currentCount": 1,
+      "textDecorationLine": "underline",
+      "headerVisible": true,
+      "horizontalOverflow": false
+    }
+  ],
+  "mobile": {
+    "currentLabel": "近期活動",
+    "currentCount": 1,
+    "textDecorationLine": "underline",
+    "menuExpanded": "true",
+    "navVisible": "visible",
+    "bodyOverflow": "hidden",
+    "focusedLabel": "近期活動",
+    "horizontalOverflow": false
+  }
+}

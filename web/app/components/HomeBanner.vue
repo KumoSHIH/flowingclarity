@@ -97,16 +97,15 @@ function selectCategory(id: string, event: MouseEvent) {
       </p>
 
       <div class="atlas-categories" aria-label="課程類別">
-        <button
+        <a
           v-for="category in categories"
           :key="category.id"
-          type="button"
+          :href="`/course#${category.id}`"
           class="atlas-category"
           :class="[
             `atlas-category--${category.id}`,
             { 'is-active': activeCategoryId === category.id },
           ]"
-          :aria-pressed="activeCategoryId === category.id"
           @click="selectCategory(category.id, $event)"
         >
           <span class="atlas-category__marker" aria-hidden="true"><i /></span>
@@ -114,7 +113,7 @@ function selectCategory(id: string, event: MouseEvent) {
             <strong>{{ category.title }}</strong>
             <small>{{ category.courses.join("、") }}</small>
           </span>
-        </button>
+        </a>
       </div>
     </div>
     <div class="home-banner__story">
@@ -260,6 +259,7 @@ function selectCategory(id: string, event: MouseEvent) {
   border: 0;
   font: inherit;
   text-align: left;
+  text-decoration: none;
   cursor: pointer;
   transition: color 180ms ease;
 }

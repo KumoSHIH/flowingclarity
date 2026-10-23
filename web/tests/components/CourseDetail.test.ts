@@ -71,6 +71,25 @@ describe("CourseDetail", () => {
     ]);
   });
 
+  it("renders shared testimonials, the reusable image carousel, and related articles in their required positions", async () => {
+    const wrapper = mount(CourseDetail, {
+      props: { content: courseDetailFixture },
+      global: { stubs: { NuxtLink: nuxtLinkStub } },
+    });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.findAll(".course-testimonials blockquote")).toHaveLength(1);
+    expect(wrapper.get(".course-carousel h2").text()).toContain("在練習之間");
+    expect(wrapper.get(".course-carousel .about-carousel__controls span").text()).toBe("01 / 03");
+    await wrapper.findAll(".course-carousel .about-carousel__controls button")[1]!.trigger("click");
+    expect(wrapper.get(".course-carousel .about-carousel__controls span").text()).toBe("02 / 03");
+    expect(wrapper.findAll(".course-related .article-related__track > li")).toHaveLength(1);
+
+    const registration = wrapper.get("#registration").element;
+    const related = wrapper.get(".course-related").element;
+    expect(registration.compareDocumentPosition(related) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
   it("only links to optional sections that are present", async () => {
     const wrapper = mount(CourseDetail, {
       props: { content: minimalCourseDetailFixture },
@@ -80,6 +99,8 @@ describe("CourseDetail", () => {
 
     expect(wrapper.find("a[href='#content-teacher']").exists()).toBe(false);
     expect(wrapper.find("a[href='#content-video']").exists()).toBe(false);
+    expect(wrapper.find("a[href='#content-testimonials']").exists()).toBe(false);
+    expect(wrapper.find("a[href='#content-practice-carousel']").exists()).toBe(false);
     expect(wrapper.find("a[href='#content-curriculum']").exists()).toBe(true);
     expect(wrapper.find(".gallery-tabs").exists()).toBe(false);
     expect(wrapper.get(".gallery-panel").attributes("role")).toBeUndefined();

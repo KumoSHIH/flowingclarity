@@ -6,8 +6,8 @@ import CoursePage from '../../app/pages/course/index.vue'
 import { courseOverviewFixture } from '../../app/fixtures/courseOverview'
 
 const SiteHeaderStub = defineComponent({
-  props: { alwaysVisible: Boolean },
-  template: '<header data-site-header :data-always-visible="String(alwaysVisible)" />',
+  props: { alwaysVisible: Boolean, currentPath: String },
+  template: '<header data-site-header :data-always-visible="String(alwaysVisible)" :data-current-path="currentPath" />',
 })
 
 describe('course page', () => {
@@ -44,6 +44,7 @@ describe('course page', () => {
     await wrapper.vm.$nextTick()
 
     expect(wrapper.get('[data-site-header]').attributes('data-always-visible')).toBe('true')
+    expect(wrapper.get('[data-site-header]').attributes('data-current-path')).toBe('/course')
     expect(wrapper.findComponent({ name: 'HomeBanner' }).exists()).toBe(false)
     expect(wrapper.get('main h1').text()).toBe('課程探索')
     expect(wrapper.findAll('.course-group')).toHaveLength(4)

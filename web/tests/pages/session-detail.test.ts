@@ -15,8 +15,8 @@ const NuxtLinkStub = {
 }
 
 const SiteHeaderStub = {
-  props: ['alwaysVisible'],
-  template: '<header data-site-header :data-always-visible="String(alwaysVisible)" />',
+  props: ['alwaysVisible', 'currentPath'],
+  template: '<header data-site-header :data-always-visible="String(alwaysVisible)" :data-current-path="currentPath" />',
 }
 
 describe('session detail component', () => {
@@ -159,6 +159,7 @@ describe('session detail page', () => {
   it('renders published API content for the route slug', async () => {
     const wrapper = await mountPage('prototype-practitioner-01')
     expect(wrapper.get('[data-site-header]').attributes('data-always-visible')).toBeDefined()
+    expect(wrapper.get('[data-site-header]').attributes('data-current-path')).toBe('/session')
     expect(wrapper.get('[data-detail]').attributes('data-name')).toBe('林若安')
     expect(wrapper.get('[data-detail]').attributes('data-status')).toBe('ready')
   })

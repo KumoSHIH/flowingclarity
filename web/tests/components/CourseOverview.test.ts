@@ -71,6 +71,9 @@ describe('CourseOverview', () => {
   })
 
   it('initializes the active directory item from a valid URL hash', async () => {
+    const scrollIntoView = vi.fn()
+    const originalScrollIntoView = HTMLElement.prototype.scrollIntoView
+    HTMLElement.prototype.scrollIntoView = scrollIntoView
     window.history.replaceState(null, '', '/course#heart')
     const wrapper = mount(CourseOverview, {
       props: { content: courseOverviewFixture },
@@ -80,6 +83,26 @@ describe('CourseOverview', () => {
 
     expect(wrapper.get('a[href="#heart"]').attributes('aria-current')).toBe('location')
     expect(wrapper.get('a[href="#body"]').attributes('aria-current')).toBeUndefined()
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: 'start' })
+    HTMLElement.prototype.scrollIntoView = originalScrollIntoView
+  })
+
+  it('applies a category hash after loading content becomes ready', async () => {
+    const scrollIntoView = vi.fn()
+    const originalScrollIntoView = HTMLElement.prototype.scrollIntoView
+    HTMLElement.prototype.scrollIntoView = scrollIntoView
+    window.history.replaceState(null, '', '/course#beauty')
+    const wrapper = mount(CourseOverview, {
+      props: { content: courseOverviewFixture, status: 'loading' },
+    })
+
+    await wrapper.setProps({ status: 'ready' })
+    await wrapper.vm.$nextTick()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.get('a[href="#beauty"]').attributes('aria-current')).toBe('location')
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: 'start' })
+    HTMLElement.prototype.scrollIntoView = originalScrollIntoView
   })
 
   it('excludes unpublished courses from links and directory counts', () => {

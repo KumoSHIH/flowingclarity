@@ -40,11 +40,11 @@ Sanity 為正式內容管理方式。課程分類與授課形式如下：
 - 技術架構為 Nuxt 4、Vue 3、TypeScript 與 Tailwind CSS 4。
 - 全站設定已完成 Sanity 單例、遠端 schema、published-only 查詢及前台串接：Header、hero-menu、Footer 共用五項導覽；Header Logo 與 Footer Logo 在同一文件內獨立設定。2026-10-08 已驗證草稿隔離、匿名發布讀取、三處同步及完整還原；目前公開文件未設定 Footer Logo，因此顯示品牌文字備援。Studio 尚無部署 hostname，且三個目的頁尚未建立，仍是發布門檻。
 - 首頁包含品牌介紹、活動、課程與聯絡區塊，內容仍為示範資料；課程區塊尚未提供報名連結。
-- Banner 從 Sanity 讀取已發布的大標題、敘述、按鈕文字及按鈕連結；內容不完整或讀取失敗時使用本機示範內容。玫瑰底圖、課程分類與動畫由前端維護。
+- Banner 從 Sanity 讀取已發布的大標題、敘述、按鈕文字及按鈕連結；內容不完整或讀取失敗時使用本機示範內容。玫瑰底圖、課程分類與動畫由前端維護；地圖四分類固定連至 `/course` 的 body、heart、life、beauty 分類錨點。
 - `/course` 已完成 Sanity 課程總覽、固定分類、課程與梯次 schema、伺服器查詢及 production 內容流驗收；遠端 schema 已部署，公開分類 ID migration 已完成。頁面不再以 fixture 作為主要資料，目前 production 有 1 門初步課程，其餘正式內容仍待內容負責人審核與發布。
-- `/course/[slug]` 已完成響應式前端、Sanity 整合與 production 內容流驗收：課程總覽與詳情頁共用單一公開開關，公開前必須有完整詳情與代表圖；另包含 published-only slug API、共用資料契約、可排序內容編排、五款可重複圖文版型、公開梯次及安全報名連結。草稿隔離、兩次發布、匿名讀取、1440px／390px 完整頁及測試內容清除均已驗證；正式內容仍待核准。
+- `/course/[slug]` 既有響應式前端、Sanity 整合與 production 內容流已驗證；2026-10-20 另於本機加入最多一個共用學員心得、可重複左圖右文圖片輪播及固定頁尾的 0–8 篇延伸閱讀，並統一桌機／手機內容標題。新版 schema、published-only 投影、parser、Vue、測試與 Chrome 1440px／390px 驗收已完成，但更新後 schema 尚未部署、遠端內容流尚未回歸；正式內容仍待核准。
 - `/events` 已完成 fixture 驅動的前端原型：左側可切換近期／過去活動，右側以月份長譜呈現目前集合，支援每頁 8 筆、URL query、自動截止、結束後歸檔，以及 loading／empty／error 狀態。此階段尚未串接 Sanity，頁面活動內容皆為明確標示的示範資料。
-- `/events/[slug]` 已完成前端、Sanity 整合與 production 內容流驗收：活動總覽與詳情頁共用單一公開開關，公開前必須有完整詳情；另提供可排序語意區塊、published-only slug API 與安全 parser。心得只包含文字與分享者名稱，不設逐筆公開同意欄位；草稿隔離、兩次發布、匿名讀取、1440px／390px 完整頁及測試內容清除均已驗證。正式活動內容仍待核准，課程詳情也尚未接入共用心得 schema。
+- `/events/[slug]` 已完成前端、Sanity 整合與 production 內容流驗收：活動總覽與詳情頁共用單一公開開關，公開前必須有完整詳情；另提供可排序語意區塊、published-only slug API 與安全 parser。心得只包含文字與分享者名稱，不設逐筆公開同意欄位；草稿隔離、兩次發布、匿名讀取、1440px／390px 完整頁及測試內容清除均已驗證。正式活動內容仍待核准；課程詳情已於本機接入相同心得 schema，遠端回歸尚未執行。
 - `/articles/[slug]` 已完成響應式前端、UI 行為驗收與本機 Sanity 整合：同一份 `article` 文件提供 `overlay`／`split` 首區、三種可排序正文區塊、受限 Portable Text、人工排序延伸閱讀與 SEO；published-only slug API 以嚴格 parser 區分 404、無效發布內容及讀取失敗，前端不再以 fixture 作為主要資料。遠端 schema 尚未部署，草稿隔離、匿名發布讀取、真實圖片與 production 內容流程仍待驗證。
 - `/session` 已完成無人物照片的 A「經緯名錄」響應式前端、Sanity 整合與 production 內容流驗收：桌機使用 30%／70% sticky 雙域，手機改為單欄篩選與人物長列；支援服務地區／服務項目多選、URL 還原、每頁 8 筆、狀態處理及後台標題純文字換行契約。遠端 schema 已部署，Studio 提供總覽單例、可新增的服務地區／服務項目 taxonomy 與可複選 references 的執行師文件；草稿隔離、兩次發布、匿名讀取、48 筆分頁、1440px／390px 前台與清理後空狀態均已驗證。隔離測試資料已清除，production 保留一份無內容且未發布的 `drafts.session-page` 供後台直接編輯；正式總覽、taxonomy 與執行師內容仍待內容負責人建立及發布。
 - `/session/[slug]` 已完成 C「靜謐檔案」＋A 單欄經歷的響應式 UI、Sanity schema、published-only API 與 production 內容流程驗收。人物照可由後台選擇限制寬度或滿版裁切，並支援無圖及選填主要預約按鈕；詳情字級與 rail padding 為活動／執行師詳情共用 token。聯繫支援電話、LINE ID、Facebook、LINE 官方連結與預約表單；城市可新增，每筆服務地區可多選 1–6 個城市，地點名稱／完整地址由公開層級控制，`practitioner` 不設對外公開同意欄位。目前為 `verified`；隔離測試資料已清除。

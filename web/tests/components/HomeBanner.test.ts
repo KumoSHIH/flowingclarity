@@ -35,11 +35,17 @@ describe('home banner content', () => {
     wrapper.unmount()
   })
 
-  it('keeps category selection independent of CMS content', async () => {
+  it('links every atlas category to the matching course directory target', async () => {
     const wrapper = mount(HomeBanner, { props: { banner } })
+    expect(wrapper.findAll('.atlas-category').map(link => link.attributes('href'))).toEqual([
+      '/course#body',
+      '/course#heart',
+      '/course#life',
+      '/course#beauty',
+    ])
     await wrapper.get('.atlas-category--heart').trigger('click')
-    expect(wrapper.get('.atlas-category--heart').attributes('aria-pressed')).toBe('true')
-    expect(wrapper.get('.atlas-category--body').attributes('aria-pressed')).toBe('false')
+    expect(wrapper.get('.atlas-category--heart').classes()).toContain('is-active')
+    expect(wrapper.get('.atlas-category--body').classes()).not.toContain('is-active')
     expect(wrapper.get('.hero-cta').attributes('href')).toBe(banner.buttonLink)
     wrapper.unmount()
   })

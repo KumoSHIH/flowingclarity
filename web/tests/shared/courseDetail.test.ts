@@ -88,6 +88,20 @@ describe('course detail parser', () => {
     expect(parseCourseDetail(value)?.schedule.sessions).toHaveLength(1)
   })
 
+  it('enforces one testimonial block and skips invalid or duplicate related articles', () => {
+    const duplicateTestimonials = structuredClone(sanityCourseDetail)
+    const testimonial = duplicateTestimonials.course.detail.body.find(block => block.type === 'testimonials')!
+    duplicateTestimonials.course.detail.body.push({ ...testimonial, key: 'testimonials-copy' })
+    expect(parseCourseDetail(duplicateTestimonials)).toBeNull()
+
+    const related = structuredClone(sanityCourseDetail)
+    related.course.detail.relatedArticles.push(
+      { ...structuredClone(related.course.detail.relatedArticles[0]!), id: 'article-course-related' },
+      { ...structuredClone(related.course.detail.relatedArticles[0]!), id: 'drafts.invalid-related' },
+    )
+    expect(parseCourseDetail(related)?.relatedArticles).toHaveLength(1)
+  })
+
   it('filters an open run whose registration URL is not a valid HTTPS URL', () => {
     const value = structuredClone(sanityCourseDetail)
     value.runs[0]!.registrationUrl = 'javascript:alert(1)'

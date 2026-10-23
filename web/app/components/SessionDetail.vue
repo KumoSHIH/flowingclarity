@@ -237,18 +237,21 @@ function opensNewTab(href?: string): boolean {
 }
 .session-detail__hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(380px, 34%);
-  min-height: 620px;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 30%);
+  align-items: center;
+  gap: clamp(48px, 7vw, 110px);
+  width: min(100%, var(--detail-hero-max-width));
+  min-height: 560px;
+  padding-block: var(--detail-hero-padding-block-start)
+    var(--detail-hero-padding-block-end);
+  padding-inline: 0;
+  margin: 0 auto;
 }
 .session-detail__hero--without-portrait {
   grid-template-columns: 1fr;
 }
 .session-detail__hero-copy {
-  display: flex;
   min-width: 0;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 42px clamp(28px, 6vw, 116px) 70px;
 }
 .session-detail__hero-copy > div {
   padding-top: 0;
@@ -304,6 +307,7 @@ function opensNewTab(href?: string): boolean {
 .session-detail__portrait-stage {
   display: grid;
   min-width: 0;
+  min-height: 360px;
   place-items: center;
   padding: 54px;
   background: var(--color-sand);
@@ -332,7 +336,7 @@ function opensNewTab(href?: string): boolean {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 620px;
+  min-height: 360px;
 }
 .session-detail__portrait-stage--cover img {
   position: absolute;
@@ -346,8 +350,11 @@ function opensNewTab(href?: string): boolean {
 
 .session-detail__layout {
   display: grid;
-  grid-template-columns: minmax(300px, 31%) minmax(0, 1fr);
-  border-top: 1px solid rgb(56 52 46 / 24%);
+  grid-template-columns: var(--split-layout-rail-width) minmax(0, 1fr);
+  padding-inline-start: max(
+    0px,
+    calc((100% - var(--detail-layout-max-width)) / 2)
+  );
 }
 .session-detail__rail {
   background: var(--color-sand);
@@ -470,11 +477,10 @@ function opensNewTab(href?: string): boolean {
 
 .session-detail__content {
   min-width: 0;
-  padding: 76px clamp(48px, 7vw, 104px);
+  padding: var(--detail-content-padding-block) var(--detail-content-padding-inline);
 }
 .profile-section {
-  max-width: 860px;
-  margin-inline: auto;
+  max-width: none;
 }
 .profile-section + .profile-section {
   margin-top: 76px;
@@ -501,6 +507,7 @@ function opensNewTab(href?: string): boolean {
   margin-top: 18px;
 }
 .session-detail__experience {
+  max-width: 68ch;
   border-top: 1px solid var(--color-ink);
 }
 .session-detail__experience li {
@@ -511,8 +518,8 @@ function opensNewTab(href?: string): boolean {
   line-height: 1.7;
 }
 .session-detail__notice {
-  max-width: 860px;
-  margin: 64px auto 0;
+  max-width: 68ch;
+  margin: 64px 0 0;
   padding-top: 18px;
   border-top: 1px solid rgb(56 52 46 / 24%);
   color: #745142;
@@ -572,14 +579,10 @@ function opensNewTab(href?: string): boolean {
   .session-detail__hero {
     grid-template-columns: 1fr;
     min-height: auto;
+    padding-inline: var(--detail-hero-padding-inline);
   }
   .session-detail__hero-copy {
     min-height: 0;
-    justify-content: flex-start;
-    padding: 34px 24px 68px;
-  }
-  .session-detail__hero-copy > div {
-    padding-top: 64px;
   }
   .session-detail__summary-grid {
     grid-template-columns: 1fr;
@@ -604,6 +607,7 @@ function opensNewTab(href?: string): boolean {
   }
   .session-detail__layout {
     display: block;
+    padding-inline-start: 0;
   }
   .session-detail__rail {
     border-bottom: 1px solid rgb(56 52 46 / 24%);
@@ -623,7 +627,7 @@ function opensNewTab(href?: string): boolean {
     grid-column: 1 / -1;
   }
   .session-detail__content {
-    padding: 64px 24px;
+    padding: var(--detail-content-padding-block) var(--detail-content-padding-inline);
   }
   .profile-section + .profile-section {
     margin-top: 64px;

@@ -72,9 +72,12 @@ components:
     rounded: "0"
     padding: "0 clamp(28px, 3vw, 48px)"
     height: "clamp(72px, 8.4vh, 92px)"
+    maxWidth: "360px"
   button-primary-hover:
     backgroundColor: "#c94f34"
     textColor: "{colors.warm-white}"
+  interactive-title-hover:
+    textColor: "{colors.clay}"
 ---
 
 # Design System: Flowing Clarity
@@ -105,15 +108,17 @@ components:
 
 **The Quiet Rhythm Rule.** 中文標題不使用全大寫效果；以留白、換行與字距建立節奏，避免額外裝飾字型。
 
-**The Detail Continuity Rule.** 活動、執行師與文章等內容詳情頁沿用桌機閱讀字級：`h1` 為 `clamp(44px, 4.8vw, 72px)`、摘要 `17px / 2`、章節 `h2` 為 `38px / 1.4`、正文 `16px / 2.1` 且最寬約 `68ch`。所有內容詳情頁在手機版統一使用 `26px` 的內容章節 `h2` 與 `16px` 正文；課程桌機保留已核准的章節展示尺寸，不套用 38px，但手機同樣收斂為 26px。新內容詳情頁不得另創相近手機尺寸；頁面首區展示標題與引言式 blockquote 不視為內容章節 `h2`。
+**The Detail Continuity Rule.** 活動、執行師與文章等內容詳情頁沿用桌機閱讀字級：`h1` 為 `clamp(44px, 4.8vw, 72px)`、摘要 `17px / 2`、章節 `h2` 為 `38px / 1.4`、正文 `16px / 2.1` 且最寬約 `68ch`。活動與執行師詳情的 hero 共用桌機 `84px / 84px`、手機 `68px / 76px` 的上下內距；活動詳情桌機保留水平 `clamp(28px, 6vw, 116px)`，執行師詳情桌機 banner 不設左右 padding，兩頁手機皆使用 `24px`。主要內容共用桌機 `76px clamp(48px, 7vw, 104px)`、手機 `64px 24px`，不得再用內層置中容器改變內容左緣。所有內容詳情頁在手機版統一使用 `26px` 的內容章節 `h2` 與 `16px` 正文；課程桌機保留已核准的章節展示尺寸，不套用 38px，但手機同樣收斂為 26px。新內容詳情頁不得另創相近手機尺寸；頁面首區展示標題與引言式 blockquote 不視為內容章節 `h2`。
 
 ## Layout
 
-頁面最大寬度為 `1920px`，主要內容左右留白使用 `clamp(28px, 6vw, 116px)`，區塊垂直間距以 `112–176px` 為主。桌面首頁首屏採 65%／35% 地圖與敘事雙欄，1024–1250px 改為 60%／40%；不大於 1023px 時改成單欄，固定導覽高度為 `87px`。內容圖片維持明確比例並允許自然裁切。
+全幅敘事頁面最大寬度可到 `1920px`，主要內容左右留白使用 `clamp(28px, 6vw, 116px)`，區塊垂直間距以 `112–176px` 為主。採左側目錄／篩選 rail 與右側主內容的總覽頁，桌機左欄固定 `400px` 並貼齊視窗左側，右側內容填滿剩餘欄寬且不設定最大寬度；不大於 `1023px` 回到單欄。詳情頁依上方 hero 的構圖決定內容起點，不以總覽頁規則限制最外層寬度。桌面首頁首屏仍採 65%／35% 地圖與敘事雙欄，1024–1250px 改為 60%／40%；固定導覽高度為 `87px`。內容圖片維持明確比例並允許自然裁切。
 
 內容詳情頁的桌機固定左側欄以底色、留白與內部分隔建立層級，不使用 `border-right`；不大於 `1023px` 回到單欄後，可保留區塊底線與項目內部分隔。此規則適用於所有採 fixed／sticky facts rail 的相似頁面。
 
 **The Detail Rail Rule.** 相似詳情頁的 facts rail 必須共用 `/events/[slug]` 的節奏：桌機資料列為 `26px clamp(28px, 3.2vw, 50px)`，獨立主要操作區為 `34px clamp(28px, 3.2vw, 50px)`；`<= 1023px` 資料列為 `22px 24px`、獨立主要操作區為 `24px`。聯繫資料須與上方服務項目、服務地區使用相同 padding；側欄資訊小標題統一為 14px、粗體與 `.08em` 字距，聯繫內容與按鈕文字皆為 14px，聯繫清單不使用 `border-top` 或 `border-bottom`。桌機側欄本身無右框線。閱讀內容的連續 `profile-section` 不以 `border-top` 或額外 `padding-top` 切段，只使用章節間距維持節奏。
+
+**The Split Layout Rule.** 課程、活動、執行師總覽只共用 `--split-layout-rail-width: 400px`。桌機 grid 使用固定左欄與 `minmax(0, 1fr)` 主欄；外層保持全寬、左欄無外距，右側內容不設最大寬度並填滿剩餘欄寬。活動與執行師詳情的 hero 共用 `1500px` 置中外框，雙欄起點也以 `1500px` 置中基準對齊；活動詳情限制整個雙欄寬度，執行師詳情維持全寬，只加入同等左側 gutter，且雙欄銜接處不加上框線。不得把詳情頁規則套到總覽頁。
 
 ## Elevation & Depth
 
@@ -131,6 +136,8 @@ components:
 
 大型主要按鈕為柿橘底、暖白字、直角矩形，最小高度為 `clamp(72px, 8.4vh, 92px)`；hover 加深為 `#c94f34`，鍵盤焦點使用 2px 陶土色外框與 6px offset。次要行動採底線文字連結，至少 48px 高。
 
+大型主要按鈕寬度可依容器縮小，但不得超過 `360px`。可點擊內容標題在 hover 與 `focus-visible` 時統一改為 `clay`；可同時使用底線、影像縮放或箭頭位移補強回饋，但不得另用相近棕色建立同角色變體。
+
 ### Go Top Button
 
 全站回頂按鈕是固定於右下角的直角座標控制：桌機為 56px、手機為 52px，深夜棕底搭配暖紙色線性箭頭，hover 轉為陶土色。位置使用 `clamp(20px, 3vw, 48px)` 並納入裝置 safe area；層級低於固定 Header。頁面捲動超過 480px 後才顯示，進出只使用短距離垂直位移與透明度；`prefers-reduced-motion` 下停用過渡並立即回頂。元件保持平面、直角、無陰影，不延伸成圓形浮動操作按鈕。
@@ -141,7 +148,7 @@ components:
 
 ### Navigation
 
-導覽使用小字、粗字重與寬字距。桌面連結 hover 可輕微上移；手機以全螢幕半透明選單呈現，每個選項至少 72px 高。所有動態需尊重 `prefers-reduced-motion`。
+導覽使用小字、粗字重與寬字距。桌面連結 hover 可輕微上移；目前所在單元以 1px 下底線標示，總覽與詳情頁維持相同單元狀態。手機以全螢幕半透明選單呈現，每個選項至少 72px 高，並保留相同目前單元標示。所有動態需尊重 `prefers-reduced-motion`。
 
 ### Atlas Markers
 

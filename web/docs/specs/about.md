@@ -130,6 +130,7 @@
 - 2026-10-18 已部署 production schema 1/1，並在遠端建立未發布的 `drafts.about-page` 與 `drafts.site-settings`。About 草稿保留目前文案及 4 張圖片；共用設定草稿由既有 published 文件複製後，只補入示意營業時間與地圖。匿名前台確認讀不到 About 草稿，兩份草稿皆未發布。
 - 2026-10-18 Google Maps embed 驗證已支援官方 `/maps/embed?pb=...` 分享格式及既有 `output=embed` 格式；共用設定草稿改用內容負責人提供的正式 embed 網址，published 設定不變。
 - 2026-10-19 完成 production 內容流驗收：`about-page` 與 `site-settings` 已發布且無草稿，匿名 published 查詢與前台 parser 成功取得 3 張精選片段、1 組營業時間、Google Maps 與 5 個可公開讀取的圖片資產；Nuxt API 回傳 `ready`，SSR 與 320px production browser 回歸通過。證據見 [About 內容流驗收](../design/review/about-content-flow/README.md)。
+- 2026-10-20 將「精選片段」的輪播狀態、拖曳、自動播放、暫停條件、控制與響應式版面抽成 `SharedImageTextCarousel`，供課程詳情的選填圖文輪播共用；About 的內容契約、2,000ms 自動播放、1,500ms 轉場與既有視覺不變，完整 Web 回歸測試通過。
 
 ## 本階段完成與驗證
 

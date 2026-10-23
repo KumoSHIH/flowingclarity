@@ -112,7 +112,7 @@ SEO 不得加入頁面未呈現或未核准的療效、資格與事實。not fou
 - 有意義圖片使用描述內容的 alt，不重複文章標題或圖說；明確純裝飾圖片使用空 alt。圖說以 `<figcaption>` 關聯圖片，不把重要文字烘焙進圖片。
 - 所有操作目標至少 44 × 44px，鍵盤焦點清楚可見。200% 文字放大後不遮擋內容；swiper 不可鎖住 Tab 焦點或攔截垂直捲動。
 - Swiper 手動切換位移時間為 `1500ms`；`prefers-reduced-motion: reduce` 時移除動畫，但保留目前位置與控制狀態。
-- 延伸閱讀卡片以整張連結承接 hover／focus：圖片只在既有裁切窗內微幅放大，標題、閱讀連結及箭頭改用陶土色回應；控制按鈕具 hover、focus、active 與 disabled 狀態。多篇內容顯示目前範圍及細線進度，手機支援具方向門檻的水平滑動，不攔截一般垂直閱讀。
+- 延伸閱讀卡片以整張連結承接 hover／focus：圖片只在既有裁切窗內微幅放大，標題、閱讀連結及箭頭引用全站 `--interactive-title-hover`（目前為陶土色）回應；控制按鈕具 hover、focus、active 與 disabled 狀態。多篇內容顯示目前範圍及細線進度，手機支援具方向門檻的水平滑動，不攔截一般垂直閱讀。
 - 尊重 `prefers-reduced-motion`；移除卡片、箭頭、按鈕、進度與 swiper 的空間位移後，仍保留色彩與焦點回饋，正文、控制、目前位置與所有文章入口完整可用。swiper 不自動播放，因此不需要暫停控制。
 
 ## 驗收條件
@@ -143,6 +143,8 @@ SEO 不得加入頁面未呈現或未核准的療效、資格與事實。not fou
 
 ## 階段紀錄
 
+- 2026-10-20：將延伸閱讀的響應式欄數、切換、觸控方向門檻、Tab 範圍、進度、live region、hover／focus 與 reduced-motion 行為抽成 `SharedRelatedArticles`，供課程詳情固定頁尾的延伸閱讀共用；Article 的內容契約與視覺維持不變，完整 Web 回歸測試通過。
+- 2026-10-20：延伸閱讀標題與 CTA 的 hover／`focus-visible` 顏色改為引用全站 `--interactive-title-hover`，與活動列表的可點擊內容標題共用同一語意 token；既有圖片縮放、箭頭位移、焦點框與 reduced-motion 行為不變。Web 39 個測試檔、226 項測試、typecheck、production build 與 `git diff --check` 通過；正式內容的瀏覽器互動仍待部署後驗收。
 - 2026-10-15：完成 `define-feature-spec` 初稿。依文章總覽共用資料契約與使用者確認的圖文段落、麵包屑及後台自選相關文章需求，補齊範圍、正文模型、狀態、響應式、無障礙、SEO 與可測試驗收條件。狀態為 `draft`；尚未進行視覺設計、前端、Sanity schema、正式內容或內容流程驗收。
 - 2026-10-15：依 `shape-ui-direction` 完成三款 1440px 桌機候選：A「潮汐章頁」、B「頁邊星圖」、C「雙頁書冊」。三案均涵蓋麵包屑、文章首區、純文字、左右圖文、滿寬大圖與文末延伸閱讀，完整比較稿與截圖證據位於 [`articles-detail-concepts.html`](../design/articles-detail-concepts.html)及 [`review/articles-detail-concepts-desktop/`](../design/review/articles-detail-concepts-desktop/README.md)。經 detector 與完整畫面審查修正內容契約、文字對比及控制圖示後，最終 disposition 為 `ship`。目前等待選定方向，狀態維持 `draft`；尚未製作手機稿、Vue、Sanity schema 或正式內容。
 - 2026-10-16：使用者指定保留第一輪 B 的大標題＋右側直幅圖首區，其餘重新設計，並以舊站〈來自尼騰 Neeten 的分享（一）〉驗證「小標＋連續段落、正文無圖片」情境。完成第二輪 A「靜水長讀」、B「頁邊節奏」、C「章節帶譜」三款 1440px 桌機稿；三案使用完全相同的首區，正文分別採連續長欄、左右對讀及全幅章節帶，且已縮短首區、正文與延伸閱讀的垂直間距。比較稿與截圖位於 [`articles-detail-text-concepts.html`](../design/articles-detail-text-concepts.html)及 [`review/articles-detail-text-concepts-desktop/`](../design/review/articles-detail-text-concepts-desktop/README.md)，detector 與完整畫面 finish review 的最終 disposition 為 `ship`。目前仍等待選案，狀態維持 `draft`；手機、Vue、Sanity schema 與正式內容皆未開始。

@@ -6,8 +6,8 @@ import EventsPage from '../../app/pages/events/index.vue'
 import { eventOverviewFixture } from '../../app/fixtures/events'
 
 const SiteHeaderStub = defineComponent({
-  props: { alwaysVisible: Boolean },
-  template: '<header data-site-header :data-always-visible="String(alwaysVisible)" />',
+  props: { alwaysVisible: Boolean, currentPath: String },
+  template: '<header data-site-header :data-always-visible="String(alwaysVisible)" :data-current-path="currentPath" />',
 })
 
 describe('event overview', () => {
@@ -39,6 +39,8 @@ describe('event overview', () => {
     expect(wrapper.get('.event-row__copy').attributes('target')).toBeUndefined()
     expect(wrapper.get('.event-row__action a').attributes('href')).toBe('https://example.com/register/01')
     expect(wrapper.get('.event-row__action a').attributes('target')).toBe('_blank')
+    expect(wrapper.get('.event-row__action a').classes()).toContain('button-primary')
+    expect(wrapper.get('.event-row__action svg').classes()).toContain('button-primary__icon')
     expect(wrapper.get('.event-row__date-item').findAll('span')).toHaveLength(2)
     expect(wrapper.get('.event-row__weekday').text()).toBe('(週六)')
     expect(wrapper.get('.event-row').find('.event-row__date-separator').exists()).toBe(false)
@@ -258,6 +260,7 @@ describe('events page', () => {
     })
 
     expect(wrapper.get('[data-site-header]').attributes('data-always-visible')).toBe('true')
+    expect(wrapper.get('[data-site-header]').attributes('data-current-path')).toBe('/events')
     expect(wrapper.get('main h1').text()).toBe('近期活動')
     await wrapper.findAll('aside nav a')[1]!.trigger('click')
     expect(push).toHaveBeenCalledWith({

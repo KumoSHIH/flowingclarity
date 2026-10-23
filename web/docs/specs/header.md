@@ -75,4 +75,13 @@ Header 使用 `header`，主要導覽使用具名稱的 `nav`；品牌為可操�
 
 
 ## 人工測試後修正清單
-- [] 當前單元需要加上 下底線，目前只有關於我們和文章分享有這個效果
+
+- [x] 當前單元需要加上 下底線，目前只有關於我們和文章分享有這個效果（2026-10-23：活動、課程、個案諮詢的總覽與詳情頁皆已傳入所屬單元路徑；Chrome 1440px 與 390px 展開選單確認各路由只有一個 `aria-current="page"`，計算樣式為 underline，且無水平溢位。）
+
+## 2026-10-23 修正紀錄
+
+- **目前狀態：** 本次清單 1 項已完成；Header 規格整體仍維持 draft，原有正式內容、Studio hostname 與完整功能驗收依賴不因本次修正而視為完成。
+- **完成項目：** 為 `/events`、`/course`、`/session` 的總覽與詳情頁補上 Header `currentPath`，沿用既有 `aria-current="page"` 與下底線樣式；同步更新共用導覽設計規則。
+- **實際驗證：** 7 個相關測試檔共 40 項及 Web 完整測試 41 個檔案共 242 項通過；`npm run typecheck -w web`、`npm run build -w web` 與 `git diff --check` 通過。Chrome 實際渲染驗證上述 6 個路由，桌機與手機選單均正確標示目前單元；手機展開後背景鎖定、焦點移至第一項，畫面無水平溢位。代表截圖及量測見 [Header 目前單元驗證](../design/review/header-current-unit-2026-10-23/README.md)。
+- **未完成事項：** 本次修正清單無未完成項目；typecheck 保留既有 `vue-router/volar/sfc-route-blocks` 套件匯出警告，build 保留既有 sourcemap 與字型執行期解析警告。
+- **下一步：** 後續建立新單元頁或共用 Header 至其他路由時，必須傳入所屬單元路徑並保留頁面層回歸測試；其餘 Header 發布依賴依「待決事項與下一階段輸入」處理。

@@ -5,6 +5,6 @@ export type {
   EventDetailBodyBlock,
   EventDetailContent,
   EventDetailStatus,
-  SharedTestimonialItem,
 } from '../../shared/types/eventDetail'
+export type { SharedTestimonialItem } from '../../shared/types/content'
 

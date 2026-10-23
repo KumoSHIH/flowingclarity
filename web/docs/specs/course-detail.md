@@ -1,10 +1,10 @@
 # 課程內頁規格
 
-**規格狀態：** `verified`
+**規格狀態：** `cms-integrated`（2026-10-20 修正已於本機完成；更新後的 production schema 與內容流程尚未驗證）
 
 **設計狀態：** A「章節潮汐」響應式 HTML 整合稿已完成；桌機單元圖冊錯位調整與五款手機多圖模式已有瀏覽器模擬驗證紀錄。
 
-**開發狀態：** 已完成 Sanity 內頁 schema、published-only GROQ/API、資料契約轉換、正式動態路由與 production 內容流驗收；schema 已部署，隔離測試內容已完成草稿、發布、更新、再次發布、匿名讀取與清除。
+**開發狀態：** 既有課程內頁曾完成 production 內容流驗收。2026-10-20 已於本機新增單一學員心得、可重複圖片輪播與固定頁尾延伸閱讀，並完成 schema、published-only GROQ、parser、Vue、測試與 Chrome 驗收；新版 schema 尚未部署，新增欄位尚未執行遠端草稿／發布／清除流程。
 
 **後續決策：** 課程內頁目前以已驗證版本投入內容建置，不阻擋後續單元開發。待其他課程陸續完成後台資料後，再依跨課程的實際內容長度、區塊組合與編輯需求，集中評估是否調整前台樣式或 Studio 欄位；此項工作因需要大量內容建置與人工檢視，暫緩至資料較完整時處理。
 
@@ -21,11 +21,11 @@
 | 桌機與手機設計原型 | 已完成原型 | 響應式 HTML 與截圖已存在；不是正式 Vue 元件 |
 | 課程總覽與基礎資料 | 已沿用 | 內頁延伸既有 `course` 與 `courseRun`，梯次日期、地點、形式與報名狀態不重複儲存 |
 | 正式內頁路由 | 本機整合完成 | `/course/[slug]` 改由內頁 API 取得資料，提供載入、錯誤、重試與不存在／未公開狀態；不再以 fixture 作正式資料來源 |
-| 內頁內容模型與型別 | 已完成 | Studio 詳情 schema、單一 `isPublished` 公開開關、欄位驗證與共用前後端型別已部署；公開前必須有代表圖及完整詳情，內容編排可混合排序，圖文版型可重複新增並各自選型 |
+| 內頁內容模型與型別 | 本機更新完成 | 既有 Studio 詳情 schema 與單一 `isPublished` 公開開關已部署；本機另加入最多一個共用心得區塊、1–10 張的可重複圖片輪播及 0–8 篇不重複相關文章，更新版尚未部署 |
 | 內頁 API 與資料處理 | 已完成 | 依 slug 查詢已發布課程與公開梯次，固定使用 published perspective；解析器兼容 GROQ 回傳的 Sanity schema 型別名，並拒絕不完整內容、危險連結與不合法梯次 |
-| Vue 內容元件 | 已完成 | `CourseDetail.vue` 依 CMS 陣列順序渲染介紹、五款可重複圖文版型、帶領者、引言、課綱、影片與對象；Banner、梯次及報名維持固定位置 |
+| Vue 內容元件 | 已完成 | `CourseDetail.vue` 依 CMS 陣列順序渲染介紹、五款可重複圖文版型、帶領者、引言、課綱、影片、對象、單一學員心得及可重複圖片輪播；Banner、梯次與報名維持固定位置，延伸閱讀固定在報名後方 |
 | 互動與響應式整合 | 已完成 | 章節導覽依內容編排動態產生，以實際固定列高度精準定位並在捲動時更新 active；手機作用中錨點會自動水平移入畫面。另已完成課綱展開、媒體／CTA 停用狀態、後台多行文字換行保留及桌機／手機排版；正式頁不再顯示版型比較 tabs |
-| 自動化與瀏覽器驗收 | 已完成 | Web 104 項與 Studio 14 項測試、兩端 typecheck 及 production build 通過；Chrome CDP 以 1440px 與 390px 完成真實內容完整頁及錨點追蹤驗收 |
+| 自動化與瀏覽器驗收 | 本機已完成 | 2026-10-20 完整 Web 228 項與 Studio 31 項測試、兩端 typecheck 及 production build 通過；Chrome CDP 以 1440px 與 390px 驗證新增區塊、互動、焦點、reduced motion 與無水平溢位 |
 | 正式內容與發布 | 流程已驗證／內容待提供 | production schema 與草稿隔離、首次發布、更新草稿隔離、再次發布、匿名讀取和精確清理皆通過；正式課程內容仍待內容負責人核准 |
 
 ### 開發順序與驗收
@@ -44,6 +44,8 @@
 
 2026-10-11 決定先結束本單元並進入下一個單元。課程內頁的樣式與欄位不在此時繼續擴充；待其他課程後台資料陸續建置完成、具備足夠的跨課程案例後，再安排整體檢視與必要調整。
 
+2026-10-20 依待修正清單完成本機修正。桌機內容 `h2` 統一為全站詳情頁 38px token；課程 body 可加入最多一個共用心得及可重複的左圖右文圖片輪播；0–8 篇人工選取的延伸閱讀固定在報名區後。About 圖片輪播與 Article 延伸閱讀已拆成共用元件，原頁行為維持不變。新版 schema 尚未部署，狀態回到 `cms-integrated`，下一階段為遠端內容流回歸。
+
 ## 目標與受眾
 協助正在評估身心課程的訪客清楚取得課程資訊，在理解方法、帶領者、學習路徑與參與條件後，感受到安定與信任，並找到明確報名入口。
 
@@ -61,9 +63,9 @@
 | cmp-curriculum | 階段、單元、標題與內容，可展開 | 建議；支援 1–12 單元 | 編輯者／Sanity block content |
 | cmp-schedule | 城市、日期、時間、地點、名額與狀態 | 報名時必要；不得顯示未確認資料 | 編輯者／Sanity course document |
 | cmp-video | YouTube 播放器與封面 | 非必要；需標題與封面替代文字 | 編輯者／Sanity block content |
-| cmp-testimonial | 純文字學員心得與分享者名稱 | 非必要；可重複新增，僅使用已核准公開的內容 | 編輯者／Sanity shared block content |
-| cmp-swiper | 圖文輪播 | 非必要；桌面最多三則、手機一則 | 編輯者／Sanity block content |
-| cmp-related-articles | 相關文章輪播 | 非必要；桌面三則、平板兩則、手機一則 | Sanity references |
+| cmp-testimonial | 純文字學員心得與分享者名稱 | 非必要；每頁最多一個區塊、每區 1–12 筆，僅使用已核准公開的內容 | 編輯者／Sanity shared block content |
+| cmp-swiper | 左側圖片輪播與右側固定文字 | 非必要；可重複新增，每區 1–10 張 | 編輯者／Sanity block content |
+| cmp-related-articles | 相關文章輪播 | 非必要；0–8 篇不重複文章，固定在報名後方；桌面三則、平板兩則、手機一則 | Sanity references |
 
 
 ## 三種設計方向
@@ -104,7 +106,7 @@
 
 ### 學員心得分享規劃
 
-學員心得將改用活動詳情與課程詳情共用的 `sharedTestimonialBlock`，加入現有 `courseDetailContent.body` 可排序陣列；每頁可自由新增區塊，每區 1–12 筆並可拖曳排序。前台每筆只顯示心得文字與分享者名稱；內容負責人在輸入 CMS 前完成公開授權與文案核准，不另設逐筆同意開關。欄位、驗證、GROQ 與三款桌機設計見 [學員心得分享共用元件規格](shared-testimonials.md)。共用 Vue 元件原型已隨活動詳情建立，但 production schema、課程 parser 與 body renderer 尚未接入此 type；現有 `courseDetailQuote` 仍是課程引言，不得拿來儲存學員心得。
+學員心得使用活動詳情與課程詳情共用的 `sharedTestimonialBlock`，加入 `courseDetailContent.body` 可排序陣列；每頁最多一個區塊，每區 1–12 筆並可拖曳排序。前台每筆只顯示心得文字與分享者名稱；內容負責人在輸入 CMS 前完成公開授權與文案核准，不另設逐筆同意開關。欄位、驗證與設計見 [學員心得分享共用元件規格](shared-testimonials.md)。共用 schema、GROQ、parser 與 renderer 已於本機接入；production 尚未部署與驗證。現有 `courseDetailQuote` 仍是課程引言，不得拿來儲存學員心得。
 - 行動版維持資料與 DOM 相同順序，觸控目標至少 44px，所有互動須支援鍵盤與 reduced motion。
 
 ## 驗證紀錄
@@ -141,12 +143,13 @@
 - 2026-10-13：新增學員心得共用元件規劃與三款桌機候選稿。Chrome 於 1280px、1440px 檢查六組畫面，皆無水平溢位；C 案方向鍵切換可同步選取、焦點與內容。此階段未修改 production schema、查詢、Vue 元件或測試，手機版待選案後設計。
 - 2026-10-16：手機內容章節標題改用全站共用 `--detail-section-title-size: 26px`，涵蓋介紹、適合對象、圖冊、梯次、課綱、帶領者、影片與報名；Hero 與引言維持原展示字級。390px fixture 頁的 12 個內容 `h2` 均為 `26px / 32.5px`、最右界 368px，長標題可自然換兩行且無水平溢位；完整長頁及淺色長文／深色報名區近照位於 [`review/detail-heading-token-mobile/`](../design/review/detail-heading-token-mobile/README.md)。Web 34 檔／190 項測試、typecheck 與 production build 通過。
 - 2026-10-18：詳情頁頂端加入共用 `DetailBreadcrumb`，呈現「首頁／課程探索／目前課程」；目前頁為帶有 `aria-current="page"` 的純文字。Chrome 以 production 內容 `/course/rebalancing` 檢查 1440 × 900 與 390 × 844，麵包屑、首區及長標題無溢位或錯位；截圖位於 `/private/tmp/course-*-breadcrumb.png`。相關四組詳情測試 37 項、Web 全套 37 檔共 211 項、typecheck 與 production build 均通過；typecheck 僅保留既有 Volar 套件警告。
+- 2026-10-20：完成待修正清單。新增單一共用心得、可重複圖片輪播與頁尾延伸閱讀；About 輪播及 Article 延伸閱讀分別抽成 `SharedImageTextCarousel`、`SharedRelatedArticles`。Chrome CDP 於 1440×1000／390×844 確認無水平溢位、單一 `h1`、內容標題 38px／26px、桌機左圖右文、手機自然堆疊、48px 控制、可見鍵盤焦點、卡片 hover 色彩及 reduced-motion 0s；證據見 [課程內頁修正驗收](../design/review/course-detail-corrections-2026-10-20/README.md)。Web 39 檔／228 項與 Studio 31 項測試、兩端 typecheck 及 production build 均通過；Impeccable detector 為 0 個 anti-pattern，55 項 advisory 均為既有且已核准的頁面角色字級與色值。新版 schema 尚未部署或寫入遠端資料。
 
 ## 待處理與下一階段
 
 - 已加入與文章詳情一致的三層麵包屑，提供「首頁／課程探索／目前課程」導覽。
 - 延後項目：待多門課程完成後台資料建置後，集中檢查長短內容、不同區塊組合與缺省資料的呈現，再決定是否調整前台樣式或新增、拆分 Studio 欄位；目前不阻擋下一個單元。
-- 新增規劃：學員心得桌機與手機版型已確認，共享型別與 Vue 元件原型已建立；下一步新增共用 schema、GROQ／查詢、parser、課程 body renderer，並執行 production 回歸與可復原內容流驗收。完成前不得記為已在課程詳情上線。
+- 本機新增的學員心得、圖片輪播與延伸閱讀仍須部署 Studio schema，並以隔離內容完成草稿不可見、發布、更新、匿名讀取、前台呈現與精確清除後，才可恢復 `verified`。
 - 發布前仍需補真實 iOS／Android 裝置，以及 Safari、Firefox 的交叉驗證；本階段只完成 Chrome headless 驗收。
 
 #### 筆記，不需要執行，可忽略
@@ -154,8 +157,8 @@
 
 #### 待修正項目
 - [x] 最上方補上麵包屑導覽列；2026-10-18 已使用共用 `DetailBreadcrumb` 完成
-[x] 內文標題字級太大，需與其他內頁的大標題字級相同；2026-10-16 手機內容章節 `h2` 已統一引用共用 `--detail-section-title-size: 26px`，桌機與 Hero 展示標題維持既有核准構圖
-[] 桌機的內文區域大標題需要對齊其他頁面
-[] 缺少學員分享的區塊（此區後檯可自由新增，只能有一個），近期活動內頁有相同的元件，用這個就可以
-[] 新增圖片輪播，左：swiper 右：固定文字（後檯可編輯輸入一段文字）
-[] 新增元件：延伸閱讀（同 articles-detail），此區塊為自由新增，固定在最下方，可選取想放的文章或是關聯文章，
+- [x] 內文標題字級太大，需與其他內頁的大標題字級相同；2026-10-16 手機內容章節 `h2` 已統一引用共用 `--detail-section-title-size: 26px`，桌機與 Hero 展示標題維持既有核准構圖
+- [x] 桌機的內文區域大標題需要對齊其他頁面；2026-10-20 已統一引用共用 `--detail-section-title-size: 38px`，Chrome 實測所有內容 `h2` 為 38px
+- [x] 缺少學員分享的區塊（此區後檯可自由新增，只能有一個），近期活動內頁有相同的元件，用這個就可以；2026-10-20 已接入共用 schema、型別、parser 與 `SharedTestimonials`，Studio 驗證每頁最多一個
+- [x] 新增圖片輪播，左：swiper 右：固定文字（功能樣式同關於我們：精選片段 的輪播，請把這個論播拆成共用元件），此區塊為自由新增；2026-10-20 已抽出 `SharedImageTextCarousel`，About 與課程共用，課程可在內容編排中重複新增
+- [x] 新增元件：延伸閱讀（同 articles-detail），此區塊為自由新增，固定在最下方，可選取想放的文章或是關聯文章；2026-10-20 已抽出 `SharedRelatedArticles`，支援人工排序 0–8 篇並固定在報名區後方

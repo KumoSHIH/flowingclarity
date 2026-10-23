@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { ref } from "vue";
 import type { AboutPageContent, AboutPageStatus } from "#shared/types/about";
 import type { AboutRichTextParagraph } from "#shared/types/about";
+import SharedImageTextCarousel from "./SharedImageTextCarousel.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -14,200 +15,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{ retry: [] }>();
-const momentsSection = ref<HTMLElement | null>(null);
-const activeIndex = ref(0);
 const failedImages = ref(new Set<string>());
-const dragStartX = ref<number | null>(null);
-const dragOffset = ref(0);
-const dragging = ref(false);
-const activePointerId = ref<number | null>(null);
-const visualIndex = ref(1);
-const transitionEnabled = ref(true);
-const transitionRunning = ref(false);
-const carouselIsHovered = ref(false);
-const carouselHasFocus = ref(false);
-const carouselIsVisible = ref(true);
-const documentIsVisible = ref(true);
-const reducedMotion = ref(false);
-let autoplayTimer: ReturnType<typeof setInterval> | undefined;
-let transitionTimer: ReturnType<typeof setTimeout> | undefined;
-let carouselObserver: IntersectionObserver | undefined;
-let motionQuery: MediaQueryList | undefined;
-let mounted = false;
-
-const AUTOPLAY_DELAY_MS = 2_000;
-const SLIDE_TRANSITION_MS = 1_500;
-const DRAG_THRESHOLD_PX = 48;
-
-const moments = computed(() => props.content.featuredMoments.items);
-const currentMoment = computed(() => moments.value[activeIndex.value]);
-const renderedMoments = computed(() => {
-  if (moments.value.length < 2) {
-    return moments.value.map((moment, originalIndex) => ({
-      key: moment.id,
-      moment,
-      originalIndex,
-    }));
-  }
-
-  const firstMoment = moments.value[0]!;
-  const lastMoment = moments.value[moments.value.length - 1]!;
-  return [
-    {
-      key: `loop-before-${lastMoment.id}`,
-      moment: lastMoment,
-      originalIndex: moments.value.length - 1,
-    },
-    ...moments.value.map((moment, originalIndex) => ({
-      key: moment.id,
-      moment,
-      originalIndex,
-    })),
-    {
-      key: `loop-after-${firstMoment.id}`,
-      moment: firstMoment,
-      originalIndex: 0,
-    },
-  ];
-});
-const countLabel = computed(
-  () =>
-    `${String(activeIndex.value + 1).padStart(2, "0")} / ${String(moments.value.length).padStart(2, "0")}`,
-);
-const trackStyle = computed(() => ({
-  transform: `translate3d(calc(${-visualIndex.value * 100}% + ${dragOffset.value}px), 0, 0)`,
-}));
-const autoplayCanRun = computed(
-  () =>
-    moments.value.length > 1 &&
-    !carouselIsHovered.value &&
-    !carouselHasFocus.value &&
-    !dragging.value &&
-    carouselIsVisible.value &&
-    documentIsVisible.value &&
-    !reducedMotion.value,
-);
-
-watch(
-  () => moments.value.length,
-  (length) => {
-    if (!length || activeIndex.value >= length) activeIndex.value = 0;
-    visualIndex.value = length > 1 ? activeIndex.value + 1 : 0;
-  },
-  { immediate: true },
-);
-
-watch(autoplayCanRun, syncAutoplay);
-
-function previousMoment() {
-  const length = moments.value.length;
-  if (length < 2 || transitionRunning.value) return;
-  startTransitionTimer();
-  activeIndex.value = (activeIndex.value - 1 + length) % length;
-  visualIndex.value -= 1;
-}
-
-function nextMoment() {
-  const length = moments.value.length;
-  if (length < 2 || transitionRunning.value) return;
-  startTransitionTimer();
-  activeIndex.value = (activeIndex.value + 1) % length;
-  visualIndex.value += 1;
-}
-
-function advanceAutomatically() {
-  nextMoment();
-}
-
-function syncAutoplay() {
-  if (autoplayTimer) clearInterval(autoplayTimer);
-  autoplayTimer = undefined;
-  if (!mounted || !autoplayCanRun.value) return;
-  autoplayTimer = setInterval(advanceAutomatically, AUTOPLAY_DELAY_MS);
-}
-
-function startTransitionTimer() {
-  transitionRunning.value = true;
-  if (transitionTimer) clearTimeout(transitionTimer);
-  transitionTimer = setTimeout(finishTrackTransition, SLIDE_TRANSITION_MS + 50);
-}
-
-function finishTrackTransition() {
-  if (transitionTimer) clearTimeout(transitionTimer);
-  transitionTimer = undefined;
-  if (moments.value.length < 2) {
-    transitionRunning.value = false;
-    return;
-  }
-
-  const lastRealIndex = moments.value.length;
-  if (visualIndex.value !== 0 && visualIndex.value !== lastRealIndex + 1) {
-    transitionRunning.value = false;
-    return;
-  }
-
-  transitionEnabled.value = false;
-  visualIndex.value = visualIndex.value === 0 ? lastRealIndex : 1;
-  requestAnimationFrame(() => {
-    transitionEnabled.value = true;
-    transitionRunning.value = false;
-  });
-}
-
-function onTrackTransitionEnd(event: TransitionEvent) {
-  if (event.propertyName === "transform") finishTrackTransition();
-}
-
-function onPointerDown(event: PointerEvent) {
-  if (
-    transitionRunning.value ||
-    (event.pointerType === "mouse" && event.button !== 0)
-  )
-    return;
-  dragStartX.value = event.clientX;
-  activePointerId.value = event.pointerId;
-  dragging.value = true;
-  (event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId);
-}
-
-function onPointerMove(event: PointerEvent) {
-  if (
-    !dragging.value ||
-    dragStartX.value === null ||
-    activePointerId.value !== event.pointerId
-  )
-    return;
-  dragOffset.value = event.clientX - dragStartX.value;
-}
-
-function finishDrag(event: PointerEvent) {
-  if (!dragging.value || activePointerId.value !== event.pointerId) return;
-  const completedOffset = dragOffset.value;
-  dragging.value = false;
-  dragStartX.value = null;
-  activePointerId.value = null;
-  dragOffset.value = 0;
-  if (Math.abs(completedOffset) < DRAG_THRESHOLD_PX) return;
-  completedOffset < 0 ? nextMoment() : previousMoment();
-}
-
-function onCarouselFocusOut(event: FocusEvent) {
-  const nextTarget = event.relatedTarget;
-  if (
-    !(nextTarget instanceof Node) ||
-    !(event.currentTarget as HTMLElement).contains(nextTarget)
-  ) {
-    carouselHasFocus.value = false;
-  }
-}
-
-function onVisibilityChange() {
-  documentIsVisible.value = document.visibilityState !== "hidden";
-}
-
-function onMotionPreferenceChange(event: MediaQueryListEvent) {
-  reducedMotion.value = event.matches;
-}
 
 function markImageFailed(src: string) {
   failedImages.value = new Set(failedImages.value).add(src);
@@ -223,35 +31,6 @@ function paragraphSegments(paragraph: AboutRichTextParagraph) {
     : [{ key: `${paragraph.key}-text`, text: paragraph.text }];
 }
 
-onMounted(() => {
-  mounted = true;
-  documentIsVisible.value = document.visibilityState !== "hidden";
-  document.addEventListener("visibilitychange", onVisibilityChange);
-
-  motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-  reducedMotion.value = motionQuery.matches;
-  motionQuery.addEventListener("change", onMotionPreferenceChange);
-
-  if ("IntersectionObserver" in window && momentsSection.value) {
-    carouselObserver = new IntersectionObserver(
-      ([entry]) => {
-        carouselIsVisible.value = entry?.isIntersecting ?? true;
-      },
-      { threshold: 0.15 },
-    );
-    carouselObserver.observe(momentsSection.value);
-  }
-  syncAutoplay();
-});
-
-onBeforeUnmount(() => {
-  mounted = false;
-  if (autoplayTimer) clearInterval(autoplayTimer);
-  if (transitionTimer) clearTimeout(transitionTimer);
-  carouselObserver?.disconnect();
-  document.removeEventListener("visibilitychange", onVisibilityChange);
-  motionQuery?.removeEventListener("change", onMotionPreferenceChange);
-});
 </script>
 
 <template>
@@ -382,109 +161,18 @@ onBeforeUnmount(() => {
         </div>
       </section>
 
-      <section
-        ref="momentsSection"
+      <SharedImageTextCarousel
         class="about-moments"
-        aria-labelledby="about-moments-title"
-        @mouseenter="carouselIsHovered = true"
-        @mouseleave="carouselIsHovered = false"
-        @focusin="carouselHasFocus = true"
-        @focusout="onCarouselFocusOut"
+        :items="content.featuredMoments.items"
+        label="片段"
       >
-        <div class="about-moments__heading">
+        <template #heading>
           <p class="about-label">精選片段</p>
-          <h2 id="about-moments-title">
-            {{ content.featuredMoments.heading }}
-          </h2>
-        </div>
-
-        <div
-          v-if="currentMoment"
-          class="about-carousel"
-          role="region"
-          aria-roledescription="carousel"
-          aria-label="精選片段"
-        >
-          <figure
-            class="about-carousel__figure"
-            :class="{ 'is-dragging': dragging }"
-            @pointerdown="onPointerDown"
-            @pointermove="onPointerMove"
-            @pointerup="finishDrag"
-            @pointercancel="finishDrag"
-            @pointerleave="finishDrag"
-          >
-            <div class="about-carousel__stage">
-              <div
-                class="about-carousel__track"
-                :class="{
-                  'is-dragging': dragging,
-                  'is-jumping': !transitionEnabled,
-                }"
-                :style="trackStyle"
-                @transitionend.self="onTrackTransitionEnd"
-              >
-                <div
-                  v-for="(slide, index) in renderedMoments"
-                  :key="slide.key"
-                  class="about-carousel__slide"
-                  :aria-hidden="index !== visualIndex"
-                >
-                  <img
-                    v-if="!imageHasFailed(slide.moment.image.src)"
-                    :src="slide.moment.image.src"
-                    :alt="slide.moment.image.alt"
-                    :width="slide.moment.image.width"
-                    :height="slide.moment.image.height"
-                    :style="{
-                      objectPosition: slide.moment.image.objectPosition,
-                    }"
-                    :loading="slide.originalIndex === 0 ? 'eager' : 'lazy'"
-                    decoding="async"
-                    draggable="false"
-                    @error="markImageFailed(slide.moment.image.src)"
-                  />
-                  <p v-else class="about-image-fallback">
-                    {{ slide.moment.image.alt }}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <figcaption v-if="currentMoment.caption">
-              {{ currentMoment.caption }}
-            </figcaption>
-          </figure>
-
-          <div class="about-carousel__controls">
-            <button
-              type="button"
-              :disabled="moments.length < 2"
-              :aria-disabled="transitionRunning ? 'true' : undefined"
-              aria-label="上一張片段"
-              @click="previousMoment"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="m15 5-7 7 7 7M8 12h12" />
-              </svg>
-            </button>
-            <span aria-live="off" aria-atomic="true">{{ countLabel }}</span>
-            <button
-              type="button"
-              :disabled="moments.length < 2"
-              :aria-disabled="transitionRunning ? 'true' : undefined"
-              aria-label="下一張片段"
-              @click="nextMoment"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="m9 5 7 7-7 7M4 12h12" />
-              </svg>
-            </button>
-          </div>
-          <div class="about-carousel__copy about-copy">
-            <p
-              v-for="paragraph in content.featuredMoments.body"
-              :key="paragraph.key"
-            >
+          <h2 id="about-moments-title">{{ content.featuredMoments.heading }}</h2>
+        </template>
+        <template #copy>
+          <div class="about-copy">
+            <p v-for="paragraph in content.featuredMoments.body" :key="paragraph.key">
               <component
                 :is="segment.href ? 'a' : 'span'"
                 v-for="segment in paragraphSegments(paragraph)"
@@ -500,11 +188,9 @@ onBeforeUnmount(() => {
               </component>
             </p>
           </div>
-        </div>
-        <div v-else class="about-moments__empty">
-          <p>精選片段仍在整理中。</p>
-        </div>
-      </section>
+        </template>
+        <template #empty><p>精選片段仍在整理中。</p></template>
+      </SharedImageTextCarousel>
 
       <section class="about-contact" aria-labelledby="about-contact-title">
         <div class="about-contact__copy">
@@ -760,128 +446,8 @@ onBeforeUnmount(() => {
 }
 
 .about-moments {
-  display: grid;
-  grid-template-columns: minmax(0, 56%) minmax(0, 44%);
-  grid-template-areas:
-    "media heading"
-    "media copy"
-    "media controls";
-  background: var(--color-paper);
-}
-
-.about-moments__heading {
-  grid-area: heading;
-  align-self: end;
-  padding: 104px var(--about-edge) 42px clamp(44px, 5vw, 88px);
-}
-
-.about-carousel {
-  display: contents;
-}
-
-.about-carousel__figure {
-  grid-area: media;
-  min-width: 0;
-  cursor: grab;
-  touch-action: pan-y;
-  user-select: none;
-}
-
-.about-carousel__figure.is-dragging {
-  cursor: grabbing;
-}
-
-.about-carousel__stage {
-  aspect-ratio: 3 / 2;
-}
-
-.about-carousel__track {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  transition: transform 1500ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.about-carousel__track.is-dragging,
-.about-carousel__track.is-jumping {
-  transition: none;
-}
-
-.about-carousel__slide {
-  width: 100%;
-  height: 100%;
-  flex: 0 0 100%;
-}
-
-.about-carousel__figure figcaption {
-  min-height: 76px;
-  padding: 20px var(--about-edge) 20px;
-  color: var(--about-muted);
-  font-size: 12px;
-  line-height: 1.8;
-  letter-spacing: 0.05em;
-}
-
-.about-carousel__copy {
-  grid-area: copy;
-  max-width: 36em;
-  padding: 0 var(--about-edge) 48px clamp(44px, 5vw, 88px);
-}
-
-.about-carousel__controls {
-  display: flex;
-  grid-area: controls;
-  align-items: center;
-  gap: 22px;
-  padding: 0 var(--about-edge) 104px clamp(44px, 5vw, 88px);
-}
-
-.about-carousel__controls button {
-  display: grid;
-  width: 48px;
-  height: 48px;
-  place-items: center;
-  padding: 0;
-  color: var(--color-ink);
-  background: transparent;
-  border: 1px solid color-mix(in srgb, var(--color-ink) 35%, transparent);
-  border-radius: 0;
-  cursor: pointer;
-}
-
-.about-carousel__controls button:disabled {
-  cursor: not-allowed;
-  opacity: 0.34;
-}
-
-.about-carousel__controls button[aria-disabled="true"] {
-  cursor: wait;
-  opacity: 0.6;
-}
-
-.about-carousel__controls svg {
-  width: 22px;
-  fill: none;
-  stroke: currentcolor;
-  stroke-width: 1.5;
-}
-
-.about-carousel__controls span {
-  min-width: 64px;
-  color: var(--about-muted);
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  text-align: center;
-}
-
-.about-moments__empty {
-  grid-area: media / media / copy / copy;
-  display: grid;
-  min-height: 340px;
-  place-items: center;
-  padding: 48px var(--about-edge);
-  color: var(--about-muted);
-  background: var(--color-sand);
+  --carousel-edge: var(--about-edge);
+  --carousel-muted: var(--about-muted);
 }
 
 .about-contact {
@@ -1092,43 +658,6 @@ onBeforeUnmount(() => {
     aspect-ratio: 4 / 3;
   }
 
-  .about-moments {
-    display: block;
-  }
-
-  .about-moments__heading {
-    padding: 80px var(--about-edge) 36px;
-  }
-
-  .about-carousel {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .about-carousel__figure {
-    order: 1;
-  }
-
-  .about-carousel__stage {
-    aspect-ratio: 4 / 3;
-  }
-
-  .about-carousel__figure figcaption {
-    min-height: 0;
-    padding: 18px var(--about-edge) 0;
-  }
-
-  .about-carousel__copy {
-    order: 3;
-    max-width: none;
-    padding: 32px var(--about-edge) 84px;
-  }
-
-  .about-carousel__controls {
-    order: 2;
-    padding: 24px var(--about-edge) 0;
-  }
-
   .about-contact {
     margin-top: 50px;
     min-height: 0;
@@ -1166,9 +695,4 @@ onBeforeUnmount(() => {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .about-carousel__track {
-    transition-duration: 1ms;
-  }
-}
 </style>

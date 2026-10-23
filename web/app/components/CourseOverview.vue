@@ -5,6 +5,7 @@ import {
   onBeforeUnmount,
   onMounted,
   ref,
+  watch,
   type ComponentPublicInstance,
 } from "vue";
 import type {
@@ -62,6 +63,8 @@ const hasCourses = computed(() => totalCourses.value > 0);
 const activeCategorySlug = ref("");
 const categorySections = new Map<string, HTMLElement>();
 let categoryObserver: IntersectionObserver | null = null;
+let isMounted = false;
+let hasAppliedInitialHash = false;
 
 const setCategorySection = (
   element: Element | ComponentPublicInstance | null,
@@ -69,7 +72,10 @@ const setCategorySection = (
   if (element instanceof HTMLElement) categorySections.set(element.id, element);
 };
 
-onMounted(async () => {
+async function setupCategoryNavigation() {
+  if (!isMounted) return;
+  categoryObserver?.disconnect();
+  categoryObserver = null;
   if (props.status !== "ready" || !hasCourses.value) return;
 
   await nextTick();
@@ -79,6 +85,11 @@ onMounted(async () => {
   )
     ? requestedSlug
     : (orderedCategories.value[0]?.slug ?? "");
+
+  if (requestedSlug && activeCategorySlug.value === requestedSlug && !hasAppliedInitialHash) {
+    categorySections.get(requestedSlug)?.scrollIntoView({ block: "start" });
+    hasAppliedInitialHash = true;
+  }
 
   categoryObserver = new IntersectionObserver(
     (entries) => {
@@ -96,9 +107,25 @@ onMounted(async () => {
   );
 
   categorySections.forEach((section) => categoryObserver?.observe(section));
+}
+
+onMounted(() => {
+  isMounted = true;
+  void setupCategoryNavigation();
 });
 
-onBeforeUnmount(() => categoryObserver?.disconnect());
+watch(
+  [
+    () => props.status,
+    () => orderedCategories.value.map((category) => category.slug).join("|"),
+  ],
+  () => void setupCategoryNavigation(),
+);
+
+onBeforeUnmount(() => {
+  isMounted = false;
+  categoryObserver?.disconnect();
+});
 </script>
 
 <template>
@@ -235,7 +262,7 @@ onBeforeUnmount(() => categoryObserver?.disconnect());
 <style scoped>
 .course-directory {
   display: grid;
-  grid-template-columns: minmax(300px, 30%) minmax(0, 70%);
+  grid-template-columns: var(--split-layout-rail-width) minmax(0, 1fr);
   align-items: start;
   color: var(--color-ink);
   background: var(--color-paper);
@@ -306,6 +333,7 @@ onBeforeUnmount(() => categoryObserver?.disconnect());
 }
 
 .course-directory__content {
+  width: 100%;
   min-width: 0;
   padding-top: 30px;
 }
