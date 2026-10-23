@@ -41,7 +41,7 @@
 
 共用 CSS 只定義 `.detail-*` 的排版、字級角色、1px 分隔線、焦點與狀態；各頁以 modifier 或 CSS custom properties 決定構圖。沿用 `main.css` 的 paper、sand、ink、clay、saffron、persimmon、night、字體與控制項 token，不把三款決策稿的特殊構圖升格為全站規則。
 
-活動、執行師與文章等內容詳情頁依 [`DESIGN.md`](../../DESIGN.md) 沿用桌機閱讀字級：`h1` 為 `clamp(44px, 4.8vw, 72px)`、摘要 `17px / 2`、章節 `h2` 為 `38px / 1.4`、正文 `16px / 2.1` 且最寬約 `68ch`；所有內容詳情頁的手機內容章節 `h2` 統一為 `26px`。課程桌機保留已核准的展示尺寸，但手機同樣使用 26px。桌機 fixed／sticky facts rail 不使用 `border-right`，只以表面色、留白及欄內分隔建立層級。活動與執行師詳情共用 `1500px` 置中 hero 外框與 `1500px` 雙欄起點；執行師詳情不限制最外層右界，且其桌機 banner 不使用活動詳情的水平 padding，手機則同為 `24px`。單欄斷點仍可保留底線與項目分隔。
+活動、執行師與文章等內容詳情頁依 [`DESIGN.md`](../../DESIGN.md) 沿用固定閱讀字級：桌機 `h1` 為 `72px`、摘要 `17px / 2`、章節 `h2` 為 `38px / 1.4`、正文 `16px / 2.1`；`<= 1023px` 的 `h1` 為 `42px`、摘要與正文為 `16px`、內容章節 `h2` 為 `26px`，正文最寬約 `68ch`。課程桌機保留已核准的展示尺寸，但手機同樣使用 26px。桌機 fixed／sticky facts rail 不使用 `border-right`，只以表面色、留白及欄內分隔建立層級。活動與執行師詳情共用 `1500px` 置中 hero 外框與 `1500px` 雙欄起點；執行師詳情不限制最外層右界，且其桌機 banner 不使用活動詳情的水平 padding，手機則同為 `24px`。單欄斷點仍可保留底線與項目分隔。
 
 相似詳情元件也沿用同一 rail spacing：桌機資料列 `26px clamp(28px, 3.2vw, 50px)`、操作區 `34px clamp(28px, 3.2vw, 50px)`；`<= 1023px` 資料列 `22px 24px`、操作區 `24px`。連續閱讀章節可依內容使用 margin 分段，不以 `border-top` 或額外 `padding-top` 重複切割視覺。
 
@@ -102,4 +102,4 @@
 - [x] banner 裡的圖片 移除 min-height；2026-10-22 已改為圖片自然高度並通過回歸測試，待桌機／手機比例與版面位移驗證
 - [x] .event-detail__fact dd 手機 font-size: 16px；2026-10-22 已於 `<= 560px` 實作並通過回歸測試，待手機畫面驗證
 - [] 內容區塊 例如： event-detail__section event-detail__quote .shared-testimonials ... 希望 padding 統一，請再檢查電腦和手機版
-- [] 
+- []

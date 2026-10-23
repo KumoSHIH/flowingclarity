@@ -355,7 +355,7 @@ onBeforeUnmount(() => {
   max-width: 5em;
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(50px, 7vw, 60px);
+  font-size: 60px;
   font-weight: 400;
   line-height: 1.05;
   letter-spacing: 0.05em;
@@ -424,7 +424,7 @@ onBeforeUnmount(() => {
   margin: 0;
   padding: 10px 0;
   font-family: var(--font-display);
-  font-size: clamp(24px, 2vw, 30px);
+  font-size: 30px;
   font-weight: 400;
   line-height: 1.35;
   letter-spacing: 0.035em;
@@ -481,7 +481,7 @@ onBeforeUnmount(() => {
 }
 
 .course-item:is(:hover, :focus-visible) .course-item__title {
-  font-size: clamp(24px, 2.7vw, 36px);
+  font-size: 36px;
 }
 
 .course-group__empty {
@@ -512,7 +512,7 @@ onBeforeUnmount(() => {
   max-width: 12em;
   margin: 0 0 38px;
   font-family: var(--font-display);
-  font-size: clamp(40px, 5vw, 78px);
+  font-size: 78px;
   font-weight: 400;
   line-height: 1.45;
   letter-spacing: 0.035em;
@@ -595,7 +595,17 @@ onBeforeUnmount(() => {
   }
 
   .course-group__heading h2 {
-    font-size: clamp(52px, 12vw, 76px);
+    font-size: 52px;
+  }
+
+  .course-item__title,
+  .course-item:is(:hover, :focus-visible) .course-item__title {
+    font-size: 34px;
+  }
+
+  .course-ending h2,
+  .course-state h2 {
+    font-size: 40px;
   }
 
   .course-rows {
@@ -643,9 +653,6 @@ onBeforeUnmount(() => {
     padding: 24px;
   }
 
-  .course-item__title {
-    font-size: clamp(26px, 8.2vw, 34px);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

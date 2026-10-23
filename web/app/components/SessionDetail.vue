@@ -466,7 +466,7 @@ function opensNewTab(href?: string): boolean {
   color: var(--color-night);
   background: var(--color-persimmon);
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 400;
   text-decoration: none;
 }
 .session-detail__booking span {

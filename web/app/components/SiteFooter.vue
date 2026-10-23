@@ -215,7 +215,7 @@ const paths = [
 .site-footer__closing {
   max-width: 13em;
   margin: 0;
-  font: 400 clamp(31px, 3.4vw, 52px)/1.35 var(--font-display);
+  font: 400 52px/1.35 var(--font-display);
   color: var(--color-paper);
 }
 .site-footer__content {
@@ -224,7 +224,7 @@ const paths = [
 }
 .site-footer__statement {
   color: var(--color-paper);
-  font: 400 clamp(48px, 5vw, 92px)/1.18 var(--font-display);
+  font: 400 92px/1.18 var(--font-display);
   letter-spacing: 3.6px;
   text-wrap: balance;
 }
@@ -405,7 +405,7 @@ const paths = [
     padding-inline: 24px;
   }
   .site-footer__statement {
-    font-size: clamp(36px, 8.4vw, 47px);
+    font-size: 36px;
     line-height: 1.5;
   }
   .site-footer__bottom {

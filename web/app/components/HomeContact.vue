@@ -3,7 +3,7 @@
     <div class="relative overflow-hidden bg-[#766254] px-7 py-20 text-[#f8f5ef] md:px-[clamp(56px,8vw,140px)] md:py-36">
       <div class="relative grid gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-20">
         <div>
-          <h2 id="contact-title" class="max-w-[760px] font-display text-[clamp(38px,5.5vw,80px)] font-medium leading-[1.4] tracking-[0.04em]">
+          <h2 id="contact-title" class="max-w-[760px] font-display text-[38px] font-medium leading-[1.4] tracking-[0.04em] lg:text-[80px]">
             留一段時間，<br>好好照顧自己。
           </h2>
         </div>

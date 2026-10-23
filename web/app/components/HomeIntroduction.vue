@@ -21,7 +21,7 @@
     </div>
 
     <div class="relative z-20 max-w-[620px] md:py-12">
-      <h2 id="about-title" class="font-display text-[clamp(34px,4vw,62px)] font-medium leading-[1.45] tracking-[0.04em]">
+      <h2 id="about-title" class="font-display text-[34px] font-medium leading-[1.45] tracking-[0.04em] lg:text-[62px]">
         讓身體被好好聽見，<br class="hidden sm:block">讓心有地方安放。
       </h2>
       <p class="mb-0 mt-10 flex items-center gap-4 text-xs font-semibold tracking-[0.18em] text-clay">

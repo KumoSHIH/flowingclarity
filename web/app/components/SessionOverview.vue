@@ -340,7 +340,7 @@ watch(
   max-width: 6em;
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(48px, 4.2vw, 66px);
+  font-size: 60px;
   font-weight: 400;
   line-height: 1.18;
   letter-spacing: 0.035em;
@@ -415,7 +415,7 @@ watch(
   padding-left: 14px;
   color: var(--color-oxblood);
   border-bottom-color: var(--color-oxblood);
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .session-filters__options button[aria-pressed="true"]::before {
@@ -462,7 +462,7 @@ watch(
 .session-results__header h2 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(30px, 2.7vw, 42px);
+  font-size: 42px;
   font-weight: 400;
   letter-spacing: 0.035em;
 }
@@ -507,7 +507,7 @@ watch(
 .practitioner-row h3 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(27px, 2vw, 34px);
+  font-size: 28px;
   font-weight: 500;
   line-height: 1.25;
   letter-spacing: 0.035em;
@@ -710,7 +710,7 @@ watch(
   }
 
   .session-directory__intro h1 {
-    font-size: clamp(44px, 10vw, 64px);
+    font-size: 48px;
   }
 
   .session-filters__options {
@@ -749,7 +749,6 @@ watch(
 
   .session-directory__intro h1 {
     max-width: 5em;
-    font-size: clamp(48px, 14vw, 58px);
     line-height: 1.14;
   }
 
@@ -801,7 +800,7 @@ watch(
   }
 
   .session-results__header h2 {
-    font-size: clamp(30px, 9vw, 36px);
+    font-size: 30px;
   }
 
   .session-results__header {
@@ -821,7 +820,7 @@ watch(
 
   .practitioner-row h3 {
     min-width: 0;
-    font-size: clamp(27px, 8vw, 32px);
+    font-size: 27px;
     overflow-wrap: anywhere;
   }
 

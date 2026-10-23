@@ -46,7 +46,7 @@ const courses = [
         <div>
           <h2
             id="courses-title"
-            class="font-display text-[clamp(40px,4.8vw,72px)] font-medium tracking-[0.05em] text-center"
+            class="text-center font-display text-[40px] font-medium tracking-[0.05em] lg:text-[72px]"
           >
             近期課程
           </h2>

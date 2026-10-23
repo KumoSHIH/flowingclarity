@@ -18,7 +18,7 @@ colors:
 typography:
   display:
     fontFamily: '"Noto Serif TC", "Songti TC", "PMingLiU", serif'
-    fontSize: "clamp(50px, 5vw, 56px)"
+    fontSize: "56px"
     fontWeight: 400
     lineHeight: 1.2
     letterSpacing: "0.06em"
@@ -30,7 +30,7 @@ typography:
     letterSpacing: "0.05em"
   lead:
     fontFamily: '"BIZ UDPGothic", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif'
-    fontSize: "clamp(14px, 1.05vw, 17px)"
+    fontSize: "17px"
     fontWeight: 500
     lineHeight: 1.95
     letterSpacing: "0.06em"
@@ -42,7 +42,7 @@ typography:
     letterSpacing: "0.18em"
   detailHero:
     fontFamily: '"Noto Serif TC", "Songti TC", "PMingLiU", serif'
-    fontSize: "clamp(44px, 4.8vw, 72px)"
+    fontSize: "72px"
     fontWeight: 400
     lineHeight: 1.22
     letterSpacing: "0.025em"
@@ -73,6 +73,8 @@ components:
     padding: "0 clamp(28px, 3vw, 48px)"
     height: "clamp(72px, 8.4vh, 92px)"
     maxWidth: "360px"
+    fontSize: "18px"
+    fontWeight: 400
   button-primary-hover:
     backgroundColor: "#c94f34"
     textColor: "{colors.warm-white}"
@@ -104,11 +106,11 @@ components:
 
 ## Typography
 
-標題使用具人文感的繁中襯線字體，內文、導覽與控制項使用清楚的東亞無襯線字體。展示標題只用於首屏；一般區塊標題約為 `clamp(34px, 4–4.8vw, 72px)`，正文保持寬鬆行距並控制在約 65–75 個半形字元內。
+標題使用具人文感的繁中襯線字體，內文、導覽與控制項使用清楚的東亞無襯線字體。展示標題只用於首屏；文字字級採桌面與 `<= 1023px` 兩組固定值，不使用 `clamp()`，正文保持寬鬆行距並控制在約 65–75 個半形字元內。
 
 **The Quiet Rhythm Rule.** 中文標題不使用全大寫效果；以留白、換行與字距建立節奏，避免額外裝飾字型。
 
-**The Detail Continuity Rule.** 活動、執行師與文章等內容詳情頁沿用桌機閱讀字級：`h1` 為 `clamp(44px, 4.8vw, 72px)`、摘要 `17px / 2`、章節 `h2` 為 `38px / 1.4`、正文 `16px / 2.1` 且最寬約 `68ch`。活動與執行師詳情的 hero 共用桌機 `84px / 84px`、手機 `68px / 76px` 的上下內距；活動詳情桌機保留水平 `clamp(28px, 6vw, 116px)`，執行師詳情桌機 banner 不設左右 padding，兩頁手機皆使用 `24px`。主要內容共用桌機 `76px clamp(48px, 7vw, 104px)`、手機 `64px 24px`，不得再用內層置中容器改變內容左緣。所有內容詳情頁在手機版統一使用 `26px` 的內容章節 `h2` 與 `16px` 正文；課程桌機保留已核准的章節展示尺寸，不套用 38px，但手機同樣收斂為 26px。新內容詳情頁不得另創相近手機尺寸；頁面首區展示標題與引言式 blockquote 不視為內容章節 `h2`。
+**The Detail Continuity Rule.** 活動、執行師與文章等內容詳情頁沿用固定閱讀字級：桌機 `h1` 為 `72px`、摘要 `17px / 2`、章節 `h2` 為 `38px / 1.4`、正文 `16px / 2.1`；`<= 1023px` 的 `h1` 為 `42px`、摘要與正文為 `16px`、內容章節 `h2` 為 `26px`，正文最寬約 `68ch`。活動與執行師詳情的 hero 共用桌機 `84px / 84px`、手機 `68px / 76px` 的上下內距；活動詳情桌機保留水平 `clamp(28px, 6vw, 116px)`，執行師詳情桌機 banner 不設左右 padding，兩頁手機皆使用 `24px`。主要內容共用桌機 `76px clamp(48px, 7vw, 104px)`、手機 `64px 24px`，不得再用內層置中容器改變內容左緣。課程桌機保留已核准的章節展示尺寸，不套用 38px，但手機同樣收斂為 26px。新內容詳情頁不得另創相近手機尺寸；頁面首區展示標題與引言式 blockquote 不視為內容章節 `h2`。
 
 ## Layout
 
@@ -134,7 +136,7 @@ components:
 
 ### Buttons
 
-大型主要按鈕為柿橘底、暖白字、直角矩形，最小高度為 `clamp(72px, 8.4vh, 92px)`；hover 加深為 `#c94f34`，鍵盤焦點使用 2px 陶土色外框與 6px offset。次要行動採底線文字連結，至少 48px 高。
+大型主要按鈕為柿橘底、暖白字、直角矩形，文字為桌機 `18px / 400`、`<= 1023px` 為 `14px / 400`，最小高度為 `clamp(72px, 8.4vh, 92px)`；hover 加深為 `#c94f34`，鍵盤焦點使用 2px 陶土色外框與 6px offset。所有按鈕標籤使用一般字重，不以粗體建立層級；次要行動採底線文字連結，至少 48px 高。
 
 大型主要按鈕寬度可依容器縮小，但不得超過 `360px`。可點擊內容標題在 hover 與 `focus-visible` 時統一改為 `clay`；可同時使用底線、影像縮放或箭頭位移補強回饋，但不得另用相近棕色建立同角色變體。
 

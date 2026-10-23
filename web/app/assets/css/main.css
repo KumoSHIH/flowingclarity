@@ -29,15 +29,15 @@
 
 /* Shared typography and large primary action. Layout margins belong to consumers. */
 :root {
-  --display-title-size: clamp(50px, 5vw, 56px);
+  --display-title-size: 56px;
   --display-title-weight: 400;
   --display-title-leading: 1.2;
-  --lead-text-size: clamp(14px, 1.05vw, 17px);
+  --lead-text-size: 17px;
   --lead-text-weight: 500;
   --lead-text-leading: 1.95;
   --text-tracking: 0.06em;
   --lead-text-inverse: #e9ded7;
-  --button-primary-size: clamp(17px, 1.4vw, 22px);
+  --button-primary-size: 18px;
   --button-primary-height: clamp(72px, 8.4vh, 92px);
   --button-primary-max-width: 360px;
   --button-primary-padding: clamp(28px, 3vw, 48px);
@@ -50,7 +50,7 @@
   --interactive-title-hover: var(--color-clay);
   --directory-filter-font-size: 16px;
   --directory-filter-count-size: 12px;
-  --detail-hero-title-size: clamp(44px, 4.8vw, 72px);
+  --detail-hero-title-size: 72px;
   --detail-hero-padding-block-start: 84px;
   --detail-hero-padding-block-end: 84px;
   --detail-hero-padding-inline: clamp(28px, 6vw, 116px);
@@ -103,6 +103,7 @@
     color: var(--button-primary-text);
     background: var(--color-persimmon);
     font-size: var(--button-primary-size);
+    font-weight: 400;
     letter-spacing: var(--button-primary-tracking);
     text-decoration: none;
     cursor: pointer;
@@ -137,7 +138,7 @@
   :root {
     --display-title-size: 42px;
     --lead-text-size: 14px;
-    --button-primary-size: 16px;
+    --button-primary-size: 14px;
     --button-primary-padding: 24px;
     --detail-hero-title-size: 42px;
     --detail-hero-padding-block-start: 68px;
@@ -166,6 +167,10 @@ html {
 body {
   margin: 0;
   color: var(--color-ink);
+}
+
+button {
+  font-weight: 400;
 }
 
 .home-page {

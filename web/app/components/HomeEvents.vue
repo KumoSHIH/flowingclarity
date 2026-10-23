@@ -40,7 +40,7 @@ const events = [
         <div>
           <h2
             id="events-title"
-            class="font-display text-[clamp(40px,4.8vw,72px)] font-medium tracking-[0.05em]"
+            class="font-display text-[40px] font-medium tracking-[0.05em] lg:text-[72px]"
           >
             近期活動
           </h2>

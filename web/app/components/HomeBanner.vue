@@ -332,7 +332,7 @@ function selectCategory(id: string, event: MouseEvent) {
 }
 
 .atlas-category__copy strong {
-  font-size: clamp(22px, 2.2vw, 36px);
+  font-size: 36px;
   line-height: 1;
   letter-spacing: 0.06em;
 }

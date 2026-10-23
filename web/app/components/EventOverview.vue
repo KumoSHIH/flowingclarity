@@ -581,7 +581,7 @@ onBeforeUnmount(() => {
 .event-collection__heading h2 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(50px, 7vw, 60px);
+  font-size: 60px;
   font-weight: 400;
   line-height: 1.05;
   letter-spacing: 0.05em;
@@ -597,7 +597,7 @@ onBeforeUnmount(() => {
   gap: 22px;
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(28px, 2.5vw, 38px);
+  font-size: 38px;
   font-weight: 400;
   line-height: 1.2;
   letter-spacing: 0.05em;
@@ -661,7 +661,7 @@ onBeforeUnmount(() => {
 .event-row__day {
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: clamp(42px, 4vw, 50px);
+  font-size: 50px;
   line-height: 0.95;
   letter-spacing: 0;
   font-variant-numeric: tabular-nums;
@@ -684,7 +684,7 @@ onBeforeUnmount(() => {
 .event-row__copy h4 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(20px, 1.6vw, 24px);
+  font-size: 24px;
   font-weight: 500;
   line-height: 1.45;
   letter-spacing: 0.04em;
@@ -846,7 +846,7 @@ onBeforeUnmount(() => {
   max-width: 12em;
   margin: 0 0 30px;
   font-family: var(--font-display);
-  font-size: clamp(40px, 5vw, 60px);
+  font-size: 60px;
   font-weight: 400;
   line-height: 1.35;
   letter-spacing: 0.04em;
@@ -939,7 +939,23 @@ onBeforeUnmount(() => {
   }
 
   .event-collection__heading h2 {
-    font-size: clamp(44px, 10vw, 64px);
+    font-size: 44px;
+  }
+
+  .event-month h3 {
+    font-size: 28px;
+  }
+
+  .event-row__day {
+    font-size: 42px;
+  }
+
+  .event-row__copy h4 {
+    font-size: 20px;
+  }
+
+  .event-state h2 {
+    font-size: 40px;
   }
 
   .event-row {

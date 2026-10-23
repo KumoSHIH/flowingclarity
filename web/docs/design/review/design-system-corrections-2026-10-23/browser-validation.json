@@ -1,0 +1,1053 @@
+{
+  "generatedAt": "2026-10-23T03:44:04.008Z",
+  "report": [
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "name": "home",
+      "title": "Flowing Clarity",
+      "path": "/",
+      "overflow": 0,
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "讓身心，慢慢回到自己的節奏。",
+          "fontSize": "56px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "讓身體被好好聽見，讓心有地方安放。",
+          "fontSize": "62px",
+          "fontWeight": "500",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "近期活動",
+          "fontSize": "72px",
+          "fontWeight": "500",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "秋日靜心練習",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "身體書寫之夜",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "一杯茶的慢時光",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "近期課程",
+          "fontSize": "72px",
+          "fontWeight": "500",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "回到身體的呼吸練習",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "溫柔觸碰按摩課",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "回到身體的呼吸練習",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "回到身體的呼吸練習",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "留一段時間，好好照顧自己。",
+          "fontSize": "80px",
+          "fontWeight": "500",
+          "color": "rgb(248, 245, 239)"
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "a",
+          "text": "探索主題課程",
+          "fontSize": "18px",
+          "fontWeight": "400",
+          "color": "rgb(255, 247, 241)"
+        }
+      ],
+      "boldButtonDescendants": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "name": "course",
+      "title": "Flowing Clarity",
+      "path": "/course",
+      "overflow": 0,
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "課程探索",
+          "fontSize": "60px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "愛身體",
+          "fontSize": "60px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "身心再平衡按摩",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(247, 246, 244)"
+        },
+        {
+          "tag": "h2",
+          "text": "撫慰心",
+          "fontSize": "60px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "究生命",
+          "fontSize": "60px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "展現美",
+          "fontSize": "60px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "有任何疑問需要協助嗎",
+          "fontSize": "78px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        }
+      ],
+      "buttons": [],
+      "boldButtonDescendants": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "name": "events",
+      "title": "近期活動｜Flowing Clarity",
+      "path": "/events",
+      "overflow": 0,
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "近期活動",
+          "fontSize": "60px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "即將到來",
+          "fontSize": "60px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "十一月 2026",
+          "fontSize": "38px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "a",
+          "text": "前往報名",
+          "fontSize": "18px",
+          "fontWeight": "400",
+          "color": "rgb(255, 247, 241)"
+        }
+      ],
+      "boldButtonDescendants": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "name": "session",
+      "title": "個案諮詢｜Flowing Clarity",
+      "path": "/session",
+      "overflow": 0,
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "個案諮詢",
+          "fontSize": "60px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "尋找執行師",
+          "fontSize": "42px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "謝照芬 Amoda",
+          "fontSize": "28px",
+          "fontWeight": "500",
+          "color": "rgb(56, 52, 46)"
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "button",
+          "text": "台北",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "button",
+          "text": "台中",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "button",
+          "text": "高雄",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "button",
+          "text": "再平衡身心按摩",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "button",
+          "text": "生物動能頭薦骨",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        }
+      ],
+      "boldButtonDescendants": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "name": "articles",
+      "title": "文章分享｜Flowing Clarity",
+      "path": "/articles",
+      "overflow": 0,
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "文章分享",
+          "fontSize": "76px",
+          "fontWeight": "400",
+          "color": "rgb(57, 38, 24)"
+        },
+        {
+          "tag": "h2",
+          "text": "搜尋結果",
+          "fontSize": "32px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "生命的源頭",
+          "fontSize": "26px",
+          "fontWeight": "500",
+          "color": "rgb(57, 38, 24)"
+        },
+        {
+          "tag": "h3",
+          "text": "心與中線",
+          "fontSize": "26px",
+          "fontWeight": "500",
+          "color": "rgb(57, 38, 24)"
+        },
+        {
+          "tag": "h3",
+          "text": "身體與動力",
+          "fontSize": "26px",
+          "fontWeight": "500",
+          "color": "rgb(57, 38, 24)"
+        }
+      ],
+      "buttons": [],
+      "boldButtonDescendants": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 1023,
+      "name": "home",
+      "title": "Flowing Clarity",
+      "path": "/",
+      "overflow": 0,
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "讓身心，慢慢回到自己的節奏。",
+          "fontSize": "42px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "讓身體被好好聽見，讓心有地方安放。",
+          "fontSize": "34px",
+          "fontWeight": "500",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "近期活動",
+          "fontSize": "40px",
+          "fontWeight": "500",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "秋日靜心練習",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "身體書寫之夜",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "一杯茶的慢時光",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "近期課程",
+          "fontSize": "40px",
+          "fontWeight": "500",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "回到身體的呼吸練習",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "溫柔觸碰按摩課",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "回到身體的呼吸練習",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "回到身體的呼吸練習",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "留一段時間，好好照顧自己。",
+          "fontSize": "38px",
+          "fontWeight": "500",
+          "color": "rgb(248, 245, 239)"
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "button",
+          "text": "",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(57, 38, 24)"
+        },
+        {
+          "tag": "a",
+          "text": "探索主題課程",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "color": "rgb(255, 247, 241)"
+        }
+      ],
+      "boldButtonDescendants": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 1023,
+      "name": "course",
+      "title": "Flowing Clarity",
+      "path": "/course",
+      "overflow": 0,
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "課程探索",
+          "fontSize": "44px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "愛身體",
+          "fontSize": "52px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "身心再平衡按摩",
+          "fontSize": "34px",
+          "fontWeight": "400",
+          "color": "rgb(247, 246, 244)"
+        },
+        {
+          "tag": "h2",
+          "text": "撫慰心",
+          "fontSize": "52px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "究生命",
+          "fontSize": "52px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "展現美",
+          "fontSize": "52px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "有任何疑問需要協助嗎",
+          "fontSize": "40px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "button",
+          "text": "",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(57, 38, 24)"
+        }
+      ],
+      "boldButtonDescendants": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 1023,
+      "name": "events",
+      "title": "近期活動｜Flowing Clarity",
+      "path": "/events",
+      "overflow": 0,
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "近期活動",
+          "fontSize": "44px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "即將到來",
+          "fontSize": "44px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "十一月 2026",
+          "fontSize": "28px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "button",
+          "text": "",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(57, 38, 24)"
+        },
+        {
+          "tag": "a",
+          "text": "前往報名",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "color": "rgb(255, 247, 241)"
+        }
+      ],
+      "boldButtonDescendants": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 1023,
+      "name": "session",
+      "title": "個案諮詢｜Flowing Clarity",
+      "path": "/session",
+      "overflow": 0,
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "個案諮詢",
+          "fontSize": "48px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "尋找執行師",
+          "fontSize": "42px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "謝照芬 Amoda",
+          "fontSize": "28px",
+          "fontWeight": "500",
+          "color": "rgb(56, 52, 46)"
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "button",
+          "text": "",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(57, 38, 24)"
+        },
+        {
+          "tag": "button",
+          "text": "台北",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "button",
+          "text": "台中",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "button",
+          "text": "高雄",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "button",
+          "text": "再平衡身心按摩",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "button",
+          "text": "生物動能頭薦骨",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        }
+      ],
+      "boldButtonDescendants": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 1023,
+      "name": "articles",
+      "title": "文章分享｜Flowing Clarity",
+      "path": "/articles",
+      "overflow": 0,
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "文章分享",
+          "fontSize": "46px",
+          "fontWeight": "400",
+          "color": "rgb(57, 38, 24)"
+        },
+        {
+          "tag": "h2",
+          "text": "搜尋結果",
+          "fontSize": "24px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "生命的源頭",
+          "fontSize": "22px",
+          "fontWeight": "500",
+          "color": "rgb(57, 38, 24)"
+        },
+        {
+          "tag": "h3",
+          "text": "心與中線",
+          "fontSize": "22px",
+          "fontWeight": "500",
+          "color": "rgb(57, 38, 24)"
+        },
+        {
+          "tag": "h3",
+          "text": "身體與動力",
+          "fontSize": "22px",
+          "fontWeight": "500",
+          "color": "rgb(57, 38, 24)"
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "button",
+          "text": "",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(57, 38, 24)"
+        }
+      ],
+      "boldButtonDescendants": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "name": "home",
+      "title": "Flowing Clarity",
+      "path": "/",
+      "overflow": 0,
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "讓身心，慢慢回到自己的節奏。",
+          "fontSize": "42px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "讓身體被好好聽見，讓心有地方安放。",
+          "fontSize": "34px",
+          "fontWeight": "500",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "近期活動",
+          "fontSize": "40px",
+          "fontWeight": "500",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "秋日靜心練習",
+          "fontSize": "20px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "身體書寫之夜",
+          "fontSize": "20px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "一杯茶的慢時光",
+          "fontSize": "20px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "近期課程",
+          "fontSize": "40px",
+          "fontWeight": "500",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "回到身體的呼吸練習",
+          "fontSize": "24px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "溫柔觸碰按摩課",
+          "fontSize": "24px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "回到身體的呼吸練習",
+          "fontSize": "24px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "回到身體的呼吸練習",
+          "fontSize": "24px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "留一段時間，好好照顧自己。",
+          "fontSize": "38px",
+          "fontWeight": "500",
+          "color": "rgb(248, 245, 239)"
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "button",
+          "text": "",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(57, 38, 24)"
+        },
+        {
+          "tag": "a",
+          "text": "探索主題課程",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "color": "rgb(255, 247, 241)"
+        }
+      ],
+      "boldButtonDescendants": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "name": "course",
+      "title": "Flowing Clarity",
+      "path": "/course",
+      "overflow": 0,
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "課程探索",
+          "fontSize": "44px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "愛身體",
+          "fontSize": "52px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "身心再平衡按摩",
+          "fontSize": "34px",
+          "fontWeight": "400",
+          "color": "rgb(247, 246, 244)"
+        },
+        {
+          "tag": "h2",
+          "text": "撫慰心",
+          "fontSize": "52px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "究生命",
+          "fontSize": "52px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "展現美",
+          "fontSize": "52px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "有任何疑問需要協助嗎",
+          "fontSize": "40px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "button",
+          "text": "",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(57, 38, 24)"
+        }
+      ],
+      "boldButtonDescendants": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "name": "events",
+      "title": "近期活動｜Flowing Clarity",
+      "path": "/events",
+      "overflow": 0,
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "近期活動",
+          "fontSize": "44px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "即將到來",
+          "fontSize": "44px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "十一月 2026",
+          "fontSize": "28px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "button",
+          "text": "",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(57, 38, 24)"
+        },
+        {
+          "tag": "a",
+          "text": "前往報名",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "color": "rgb(255, 247, 241)"
+        }
+      ],
+      "boldButtonDescendants": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "name": "session",
+      "title": "個案諮詢｜Flowing Clarity",
+      "path": "/session",
+      "overflow": 0,
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "個案諮詢",
+          "fontSize": "48px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h2",
+          "text": "尋找執行師",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "謝照芬 Amoda",
+          "fontSize": "27px",
+          "fontWeight": "500",
+          "color": "rgb(56, 52, 46)"
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "button",
+          "text": "",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(57, 38, 24)"
+        },
+        {
+          "tag": "button",
+          "text": "台北",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "button",
+          "text": "台中",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "button",
+          "text": "高雄",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "button",
+          "text": "再平衡身心按摩",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "button",
+          "text": "生物動能頭薦骨",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        }
+      ],
+      "boldButtonDescendants": []
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "name": "articles",
+      "title": "文章分享｜Flowing Clarity",
+      "path": "/articles",
+      "overflow": 0,
+      "headings": [
+        {
+          "tag": "h1",
+          "text": "文章分享",
+          "fontSize": "46px",
+          "fontWeight": "400",
+          "color": "rgb(57, 38, 24)"
+        },
+        {
+          "tag": "h2",
+          "text": "搜尋結果",
+          "fontSize": "24px",
+          "fontWeight": "400",
+          "color": "rgb(56, 52, 46)"
+        },
+        {
+          "tag": "h3",
+          "text": "生命的源頭",
+          "fontSize": "22px",
+          "fontWeight": "500",
+          "color": "rgb(57, 38, 24)"
+        },
+        {
+          "tag": "h3",
+          "text": "心與中線",
+          "fontSize": "22px",
+          "fontWeight": "500",
+          "color": "rgb(57, 38, 24)"
+        },
+        {
+          "tag": "h3",
+          "text": "身體與動力",
+          "fontSize": "22px",
+          "fontWeight": "500",
+          "color": "rgb(57, 38, 24)"
+        }
+      ],
+      "buttons": [
+        {
+          "tag": "button",
+          "text": "",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "color": "rgb(57, 38, 24)"
+        }
+      ],
+      "boldButtonDescendants": []
+    }
+  ],
+  "interaction": {
+    "before": "rgb(56, 52, 46)",
+    "hover": "rgb(164, 107, 84)",
+    "focus": {
+      "color": "rgb(164, 107, 84)",
+      "outline": "solid"
+    }
+  }
+}

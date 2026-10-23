@@ -2,7 +2,7 @@
 
 ## 狀態與範圍
 
-狀態：已抽成共用 CSS，由 Banner 與近期活動報名入口使用；其他頁面仍依需求逐步採用。2026-10-20 依 [HomeBanner.vue](../../app/components/HomeBanner.vue)、[EventOverview.vue](../../app/components/EventOverview.vue) 與 [main.css](../../app/assets/css/main.css) 更新；以下數值是目前實作基準，不代表全站已完成實體裝置或螢幕閱讀器驗收。
+狀態：已抽成共用 CSS，由 Banner 與近期活動報名入口使用；其他頁面仍依需求逐步採用。2026-10-23 完成全站字級、按鈕字重與互動標題色修正；以下數值是目前實作基準，不代表已完成實體裝置或螢幕閱讀器驗收。
 
 本文件管理文字角色、按鈕外觀與跨頁 split layout 尺寸；其他容器寬度、區塊排列及元素間距仍由各頁規格管理。[Banner 規格](home-banner.md) 是第一個文字 token 引用案例。樣式角色不取代 HTML 語意，標題層級仍依內容結構選擇。
 
@@ -12,9 +12,9 @@
 
 | 候選角色 | 用途 | 桌面字級 | 手機字級 | 字重／行高／字距 |
 | --- | --- | --- | --- | --- |
-| 展示標題 | 首屏主要訊息 | `clamp(50px, 5vw, 56px)` | `42px` | `400`／`1.2`／`0.06em` |
-| 引導敘述 | 展示標題下的短文 | `clamp(14px, 1.05vw, 17px)` | `14px` | `500`／`1.95`／`0.06em` |
-| 行動文字 | 主要按鈕標籤 | `clamp(17px, 1.4vw, 22px)` | `16px` | 字重與行高沿用所在頁面／字距 `0.1em` |
+| 展示標題 | 首屏主要訊息 | `56px` | `42px` | `400`／`1.2`／`0.06em` |
+| 引導敘述 | 展示標題下的短文 | `17px` | `14px` | `500`／`1.95`／`0.06em` |
+| 行動文字 | 主要按鈕標籤 | `18px` | `14px` | `400`／`1.4`／`0.1em` |
 
 目前淺色 Banner Story 欄的標題與敘述繼承 `#38342e`，背景為 `#e8dfd2`；深色表面使用 `#f7f6f4`，次要文字使用 `#d8c7b8`。一般區塊標題不直接沿用首屏字級。
 
@@ -29,6 +29,7 @@
 | 最小高度 | `clamp(72px, 8.4vh, 92px)`，手機亦繼承此值 |
 | 內距 | 上下 `0`；桌面左右 `clamp(28px, 3vw, 48px)`，手機 `24px` |
 | 圖示 | 文字與圖示間距 `24px`；箭頭 `22 × 22px` |
+| 字級／字重 | 桌面 `18px`、手機 `14px`；統一 `400` |
 | Hover | 背景 `#c94f34`，`220ms ease` 過渡 |
 | 鍵盤焦點 | 共用按鈕自帶 `2px solid var(--color-clay)` 外框，偏移 `6px` |
 | 減少動態 | 停用過渡 |
@@ -40,7 +41,7 @@
 1. 先在使用頁規格指定文字角色、按鈕變體與適用表面，再確認候選數值。確認後在本文件記錄日期與採用範圍。
 2. 共用數值及 class 已集中至 `web/app/assets/css/main.css`；其他頁面以加入 class 的方式逐步採用，不修改所有 `h1`、`p` 或 `a`。目前沒有另建 Vue 按鈕元件。
 3. 套用時驗證桌面、手機、斷點及長文案：不得裁切、重疊或水平溢位；鍵盤焦點可見，連結及操作行為正確。
-4. 目前配色與尺寸仍需完成對比、文字放大及實際頁面檢視；未驗證前不標記為全站已驗收規範。
+4. 2026-10-23 已完成 Chrome 桌機、平板與手機檢視；配色對比、文字放大、實體裝置與螢幕閱讀器仍待後續驗收。
 
 ## 共用 CSS 用法
 
@@ -55,7 +56,7 @@
 
 深色背景的敘述加上 `lead-text--inverse`；淺色 Banner 使用基本 `.lead-text` 並繼承容器文字顏色。`.button-primary` 目前代表大型主要行動，也可用於 `<button type="button">`。共用 class 放在 `@layer components`，頁面可用 Tailwind utility 明確覆寫。
 
-共用 token 分為 `--display-title-*`、`--lead-text-*`、`--text-tracking`、`--button-primary-*`、`--interactive-title-hover` 及 `--control-focus-*`，字體和主色沿用既有 `--font-sans`、`--color-persimmon` 與 `--color-clay`。手機數值在 `max-width: 1023px` 統一切換。修改全站數值時同步更新本文件。
+共用 token 分為 `--display-title-*`、`--lead-text-*`、`--text-tracking`、`--button-primary-*`、`--interactive-title-hover` 及 `--control-focus-*`，字體和主色沿用既有 `--font-sans`、`--color-persimmon` 與 `--color-clay`。手機數值在 `max-width: 1023px` 統一切換。文字字級使用桌面與手機兩組固定值，不使用 `clamp()`；間距、容器與非文字尺寸仍可依既有版面需求使用流體尺度。修改全站數值時同步更新本文件。
 
 ## 互動標題顏色
 
@@ -101,13 +102,24 @@ Footer 採主色 bark（`#766254`）表面與 paper 文字，保留 2.4px 連結
 - 盤點目前會使內容標題變色的互動；活動列表與文章延伸閱讀統一引用 `--interactive-title-hover`，並讓 hover／鍵盤焦點使用同一語意色。
 - `npm run test -w web` 通過 39 個測試檔、226 項測試；`npm run typecheck -w web`、`npm run build -w web` 與 `git diff --check` 通過。Impeccable detector 為 0 個反模式；28 個 advisory 皆為既有的頁面角色字級或既有色值未列入 `DESIGN.md` ramp。typecheck 保留既有 `vue-router/volar/sfc-route-blocks` 套件匯出警告；build 保留既有 sourcemap 與字型執行期解析警告。瀏覽器實際版面、實體觸控裝置及螢幕閱讀器仍待人工驗收。
 
-下一步：完成下列原始清單的瀏覽器驗收後，再逐項標記完成。後續若新增可點擊內容標題或主要按鈕，應直接引用上述共用 class／token，不另建近似色值。
+後續若新增可點擊內容標題或主要按鈕，應直接引用上述共用 class／token，不另建近似色值。
+
+## 2026-10-23 全站字級與按鈕修正
+
+- 移除 `web/app` 內所有 `font-size: clamp(...)`、含流體字級的 `font` shorthand 與 Tailwind arbitrary clamp 字級；各元件改用桌面固定值，並在既有 `max-width: 1023px` 或元件窄版斷點切換手機固定值。
+- `.button-primary` 桌面／手機字級固定為 `18px`／`14px`，全域原生 `button`、主要 CTA 與既有按鈕內文字皆採 `font-weight: 400`。
+- 活動列表與文章延伸閱讀的可點擊標題統一使用 `--interactive-title-hover`，hover 與 `focus-visible` 保持相同語意角色。
+- Chrome 實測 `/`、`/course`、`/events`、`/session`、`/articles` 於 1440、1023、390px，共 15 組頁面／斷點皆無水平溢位；CTA 字級與按鈕字重符合規格，活動標題 hover／focus 色彩與可見焦點通過。代表截圖與量測見 [瀏覽器驗證記錄](../design/review/design-system-corrections-2026-10-23/README.md)。
+- `typography-corrections.test.ts` 通過 3 項回歸測試；`npm run test -w web` 通過 42 個測試檔、245 項測試。`npm run typecheck -w web`、`npm run build -w web` 與 `git diff --check` 通過。typecheck 保留既有 `vue-router/volar/sfc-route-blocks` 套件匯出警告；build 保留既有 sourcemap 與字型執行期解析警告。
+- 實體觸控裝置、Safari／Firefox、文字放大與螢幕閱讀器未於本輪執行；不得視為已完成。
 
 ## 待修正項目
 
-2026-10-20 從 Git 原始版本復原清單，保留原文與順序，僅正規化 checkbox 格式。上述實作與自動驗證紀錄保留；目前尚待瀏覽器驗收，因此維持未勾選。
+2026-10-20 從 Git 原始版本復原清單，保留原文與順序。2026-10-23 完成剩餘項目，僅正規化 checkbox 格式並於原項目後補上完成證據。
 
 - [x] button-primary 限制最大寬度為360px
 - [x] 深色按鈕需使用公用元件，例如：event-row__action > a ，樣式應該是 button-primary
-- [ ] 檢查所有 hover效果，會讓標題變色的，顏色要統一
-- [] --button-primary-size: clamp(14px, 1.4vw, 18px)
+- [x] 檢查所有 hover效果，會讓標題變色的，顏色要統一（2026-10-23：活動列表與文章延伸閱讀統一引用 `--interactive-title-hover`，Chrome hover／focus 驗證通過。）
+- [x] --button-primary-size: clamp(14px, 1.4vw, 18px)（2026-10-23：依下項固定字級要求改為桌面 `18px`、手機 `14px`。）
+- [x] 檢查全站所有按鈕，不需要粗體字（2026-10-23：原生按鈕、主要 CTA 與按鈕內文字統一為 `400`；回歸測試及瀏覽器 computed style 通過。）
+- [x] font-size 有設定 clamp 屬性的 希望可以拿掉，改用電腦版一個尺寸，手機裝置一個尺寸，這樣比較好懂好修改-（2026-10-23：`web/app` 已無 `font-size` clamp 或等價 Tailwind arbitrary clamp 字級，桌面／手機固定值與 15 組瀏覽器量測通過。）

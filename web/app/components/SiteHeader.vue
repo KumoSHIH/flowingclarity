@@ -232,8 +232,8 @@ const {
     align-items: center;
     border-bottom: 1px solid
       color-mix(in srgb, var(--color-oxblood) 14%, transparent);
-    font-size: clamp(18px, 3vw, 22px);
-    font-weight: 600;
+    font-size: 18px;
+    font-weight: 400;
     letter-spacing: 0.12em;
   }
 
