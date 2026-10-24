@@ -44,6 +44,34 @@ describe('shared split layout', () => {
     expect(component).toContain('width: min(100%, var(--detail-layout-max-width));')
   })
 
+  it('reflows event actions before the primary button can be compressed', () => {
+    const component = read('../../app/components/EventOverview.vue')
+
+    expect(component).toMatch(
+      /@media \(min-width: 1024px\) and \(max-width: 1279px\)[\s\S]*grid-template-columns: 150px minmax\(0, 1fr\);/,
+    )
+    expect(component).toMatch(
+      /@media \(min-width: 1280px\)[\s\S]*minmax\(\s*240px,\s*0\.85fr\s*\)/,
+    )
+    expect(component).toMatch(
+      /@media \(max-width: 1023px\)[\s\S]*minmax\(200px, 0\.7fr\)/,
+    )
+    expect(component).toMatch(
+      /\.event-row__action \.button-primary > span \{[\s\S]*?white-space: nowrap;/,
+    )
+  })
+
+  it('clamps event summaries to three visual lines', () => {
+    const component = read('../../app/components/EventOverview.vue')
+    const summaryRule = component.match(/\.event-row__summary \{([\s\S]*?)\}/)?.[1]
+
+    expect(summaryRule).toBeDefined()
+    expect(summaryRule).toContain('display: -webkit-box;')
+    expect(summaryRule).toContain('overflow: hidden;')
+    expect(summaryRule).toContain('-webkit-line-clamp: 3;')
+    expect(summaryRule).toContain('line-clamp: 3;')
+  })
+
   it('keeps the shared detail widths and vertical spacing in sync', () => {
     const stylesheet = read('../../app/assets/css/main.css')
     const eventDetail = read('../../app/components/EventDetail.vue')

@@ -88,3 +88,9 @@ Banner 為 ID 固定為 `homeBanner` 的單一文件，只有以下四個必填�
 ## 2026-10-24 字體角色遷移
 
 Banner 的地圖註記、分類名稱、課程文字與選單已改用 `meta`、`label`、`body`、`title-md`；Story 標題與摘要的既有 class 改為 `title-lg`、`lead` 別名。type detector 為 0，完整 Web 測試、typecheck 與 build 通過；桌機／手機與文字放大仍待可用瀏覽器補驗。
+
+## 2026-10-24 地圖分類標題手動微調
+
+Atlas 四個分類標題保留 `title-md` 的桌機／手機字級、行高與字距，但字體改用全站無襯線 `--font-sans`，字重改為 `500`；分類下方課程名稱仍使用 `meta`。這是首頁地圖標記的元件層級視覺例外，不修改全站 `title-md` 的襯線、`400` 字重定義，也不影響分類連結、active 狀態或動畫行為。
+
+目前狀態為程式調整與文件同步完成。2026-10-24 重新執行 Web 全套 44 檔／292 項測試、typecheck 與 production build，結果皆通過；typecheck／build 仍有既有的 Volar package export、sourcemap 與字型 runtime resolve 警告。尚未執行本次字體調整後的瀏覽器視覺與 200% 文字放大驗收；下一步應在 1440px、1023px、390px 檢查四個分類標題的辨識度、換行、hover／focus 對比與操作區，舊有襯線版本截圖不作為目前樣式證據。

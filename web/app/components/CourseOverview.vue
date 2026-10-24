@@ -86,7 +86,11 @@ async function setupCategoryNavigation() {
     ? requestedSlug
     : (orderedCategories.value[0]?.slug ?? "");
 
-  if (requestedSlug && activeCategorySlug.value === requestedSlug && !hasAppliedInitialHash) {
+  if (
+    requestedSlug &&
+    activeCategorySlug.value === requestedSlug &&
+    !hasAppliedInitialHash
+  ) {
     categorySections.get(requestedSlug)?.scrollIntoView({ block: "start" });
     hasAppliedInitialHash = true;
   }
@@ -508,7 +512,6 @@ onBeforeUnmount(() => {
 
 .course-ending h2,
 .course-state h2 {
-  max-width: 12em;
   margin: 0 0 38px;
   font-family: var(--font-display);
   font-size: var(--type-title-xl-size);
@@ -629,7 +632,6 @@ onBeforeUnmount(() => {
   .course-item__copy {
     padding: 24px;
   }
-
 }
 
 @media (prefers-reduced-motion: reduce) {

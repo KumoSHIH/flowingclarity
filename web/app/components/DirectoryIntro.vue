@@ -23,8 +23,7 @@ defineProps<{
 }
 
 .directory-intro__description {
-  max-width: 12em;
-  margin: 28px 0 0;
+  margin: 25px 0 0;
   font-size: var(--type-lead-size);
   font-weight: var(--type-lead-weight);
   line-height: var(--type-lead-leading);
@@ -32,6 +31,8 @@ defineProps<{
 }
 
 @media (max-width: 1023px) {
-  .directory-intro__description { max-width: none; }
+  .directory-intro__description {
+    max-width: none;
+  }
 }
 </style>

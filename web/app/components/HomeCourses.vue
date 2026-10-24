@@ -44,16 +44,9 @@ const courses = [
     <div class="relative z-20 mx-auto max-w-[1520px]">
       <div class="mb-14">
         <div>
-          <h2
-            id="courses-title"
-            class="type-title-xl text-center"
-          >
-            近期課程
-          </h2>
+          <h2 id="courses-title" class="type-title-xl text-center">近期課程</h2>
         </div>
-        <p
-          class="type-body mx-auto max-w-[470px] text-center text-muted"
-        >
+        <p class="type-body mx-auto max-w-[470px] text-center text-muted">
           用可以帶回日常的練習，一點一點培養對身體的覺察與信任。
         </p>
       </div>
@@ -75,22 +68,16 @@ const courses = [
               :class="index === 0 ? 'object-[60%_center]' : 'object-center'"
             />
           </div>
-          <div class="border-b border-[#d2c8bc] pb-10 pt-8 md:pb-12 md:pt-10">
+          <div class="pb-10 pt-8 md:pt-10">
             <div>
-              <p
-                class="type-label mb-4 text-clay"
-              >
+              <p class="type-label mb-4 text-clay">
                 {{ course.meta }}
               </p>
-              <h3
-                class="type-title-sm"
-              >
+              <h3 class="type-title-sm">
                 {{ course.title }}
               </h3>
             </div>
-            <p
-              class="type-body mt-6 max-w-[440px] text-muted"
-            >
+            <p class="type-body mt-6 max-w-[440px] text-muted">
               {{ course.description }}
             </p>
           </div>

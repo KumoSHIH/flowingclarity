@@ -162,6 +162,13 @@ Footer 採主色 bark（`#766254`）表面與 paper 文字，保留 2.4px 連結
 - 相關 7 檔／62 項與 Web 全套 43 檔／268 項測試、typecheck 及 production build 通過；既有 Volar package export、sourcemap 與字型 runtime resolve 警告仍存在。
 - 程式遷移已完成，不再有待遷移元件。Computer Use 服務仍無可用瀏覽器，因此 1440、1023、390px、200% 文字放大、長文字換行與操作區尺寸仍待人工驗收。
 
+## 2026-10-24 總覽頁手動校準
+
+- `DirectoryIntro` 保持 `title-lg`／`lead` 角色，但導讀不再限制為 `12em`，並以 `25px` 與頁名分隔；課程結尾／狀態及活動狀態標題同樣取消 `12em` 上限。上述文字依各自內容區自然換行，不新增寬度 token。
+- 活動總覽的目前集合標題使用 `title-md`；活動類型及地點／形式資訊使用 `label`，日期與狀態保留 `meta`。這是既有正式角色的語意重映射，沒有新增 token 或局部字級。
+- 相關 5 檔／30 項測試、typecheck、production build 與 `git diff --check` 通過；只保留既有的 Volar、sourcemap 與字型 runtime resolve 警告。本次尚未完成瀏覽器、200% 文字放大、實體裝置或螢幕閱讀器驗收；下一階段應以 1440px、1023px、390px 補驗長導讀、狀態標題與活動列換行。
+- 活動列表的主要行動不得使用低於按鈕內容需求的固定窄欄。1024–1279px 以兩欄活動列承載，狀態與按鈕移至內容下方；1280px 以上的三欄行動區最低為 `240px`，521–1023px 的按鈕子欄最低為 `200px`，520px 以下改成單欄。短版主要行動標籤保持單行，若容器不足應先重排版面，不以逐字換行壓縮按鈕。本次 3 檔／26 項測試、typecheck、production build、layout detector 與 `git diff --check` 通過；Computer Use 無可用瀏覽器，實際斷點畫面仍待人工驗收。
+
 ## 待修正項目
 
 2026-10-20 從 Git 原始版本復原清單，保留原文與順序。2026-10-23 完成剩餘項目，僅正規化 checkbox 格式並於原項目後補上完成證據。

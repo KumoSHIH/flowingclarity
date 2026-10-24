@@ -218,3 +218,13 @@
 ## 2026-10-24 字體角色遷移
 
 活動總覽與共用左欄導讀已統一使用 `title-lg`、`title-md`、`title-sm`、`body`、`label`、`meta`，取代歷史紀錄中的 `50/42/22/14/12px` 局部尺寸；日期、摘要、狀態及分頁現在皆由角色 token 控制。type detector 為 0，完整 Web 測試、typecheck 與 build 通過；瀏覽器視覺驗收待補。
+
+## 2026-10-24 手動視覺微調
+
+共用 `DirectoryIntro` 的導讀已移除桌機 `12em` 最大寬度，改為使用左側 rail 的完整可用寬度；標題與導讀間距調整為 `25px`。活動空白／錯誤狀態標題也移除 `12em` 上限，依內容區自然換行。活動右欄的目前集合標題由 `title-lg` 降為 `title-md`，與月份標題維持同一層視覺尺度；活動類型與地點／形式資訊由 `meta` 提升為 `label`，日期與狀態仍使用 `meta`，活動名稱與摘要分別維持 `title-sm`、`body`。
+
+此次只調整版面與文字角色，沒有更動 URL、切換、分頁、報名或 CMS 契約。相關 5 檔／30 項測試、typecheck、production build 與 `git diff --check` 通過；typecheck 與 build 只出現既有的 Volar、sourcemap 與字型 runtime resolve 警告。桌機、手機、長文換行及資訊層級仍待瀏覽器視覺驗收，先前 12em 導讀與舊字級截圖不代表目前版本。下一步應在 1440px、1023px、390px 與 200% 文字放大下確認 rail、狀態標題與活動列換行，以及集合標題層級。
+
+同日修正 1024px 附近報名按鈕被三欄 grid 壓縮而逐字換行的問題。1024–1279px 活動列改為日期／內容兩欄，狀態與主要行動在內容欄下方並排；1280px 以上才使用三欄，行動欄最低寬度提高為 `240px`。521–1023px 的按鈕子欄最低為 `200px`，520px 以下沿用既有單欄滿寬按鈕；短版按鈕標籤禁止 flex 收縮及換行。相關 3 檔／26 項測試、typecheck、production build、layout detector 與 `git diff --check` 通過；僅保留既有 Volar、sourcemap 與字型 runtime resolve 警告。Computer Use 服務沒有可用瀏覽器，1024px、1280px 與手機實際畫面仍待人工驗收。
+
+活動列摘要 `.event-row__summary` 最多顯示三行，超出內容以省略號收束；完整摘要仍保留於 DOM，訪客可由同一活動連結進入詳情閱讀。此規則套用所有斷點，不改寫 CMS 摘要內容或 API 契約。相關 3 檔／27 項測試、typecheck、production build、layout detector 與 `git diff --check` 通過；實際中文換行與省略號位置仍待可用瀏覽器環境驗收。

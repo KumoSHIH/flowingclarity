@@ -181,7 +181,7 @@ stages:
 - 各階段是否可獨立報名須在建立正式梯次前確認；此決定影響 stage 與 run 的切分，但不阻擋總覽 CMS 串接。
 - `validate-content-flow` 已完成 production schema 部署、公開 ID migration、草稿／published 隔離、匿名公開讀取、瀏覽器呈現及測試資料清除；狀態維持 `verified`。舊 `courseCategory.*` reference 已確認為 0，文件本身留待獨立清理變更。
 - 已核准的原始方向記錄於 [`web/.impeccable/surfaces/app-pages-course-vue.md`](../../.impeccable/surfaces/app-pages-course-vue.md)；目前 Vue 實作及本規格記錄其後續手動調整。
-- 課程與活動總覽左欄的頁面標題及導讀共用 `DirectoryIntro.vue`；桌面維持 12em 閱讀寬度，1023px 以下取消最大寬度，避免手機導讀過早換行。分類導覽仍由課程頁自行管理。
+- 課程與活動總覽左欄的頁面標題及導讀共用 `DirectoryIntro.vue`；導讀使用左欄完整可用寬度，不另設桌機最大寬度，標題與導讀間距為 `25px`。分類導覽仍由課程頁自行管理。
 
 ## 共用左欄導讀調整記錄
 
@@ -204,3 +204,7 @@ stages:
 ## 2026-10-24 總覽字體角色遷移
 
 課程總覽與 `DirectoryIntro` 已改用正式角色 token：頁面／分類標題採 `title-lg`、光片課名採 `title-sm`、摘要採 `body`、形式與補充資訊採 `label/meta`。光片 hover／focus 保留欄寬與影像變化，不再把課名字級放大為獨立尺寸。type detector 為 0，完整 Web 測試、typecheck 與 build 通過；響應式視覺驗收待補。
+
+## 2026-10-24 共用導讀手動微調
+
+`DirectoryIntro` 的導讀已移除桌機 `12em` 最大寬度，改為使用 rail 內完整可用寬度；標題與導讀的上距由 `28px` 微調為 `25px`。課程結尾與狀態標題也移除 `12em` 上限，依所在內容區自然換行。這些變更不改變既有 `title-lg`／`lead`／`title-xl` 角色或 `1023px` 單欄斷點。相關 5 檔／30 項測試、typecheck、production build 與 `git diff --check` 通過；桌機、手機及長文換行仍待瀏覽器視覺驗收，舊有 12em 截圖不作為本版證據。

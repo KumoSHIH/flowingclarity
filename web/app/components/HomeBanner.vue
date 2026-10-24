@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 import { useRoseAtlasAnimation } from "../composables/useRoseAtlasAnimation";
 import { siteNavigationItems } from "../constants/siteNavigation";
-import type { SiteNavigationItem } from '../constants/siteNavigation';
+import type { SiteNavigationItem } from "../constants/siteNavigation";
 
 import {
   fallbackHomeBanner,
@@ -10,8 +10,13 @@ import {
   type HomeBannerContent,
 } from "#shared/utils/homeBanner";
 
-const props = defineProps<{ banner?: HomeBannerContent | null; navigationItems?: readonly SiteNavigationItem[] }>();
-const items = computed<readonly SiteNavigationItem[]>(() => props.navigationItems ?? siteNavigationItems);
+const props = defineProps<{
+  banner?: HomeBannerContent | null;
+  navigationItems?: readonly SiteNavigationItem[];
+}>();
+const items = computed<readonly SiteNavigationItem[]>(
+  () => props.navigationItems ?? siteNavigationItems,
+);
 const content = computed(
   () => parseHomeBanner(props.banner) ?? fallbackHomeBanner,
 );
@@ -332,9 +337,9 @@ function selectCategory(id: string, event: MouseEvent) {
 }
 
 .atlas-category__copy strong {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-size: var(--type-title-md-size);
-  font-weight: var(--type-title-md-weight);
+  font-weight: 500;
   line-height: var(--type-title-md-leading);
   letter-spacing: var(--type-title-md-tracking);
 }
