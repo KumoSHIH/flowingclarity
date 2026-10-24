@@ -15,13 +15,16 @@ interface CarouselItem {
   caption?: string;
 }
 
-const props = withDefaults(defineProps<{
-  items: CarouselItem[];
-  label: string;
-  autoplay?: boolean;
-}>(), {
-  autoplay: true,
-});
+const props = withDefaults(
+  defineProps<{
+    items: CarouselItem[];
+    label: string;
+    autoplay?: boolean;
+  }>(),
+  {
+    autoplay: true,
+  },
+);
 
 const root = ref<HTMLElement | null>(null);
 const activeIndex = ref(0);
@@ -44,8 +47,8 @@ let observer: IntersectionObserver | undefined;
 let motionQuery: MediaQueryList | undefined;
 let mounted = false;
 
-const AUTOPLAY_DELAY_MS = 2_000;
-const SLIDE_TRANSITION_MS = 1_500;
+const AUTOPLAY_DELAY_MS = 2_500;
+const SLIDE_TRANSITION_MS = 2_000;
 const DRAG_THRESHOLD_PX = 48;
 
 const currentItem = computed(() => props.items[activeIndex.value]);
@@ -61,20 +64,36 @@ const renderedItems = computed(() => {
   const firstItem = props.items[0]!;
   const lastItem = props.items.at(-1)!;
   return [
-    { key: `loop-before-${lastItem.id}`, item: lastItem, originalIndex: props.items.length - 1 },
-    ...props.items.map((item, originalIndex) => ({ key: item.id, item, originalIndex })),
+    {
+      key: `loop-before-${lastItem.id}`,
+      item: lastItem,
+      originalIndex: props.items.length - 1,
+    },
+    ...props.items.map((item, originalIndex) => ({
+      key: item.id,
+      item,
+      originalIndex,
+    })),
     { key: `loop-after-${firstItem.id}`, item: firstItem, originalIndex: 0 },
   ];
 });
-const countLabel = computed(() =>
-  `${String(activeIndex.value + 1).padStart(2, "0")} / ${String(props.items.length).padStart(2, "0")}`,
+const countLabel = computed(
+  () =>
+    `${String(activeIndex.value + 1).padStart(2, "0")} / ${String(props.items.length).padStart(2, "0")}`,
 );
 const trackStyle = computed(() => ({
   transform: `translate3d(calc(${-visualIndex.value * 100}% + ${dragOffset.value}px), 0, 0)`,
 }));
-const autoplayCanRun = computed(() =>
-  props.autoplay && props.items.length > 1 && !isHovered.value && !hasFocus.value
-  && !dragging.value && isVisible.value && documentIsVisible.value && !reducedMotion.value,
+const autoplayCanRun = computed(
+  () =>
+    props.autoplay &&
+    props.items.length > 1 &&
+    !isHovered.value &&
+    !hasFocus.value &&
+    !dragging.value &&
+    isVisible.value &&
+    documentIsVisible.value &&
+    !reducedMotion.value,
 );
 
 watch(
@@ -90,7 +109,8 @@ watch(autoplayCanRun, syncAutoplay);
 function previousItem() {
   if (props.items.length < 2 || transitionRunning.value) return;
   startTransitionTimer();
-  activeIndex.value = (activeIndex.value - 1 + props.items.length) % props.items.length;
+  activeIndex.value =
+    (activeIndex.value - 1 + props.items.length) % props.items.length;
   visualIndex.value -= 1;
 }
 
@@ -140,7 +160,11 @@ function onTrackTransitionEnd(event: TransitionEvent) {
 }
 
 function onPointerDown(event: PointerEvent) {
-  if (transitionRunning.value || (event.pointerType === "mouse" && event.button !== 0)) return;
+  if (
+    transitionRunning.value ||
+    (event.pointerType === "mouse" && event.button !== 0)
+  )
+    return;
   dragStartX.value = event.clientX;
   activePointerId.value = event.pointerId;
   dragging.value = true;
@@ -148,7 +172,12 @@ function onPointerDown(event: PointerEvent) {
 }
 
 function onPointerMove(event: PointerEvent) {
-  if (!dragging.value || dragStartX.value === null || activePointerId.value !== event.pointerId) return;
+  if (
+    !dragging.value ||
+    dragStartX.value === null ||
+    activePointerId.value !== event.pointerId
+  )
+    return;
   dragOffset.value = event.clientX - dragStartX.value;
 }
 
@@ -165,7 +194,10 @@ function finishDrag(event: PointerEvent) {
 
 function onFocusOut(event: FocusEvent) {
   const nextTarget = event.relatedTarget;
-  if (!(nextTarget instanceof Node) || !(event.currentTarget as HTMLElement).contains(nextTarget)) {
+  if (
+    !(nextTarget instanceof Node) ||
+    !(event.currentTarget as HTMLElement).contains(nextTarget)
+  ) {
     hasFocus.value = false;
   }
 }
@@ -192,7 +224,12 @@ onMounted(() => {
   motionQuery.addEventListener?.("change", onMotionChange);
 
   if ("IntersectionObserver" in window && root.value) {
-    observer = new IntersectionObserver(([entry]) => { isVisible.value = entry?.isIntersecting ?? true; }, { threshold: 0.15 });
+    observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible.value = entry?.isIntersecting ?? true;
+      },
+      { threshold: 0.15 },
+    );
     observer.observe(root.value);
   }
   syncAutoplay();
@@ -234,7 +271,10 @@ onBeforeUnmount(() => {
         <div class="about-carousel__stage">
           <div
             class="about-carousel__track"
-            :class="{ 'is-dragging': dragging, 'is-jumping': !transitionEnabled }"
+            :class="{
+              'is-dragging': dragging,
+              'is-jumping': !transitionEnabled,
+            }"
             :style="trackStyle"
             @transitionend.self="onTrackTransitionEnd"
           >
@@ -255,21 +295,41 @@ onBeforeUnmount(() => {
                 decoding="async"
                 draggable="false"
                 @error="markImageFailed(slide.item.image.src)"
-              >
-              <p v-else class="about-carousel__fallback about-image-fallback">{{ slide.item.image.alt }}</p>
+              />
+              <p v-else class="about-carousel__fallback about-image-fallback">
+                {{ slide.item.image.alt }}
+              </p>
             </div>
           </div>
         </div>
-        <figcaption v-if="currentItem.caption">{{ currentItem.caption }}</figcaption>
+        <figcaption v-if="currentItem.caption">
+          {{ currentItem.caption }}
+        </figcaption>
       </figure>
 
       <div class="about-carousel__controls">
-        <button type="button" :disabled="items.length < 2" :aria-disabled="transitionRunning ? 'true' : undefined" :aria-label="`上一張${label}`" @click="previousItem">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7M8 12h12" /></svg>
+        <button
+          type="button"
+          :disabled="items.length < 2"
+          :aria-disabled="transitionRunning ? 'true' : undefined"
+          :aria-label="`上一張${label}`"
+          @click="previousItem"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m15 5-7 7 7 7M8 12h12" />
+          </svg>
         </button>
         <span aria-live="off" aria-atomic="true">{{ countLabel }}</span>
-        <button type="button" :disabled="items.length < 2" :aria-disabled="transitionRunning ? 'true' : undefined" :aria-label="`下一張${label}`" @click="nextItem">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7M4 12h12" /></svg>
+        <button
+          type="button"
+          :disabled="items.length < 2"
+          :aria-disabled="transitionRunning ? 'true' : undefined"
+          :aria-label="`下一張${label}`"
+          @click="nextItem"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m9 5 7 7-7 7M4 12h12" />
+          </svg>
         </button>
       </div>
       <div class="about-carousel__copy"><slot name="copy" /></div>
@@ -286,35 +346,154 @@ onBeforeUnmount(() => {
   color: var(--color-ink);
   background: var(--color-paper);
 }
-.about-carousel__heading { grid-area: heading; align-self: end; padding: 104px var(--carousel-edge) 42px clamp(44px, 5vw, 88px); }
-.about-carousel__figure { grid-area: media; min-width: 0; margin: 0; cursor: grab; touch-action: pan-y; user-select: none; }
-.about-carousel__figure.is-dragging { cursor: grabbing; }
-.about-carousel__stage { aspect-ratio: 3 / 2; overflow: hidden; }
-.about-carousel__track { display: flex; width: 100%; height: 100%; transition: transform 1500ms cubic-bezier(0.16, 1, 0.3, 1); }
-.about-carousel__track.is-dragging, .about-carousel__track.is-jumping { transition: none; }
-.about-carousel__slide { width: 100%; height: 100%; flex: 0 0 100%; }
-.about-carousel__slide img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.about-carousel__fallback { display: grid; height: 100%; place-items: center; padding: 24px; margin: 0; background: var(--color-sand); }
-.about-carousel__figure figcaption { min-height: 76px; padding: 20px var(--carousel-edge); color: var(--carousel-muted); font-size: 12px; line-height: 1.8; letter-spacing: 0.05em; }
-.about-carousel__copy { grid-area: copy; max-width: 36em; padding: 0 var(--carousel-edge) 48px clamp(44px, 5vw, 88px); }
-.about-carousel__controls { display: flex; grid-area: controls; align-items: center; gap: 22px; padding: 0 var(--carousel-edge) 104px clamp(44px, 5vw, 88px); }
-.about-carousel__controls button { display: grid; width: 48px; height: 48px; place-items: center; padding: 0; color: var(--color-ink); background: transparent; border: 1px solid color-mix(in srgb, var(--color-ink) 35%, transparent); border-radius: 0; cursor: pointer; }
-.about-carousel__controls button:focus-visible { outline: 2px solid var(--color-clay); outline-offset: 5px; }
-.about-carousel__controls button:disabled { cursor: not-allowed; opacity: 0.34; }
-.about-carousel__controls button[aria-disabled="true"] { cursor: wait; opacity: 0.6; }
-.about-carousel__controls svg { width: 22px; fill: none; stroke: currentcolor; stroke-width: 1.5; }
-.about-carousel__controls span { min-width: 64px; color: var(--carousel-muted); font-size: 12px; font-variant-numeric: tabular-nums; letter-spacing: 0.14em; text-align: center; }
-.about-carousel__empty { grid-area: media / media / copy / copy; display: grid; min-height: 340px; place-items: center; padding: 48px var(--carousel-edge); color: var(--carousel-muted); background: var(--color-sand); }
+.about-carousel__heading {
+  grid-area: heading;
+  align-self: end;
+  padding: 104px var(--carousel-edge) 42px clamp(44px, 5vw, 88px);
+}
+.about-carousel__figure {
+  grid-area: media;
+  min-width: 0;
+  margin: 0;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+.about-carousel__figure.is-dragging {
+  cursor: grabbing;
+}
+.about-carousel__stage {
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+}
+.about-carousel__track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 2000ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.about-carousel__track.is-dragging,
+.about-carousel__track.is-jumping {
+  transition: none;
+}
+.about-carousel__slide {
+  width: 100%;
+  height: 100%;
+  flex: 0 0 100%;
+}
+.about-carousel__slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.about-carousel__fallback {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  padding: 24px;
+  margin: 0;
+  background: var(--color-sand);
+}
+.about-carousel__figure figcaption {
+  min-height: 76px;
+  padding: 20px var(--carousel-edge);
+  color: var(--carousel-muted);
+  font-size: 12px;
+  line-height: 1.8;
+  letter-spacing: 0.05em;
+}
+.about-carousel__copy {
+  grid-area: copy;
+  max-width: 36em;
+  padding: 0 var(--carousel-edge) 48px clamp(44px, 5vw, 88px);
+}
+.about-carousel__controls {
+  display: flex;
+  grid-area: controls;
+  align-items: center;
+  gap: 22px;
+  padding: 0 var(--carousel-edge) 104px clamp(44px, 5vw, 88px);
+}
+.about-carousel__controls button {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  padding: 0;
+  color: var(--color-ink);
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--color-ink) 35%, transparent);
+  border-radius: 0;
+  cursor: pointer;
+}
+.about-carousel__controls button:focus-visible {
+  outline: 2px solid var(--color-clay);
+  outline-offset: 5px;
+}
+.about-carousel__controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.34;
+}
+.about-carousel__controls button[aria-disabled="true"] {
+  cursor: wait;
+  opacity: 0.6;
+}
+.about-carousel__controls svg {
+  width: 22px;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.5;
+}
+.about-carousel__controls span {
+  min-width: 64px;
+  color: var(--carousel-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.14em;
+  text-align: center;
+}
+.about-carousel__empty {
+  grid-area: media / media / copy / copy;
+  display: grid;
+  min-height: 340px;
+  place-items: center;
+  padding: 48px var(--carousel-edge);
+  color: var(--carousel-muted);
+  background: var(--color-sand);
+}
 @media (max-width: 767px) {
-  .shared-image-carousel { display: flex; flex-direction: column; }
-  .about-carousel__heading { order: 0; padding: 80px var(--carousel-edge) 36px; }
-  .about-carousel__figure { order: 1; }
-  .about-carousel__stage { aspect-ratio: 4 / 3; }
-  .about-carousel__figure figcaption { min-height: 0; padding: 18px var(--carousel-edge) 0; }
-  .about-carousel__controls { order: 2; padding: 24px var(--carousel-edge) 0; }
-  .about-carousel__copy { order: 3; max-width: none; padding: 32px var(--carousel-edge) 84px; }
+  .shared-image-carousel {
+    display: flex;
+    flex-direction: column;
+  }
+  .about-carousel__heading {
+    order: 0;
+    padding: 80px var(--carousel-edge) 36px;
+  }
+  .about-carousel__figure {
+    order: 1;
+  }
+  .about-carousel__stage {
+    aspect-ratio: 4 / 3;
+  }
+  .about-carousel__figure figcaption {
+    min-height: 0;
+    padding: 18px var(--carousel-edge) 0;
+  }
+  .about-carousel__controls {
+    order: 2;
+    padding: 24px var(--carousel-edge) 0;
+  }
+  .about-carousel__copy {
+    order: 3;
+    max-width: none;
+    padding: 32px var(--carousel-edge) 84px;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .about-carousel__track { transition: none; }
+  .about-carousel__track {
+    transition: none;
+  }
 }
 </style>

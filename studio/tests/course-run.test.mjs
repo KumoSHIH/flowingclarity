@@ -3,6 +3,7 @@ import { test } from 'node:test'
 import {
   deriveCourseRunDateBounds,
   validateCourseRunPublication,
+  validateCourseRunRegistrationUrl,
   validateCourseRunStages,
 } from '../schemaTypes/courseRun.ts'
 
@@ -63,6 +64,16 @@ test('requires an HTTPS registration target before an open run can be public', (
     isPublished: false,
     registrationStatus: 'open',
   }), true)
+})
+
+test('requires the registration URL as soon as a run is marked open', () => {
+  assert.equal(validateCourseRunRegistrationUrl(
+    'https://forms.example.com/course',
+    { registrationStatus: 'open' },
+  ), true)
+  assert.notEqual(validateCourseRunRegistrationUrl(undefined, { registrationStatus: 'open' }), true)
+  assert.notEqual(validateCourseRunRegistrationUrl('http://example.com', { registrationStatus: 'open' }), true)
+  assert.equal(validateCourseRunRegistrationUrl(undefined, { registrationStatus: 'scheduled' }), true)
 })
 
 test('rejects duplicate stage order, inverted dates, overlap and out-of-order ranges', () => {

@@ -205,9 +205,6 @@ const emit = defineEmits<{ retry: [] }>()
 .event-detail__fact dt { margin-bottom: 8px; color: #745142; font-size: 14px; font-weight: 700; letter-spacing: 0.08em; }
 .event-detail__fact dd { margin: 0; font-family: var(--font-display); font-size: 20px; line-height: 1.55; }
 .event-detail__action-wrap { padding: var(--detail-rail-action-padding); }
-.event-detail__action { color: var(--color-warm-white); font-weight: 400; }
-.event-detail__action .button-primary__icon { fill: none; stroke: currentcolor; stroke-width: 1.5; transition: transform var(--button-primary-transition); }
-.event-detail__action:is(:hover, :focus-visible) .button-primary__icon { transform: translateX(4px); }
 .event-detail__action--disabled { display: flex; min-height: 76px; align-items: center; padding: 0 28px; color: var(--color-warm-white); background: var(--color-bark); cursor: not-allowed; }
 .event-detail__action-wrap small { display: block; margin-top: 12px; color: #745142; font-size: 14px; line-height: 1.7; }
 
@@ -265,7 +262,6 @@ const emit = defineEmits<{ retry: [] }>()
 
 @media (prefers-reduced-motion: reduce) {
   .event-detail__skeleton { animation: none; }
-  .event-detail__action .button-primary__icon { transition: none; }
 }
 </style>
 

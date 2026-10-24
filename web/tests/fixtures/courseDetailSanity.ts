@@ -68,7 +68,7 @@ export const sanityCourseDetail = {
           type: 'video',
           title: '先看見觸碰的節奏',
           statusLabel: '觀看課程影片',
-          url: 'https://www.youtube.com/watch?v=example',
+          url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
           image: image('video', '課程影片封面'),
         },
         {
@@ -124,7 +124,7 @@ export const sanityCourseDetail = {
     capacityLabel: '名額 12 人',
     feeLabel: '費用已核准',
     notes: ['需完成課前問卷'],
-    stages: [{ dateRanges: [{ startDate: '2027-03-01', endDate: '2027-03-03' }] }],
+    stages: [{ title: '第一階', order: 1, dateRanges: [{ startDate: '2027-03-01', endDate: '2027-03-03' }] }],
     isPublished: true,
   }],
 }

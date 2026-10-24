@@ -9,7 +9,14 @@ import {
 import { courseOverviewPage } from '../schemaTypes/courseOverviewPage.ts'
 import {
   courseDetailContent,
+  courseDetailAudience,
+  courseDetailCurriculum,
+  courseDetailCurriculumUnit,
   courseDetailGallery,
+  courseDetailGalleryItem,
+  courseDetailRegistration,
+  courseDetailSchedule,
+  courseDetailVideo,
   validateCourseDetailBody,
 } from '../schemaTypes/courseDetail.ts'
 import { courseRun } from '../schemaTypes/courseRun.ts'
@@ -94,13 +101,13 @@ test('course content types are registered with their required semantic fields', 
     'course',
     'label',
     'registrationStatus',
+    'registrationUrl',
     'isPublished',
     'city',
     'venue',
     'timeLabel',
     'capacityLabel',
     'feeLabel',
-    'registrationUrl',
     'notes',
     'stages',
   ])
@@ -134,8 +141,11 @@ test('course content types are registered with their required semantic fields', 
     .filter(({ name }) => name.startsWith('courseDetail'))
     .flatMap(({ fields = [] }) => fields.flatMap(field => [field, ...(field.of ?? [])]))
     .filter(({ type }) => type === 'text')
-  assert.equal(multilineFields.length, 14)
+  assert.equal(multilineFields.length, 15)
   assert.equal(multilineFields.every(({ description }) => description === '可按 Enter 換行，前台會保留段落。'), true)
+  const curriculumUnitTitle = courseDetailCurriculumUnit.fields.find(({ name }) => name === 'title')
+  assert.equal(curriculumUnitTitle.type, 'text')
+  assert.equal(curriculumUnitTitle.rows, 2)
 })
 
 test('course detail body supports ordered mixed blocks and requires core content', () => {
@@ -146,13 +156,79 @@ test('course detail body supports ordered mixed blocks and requires core content
     { _type: 'courseDetailAudience' },
   ]
   assert.equal(validateCourseDetailBody(coreBlocks), true)
-  assert.match(validateCourseDetailBody(coreBlocks.slice(0, 3)), /適合對象/)
+  assert.equal(validateCourseDetailBody(coreBlocks.slice(0, 3)), true)
+  assert.equal(validateCourseDetailBody(coreBlocks.slice(0, 2)), true)
+  assert.match(validateCourseDetailBody(coreBlocks.slice(0, 1)), /圖文版型區塊/)
   assert.match(validateCourseDetailBody([
     ...coreBlocks,
     { _type: 'sharedTestimonialBlock' },
     { _type: 'sharedTestimonialBlock' },
   ]), /只能新增一個/)
   assert.equal(courseDetailGallery.title, '圖文版型區塊')
+})
+
+test('audience and curriculum blocks and video status copy are optional', () => {
+  const body = courseDetailContent.fields.find(({ name }) => name === 'body')
+  const statusLabel = courseDetailVideo.fields.find(({ name }) => name === 'statusLabel')
+  const bodyCalls = []
+  const calls = []
+  body.validation({
+    required() { bodyCalls.push('required'); return this },
+    min(value) { bodyCalls.push(['min', value]); return this },
+    max(value) { bodyCalls.push(['max', value]); return this },
+    custom() { bodyCalls.push('custom'); return this },
+  })
+  statusLabel.validation({
+    required() { calls.push('required'); return this },
+    min(value) { calls.push(['min', value]); return this },
+    max(value) { calls.push(['max', value]); return this },
+  })
+
+  assert.equal(bodyCalls.some(call => Array.isArray(call) && call[0] === 'min' && call[1] === 2), true)
+  assert.equal(calls.includes('required'), false)
+})
+
+test('gallery supporting copy and item titles are optional but keep length limits', () => {
+  const fields = [
+    courseDetailGallery.fields.find(({ name }) => name === 'note'),
+    courseDetailGallery.fields.find(({ name }) => name === 'statement'),
+    courseDetailGalleryItem.fields.find(({ name }) => name === 'title'),
+  ]
+
+  for (const field of fields) {
+    const calls = []
+    field.validation({
+      required() { calls.push('required'); return this },
+      min(value) { calls.push(['min', value]); return this },
+      max(value) { calls.push(['max', value]); return this },
+    })
+    assert.equal(calls.includes('required'), false, `${field.name} should be optional`)
+    assert.equal(calls.some(call => Array.isArray(call) && call[0] === 'max'), true)
+  }
+})
+
+test('all fields named description are optional but keep length limits', () => {
+  const fields = [
+    courseDetailGalleryItem,
+    courseDetailGallery,
+    courseDetailCurriculum,
+    courseDetailAudience,
+    courseDetailSchedule,
+    courseDetailRegistration,
+  ].map(type => type.fields.find(({ name }) => name === 'description'))
+
+  for (const field of fields) {
+    const calls = []
+    field.validation({
+      required() { calls.push('required'); return this },
+      min(value) { calls.push(['min', value]); return this },
+      max(value) { calls.push(['max', value]); return this },
+    })
+    assert.equal(field.title, '說明（選填）')
+    assert.equal(calls.includes('required'), false, `${field.name} should be optional`)
+    assert.equal(calls.some(call => Array.isArray(call) && call[0] === 'min'), true)
+    assert.equal(calls.some(call => Array.isArray(call) && call[0] === 'max'), true)
+  }
 })
 
 test('course detail publication requires a public-safe id, image and complete detail object', () => {
@@ -184,6 +260,10 @@ test('fixed course category identity cannot drift from the confirmed product str
   assert.equal(validateCourseCategoryIdentity({ key: 'body', name: '愛身體', order: 1 }), true)
   assert.notEqual(validateCourseCategoryIdentity({ key: 'body', name: '其他名稱', order: 1 }), true)
   assert.notEqual(validateCourseCategoryIdentity({ key: 'unknown', name: '愛身體', order: 1 }), true)
+
+  const category = course.fields.find(({ name }) => name === 'category')
+  assert.equal(category.options.filter, '_id in $categoryIds')
+  assert.deepEqual(category.options.filterParams.categoryIds, Object.values(courseCategoryDefinitions).map(({ id }) => id))
 })
 
 test('course images require alt text when an image is present', () => {

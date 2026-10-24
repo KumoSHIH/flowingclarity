@@ -33,6 +33,7 @@ describe('course detail API', () => {
     expect(courseDetailQuery).toContain('isPublished == true')
     expect(courseDetailQuery).not.toContain('detailIsPublished')
     expect(courseDetailQuery).toContain('slug.current == $slug')
+    expect(courseDetailQuery).toContain('stages[]{title, order, dateRanges[]{startDate, endDate}}')
     expect(fetchMock).toHaveBeenCalledWith(courseDetailQuery, { slug: 'japanese-facial-massage' })
     expect(vi.mocked(createClient).mock.calls[0]?.[0]).toMatchObject({
       perspective: 'published',

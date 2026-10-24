@@ -7,6 +7,8 @@ export const courseCategoryDefinitions = {
   beauty: { id: 'course-category-beauty', name: '展現美', order: 4 },
 } as const
 
+export const courseCategoryIds = Object.values(courseCategoryDefinitions).map(({ id }) => id)
+
 type CourseCategoryKey = keyof typeof courseCategoryDefinitions
 
 export function validateCourseCategoryIdentity(value: unknown): true | string {

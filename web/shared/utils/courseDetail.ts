@@ -37,8 +37,10 @@ interface ParsedRun {
   status: PublicRegistrationStatus
   registrationUrl?: string
   city?: string
-  dateLabel?: string
-  details: string[]
+  location?: string
+  dateSummary?: string
+  stages: CourseDetailSession['stages']
+  details: CourseDetailSession['details']
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -96,11 +98,24 @@ function parseHttpsUrl(value: unknown): string | undefined {
   }
 }
 
-function parseVideoUrl(value: unknown): string | undefined {
+function parseYouTubeEmbedUrl(value: unknown): string | undefined {
   const url = parseHttpsUrl(value)
   if (!url) return undefined
-  const hostname = new URL(url).hostname.replace(/^www\./, '')
-  return hostname === 'youtube.com' || hostname === 'youtu.be' ? url : undefined
+  const parsedUrl = new URL(url)
+  const hostname = parsedUrl.hostname.replace(/^www\./, '')
+  let videoId: string | undefined
+
+  if (hostname === 'youtu.be') {
+    videoId = parsedUrl.pathname.split('/').filter(Boolean)[0]
+  } else if (hostname === 'youtube.com') {
+    videoId = parsedUrl.pathname === '/watch'
+      ? parsedUrl.searchParams.get('v') ?? undefined
+      : parsedUrl.pathname.match(/^\/(?:embed|shorts|live)\/([^/]+)/)?.[1]
+  }
+
+  return videoId && /^[A-Za-z0-9_-]{11}$/.test(videoId)
+    ? `https://www.youtube-nocookie.com/embed/${videoId}`
+    : undefined
 }
 
 function isIsoDate(value: unknown): value is string {
@@ -114,6 +129,42 @@ function formatDateRange(startDate: string, endDate: string): string {
   if (startDate === endDate) return start
   if (startDate.slice(0, 4) === endDate.slice(0, 4)) return `${start}–${endDate.slice(5).replace('-', '/')}`
   return `${start}–${endDate.replaceAll('-', '/')}`
+}
+
+function parseRunStages(value: unknown): CourseDetailSession['stages'] | null {
+  if (!Array.isArray(value) || value.length < 1 || value.length > 10) return null
+
+  const stages = value.map((stage) => {
+    if (!isRecord(stage)) return null
+    const title = textInRange(stage.title, 2, 20)
+    const order = stage.order
+    if (!title || typeof order !== 'number' || !Number.isInteger(order) || order < 1
+      || !Array.isArray(stage.dateRanges) || stage.dateRanges.length < 1 || stage.dateRanges.length > 6) return null
+
+    const dateRanges = stage.dateRanges.map((range) => {
+      if (!isRecord(range) || !isIsoDate(range.startDate) || !isIsoDate(range.endDate)
+        || range.startDate > range.endDate) return null
+      return formatDateRange(range.startDate, range.endDate)
+    })
+    if (dateRanges.some(range => !range)) return null
+
+    return {
+      key: `stage-${order}`,
+      title,
+      order,
+      dateRanges: dateRanges as string[],
+    }
+  })
+  if (stages.some(stage => !stage)) return null
+
+  const completeStages = stages as Array<CourseDetailSession['stages'][number] & { order: number }>
+  if (completeStages.some((stage, index) => index > 0 && stage.order <= completeStages[index - 1]!.order)) return null
+  return completeStages.map(({ order: _order, ...stage }) => stage)
+}
+
+function formatRunDateSummary(stages: CourseDetailSession['stages']): string {
+  if (stages.length === 1 && stages[0]!.dateRanges.length === 1) return stages[0]!.dateRanges[0]!
+  return stages.map(stage => `${stage.title}｜${stage.dateRanges.join('、')}`).join('\n')
 }
 
 function parseRun(value: unknown): ParsedRun | null {
@@ -137,23 +188,18 @@ function parseRun(value: unknown): ParsedRun | null {
     : parseStringArray(value.notes, 0, 8, 120)
   if (!notes) return null
 
-  const dateRanges = Array.isArray(value.stages)
-    ? value.stages.flatMap((stage) => isRecord(stage) && Array.isArray(stage.dateRanges)
-        ? stage.dateRanges
-        : [])
-    : []
-  const validRanges = dateRanges.filter((range): range is Record<string, unknown> =>
-    isRecord(range) && isIsoDate(range.startDate) && isIsoDate(range.endDate) && range.startDate <= range.endDate,
-  )
-  const dateLabel = validRanges.length
-    ? formatDateRange(
-        validRanges[0]!.startDate as string,
-        validRanges.at(-1)!.endDate as string,
-      )
-    : undefined
+  const stages = parseRunStages(value.stages)
+  if (!stages) return null
+  const dateSummary = formatRunDateSummary(stages)
   const location = [city, venue].filter(Boolean).join('・')
-  const details = [dateLabel, location || undefined, timeLabel, capacityLabel, feeLabel, ...notes]
-    .filter((detail): detail is string => Boolean(detail))
+  const details = [
+    timeLabel ? { label: '上課時間', value: timeLabel } : undefined,
+    feeLabel ? { label: '課程費用', value: feeLabel } : undefined,
+    capacityLabel ? { label: '招生名額', value: capacityLabel } : undefined,
+    notes.length ? { label: '參與條件', value: notes.join('、') } : undefined,
+  ].filter(
+    (detail): detail is CourseDetailSession['details'][number] => Boolean(detail),
+  )
   const registrationUrl = value.registrationStatus === 'open'
     ? parseHttpsUrl(value.registrationUrl)
     : undefined
@@ -166,7 +212,9 @@ function parseRun(value: unknown): ParsedRun | null {
     status: value.registrationStatus as PublicRegistrationStatus,
     registrationUrl,
     city: city ?? undefined,
-    dateLabel,
+    location: location || undefined,
+    dateSummary,
+    stages,
     details,
   }
 }
@@ -174,14 +222,14 @@ function parseRun(value: unknown): ParsedRun | null {
 function parseGalleryItem(value: unknown): CourseDetailGalleryItem | null {
   if (!isRecord(value)) return null
   const key = textInRange(value.key, 1, 120)
-  const title = textInRange(value.title, 2, 80)
-  const description = textInRange(value.description, 8, 500)
+  const title = optionalText(value.title, 2, 80)
+  const description = optionalText(value.description, 8, 500)
   const group = optionalText(value.group, 1, 40)
   const image = parseImage(value.image)
   const points = value.points === undefined || value.points === null
     ? undefined
     : parseStringArray(value.points, 1, 8, 160)
-  if (!key || !title || !description || group === null || !image || points === null) return null
+  if (!key || title === null || description === null || group === null || !image || points === null) return null
   return { key, title, description, group, image, points }
 }
 
@@ -196,14 +244,14 @@ function parseIntroductionBlock(value: Record<string, unknown>, key: string): Co
 
 function parseGalleryBlock(value: Record<string, unknown>, key: string): CourseDetailGalleryBlock | null {
   const title = textInRange(value.title, 4, 100)
-  const description = textInRange(value.description, 10, 300)
+  const description = optionalText(value.description, 10, 300)
   const layout = value.layout
-  const note = textInRange(value.note, 4, 160)
+  const note = optionalText(value.note, 4, 160)
   const statement = optionalText(value.statement, 8, 300)
   const items = Array.isArray(value.items) ? value.items.map(parseGalleryItem) : []
-  if (!title || !description || typeof layout !== 'string'
+  if (!title || description === null || typeof layout !== 'string'
     || !galleryLayouts.includes(layout as CourseDetailGalleryLayout)
-    || !note || statement === null || items.length < 1 || items.some(item => !item)) return null
+    || note === null || statement === null || items.length < 1 || items.some(item => !item)) return null
   return {
     key,
     type: 'gallery',
@@ -234,7 +282,7 @@ function parseQuoteBlock(value: Record<string, unknown>, key: string): CourseDet
 
 function parseCurriculumBlock(value: Record<string, unknown>, key: string): CourseDetailCurriculumBlock | null {
   const title = textInRange(value.title, 4, 100)
-  const description = textInRange(value.description, 8, 300)
+  const description = optionalText(value.description, 8, 300)
   const units = Array.isArray(value.units)
     ? value.units.map((unit) => {
         if (!isRecord(unit)) return null
@@ -247,24 +295,26 @@ function parseCurriculumBlock(value: Record<string, unknown>, key: string): Cour
           : null
       })
     : []
-  return title && description && units.length > 0 && !units.some(unit => !unit)
+  return title && description !== null && units.length > 0 && !units.some(unit => !unit)
     ? { key, type: 'curriculum', title, description, units: units as CourseDetailCurriculumBlock['units'] }
     : null
 }
 
 function parseVideoBlock(value: Record<string, unknown>, key: string): CourseDetailVideoBlock | null {
   const title = textInRange(value.title, 4, 120)
-  const statusLabel = textInRange(value.statusLabel, 2, 40)
+  const embedUrl = parseYouTubeEmbedUrl(value.url)
+  const authoredStatusLabel = optionalText(value.statusLabel, 2, 40)
+  const statusLabel = authoredStatusLabel ?? (embedUrl ? '觀看課程影片' : '課程影片待上架')
   const image = parseImage(value.image)
-  if (!title || !statusLabel || !image) return null
-  return { key, type: 'video', title, statusLabel, image, url: parseVideoUrl(value.url) }
+  if (!title || authoredStatusLabel === null || !image) return null
+  return { key, type: 'video', title, statusLabel, image, embedUrl }
 }
 
 function parseAudienceBlock(value: Record<string, unknown>, key: string): CourseDetailAudienceBlock | null {
   const title = textInRange(value.title, 4, 80)
-  const description = textInRange(value.description, 8, 300)
+  const description = optionalText(value.description, 8, 300)
   const items = parseStringArray(value.items, 1, 12, 180)
-  return title && description && items
+  return title && description !== null && items
     ? { key, type: 'audience', title, description, items }
     : null
 }
@@ -341,17 +391,24 @@ export function parseCourseDetail(value: unknown, expectedSlug?: string): Course
   if (notice === null || englishTitle === null || !Array.isArray(detail.body)
     || !isRecord(detail.schedule) || !isRecord(detail.registration)) return null
 
-  const body = detail.body.map(parseBodyBlock)
+  const body = detail.body.flatMap((value) => {
+    const block = parseBodyBlock(value)
+    if (block) return [block]
+    const type = isRecord(value) && typeof value.type === 'string'
+      ? value.type.replace(/^courseDetail/, '').toLowerCase()
+      : ''
+    return type === 'video' ? [] : [null]
+  })
   const bodyKeys = body.map(block => block?.key).filter((key): key is string => Boolean(key))
-  const requiredBodyTypes = ['introduction', 'gallery', 'curriculum', 'audience']
+  const requiredBodyTypes = ['introduction', 'gallery']
   if (body.length < 1 || body.some(block => !block) || new Set(bodyKeys).size !== bodyKeys.length
     || body.filter(block => block?.type === 'testimonials').length > 1
     || requiredBodyTypes.some(type => !body.some(block => block?.type === type))) return null
 
   const scheduleTitle = textInRange(detail.schedule.title, 4, 100)
-  const scheduleDescription = textInRange(detail.schedule.description, 8, 300)
+  const scheduleDescription = optionalText(detail.schedule.description, 8, 300)
   const registrationTitle = textInRange(detail.registration.title, 4, 100)
-  const registrationDescription = textInRange(detail.registration.description, 8, 400)
+  const registrationDescription = optionalText(detail.registration.description, 8, 400)
   const openActionLabel = textInRange(detail.registration.openActionLabel, 2, 30)
   const closedActionLabel = textInRange(detail.registration.closedActionLabel, 2, 40)
   const registrationImage = parseImage(detail.registration.image, false)
@@ -360,8 +417,8 @@ export function parseCourseDetail(value: unknown, expectedSlug?: string): Course
     : []
   const relatedIds = relatedArticles.map(article => article.id)
 
-  if (!scheduleTitle || !scheduleDescription
-    || !registrationTitle || !registrationDescription || !openActionLabel || !closedActionLabel
+  if (!scheduleTitle || scheduleDescription === null
+    || !registrationTitle || registrationDescription === null || !openActionLabel || !closedActionLabel
     || registrationImage === null) return null
 
   const runs = value.runs.map(parseRun).filter((run): run is ParsedRun => Boolean(run))
@@ -372,13 +429,15 @@ export function parseCourseDetail(value: unknown, expectedSlug?: string): Course
   const heroMeta = [
     { label: '形式', value: deliveryLabel },
     locations.length ? { label: '地點', value: locations.join('、') } : undefined,
-    firstRun?.dateLabel ? { label: '時間', value: firstRun.dateLabel } : undefined,
+    firstRun?.dateSummary ? { label: '時間', value: firstRun.dateSummary } : undefined,
     { label: '狀態', value: firstRun ? registrationLabels[firstRun.status] : '目前沒有已確認梯次' },
   ].filter((item): item is { label: string, value: string } => Boolean(item))
   const sessions: CourseDetailSession[] = runs.map(run => ({
     key: run.key,
     title: run.title,
     status: registrationLabels[run.status],
+    location: run.location,
+    stages: run.stages,
     details: run.details,
   }))
   const actionLabel = firstOpenRun ? openActionLabel : closedActionLabel

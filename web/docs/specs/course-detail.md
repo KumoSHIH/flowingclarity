@@ -1,10 +1,10 @@
 # 課程內頁規格
 
-**規格狀態：** `cms-integrated`（2026-10-20 修正已於本機完成；更新後的 production schema 與內容流程尚未驗證）
+**規格狀態：** `cms-integrated`（2026-10-23 修正已於本機完成；更新後的 production schema 與內容流程尚未驗證）
 
-**設計狀態：** A「章節潮汐」響應式 HTML 整合稿已完成；桌機單元圖冊錯位調整與五款手機多圖模式已有瀏覽器模擬驗證紀錄。
+**設計狀態：** `design-approved`。A「章節潮汐」響應式整合稿已完成；2026-10-23 另確認課程梯次採 900px 最大寬度、少量內容垂直置中的極簡版型，並完成正式 Vue 桌機／手機驗證。
 
-**開發狀態：** 既有課程內頁曾完成 production 內容流驗收。2026-10-20 已於本機新增單一學員心得、可重複圖片輪播與固定頁尾延伸閱讀，並完成 schema、published-only GROQ、parser、Vue、測試與 Chrome 驗收；新版 schema 尚未部署，新增欄位尚未執行遠端草稿／發布／清除流程。
+**開發狀態：** 既有課程內頁曾完成 production 內容流驗收。2026-10-23 已於本機完成帶領者版面與圖文選填欄位修正，並完成 schema、parser、Vue、測試與 Chrome 驗收；新版 schema 尚未部署，異動欄位尚未執行遠端草稿／發布／清除流程。
 
 **後續決策：** 課程內頁目前以已驗證版本投入內容建置，不阻擋後續單元開發。待其他課程陸續完成後台資料後，再依跨課程的實際內容長度、區塊組合與編輯需求，集中評估是否調整前台樣式或 Studio 欄位；此項工作因需要大量內容建置與人工檢視，暫緩至資料較完整時處理。
 
@@ -60,12 +60,21 @@
 | cmp-article-left | 左圖右文 | 非必要；手機先圖後文 | 編輯者／Sanity block content |
 | cmp-article-right | 右圖左文 | 非必要；手機先圖後文 | 編輯者／Sanity block content |
 | cmp-article-bg | 有底色的引言、原則或引用 | 非必要；深底須用暖白文字 | 編輯者／Sanity block content |
-| cmp-curriculum | 階段、單元、標題與內容，可展開 | 建議；支援 1–12 單元 | 編輯者／Sanity block content |
+| cmp-curriculum | 階段、單元、標題與內容，可展開 | 非必要；加入時支援 1–12 單元 | 編輯者／Sanity block content |
 | cmp-schedule | 城市、日期、時間、地點、名額與狀態 | 報名時必要；不得顯示未確認資料 | 編輯者／Sanity course document |
-| cmp-video | YouTube 播放器與封面 | 非必要；需標題與封面替代文字 | 編輯者／Sanity block content |
+| cmp-video | YouTube 內嵌播放器與無影片時的封面 | 非必要；需標題與封面替代文字，狀態文字選填 | 編輯者／Sanity block content |
+| cmp-audience | 適合對象標題、說明與條件 | 非必要；加入時需至少一項條件 | 編輯者／Sanity block content |
 | cmp-testimonial | 純文字學員心得與分享者名稱 | 非必要；每頁最多一個區塊、每區 1–12 筆，僅使用已核准公開的內容 | 編輯者／Sanity shared block content |
 | cmp-swiper | 左側圖片輪播與右側固定文字 | 非必要；可重複新增，每區 1–10 張 | 編輯者／Sanity block content |
 | cmp-related-articles | 相關文章輪播 | 非必要；0–8 篇不重複文章，固定在報名後方；桌面三則、平板兩則、手機一則 | Sanity references |
+
+課程梯次的 `stages` 是公開日程的唯一日期來源。單一階段且只有一段日期時可維持精簡日期；多階段或同階段含不連續日期時，首屏「時間」必須依階段分行列出，梯次區則逐階段呈現每一個日期區間。不得以最早開始日與最晚結束日合併成連續區間，以免讓訪客誤以為中間日期皆需上課。
+
+圖文版型區塊的區塊標題、說明、版型與至少一筆圖文內容仍為必要資料；「圖冊補充」、「段落引言」及每筆圖文內容的標題為選填。「圖冊補充」保留為相容既有內容的資料欄位，但 course-gallery 不再渲染 footer、版型名稱或補充文字；其他選填值留空時，前台不輸出空標籤，圖文說明與圖片仍正常呈現，非空值仍受原長度限制。
+
+課程架構為選填內容區塊；加入時，課綱單元標題仍為必填的 2–100 字短篇文字。後台使用兩行文字框並提示可按 Enter 換行，前台以 `white-space: pre-line` 保留編輯者指定的斷行；階段與單元內容的既有契約不變。
+
+課程影片的狀態文字留空時，前台依有無有效 YouTube 網址顯示「觀看課程影片」或「課程影片待上架」。有效網址會轉為 `youtube-nocookie.com` 的 16:9 iframe，在頁內直接播放，不產生導向 YouTube 的連結；播放器於桌機最大寬度 760px 並置中，窄螢幕縮至容器寬度。沒有有效網址時以後台封面呈現同尺寸佔位。影片為選填內容；若已發布資料中的影片區塊不完整，前台只略過該區塊，不讓整門課落入錯誤狀態。課程介紹與圖文版型仍是內容編排的必要核心區塊；課程架構與適合對象皆不再列為必要區塊。
 
 
 ## 三種設計方向
@@ -144,6 +153,22 @@
 - 2026-10-16：手機內容章節標題改用全站共用 `--detail-section-title-size: 26px`，涵蓋介紹、適合對象、圖冊、梯次、課綱、帶領者、影片與報名；Hero 與引言維持原展示字級。390px fixture 頁的 12 個內容 `h2` 均為 `26px / 32.5px`、最右界 368px，長標題可自然換兩行且無水平溢位；完整長頁及淺色長文／深色報名區近照位於 [`review/detail-heading-token-mobile/`](../design/review/detail-heading-token-mobile/README.md)。Web 34 檔／190 項測試、typecheck 與 production build 通過。
 - 2026-10-18：詳情頁頂端加入共用 `DetailBreadcrumb`，呈現「首頁／課程探索／目前課程」；目前頁為帶有 `aria-current="page"` 的純文字。Chrome 以 production 內容 `/course/rebalancing` 檢查 1440 × 900 與 390 × 844，麵包屑、首區及長標題無溢位或錯位；截圖位於 `/private/tmp/course-*-breadcrumb.png`。相關四組詳情測試 37 項、Web 全套 37 檔共 211 項、typecheck 與 production build 均通過；typecheck 僅保留既有 Volar 套件警告。
 - 2026-10-20：完成待修正清單。新增單一共用心得、可重複圖片輪播與頁尾延伸閱讀；About 輪播及 Article 延伸閱讀分別抽成 `SharedImageTextCarousel`、`SharedRelatedArticles`。Chrome CDP 於 1440×1000／390×844 確認無水平溢位、單一 `h1`、內容標題 38px／26px、桌機左圖右文、手機自然堆疊、48px 控制、可見鍵盤焦點、卡片 hover 色彩及 reduced-motion 0s；證據見 [課程內頁修正驗收](../design/review/course-detail-corrections-2026-10-20/README.md)。Web 39 檔／228 項與 Studio 31 項測試、兩端 typecheck 及 production build 均通過；Impeccable detector 為 0 個 anti-pattern，55 項 advisory 均為既有且已核准的頁面角色字級與色值。新版 schema 尚未部署或寫入遠端資料。
+- 2026-10-23：完成本輪待修正清單。課程介紹與帶領者導言取消局部閱讀寬度限制；帶領者色塊維持全寬，內部圖片最大寬度為 500px；新增獨立「帶領者」`h2`，姓名改為 `h3`。圖冊補充、段落引言及圖文內容標題改為端到端選填，course-gallery 的 footer 與相關版型標籤則已移除。Chrome CDP 於 1440×1000、1023×900、390×844 確認無水平溢位、單一 `h1`、兩處導言 `max-width: none`、肖像上限、標題層級、圖冊無 footer 與 2px 鍵盤焦點；證據見 [2026-10-23 課程內頁修正驗收](../design/review/course-detail-corrections-2026-10-23/README.md)。相關 Web 4 檔／31 項與 Studio 35 項測試、兩端 typecheck 通過；完整測試與 build 結果記錄於下方清單。本機未部署 schema 或寫入遠端資料。
+- 2026-10-23：追加課綱單元標題換行支援。Studio 欄位由單行 `string` 改為兩行 `text`，保留原必填及 2–100 字限制；parser 保留換行字元，Vue 標題套用既有 `preserve-lines`。Chrome 以合成兩行標題於 1440×1000／390×844 驗證皆實際渲染兩行、無水平溢位，按鈕高度分別為 96px／104px；證據同上。相關 Web 2 檔／25 項與 Studio 35 項測試、兩端 typecheck 及 production build 均通過；schema 尚未部署，未修改遠端資料。
+- 2026-10-23：依課程後台修正清單，將適合對象改為選填，並修正影片區塊可拖垮整頁的解析耦合。影片狀態文字改為選填並提供安全預設；其他影片必要資料不完整時只略過影片。Web 43 檔／254 項、Studio 37 項、兩端 typecheck／build 及 schema validation 通過；production 未部署，Studio 瀏覽器驗收待後續完成。完整紀錄見 [課程後台修正紀錄](../corrections/course-admin-corrections-2026-10-23.md)。
+- 2026-10-23：追加將課程架構改為選填。Studio 內容編排最少區塊數降為 2，必要核心只保留課程介紹與圖文版型；前台 parser 同步接受沒有課程架構的已發布內容。回歸測試與最終驗證結果記錄於 [課程後台修正紀錄](../corrections/course-admin-corrections-2026-10-23.md)。
+- 2026-10-23：課程影片改為頁內嵌入。前台將有效 YouTube 網址正規化為隱私強化 iframe，播放器以 600px 上限置中並維持 16:9；不再渲染外連播放按鈕，無網址時保留封面與待上架狀態。
+- 2026-10-23：修正分階段課程日期被合併為連續區間的誤導。GROQ 補回階段名稱與順序，parser 保留每階段的全部日期區間；首屏時間分行摘要，梯次區逐階段列出。
+- 2026-10-23：因既有課程梯次區與整頁視覺節奏不協調，新增 A「階序長卷」、B「夜色課程帶」、C「編輯式行程簿」三款桌機候選稿；三案皆以三階段、每階兩段日期測試完整資訊層級。方向尚待選定，未更新為 `design-approved`，也未開始手機版或正式 Vue 實作。比較與下一步見 [課程梯次三款桌機設計方向](../design/review/course-schedule-concepts-desktop/README.md)。
+- 2026-10-23：A、B、C 三案經人工檢視後均未採用；依回饋改為單一極簡方向。使用者後續手動將內容上限調整為 900px，正式梯次區改用完整視窗高度垂直置中，第一階上方不設分隔線；設計稿與測試已同步。正式頁另補齊梯次地點、資訊標籤與報名提醒，使內容層級和核准稿一致。Chrome 1440×1000、CDP 390×1100 實際渲染皆正常；390px 的 `innerWidth`、`clientWidth`、`scrollWidth` 均為 390px。截圖見 [課程梯次設計紀錄](../design/review/course-schedule-concepts-desktop/README.md)。
+- 2026-10-23：課程介紹與學員心得分享改用梯次區的 900px 閱讀寬度，段落使用完整可用寬度並置中；課程介紹改成標題在上、內容在下，桌機於 720–900px 高度中垂直置中，手機則維持自然高度。課程頁只覆寫共用心得元件的容器寬度與 padding，不影響活動頁等其他使用處。Chrome 1440×1000 與精確 390×1100 驗收無水平溢位，證據見 [課程梯次與閱讀寬度設計紀錄](../design/review/course-schedule-concepts-desktop/README.md)。
+- 2026-10-23：完成課程梯次與極簡稿的第二次對齊。正式頁補上梯次地點、具標籤的上課資訊及報名提醒，標題固定 58px，並保留手機 26px；既有影片容器同步修回 600px，帶領者補回獨立 `h2`。課程詳情元件 16 項、parser 14 項、修正樣式 6 項測試與 typecheck、production build 均通過。Web 全套為 43 檔中 42 檔通過、260 項中 259 項通過；唯一失敗為既有 About 輪播自動播放計時測試，非本輪修改範圍。
+- 2026-10-23：同步人工共用元件調整。課程圖片輪播沿用 `SharedImageTextCarousel` 的 2,500ms 自動播放與 2,000ms 位移轉場；學員心得的標題、清單與正文不再由共用元件重複限寬，改由課程頁既有 900px 置中外層統一控制。About 計時回歸測試已同步至新節奏；Web 全套 43 檔／261 項測試、typecheck 與 production build 均通過，上一筆 259／260 的暫時失敗已解除。
+- 2026-10-23：依最新回饋將課程影片最大寬度由 600px 調整為 760px，繼續維持 16:9、置中與窄螢幕自適應；帶領者區移除重複的固定「帶領者」標題，姓名由 `h3` 升為該 section 的 `h2`，保留原姓名字級與內容順序。Chrome 於 1440 × 1000／390 × 844 確認無水平溢位、固定標籤數為 0，影片 scoped CSS 實測寬度為 760px／346px；Web 全套 43 檔／261 項、typecheck、production build 與 layout detector 均通過。Production 公開內容目前沒有影片區塊，真實 iframe 畫面仍待發布後驗收。前述新增獨立標題與 600px 容器的紀錄屬先前階段，已由本條取代。
+- 2026-10-23：課程 Hero 與頁尾報名行動移除獨立 `.primary-action`，統一改用全站 `.button-primary` 與 `.button-primary__icon`；有效網址維持連結，未核准行動維持原生 disabled button。頁面只保留 Hero 外距與報名區上距，不再覆寫顏色、字級、高度、箭頭、最大寬度、focus 或 disabled 樣式。
+- 2026-10-23：Chrome production build 於 1440 × 1000／390 × 844 驗證課程 Hero 按鈕為 360 × 84px／346 × 72px，字級 18px／14px、字重 400，且頁面無水平溢位；disabled 視覺與不觸發箭頭位移另由共用樣式瀏覽器量測及元件測試覆蓋。證據見 [主要行動按鈕統一驗證](../design/review/primary-action-unification-2026-10-23/README.md)。
+- 2026-10-23：圖片輪播的章節導覽不再使用固定「圖片輪播」，改為與內容區 `h2` 共用後台設定的區塊標題。Production `/course/rebalancing` 實測兩處皆為「課程花絮」，點擊後 active／錨點正確，1440px／390px 均無水平溢位；證據見 [課程輪播章節標題驗證](../design/review/course-carousel-title-2026-10-23/README.md)。
+- 2026-10-23：課程後台所有明確命名為「說明」的欄位改為選填，範圍為學習片段、圖文版型、課程架構、適合對象、課程梯次與報名區塊。Studio 保留原字數上下限但移除 required；Web 型別與 parser 接受缺值，Vue 不渲染空段落。「單元內容」「固定文字」等不同語意欄位維持原契約。Web 43 檔／263 項與 Studio 38 項測試、兩端 typecheck 及 production build 通過；schema 尚未部署，實際 Studio 留空發布待驗證。
 
 ## 待處理與下一階段
 
@@ -162,4 +187,14 @@
 - [x] 缺少學員分享的區塊（此區後檯可自由新增，只能有一個），近期活動內頁有相同的元件，用這個就可以；2026-10-20 已接入共用 schema、型別、parser 與 `SharedTestimonials`，Studio 驗證每頁最多一個
 - [x] 新增圖片輪播，左：swiper 右：固定文字（功能樣式同關於我們：精選片段 的輪播，請把這個論播拆成共用元件），此區塊為自由新增；2026-10-20 已抽出 `SharedImageTextCarousel`，About 與課程共用，課程可在內容編排中重複新增
 - [x] 新增元件：延伸閱讀（同 articles-detail），此區塊為自由新增，固定在最下方，可選取想放的文章或是關聯文章；2026-10-20 已抽出 `SharedRelatedArticles`，支援人工排序 0–8 篇並固定在報名區後方
-- []
+- 剛才有手動調整的css，若有需要請幫我補回設計稿或開發文件
+- [x] .course-intro .lede 有相似這個區塊的 都拿掉 max-width（2026-10-23：課程介紹與帶領者導言皆無局部 `max-width`；三個斷點 computed style 均為 `none`。）
+- [x] course-teacher__portrait 背景底色區域維持原樣，希望裡面的圖片max-width:500px，看需要再多包一層還是怎樣（2026-10-23：保留 bark 色全寬容器，圖片直接限制 `max-width: 500px`；桌機／平板實測 500px，手機依可用寬度縮為 358px。）
+- [x] "帶領者" 希望也有這個標題，目前沒有（2026-10-23：新增獨立 `h2`，姓名使用 `h3`；桌機、平板與手機均完成視覺及語意驗證。）
+- [x] 影片容器調整為 760px（2026-10-23：最大寬度改為 760px，維持 16:9、置中與窄螢幕 `100%` 自適應。）
+- [x] 移除「帶領者」章節標題（2026-10-23：移除固定標籤，帶領者姓名改為 section 的 `h2`，避免標題階層中斷。）
+- [x] 後台相關設定： 圖冊補充、段落引言 改成非必填，圖文內容的標題 改成非必填（2026-10-23：Studio validation、共用型別、parser 與 Vue fallback 已同步；缺值回歸測試通過。schema 尚未部署，遠端內容流程仍待後續驗證。）
+- [x] course-gallery 不需要 footer（2026-10-23：已移除前台 footer markup、版型名稱與補充文字輸出，以及所有相關桌機／手機定位樣式；圖冊補充欄位保留供舊內容相容。）
+- [x] 後台設定：內容編排 > 課程架構 > 課綱單元 > 單元標題希望可以斷行（2026-10-23：Studio 改為兩行 `text` 並加入換行提示；parser 與前台保留換行，桌機／手機兩行標題驗證通過。schema 尚未部署。）
+
+本輪原始清單已全部完成本機實作及必要驗證。Web 43 個測試檔／252 項與 Studio 35 項測試、兩端 typecheck、兩端 production build 及 `git diff --check` 均通過；Web typecheck 保留既有 `vue-router/volar/sfc-route-blocks` 警告，Web build 保留既有 sourcemap 與 runtime 字型路徑提示。下一步是部署 Studio schema 後，以隔離內容驗證三個選填欄位及課綱單元標題換行的草稿、發布、匿名讀取、前台呈現與精確清除；Safari／Firefox、真實 iOS／Android 與螢幕閱讀器仍未執行。

@@ -18,6 +18,10 @@ interface CourseRunPublicationValue {
   registrationUrl?: string
 }
 
+interface CourseRunRegistrationValue {
+  registrationStatus?: string
+}
+
 const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/
 
 export function validateCourseRunPublication(value: unknown): true | string | ValidationError {
@@ -38,6 +42,24 @@ export function validateCourseRunPublication(value: unknown): true | string | Va
     }
   }
   return true
+}
+
+export function validateCourseRunRegistrationUrl(
+  value: unknown,
+  parent: unknown,
+): true | string {
+  const run = parent && typeof parent === 'object'
+    ? parent as CourseRunRegistrationValue
+    : undefined
+  if (run?.registrationStatus !== 'open') return true
+  try {
+    const url = new URL(typeof value === 'string' ? value : '')
+    return url.protocol === 'https:' && url.hostname
+      ? true
+      : '開放報名時，請填寫有效的 HTTPS 報名網址。'
+  } catch {
+    return '開放報名時，請填寫有效的 HTTPS 報名網址。'
+  }
 }
 
 function isIsoDate(value: unknown): value is string {
@@ -164,8 +186,9 @@ export const courseRun = defineType({
     }),
     defineField({
       name: 'registrationStatus',
-      title: '報名狀態',
+      title: '報名狀態（是否開放）',
       type: 'string',
+      description: '選擇「開放報名」後，還需填寫報名網址並開啟「顯示於公開網站」，前台才會出現報名連結。',
       options: {
         list: [
           { title: '尚未開放', value: 'scheduled' },
@@ -184,9 +207,18 @@ export const courseRun = defineType({
       }),
     }),
     defineField({
+      name: 'registrationUrl',
+      title: '報名網址',
+      type: 'url',
+      description: '只有狀態為「開放報名」且梯次顯示於公開網站時，前台才會顯示這個連結。',
+      validation: Rule => Rule.uri({ scheme: ['https'] }).custom((value, context) =>
+        validateCourseRunRegistrationUrl(value, context.parent)),
+    }),
+    defineField({
       name: 'isPublished',
-      title: '可供公開網站查詢',
+      title: '顯示於公開網站',
       type: 'boolean',
+      description: '關閉時，此梯次與報名狀態都不會出現在前台。',
       initialValue: false,
       validation: Rule => Rule.required(),
     }),
@@ -223,13 +255,6 @@ export const courseRun = defineType({
       type: 'string',
       description: '只填寫已核准的公開費用。',
       validation: Rule => Rule.min(2).max(60),
-    }),
-    defineField({
-      name: 'registrationUrl',
-      title: '報名網址',
-      type: 'url',
-      description: '只有狀態為「開放報名」時，前台才會顯示這個連結。',
-      validation: Rule => Rule.uri({ scheme: ['https'] }),
     }),
     defineField({
       name: 'notes',

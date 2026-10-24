@@ -37,7 +37,7 @@
 | `course.title` | 課程正式名稱，純文字 | 必填，2–40 字 | 課程編輯者／Sanity course document |
 | `course.slug` | 詳情頁穩定識別碼 | 必填且全站唯一，1–60 個小寫英數與連字號 | 課程編輯者／Sanity |
 | `course.href` | 由 slug 產生的 `/course/[slug]` 站內路徑 | 衍生值，不存入 CMS | 系統／集中式路由 helper |
-| `course.category` | 所屬分類 reference | 必填且僅 1 個 | 課程編輯者／Sanity |
+| `course.category` | 所屬分類 reference | 必填且僅 1 個；選單只顯示四份正式公開 ID | 課程編輯者／Sanity |
 | `course.deliveryModes` | 授課形式列舉 | 必填，1–2 項且不重複：`inPerson`、`online` | 課程編輯者／Sanity |
 | `course.summary` | 支援首頁及詳情頁的課程摘要 | 必填，30–100 字；總覽第一版不顯示 | 課程編輯者／Sanity |
 | `course.image` | 代表圖、裁切焦點及替代文字 | 選填；有資訊意義時替代文字必填 | 課程編輯者／Sanity image |
@@ -55,8 +55,8 @@
 | --- | --- | --- | --- |
 | `run.course` | 此梯次所屬課程，reference | 必填且僅 1 個 | 課程編輯者／Sanity |
 | `run.label` | 區分梯次的編輯用名稱 | 必填，2–40 字；不作為課程名稱 | 課程編輯者／Sanity |
-| `run.registrationStatus` | 報名狀態列舉 | 必填：`scheduled`、`open`、`full`、`closed`、`cancelled` 或 `completed` | 課程編輯者／Sanity |
-| `run.isPublished` | 是否可供公開頁面查詢 | 必填 | 課程編輯者／Sanity |
+| `run.registrationStatus` | 報名狀態列舉 | 必填：`scheduled`、`open`、`full`、`closed`、`cancelled` 或 `completed`；`open` 時需 HTTPS 報名網址 | 課程編輯者／Sanity |
+| `run.isPublished` | 是否顯示於公開網站 | 必填；關閉時不顯示梯次與報名狀態 | 課程編輯者／Sanity |
 | `run.stages` | 同一梯次內依序完成的階段 | 必填，最少 1、典型 1–3、最多 10 階 | 課程編輯者／Sanity |
 | `stage.title` | 階段名稱 | 必填，2–20 字 | 課程編輯者／`run.stages[]` |
 | `stage.order` | 梯次內階段順序 | 必填且同梯次唯一 | 課程編輯者／`run.stages[]` |
@@ -190,6 +190,10 @@ stages:
 ## 首頁分類深連結回歸
 
 2026-10-20 配合首頁 Banner 四個分類入口，課程總覽在初次 ready 或 loading 後轉為 ready 時讀取 `#body`、`#heart`、`#life`、`#beauty`，一次性捲至對應 section 並設定左欄 `aria-current="location"`；後續 IntersectionObserver 仍接手一般捲動狀態。Chrome 1440×1000 實測四個 target 頂端皆為 107px、固定 Header 底部為 99px；390×844 的 `#beauty` 頂端為 93px、Header 底部為 87px，兩尺寸皆無水平溢位。Web 39 檔／229 項測試、typecheck 與 production build 通過。證據見 [首頁 Banner 課程分類連結驗收](../design/review/home-banner-course-targets-2026-10-20/README.md)。
+
+## 課程後台修正記錄
+
+2026-10-23 唯讀盤點 production，確認分類重複來自四份 `course-category-*` 正式文件及四份 `courseCategory.*` 舊版相容文件；現有課程 reference 已限縮為四份正式 ID，未刪除遠端舊文件。梯次報名原已採 `registrationStatus`、`registrationUrl` 與 `isPublished` 三欄協作；現有唯一梯次為 `open`，但未公開且缺網址，因此前台不顯示報名入口。Studio 導覽改名為「課程梯次／報名設定」，欄位說明與順序明確化，並在選擇 `open` 時立即要求 HTTPS 網址。完整狀態見 [課程後台修正紀錄](../corrections/course-admin-corrections-2026-10-23.md)。
 
 #### 筆記，不需要執行，可忽略
 - 使用 `web/.agents/skills/develop-feature/SKILL.md` 從 `docs/specs/course` 接續下一個流程

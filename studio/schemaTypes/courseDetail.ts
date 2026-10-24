@@ -43,8 +43,8 @@ export const courseDetailGalleryItem = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'group', title: '階段或分組', type: 'string', validation: Rule => Rule.max(40) }),
-    defineField({ name: 'title', title: '標題', type: 'string', validation: Rule => Rule.required().min(2).max(80) }),
-    defineField({ name: 'description', title: '說明', type: 'text', rows: 5, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.required().min(8).max(500) }),
+    defineField({ name: 'title', title: '標題（選填）', type: 'string', validation: Rule => Rule.min(2).max(80) }),
+    defineField({ name: 'description', title: '說明（選填）', type: 'text', rows: 5, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.min(8).max(500) }),
     defineField({
       name: 'points',
       title: '重點條列',
@@ -72,7 +72,7 @@ export const courseDetailGallery = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'title', title: '標題', type: 'string', validation: Rule => Rule.required().min(4).max(100) }),
-    defineField({ name: 'description', title: '說明', type: 'text', rows: 4, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.required().min(10).max(300) }),
+    defineField({ name: 'description', title: '說明（選填）', type: 'text', rows: 4, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.min(10).max(300) }),
     defineField({
       name: 'layout',
       title: '呈現版型',
@@ -81,8 +81,8 @@ export const courseDetailGallery = defineType({
       options: { list: galleryLayoutOptions, layout: 'radio' },
       validation: Rule => Rule.required(),
     }),
-    defineField({ name: 'note', title: '圖冊補充', type: 'string', validation: Rule => Rule.required().min(4).max(160) }),
-    defineField({ name: 'statement', title: '段落引言', type: 'text', rows: 3, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.min(8).max(300) }),
+    defineField({ name: 'note', title: '圖冊補充（選填）', type: 'string', validation: Rule => Rule.min(4).max(160) }),
+    defineField({ name: 'statement', title: '段落引言（選填）', type: 'text', rows: 3, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.min(8).max(300) }),
     defineField({
       name: 'items',
       title: '圖文內容',
@@ -144,7 +144,14 @@ export const courseDetailCurriculumUnit = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'stage', title: '階段', type: 'string', validation: Rule => Rule.required().max(30) }),
-    defineField({ name: 'title', title: '單元標題', type: 'string', validation: Rule => Rule.required().min(2).max(100) }),
+    defineField({
+      name: 'title',
+      title: '單元標題',
+      type: 'text',
+      rows: 2,
+      description: '可按 Enter 換行，前台會保留段落。',
+      validation: Rule => Rule.required().min(2).max(100),
+    }),
     defineField({ name: 'description', title: '單元內容', type: 'text', rows: 7, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.required().min(8).max(1200) }),
   ],
   preview: {
@@ -158,7 +165,7 @@ export const courseDetailCurriculum = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'title', title: '標題', type: 'string', validation: Rule => Rule.required().min(4).max(100) }),
-    defineField({ name: 'description', title: '說明', type: 'text', rows: 4, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.required().min(8).max(300) }),
+    defineField({ name: 'description', title: '說明（選填）', type: 'text', rows: 4, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.min(8).max(300) }),
     defineField({
       name: 'units',
       title: '課綱單元',
@@ -179,7 +186,13 @@ export const courseDetailVideo = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'title', title: '標題', type: 'string', validation: Rule => Rule.required().min(4).max(120) }),
-    defineField({ name: 'statusLabel', title: '狀態文字', type: 'string', initialValue: '課程影片待上架', validation: Rule => Rule.required().min(2).max(40) }),
+    defineField({
+      name: 'statusLabel',
+      title: '狀態文字（選填）',
+      type: 'string',
+      description: '留空時，有網址顯示「觀看課程影片」，沒有網址顯示「課程影片待上架」。',
+      validation: Rule => Rule.min(2).max(40),
+    }),
     defineField({
       name: 'url',
       title: 'YouTube 網址',
@@ -217,7 +230,7 @@ export const courseDetailAudience = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'title', title: '標題', type: 'string', validation: Rule => Rule.required().min(4).max(80) }),
-    defineField({ name: 'description', title: '說明', type: 'text', rows: 4, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.required().min(8).max(300) }),
+    defineField({ name: 'description', title: '說明（選填）', type: 'text', rows: 4, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.min(8).max(300) }),
     defineField({
       name: 'items',
       title: '對象條件',
@@ -276,7 +289,7 @@ export const courseDetailSchedule = defineType({
   description: '日期、地點與報名狀態由已公開的課程梯次自動帶入。',
   fields: [
     defineField({ name: 'title', title: '標題', type: 'string', validation: Rule => Rule.required().min(4).max(100) }),
-    defineField({ name: 'description', title: '說明', type: 'text', rows: 4, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.required().min(8).max(300) }),
+    defineField({ name: 'description', title: '說明（選填）', type: 'text', rows: 4, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.min(8).max(300) }),
   ],
 })
 
@@ -287,7 +300,7 @@ export const courseDetailRegistration = defineType({
   description: '報名網址只會從狀態為「開放報名」的已公開梯次帶入。',
   fields: [
     defineField({ name: 'title', title: '標題', type: 'string', validation: Rule => Rule.required().min(4).max(100) }),
-    defineField({ name: 'description', title: '說明', type: 'text', rows: 5, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.required().min(8).max(400) }),
+    defineField({ name: 'description', title: '說明（選填）', type: 'text', rows: 5, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.min(8).max(400) }),
     defineField({ name: 'openActionLabel', title: '開放報名按鈕文字', type: 'string', initialValue: '前往報名', validation: Rule => Rule.required().min(2).max(30) }),
     defineField({ name: 'closedActionLabel', title: '未開放按鈕文字', type: 'string', initialValue: '報名資訊待確認', validation: Rule => Rule.required().min(2).max(40) }),
     defineField({
@@ -303,8 +316,6 @@ export const courseDetailRegistration = defineType({
 const requiredBodyBlockTypes = [
   'courseDetailIntroduction',
   'courseDetailGallery',
-  'courseDetailCurriculum',
-  'courseDetailAudience',
 ]
 
 export function validateCourseDetailBody(value: unknown): true | string {
@@ -319,8 +330,6 @@ export function validateCourseDetailBody(value: unknown): true | string {
   const labels: Record<string, string> = {
     courseDetailIntroduction: '課程介紹',
     courseDetailGallery: '圖文版型區塊',
-    courseDetailCurriculum: '課程架構',
-    courseDetailAudience: '適合對象',
   }
   return `內容編排缺少：${missing.map(type => labels[type]).join('、')}。`
 }
@@ -348,7 +357,7 @@ export const courseDetailContent = defineType({
         defineArrayMember({ type: 'sharedTestimonialBlock' }),
         defineArrayMember({ type: 'courseDetailCarousel' }),
       ],
-      validation: Rule => Rule.required().min(4).max(20).custom(validateCourseDetailBody),
+      validation: Rule => Rule.required().min(2).max(20).custom(validateCourseDetailBody),
     }),
     defineField({ name: 'schedule', title: '課程梯次', type: 'courseDetailSchedule', validation: Rule => Rule.required() }),
     defineField({ name: 'registration', title: '報名區塊', type: 'courseDetailRegistration', validation: Rule => Rule.required() }),

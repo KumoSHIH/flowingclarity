@@ -1,4 +1,5 @@
 import { defineField, defineType, type Path, type ValidationError } from 'sanity'
+import { courseCategoryIds } from './courseCategory.ts'
 
 const courseSlugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
@@ -53,7 +54,12 @@ export const course = defineType({
       title: '課程分類',
       type: 'reference',
       to: [{ type: 'courseCategory' }],
-      options: { disableNew: true },
+      description: '只顯示四個目前使用中的正式分類；舊版相容文件不會出現在選單中。',
+      options: {
+        disableNew: true,
+        filter: '_id in $categoryIds',
+        filterParams: { categoryIds: courseCategoryIds },
+      },
       validation: Rule => Rule.required(),
     }),
     defineField({

@@ -12,8 +12,8 @@ export interface CourseDetailImage {
 
 export interface CourseDetailGalleryItem {
   key: string
-  title: string
-  description: string
+  title?: string
+  description?: string
   image: CourseDetailImage
   points?: string[]
   group?: string
@@ -38,9 +38,9 @@ export interface CourseDetailGalleryBlock {
   key: string
   type: 'gallery'
   title: string
-  description: string
+  description?: string
   layout: CourseDetailGalleryLayout
-  note: string
+  note?: string
   statement?: string
   items: CourseDetailGalleryItem[]
 }
@@ -56,7 +56,16 @@ export interface CourseDetailSession {
   key: string
   title: string
   status: string
-  details: string[]
+  location?: string
+  stages: Array<{
+    key: string
+    title: string
+    dateRanges: string[]
+  }>
+  details: Array<{
+    label: string
+    value: string
+  }>
 }
 
 export interface CourseDetailTeacherBlock {
@@ -80,7 +89,7 @@ export interface CourseDetailCurriculumBlock {
   key: string
   type: 'curriculum'
   title: string
-  description: string
+  description?: string
   units: CourseDetailCurriculumUnit[]
 }
 
@@ -90,14 +99,14 @@ export interface CourseDetailVideoBlock {
   title: string
   statusLabel: string
   image: CourseDetailImage
-  url?: string
+  embedUrl?: string
 }
 
 export interface CourseDetailAudienceBlock {
   key: string
   type: 'audience'
   title: string
-  description: string
+  description?: string
   items: string[]
 }
 
@@ -148,12 +157,12 @@ export interface CourseDetailContent {
   body: CourseDetailBodyBlock[]
   schedule: {
     title: string
-    description: string
+    description?: string
     sessions: CourseDetailSession[]
   }
   registration: {
     title: string
-    description: string
+    description?: string
     actionLabel: string
     actionUrl?: string
     image?: CourseDetailImage

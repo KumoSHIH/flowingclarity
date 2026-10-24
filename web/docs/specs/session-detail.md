@@ -179,6 +179,12 @@ SEO 不得加入頁面未呈現或未核准的資格、療效、價格與服務�
 
 2026-10-21 手機版追補：桌機 banner 左右 padding 維持 `0`，`<= 1023px` 改回共用 token 的 `24px`，避免窄螢幕文字貼齊視窗邊緣。Chrome 量測確認 390px 為 `24px`、1024／1440／1920px 為 `0px`，四個尺寸皆無水平溢位；Web 40 個測試檔／237 項測試、typecheck、production build、layout detector 與 `git diff --check` 通過。
 
+2026-10-23 同步人工 CSS 調整：人物照 stage 最低高度由 `360px` 提升為 `440px`，四周 padding 調整為 `50px`；`cover` 模式的人物 figure 不再另設 `360px` 最低高度，而是完整填滿 stage。既有 2026-10-21 截圖與量測早於本次調整，本條只記錄目前實作值，尚未宣告新一輪瀏覽器視覺驗收完成。
+
+2026-10-23 主要預約入口改用全站 `.button-primary` 與 `.button-primary__icon`，只在執行師側欄保留 `28px` 上距；顏色、寬高、字級、箭頭互動、focus 與 reduced-motion 不再由頁面重複定義。選填與外部安全連結契約不變。
+
+本輪元件測試確認預約連結帶有共用按鈕與箭頭 class；Web 全套 43 個測試檔、261 項測試、typecheck 與 production build 通過。Production 兩筆執行師內容目前都沒有預約網址，因此未把真實內容的瀏覽器畫面記為已完成；共用狀態量測見 [主要行動按鈕統一驗證](../design/review/primary-action-unification-2026-10-23/README.md)。
+
 #### 筆記，不需要執行，可忽略
 
 - 使用 `$develop-feature` 從 `docs/specs/session-detail.md` 接續下一個流程

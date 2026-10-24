@@ -35,9 +35,11 @@ describe('event detail correction styles', () => {
   })
 
   it('gives the registration arrow a visible interaction and reduced-motion fallback', () => {
+    const stylesheet = read('../../app/assets/css/main.css')
+
     expect(eventDetail).toContain('class="event-detail__action button-primary"')
     expect(eventDetail).toContain('class="button-primary__icon"')
-    expect(eventDetail).toContain('transform: translateX(4px)')
-    expect(eventDetail).toMatch(/prefers-reduced-motion[\s\S]*?button-primary__icon[^}]*transition: none/)
+    expect(stylesheet).toContain('transform: translateX(4px)')
+    expect(stylesheet).toMatch(/prefers-reduced-motion[\s\S]*?button-primary__icon[^}]*transition: none/)
   })
 })

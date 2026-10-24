@@ -1,17 +1,26 @@
 <script setup lang="ts">
-import type { SharedTestimonialItem } from '#shared/types/content'
+import type { SharedTestimonialItem } from "#shared/types/content";
 
 defineProps<{
-  title?: string
-  items: SharedTestimonialItem[]
-}>()
+  title?: string;
+  items: SharedTestimonialItem[];
+}>();
 </script>
 
 <template>
-  <section v-if="items.length" class="shared-testimonials" :aria-labelledby="`${$attrs.id ?? 'testimonials'}-title`">
-    <h2 :id="`${$attrs.id ?? 'testimonials'}-title`">{{ title ?? '學員心得分享' }}</h2>
+  <section
+    v-if="items.length"
+    class="shared-testimonials"
+    :aria-labelledby="`${$attrs.id ?? 'testimonials'}-title`"
+  >
+    <h2 :id="`${$attrs.id ?? 'testimonials'}-title`">
+      {{ title ?? "學員心得分享" }}
+    </h2>
     <div class="shared-testimonials__list">
-      <blockquote v-for="(item, index) in items" :key="`${item.sharerName}-${index}`">
+      <blockquote
+        v-for="(item, index) in items"
+        :key="`${item.sharerName}-${index}`"
+      >
         <p>{{ item.text }}</p>
         <cite>{{ item.sharerName }}</cite>
       </blockquote>
@@ -26,18 +35,12 @@ defineProps<{
 }
 
 .shared-testimonials > h2 {
-  max-width: 14em;
-  padding-bottom: 34px;
-  margin: 0;
+  margin: 0 auto;
   font-family: var(--font-display);
   font-size: var(--detail-section-title-size);
   font-weight: 400;
   line-height: 1.4;
   letter-spacing: 0.02em;
-}
-
-.shared-testimonials__list {
-  max-width: 780px;
 }
 
 blockquote {
@@ -51,7 +54,6 @@ blockquote:last-child {
 }
 
 blockquote p {
-  max-width: 68ch;
   margin: 0;
   color: #625a51;
   font-size: 16px;
@@ -89,4 +91,3 @@ cite::before {
   }
 }
 </style>
-

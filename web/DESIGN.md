@@ -78,6 +78,9 @@ components:
   button-primary-hover:
     backgroundColor: "#c94f34"
     textColor: "{colors.warm-white}"
+  button-primary-disabled:
+    backgroundColor: "#8a6153"
+    textColor: "#dfd5ca"
   interactive-title-hover:
     textColor: "{colors.clay}"
 ---
@@ -136,7 +139,7 @@ components:
 
 ### Buttons
 
-大型主要按鈕為柿橘底、暖白字、直角矩形，文字為桌機 `18px / 400`、`<= 1023px` 為 `14px / 400`，最小高度為 `clamp(72px, 8.4vh, 92px)`；hover 加深為 `#c94f34`，鍵盤焦點使用 2px 陶土色外框與 6px offset。所有按鈕標籤使用一般字重，不以粗體建立層級；次要行動採底線文字連結，至少 48px 高。
+大型主要按鈕統一使用 `.button-primary`：柿橘底、暖白字、直角矩形，文字為桌機 `18px / 400`、`<= 1023px` 為 `14px / 400`，最小高度為 `clamp(72px, 8.4vh, 92px)`；hover 加深為 `#c94f34`，鍵盤焦點使用 2px 陶土色外框與 6px offset。不可用狀態為 `#8a6153` 背景、`#dfd5ca` 文字及 `not-allowed` cursor。箭頭統一使用 `.button-primary__icon`，hover／focus 向右位移 4px，reduced motion 停用過渡。所有按鈕標籤使用一般字重，不以粗體建立層級；次要行動採底線文字連結，至少 48px 高。
 
 大型主要按鈕寬度可依容器縮小，但不得超過 `360px`。可點擊內容標題在 hover 與 `focus-visible` 時統一改為 `clay`；可同時使用底線、影像縮放或箭頭位移補強回饋，但不得另用相近棕色建立同角色變體。
 

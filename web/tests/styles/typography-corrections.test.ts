@@ -37,11 +37,14 @@ describe('shared typography corrections', () => {
     expect(stylesheet).toMatch(/@media \(max-width: 1023px\)[\s\S]*--button-primary-size: 14px;/)
     expect(stylesheet).toMatch(/button \{\s*font-weight: 400;/)
     expect(stylesheet).toMatch(/\.button-primary \{[\s\S]*?font-weight: 400;/)
-    expect(courseDetail).toMatch(/\.primary-action \{[^}]*font-weight: 400;/)
+    expect(courseDetail).not.toContain('primary-action')
+    expect(courseDetail.match(/class="button-primary(?:\s|")/g)).toHaveLength(4)
+    expect(stylesheet).toContain('.button-primary:is(:disabled, [aria-disabled="true"])')
+    expect(stylesheet).toContain('.button-primary:not(:disabled):not([aria-disabled="true"]):is(:hover, :focus-visible) .button-primary__icon')
     expect(courseDetail).toMatch(/\.curriculum-list button span \{[^}]*font-weight: 400;/)
     expect(courseDetail).toMatch(/\.curriculum-list button strong \{[^}]*font-weight: 400;/)
-    expect(eventDetail).toMatch(/\.event-detail__action \{[^}]*font-weight: 400;/)
-    expect(sessionDetail).toMatch(/\.session-detail__booking \{[^}]*font-weight: 400;/)
+    expect(eventDetail).not.toMatch(/\.event-detail__action \{[^}]*font-weight:/)
+    expect(sessionDetail).toContain('class="session-detail__booking button-primary"')
   })
 
   it('uses one semantic color token for content-title hover and focus states', () => {

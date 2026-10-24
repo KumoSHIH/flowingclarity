@@ -30,7 +30,6 @@ function formatDate(value: string) {
     .format(new Date(value))
     .replaceAll("/", ".");
 }
-
 </script>
 
 <template>
@@ -341,8 +340,8 @@ function formatDate(value: string) {
   margin: 24px 0 0;
 }
 .article-section--text {
-  width: min(68ch, 68%);
-  margin-left: 27%;
+  max-width: 900px;
+  margin: 0 auto;
 }
 .article-section--split {
   display: grid;

@@ -1,0 +1,101 @@
+{
+  "generatedAt": "2026-10-23T06:51:33.891Z",
+  "reports": [
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "path": "/course/rebalancing",
+      "h1Count": 1,
+      "galleryFooterCount": 0,
+      "overflow": 0,
+      "introLeadMaxWidth": "none",
+      "teacherLeadMaxWidth": "none",
+      "teacherHeading": {
+        "tag": "H2",
+        "text": "帶領者",
+        "fontSize": "38px"
+      },
+      "teacherName": {
+        "tag": "H3",
+        "text": "尼騰Neeten",
+        "fontSize": "28px"
+      },
+      "portrait": {
+        "containerWidth": 612.75,
+        "imageWidth": 500,
+        "imageMaxWidth": "500px",
+        "background": "rgb(118, 98, 84)"
+      },
+      "chapterFocus": {
+        "text": "課程介紹",
+        "outline": "solid",
+        "outlineWidth": "2px"
+      }
+    },
+    {
+      "viewport": "tablet",
+      "width": 1023,
+      "height": 900,
+      "path": "/course/rebalancing",
+      "h1Count": 1,
+      "galleryFooterCount": 0,
+      "overflow": 0,
+      "introLeadMaxWidth": "none",
+      "teacherLeadMaxWidth": "none",
+      "teacherHeading": {
+        "tag": "H2",
+        "text": "帶領者",
+        "fontSize": "26px"
+      },
+      "teacherName": {
+        "tag": "H3",
+        "text": "尼騰Neeten",
+        "fontSize": "24px"
+      },
+      "portrait": {
+        "containerWidth": 1008,
+        "imageWidth": 500,
+        "imageMaxWidth": "500px",
+        "background": "rgb(118, 98, 84)"
+      },
+      "chapterFocus": {
+        "text": "課程介紹",
+        "outline": "solid",
+        "outlineWidth": "2px"
+      }
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "path": "/course/rebalancing",
+      "h1Count": 1,
+      "galleryFooterCount": 0,
+      "overflow": 0,
+      "introLeadMaxWidth": "none",
+      "teacherLeadMaxWidth": "none",
+      "teacherHeading": {
+        "tag": "H2",
+        "text": "帶領者",
+        "fontSize": "26px"
+      },
+      "teacherName": {
+        "tag": "H3",
+        "text": "尼騰Neeten",
+        "fontSize": "22px"
+      },
+      "portrait": {
+        "containerWidth": 390,
+        "imageWidth": 358,
+        "imageMaxWidth": "500px",
+        "background": "rgb(118, 98, 84)"
+      },
+      "chapterFocus": {
+        "text": "課程介紹",
+        "outline": "solid",
+        "outlineWidth": "2px"
+      }
+    }
+  ]
+}

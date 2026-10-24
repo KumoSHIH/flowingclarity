@@ -66,11 +66,11 @@ export const structure: StructureResolver = (S) =>
         ),
       S.listItem()
         .id('course-runs')
-        .title('課程梯次')
+        .title('課程梯次／報名設定')
         .child(
           S.documentList()
             .id('course-runs')
-            .title('課程梯次')
+            .title('課程梯次／報名設定')
             .apiVersion('2026-03-01')
             .filter('_type == "courseRun"'),
         ),

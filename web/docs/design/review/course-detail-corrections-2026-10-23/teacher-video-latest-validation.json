@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-23",
+  "route": "/course/rebalancing",
+  "desktop": {
+    "viewport": "1440x1000",
+    "clientWidth": 1425,
+    "scrollWidth": 1425,
+    "fixedTeacherLabelCount": 0,
+    "teacherNameTag": "H2",
+    "videoContainerWidth": 760
+  },
+  "mobile": {
+    "viewport": "390x844",
+    "clientWidth": 390,
+    "scrollWidth": 390,
+    "fixedTeacherLabelCount": 0,
+    "teacherNameTag": "H2",
+    "videoContainerWidth": 346
+  },
+  "notes": [
+    "The published route contains the teacher block but no video block.",
+    "Video width was measured by mounting an element with the production component scoped CSS on the same rendered page.",
+    "The 760px limit and 16:9 media ratio are also covered by regression tests."
+  ]
+}

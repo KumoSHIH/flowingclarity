@@ -34,6 +34,8 @@ describe('session detail component', () => {
     expect(wrapper.findAll('.session-detail__experience li')).toHaveLength(4)
     expect(wrapper.findAll('.session-detail__fact')).toHaveLength(2)
     expect(wrapper.findAll('.session-detail__contact li')).toHaveLength(4)
+    expect(wrapper.get('.session-detail__booking').classes()).toContain('button-primary')
+    expect(wrapper.get('.session-detail__booking .button-primary__icon').exists()).toBe(true)
     expect(wrapper.get('.session-detail__booking').attributes()).toMatchObject({
       target: '_blank',
       rel: 'noopener noreferrer',

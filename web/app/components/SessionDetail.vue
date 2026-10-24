@@ -186,12 +186,16 @@ function opensNewTab(href?: string): boolean {
               </ul>
               <a
                 v-if="content.bookingAction"
-                class="session-detail__booking"
+                class="session-detail__booking button-primary"
                 :href="content.bookingAction.url"
                 target="_blank"
                 rel="noopener noreferrer"
-                >{{ content.bookingAction.label }}<span aria-hidden="true"
-              /></a>
+              >
+                <span>{{ content.bookingAction.label }}</span>
+                <svg class="button-primary__icon" viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M4 10h11M11 6l4 4-4 4" />
+                </svg>
+              </a>
             </section>
           </div>
         </aside>
@@ -307,9 +311,9 @@ function opensNewTab(href?: string): boolean {
 .session-detail__portrait-stage {
   display: grid;
   min-width: 0;
-  min-height: 360px;
+  min-height: 440px;
   place-items: center;
-  padding: 54px;
+  padding: 50px;
   background: var(--color-sand);
 }
 .session-detail__portrait {
@@ -336,7 +340,6 @@ function opensNewTab(href?: string): boolean {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 360px;
 }
 .session-detail__portrait-stage--cover img {
   position: absolute;
@@ -456,28 +459,13 @@ function opensNewTab(href?: string): boolean {
   font-size: 14px;
 }
 .session-detail__booking {
-  display: flex;
-  min-height: 76px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
   margin-top: 28px;
-  padding: 0 28px;
-  color: var(--color-night);
-  background: var(--color-persimmon);
-  font-size: 14px;
-  font-weight: 400;
-  text-decoration: none;
-}
-.session-detail__booking span {
-  width: 24px;
-  height: 1px;
-  background: currentcolor;
 }
 
 .session-detail__content {
   min-width: 0;
-  padding: var(--detail-content-padding-block) var(--detail-content-padding-inline);
+  padding: var(--detail-content-padding-block)
+    var(--detail-content-padding-inline);
 }
 .profile-section {
   max-width: none;
@@ -627,7 +615,8 @@ function opensNewTab(href?: string): boolean {
     grid-column: 1 / -1;
   }
   .session-detail__content {
-    padding: var(--detail-content-padding-block) var(--detail-content-padding-inline);
+    padding: var(--detail-content-padding-block)
+      var(--detail-content-padding-inline);
   }
   .profile-section + .profile-section {
     margin-top: 64px;

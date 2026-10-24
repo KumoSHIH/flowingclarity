@@ -43,6 +43,8 @@
   --button-primary-padding: clamp(28px, 3vw, 48px);
   --button-primary-text: #fff7f1;
   --button-primary-hover: #c94f34;
+  --button-primary-disabled-text: #dfd5ca;
+  --button-primary-disabled-background: #8a6153;
   --button-primary-gap: 24px;
   --button-primary-icon-size: 22px;
   --button-primary-tracking: 0.1em;
@@ -110,8 +112,14 @@
     transition: background var(--button-primary-transition);
   }
 
-  .button-primary:hover {
+  .button-primary:not(:disabled):not([aria-disabled="true"]):hover {
     background: var(--button-primary-hover);
+  }
+
+  .button-primary:is(:disabled, [aria-disabled="true"]) {
+    color: var(--button-primary-disabled-text);
+    background: var(--button-primary-disabled-background);
+    cursor: not-allowed;
   }
 
   .button-primary:focus-visible {
@@ -123,6 +131,14 @@
     width: var(--button-primary-icon-size);
     height: var(--button-primary-icon-size);
     flex: 0 0 auto;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 1.5;
+    transition: transform var(--button-primary-transition);
+  }
+
+  .button-primary:not(:disabled):not([aria-disabled="true"]):is(:hover, :focus-visible) .button-primary__icon {
+    transform: translateX(4px);
   }
 
   .directory-filter__link {
@@ -154,7 +170,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .button-primary {
+  .button-primary,
+  .button-primary__icon {
     transition: none;
   }
 }

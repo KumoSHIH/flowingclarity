@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-10-23T07:01:13.281Z",
+  "note": "Synthetic two-line title injected after production content loaded; parser and Vue data flow are covered by automated tests.",
+  "reports": [
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "path": "/course/rebalancing",
+      "text": "日式回春面部按摩\n初級班",
+      "whiteSpace": "pre-line",
+      "renderedLineCount": 2,
+      "buttonHeight": 96,
+      "overflow": 0
+    },
+    {
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "path": "/course/rebalancing",
+      "text": "日式回春面部按摩\n初級班",
+      "whiteSpace": "pre-line",
+      "renderedLineCount": 2,
+      "buttonHeight": 104,
+      "overflow": 0
+    }
+  ]
+}

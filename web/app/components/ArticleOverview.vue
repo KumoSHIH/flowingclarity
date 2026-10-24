@@ -1,135 +1,154 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 import type {
   ArticleCategoryKey,
   ArticleFilters,
   ArticleOverviewContent,
   ArticleOverviewStatus,
-} from '#shared/types/articles'
+} from "#shared/types/articles";
 import {
   filterArticles,
   getArticlePaginationItems,
   getArticlePath,
   getArticlesPath,
   paginateArticles,
-} from '#shared/utils/articles'
+} from "#shared/utils/articles";
 
-const props = withDefaults(defineProps<{
-  content: ArticleOverviewContent
-  status?: ArticleOverviewStatus
-  category?: ArticleCategoryKey
-  tags?: string[]
-  page?: number
-}>(), {
-  status: 'ready',
-  category: undefined,
-  tags: () => [],
-  page: 1,
-})
+const props = withDefaults(
+  defineProps<{
+    content: ArticleOverviewContent;
+    status?: ArticleOverviewStatus;
+    category?: ArticleCategoryKey;
+    tags?: string[];
+    page?: number;
+  }>(),
+  {
+    status: "ready",
+    category: undefined,
+    tags: () => [],
+    page: 1,
+  },
+);
 
 const emit = defineEmits<{
-  navigate: [filters: ArticleFilters, page: number]
-  normalize: [filters: ArticleFilters, page: number]
-  retry: []
-}>()
+  navigate: [filters: ArticleFilters, page: number];
+  normalize: [filters: ArticleFilters, page: number];
+  retry: [];
+}>();
 
-const resultsHeading = ref<HTMLElement | null>(null)
-const mounted = ref(false)
-const orderedCategories = computed(() => (
-  props.content.categories.toSorted((first, second) => first.order - second.order)
-))
-const categoryLabels = computed(() => new Map(
-  props.content.categories.map(category => [category.key, category.name]),
-))
-const publishedArticles = computed(() => filterArticles(props.content.articles, {
-  category: undefined,
-  tags: [],
-}))
-const usedTagSlugs = computed(() => new Set(
-  publishedArticles.value.flatMap(article => article.tagSlugs),
-))
-const orderedTags = computed(() => props.content.tags
-  .filter(tag => usedTagSlugs.value.has(tag.slug))
-  .toSorted((first, second) => (
-    first.order - second.order
-    || first.name.localeCompare(second.name, 'zh-Hant')
-    || first.slug.localeCompare(second.slug)
-  )))
-const tagLabels = computed(() => new Map(
-  props.content.tags.map(tag => [tag.slug, tag.name]),
-))
+const resultsHeading = ref<HTMLElement | null>(null);
+const mounted = ref(false);
+const orderedCategories = computed(() =>
+  props.content.categories.toSorted(
+    (first, second) => first.order - second.order,
+  ),
+);
+const categoryLabels = computed(
+  () =>
+    new Map(
+      props.content.categories.map((category) => [category.key, category.name]),
+    ),
+);
+const publishedArticles = computed(() =>
+  filterArticles(props.content.articles, {
+    category: undefined,
+    tags: [],
+  }),
+);
+const usedTagSlugs = computed(
+  () => new Set(publishedArticles.value.flatMap((article) => article.tagSlugs)),
+);
+const orderedTags = computed(() =>
+  props.content.tags
+    .filter((tag) => usedTagSlugs.value.has(tag.slug))
+    .toSorted(
+      (first, second) =>
+        first.order - second.order ||
+        first.name.localeCompare(second.name, "zh-Hant") ||
+        first.slug.localeCompare(second.slug),
+    ),
+);
+const tagLabels = computed(
+  () => new Map(props.content.tags.map((tag) => [tag.slug, tag.name])),
+);
 const filters = computed<ArticleFilters>(() => ({
   category: props.category,
   tags: props.tags,
-}))
-const filteredArticles = computed(() => filterArticles(
-  props.content.articles,
-  filters.value,
-))
-const pagination = computed(() => paginateArticles(filteredArticles.value, props.page))
-const paginationItems = computed(() => getArticlePaginationItems(
-  pagination.value.currentPage,
-  pagination.value.totalPages,
-))
-const hasFilters = computed(() => Boolean(props.category) || props.tags.length > 0)
+}));
+const filteredArticles = computed(() =>
+  filterArticles(props.content.articles, filters.value),
+);
+const pagination = computed(() =>
+  paginateArticles(filteredArticles.value, props.page),
+);
+const paginationItems = computed(() =>
+  getArticlePaginationItems(
+    pagination.value.currentPage,
+    pagination.value.totalPages,
+  ),
+);
+const hasFilters = computed(
+  () => Boolean(props.category) || props.tags.length > 0,
+);
 
 function selectCategory(event: MouseEvent, category?: ArticleCategoryKey) {
-  event.preventDefault()
-  emit('navigate', { category, tags: props.tags }, 1)
+  event.preventDefault();
+  emit("navigate", { category, tags: props.tags }, 1);
 }
 
 function toggleTag(slug: string) {
-  const next = new Set(props.tags)
-  next.has(slug) ? next.delete(slug) : next.add(slug)
-  emit('navigate', { category: props.category, tags: [...next] }, 1)
+  const next = new Set(props.tags);
+  next.has(slug) ? next.delete(slug) : next.add(slug);
+  emit("navigate", { category: props.category, tags: [...next] }, 1);
 }
 
 function clearTags() {
-  emit('navigate', { category: props.category, tags: [] }, 1)
+  emit("navigate", { category: props.category, tags: [] }, 1);
 }
 
 function clearAll() {
-  emit('navigate', { category: undefined, tags: [] }, 1)
+  emit("navigate", { category: undefined, tags: [] }, 1);
 }
 
 function navigatePage(event: MouseEvent, page: number) {
-  event.preventDefault()
-  emit('navigate', filters.value, page)
+  event.preventDefault();
+  emit("navigate", filters.value, page);
 }
 
 function categoryName(key: ArticleCategoryKey): string {
-  return categoryLabels.value.get(key) ?? key
+  return categoryLabels.value.get(key) ?? key;
 }
 
 function tagName(slug: string): string {
-  return tagLabels.value.get(slug) ?? slug
+  return tagLabels.value.get(slug) ?? slug;
 }
 
 function formatDate(value: string): string {
-  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})/)
-  return match ? `${match[1]}.${match[2]}.${match[3]}` : value
+  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return match ? `${match[1]}.${match[2]}.${match[3]}` : value;
 }
 
 watch(
-  () => [props.page, props.category, props.tags.join(',')] as const,
+  () => [props.page, props.category, props.tags.join(",")] as const,
   async () => {
-    if (!mounted.value) return
-    await nextTick()
-    resultsHeading.value?.focus({ preventScroll: true })
+    if (!mounted.value) return;
+    await nextTick();
+    resultsHeading.value?.focus({ preventScroll: true });
   },
-)
+);
 
 watch(
   () => [pagination.value.currentPage, props.page] as const,
   ([currentPage, requestedPage]) => {
-    if (currentPage !== requestedPage) emit('normalize', filters.value, currentPage)
+    if (currentPage !== requestedPage)
+      emit("normalize", filters.value, currentPage);
   },
   { immediate: true },
-)
+);
 
 onMounted(() => {
-  mounted.value = true
-})
+  mounted.value = true;
+});
 </script>
 
 <template>
@@ -139,9 +158,7 @@ onMounted(() => {
         <h1>{{ content.pageTitle }}</h1>
         <p>{{ content.intro }}</p>
       </div>
-      <p class="article-hero__eyebrow" aria-hidden="true">
-        閱讀與覺察
-      </p>
+      <p class="article-hero__eyebrow" aria-hidden="true">閱讀與覺察</p>
     </header>
 
     <nav class="article-categories" aria-label="文章主要分類">
@@ -177,7 +194,7 @@ onMounted(() => {
               type="checkbox"
               :checked="tags.includes(tag.slug)"
               @change="toggleTag(tag.slug)"
-            >
+            />
             <span aria-hidden="true" />
             {{ tag.name }}
           </label>
@@ -202,7 +219,10 @@ onMounted(() => {
         <h2 id="article-results-heading" ref="resultsHeading" tabindex="-1">
           {{ content.resultsHeading }}
         </h2>
-        <p v-if="status === 'ready' && publishedArticles.length" aria-live="polite">
+        <p
+          v-if="status === 'ready' && publishedArticles.length"
+          aria-live="polite"
+        >
           共 {{ pagination.totalItems }} 篇文章<span>・每頁 8 篇</span>
         </p>
       </header>
@@ -220,9 +240,7 @@ onMounted(() => {
 
       <div v-else-if="status === 'error'" class="article-state" role="alert">
         <p>文章暫時無法載入，請稍後再試。</p>
-        <button type="button" @click="emit('retry')">
-          重新載入
-        </button>
+        <button type="button" @click="emit('retry')">重新載入</button>
       </div>
 
       <div v-else-if="!publishedArticles.length" class="article-state">
@@ -249,17 +267,14 @@ onMounted(() => {
             class="article-entry"
           >
             <a :href="getArticlePath(article.slug)" class="article-entry__link">
-              <div
-                v-if="article.coverImage"
-                class="article-entry__media"
-              >
+              <div v-if="article.coverImage" class="article-entry__media">
                 <img
                   :src="article.coverImage.src"
                   :alt="article.coverImage.alt"
                   :width="article.coverImage.width"
                   :height="article.coverImage.height"
                   loading="lazy"
-                >
+                />
               </div>
               <div
                 v-else
@@ -305,14 +320,18 @@ onMounted(() => {
             :href="getArticlesPath(filters, pagination.currentPage - 1)"
             rel="prev"
             @click="navigatePage($event, pagination.currentPage - 1)"
-          >上一頁</a>
+            >上一頁</a
+          >
           <ol>
             <li
               v-for="(item, index) in paginationItems"
               :key="item === 'ellipsis' ? `ellipsis-${index}` : item"
             >
               <span v-if="item === 'ellipsis'" aria-hidden="true">…</span>
-              <span v-else-if="item === pagination.currentPage" aria-current="page">
+              <span
+                v-else-if="item === pagination.currentPage"
+                aria-current="page"
+              >
                 {{ item }}
               </span>
               <a
@@ -320,7 +339,8 @@ onMounted(() => {
                 :href="getArticlesPath(filters, item)"
                 :aria-label="`${content.resultsHeading}第 ${item} 頁`"
                 @click="navigatePage($event, item)"
-              >{{ item }}</a>
+                >{{ item }}</a
+              >
             </li>
           </ol>
           <button
@@ -335,7 +355,8 @@ onMounted(() => {
             :href="getArticlesPath(filters, pagination.currentPage + 1)"
             rel="next"
             @click="navigatePage($event, pagination.currentPage + 1)"
-          >下一頁</a>
+            >下一頁</a
+          >
         </nav>
       </template>
     </section>
@@ -349,8 +370,16 @@ onMounted(() => {
 <style scoped>
 .article-directory {
   --article-rule: color-mix(in srgb, var(--color-ink) 24%, transparent);
-  --article-accent: color-mix(in srgb, var(--color-clay) 86%, var(--color-oxblood));
-  --article-muted-text: color-mix(in srgb, var(--color-muted) 78%, var(--color-ink));
+  --article-accent: color-mix(
+    in srgb,
+    var(--color-clay) 86%,
+    var(--color-oxblood)
+  );
+  --article-muted-text: color-mix(
+    in srgb,
+    var(--color-muted) 78%,
+    var(--color-ink)
+  );
   min-height: 100svh;
   padding: clamp(48px, 5.5vw, 84px) clamp(28px, 6vw, 116px) 64px;
   color: var(--color-ink);
@@ -408,7 +437,7 @@ onMounted(() => {
   width: 96px;
   height: 1px;
   background: var(--article-rule);
-  content: '';
+  content: "";
 }
 
 .article-categories {
@@ -440,7 +469,7 @@ onMounted(() => {
   width: 1px;
   height: 16px;
   background: var(--article-rule);
-  content: '';
+  content: "";
 }
 
 .article-categories a::after {
@@ -450,15 +479,15 @@ onMounted(() => {
   left: 18px;
   height: 2px;
   background: var(--article-accent);
-  content: '';
+  content: "";
   opacity: 0;
 }
 
-.article-categories a[aria-current='page'] {
+.article-categories a[aria-current="page"] {
   color: var(--article-accent);
 }
 
-.article-categories a[aria-current='page']::after,
+.article-categories a[aria-current="page"]::after,
 .article-categories a:hover::after,
 .article-categories a:focus-visible::after {
   opacity: 1;
@@ -468,7 +497,6 @@ onMounted(() => {
   display: flex;
   align-items: stretch;
   margin-top: 22px;
-  border: 1px solid var(--article-rule);
 }
 
 .article-tags fieldset {
@@ -541,7 +569,7 @@ onMounted(() => {
   height: 9px;
   border-right: 2px solid var(--color-paper);
   border-bottom: 2px solid var(--color-paper);
-  content: '';
+  content: "";
   transform: rotate(45deg);
 }
 
@@ -590,7 +618,7 @@ onMounted(() => {
   height: 1px;
   flex: 1;
   background: var(--article-rule);
-  content: '';
+  content: "";
 }
 
 .article-results__header p {
@@ -619,7 +647,7 @@ onMounted(() => {
   left: 50%;
   width: 1px;
   background: var(--article-rule);
-  content: '';
+  content: "";
 }
 
 .article-entry {
@@ -637,7 +665,7 @@ onMounted(() => {
   width: 45px;
   height: 1px;
   background: var(--article-rule);
-  content: '';
+  content: "";
 }
 
 .article-entry::after {
@@ -647,7 +675,7 @@ onMounted(() => {
   height: 8px;
   background: var(--color-oxblood);
   border-radius: 50%;
-  content: '';
+  content: "";
 }
 
 .article-entry:nth-child(odd)::before {
@@ -695,7 +723,9 @@ onMounted(() => {
   height: 100%;
   object-fit: cover;
   filter: saturate(0.72) sepia(0.1);
-  transition: transform 320ms ease, filter 320ms ease;
+  transition:
+    transform 320ms ease,
+    filter 320ms ease;
 }
 
 .article-entry__media--missing {
@@ -720,7 +750,7 @@ onMounted(() => {
 .article-entry__media--missing span {
   position: absolute;
   background: color-mix(in srgb, var(--color-clay) 42%, transparent);
-  content: '';
+  content: "";
 }
 
 .article-entry__media--missing::before {
@@ -776,7 +806,7 @@ onMounted(() => {
   height: 14px;
   margin: 0 10px;
   border-left: 1px solid var(--article-rule);
-  content: '';
+  content: "";
 }
 
 .article-entry h3 {
@@ -796,7 +826,7 @@ onMounted(() => {
   height: 1px;
   margin-top: 10px;
   background: var(--color-clay);
-  content: '';
+  content: "";
 }
 
 .article-entry__excerpt {
@@ -873,7 +903,7 @@ onMounted(() => {
 
 .article-pagination a:hover,
 .article-pagination a:focus-visible,
-.article-pagination [aria-current='page'] {
+.article-pagination [aria-current="page"] {
   color: var(--article-accent);
   text-decoration: underline;
   text-underline-offset: 8px;
@@ -938,8 +968,12 @@ onMounted(() => {
 }
 
 @keyframes article-pulse {
-  from { opacity: 0.48; }
-  to { opacity: 0.9; }
+  from {
+    opacity: 0.48;
+  }
+  to {
+    opacity: 0.9;
+  }
 }
 
 @media (max-width: 1180px) {

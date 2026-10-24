@@ -2,7 +2,7 @@
 
 ## 狀態與範圍
 
-狀態：已抽成共用 CSS，由 Banner 與近期活動報名入口使用；其他頁面仍依需求逐步採用。2026-10-23 完成全站字級、按鈕字重與互動標題色修正；以下數值是目前實作基準，不代表已完成實體裝置或螢幕閱讀器驗收。
+狀態：已抽成共用 CSS，由 Banner、活動列表／詳情、課程詳情及執行師預約入口使用。2026-10-23 完成全站字級、主要按鈕、按鈕字重與互動標題色修正；以下數值是目前實作基準，不代表已完成實體裝置或螢幕閱讀器驗收。
 
 本文件管理文字角色、按鈕外觀與跨頁 split layout 尺寸；其他容器寬度、區塊排列及元素間距仍由各頁規格管理。[Banner 規格](home-banner.md) 是第一個文字 token 引用案例。樣式角色不取代 HTML 語意，標題層級仍依內容結構選擇。
 
@@ -32,9 +32,11 @@
 | 字級／字重 | 桌面 `18px`、手機 `14px`；統一 `400` |
 | Hover | 背景 `#c94f34`，`220ms ease` 過渡 |
 | 鍵盤焦點 | 共用按鈕自帶 `2px solid var(--color-clay)` 外框，偏移 `6px` |
-| 減少動態 | 停用過渡 |
+| Disabled | 背景 `#8a6153`、文字 `#dfd5ca`、`cursor: not-allowed`；不得觸發導向或操作 |
+| 箭頭互動 | `.button-primary__icon` 為 `22 × 22px`、1.5px 線條；hover／focus 向右移動 4px |
+| 減少動態 | 停用按鈕與箭頭過渡 |
 
-導向目的地使用 `<a href>`；執行操作使用 `<button>`。現有 CTA 是連結，沒有 disabled 或 loading 狀態。次要按鈕、一般尺寸、pressed、disabled 與 loading 尚未定義；有使用案例時再補齊。父容器決定按鈕寬度及外距，共用按鈕只管理自身外觀與內距。
+導向目的地使用 `<a href>`；執行操作使用 `<button>`。沒有有效目的地的主要行動使用原生 disabled button，不以無效連結模擬。Loading、一般尺寸與 pressed 變體尚未定義；有使用案例時再補齊。父容器決定按鈕外距，共用按鈕管理自身寬度、外觀、內距與互動狀態。
 
 ## 套用與驗收
 
@@ -54,7 +56,7 @@
 </a>
 ```
 
-深色背景的敘述加上 `lead-text--inverse`；淺色 Banner 使用基本 `.lead-text` 並繼承容器文字顏色。`.button-primary` 目前代表大型主要行動，也可用於 `<button type="button">`。共用 class 放在 `@layer components`，頁面可用 Tailwind utility 明確覆寫。
+深色背景的敘述加上 `lead-text--inverse`；淺色 Banner 使用基本 `.lead-text` 並繼承容器文字顏色。`.button-primary` 代表全站大型主要行動，可用於連結或原生按鈕；`.button-primary__icon` 統一箭頭尺寸、線條與互動。共用 class 放在 `@layer components`，頁面只保留外距與配置，不得重新定義同角色的顏色、字級、高度、最大寬度、焦點或 disabled 狀態。
 
 共用 token 分為 `--display-title-*`、`--lead-text-*`、`--text-tracking`、`--button-primary-*`、`--interactive-title-hover` 及 `--control-focus-*`，字體和主色沿用既有 `--font-sans`、`--color-persimmon` 與 `--color-clay`。手機數值在 `max-width: 1023px` 統一切換。文字字級使用桌面與手機兩組固定值，不使用 `clamp()`；間距、容器與非文字尺寸仍可依既有版面需求使用流體尺度。修改全站數值時同步更新本文件。
 
@@ -104,6 +106,14 @@ Footer 採主色 bark（`#766254`）表面與 paper 文字，保留 2.4px 連結
 
 後續若新增可點擊內容標題或主要按鈕，應直接引用上述共用 class／token，不另建近似色值。
 
+## 2026-10-23 主要行動統一
+
+- 移除課程詳情獨立 `.primary-action` CSS；Hero 與報名區四種 link／disabled button 狀態全部改用 `.button-primary` 與 SVG `.button-primary__icon`，報名區不再覆寫 520px 上限。
+- 執行師詳情的選填預約入口加入相同共用 class 與箭頭，只保留側欄中的 `margin-top`。
+- 箭頭線條、4px 位移、disabled 顏色與 reduced-motion 集中到 `main.css`；活動詳情與活動列表移除重複箭頭 CSS。
+- 課程梯次的「查看報名方式」是頁內導引，維持次要／情境操作，不納入大型主要行動規格。
+- Chrome production build 於首頁、課程詳情及活動列表驗證 1440px／390px：按鈕無水平溢位，桌機／手機字級為 18px／14px、字重 400；hover、focus、disabled 與箭頭狀態均符合本文件。完整量測與截圖見 [主要行動按鈕統一驗證](../design/review/primary-action-unification-2026-10-23/README.md)。Production 執行師內容目前沒有預約網址，該入口只完成元件層回歸驗證。
+
 ## 2026-10-23 全站字級與按鈕修正
 
 - 移除 `web/app` 內所有 `font-size: clamp(...)`、含流體字級的 `font` shorthand 與 Tailwind arbitrary clamp 字級；各元件改用桌面固定值，並在既有 `max-width: 1023px` 或元件窄版斷點切換手機固定值。
@@ -123,3 +133,4 @@ Footer 採主色 bark（`#766254`）表面與 paper 文字，保留 2.4px 連結
 - [x] --button-primary-size: clamp(14px, 1.4vw, 18px)（2026-10-23：依下項固定字級要求改為桌面 `18px`、手機 `14px`。）
 - [x] 檢查全站所有按鈕，不需要粗體字（2026-10-23：原生按鈕、主要 CTA 與按鈕內文字統一為 `400`；回歸測試及瀏覽器 computed style 通過。）
 - [x] font-size 有設定 clamp 屬性的 希望可以拿掉，改用電腦版一個尺寸，手機裝置一個尺寸，這樣比較好懂好修改-（2026-10-23：`web/app` 已無 `font-size` clamp 或等價 Tailwind arbitrary clamp 字級，桌面／手機固定值與 15 組瀏覽器量測通過。）
+- [x] `primary-action` 按鈕樣式統一全站規格（2026-10-23：課程詳情與執行師預約入口改用 `.button-primary`；disabled、箭頭互動及 reduced-motion 已集中至共用 CSS。）

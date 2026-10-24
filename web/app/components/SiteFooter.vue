@@ -17,10 +17,7 @@ const copyrightText = computed(() => {
   const year = new Date().getFullYear();
   const text = props.content.legal.copyrightText.trim();
   if (/©\s*(?:\d{4}(?:\s*[-–—]\s*\d{4})?\s*)?/.test(text)) {
-    return text.replace(
-      /©\s*(?:\d{4}(?:\s*[-–—]\s*\d{4})?\s*)?/,
-      `© ${year} `,
-    );
+    return text.replace(/©\s*(?:\d{4}(?:\s*[-–—]\s*\d{4})?\s*)?/, `© ${year} `);
   }
   if (/^copyright\b/i.test(text)) {
     return text.replace(/^copyright\b\s*/i, `Copyright © ${year} `);
@@ -136,7 +133,7 @@ const paths = [
                 >
               </div>
             </address>
-            <nav aria-label="頁尾導覽" class="min-w-0">
+            <nav aria-label="頁尾導覽">
               <ul class="site-footer__nav">
                 <li v-for="item in content.navigationItems" :key="item.href">
                   <NuxtLink
@@ -215,8 +212,9 @@ const paths = [
 .site-footer__closing {
   max-width: 13em;
   margin: 0;
-  font: 400 52px/1.35 var(--font-display);
+  font: 400 36px/1.35 var(--font-display);
   color: var(--color-paper);
+  letter-spacing: 2.4px;
 }
 .site-footer__content {
   padding: clamp(80px, 10vw, 150px) clamp(28px, 6vw, 116px) 48px
@@ -224,7 +222,7 @@ const paths = [
 }
 .site-footer__statement {
   color: var(--color-paper);
-  font: 400 92px/1.18 var(--font-display);
+  font: 400 60px var(--font-display);
   letter-spacing: 3.6px;
   text-wrap: balance;
 }
@@ -241,6 +239,11 @@ const paths = [
   color: var(--color-paper);
   font-size: 14px;
   line-height: 1.75;
+}
+.site-footer__bottom nav {
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
 }
 .site-footer__contact > span,
 .site-footer__contact a {

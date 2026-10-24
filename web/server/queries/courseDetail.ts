@@ -138,7 +138,7 @@ export const courseDetailQuery = `{
     capacityLabel,
     feeLabel,
     notes,
-    stages[]{dateRanges[]{startDate, endDate}},
+    stages[]{title, order, dateRanges[]{startDate, endDate}},
     isPublished
   }
 }`

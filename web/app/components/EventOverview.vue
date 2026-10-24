@@ -730,12 +730,6 @@ onBeforeUnmount(() => {
   text-align: center;
 }
 
-.event-row__action svg {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
-}
-
 .event-row__course-link {
   min-height: 48px;
   align-content: center;

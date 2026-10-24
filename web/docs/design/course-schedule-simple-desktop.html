@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>課程梯次｜極簡桌面設計稿</title>
+    <style>
+      @font-face {
+        font-family: "Noto Serif TC";
+        src: url("../../public/fonts/NotoSerifTC-Variable.ttf") format("truetype");
+        font-display: swap;
+      }
+
+      @font-face {
+        font-family: "BIZ UDPGothic";
+        src: url("../../public/fonts/BIZUDPGothic-Regular.ttf") format("truetype");
+        font-display: swap;
+      }
+
+      :root {
+        --paper: #f7f3ed;
+        --ink: #342d29;
+        --muted: #746a63;
+        --rule: #cfc4b7;
+        --accent: #e85a35;
+        --saffron: #f7bd45;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: var(--paper);
+        color: var(--ink);
+      }
+
+      body {
+        font-family: "BIZ UDPGothic", sans-serif;
+      }
+
+      button,
+      a {
+        font: inherit;
+      }
+
+      a:focus-visible {
+        outline: 3px solid var(--saffron);
+        outline-offset: 4px;
+      }
+
+      ::selection {
+        background: var(--saffron);
+        color: var(--ink);
+      }
+
+      .schedule-section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 72px 48px;
+      }
+
+      .schedule {
+        width: min(100%, 900px);
+        margin: 0 auto;
+      }
+
+      .schedule__intro {
+        display: grid;
+        grid-template-columns: minmax(220px, 0.75fr) minmax(0, 1.25fr);
+        gap: 80px;
+        align-items: end;
+        padding-bottom: 36px;
+        border-bottom: 1px solid var(--ink);
+      }
+
+      h1,
+      h2,
+      p,
+      dl,
+      dd {
+        margin: 0;
+      }
+
+      h1 {
+        font-family: "Noto Serif TC", serif;
+        font-size: clamp(42px, 4vw, 60px);
+        font-weight: 500;
+        letter-spacing: -0.025em;
+        line-height: 1.1;
+      }
+
+      .schedule__summary {
+        max-width: 620px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.9;
+      }
+
+      .run {
+        display: grid;
+        grid-template-columns: minmax(220px, 0.75fr) minmax(0, 1.25fr);
+        gap: 80px;
+        padding-top: 40px;
+      }
+
+      .run__identity {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .run__status {
+        display: inline-block;
+        padding: 7px 10px 6px;
+        background: var(--saffron);
+        color: var(--ink);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+      }
+
+      .run__identity h2 {
+        font-family: "Noto Serif TC", serif;
+        font-size: 28px;
+        font-weight: 500;
+        line-height: 1.45;
+      }
+
+      .run__location {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.7;
+      }
+
+      .run__content {
+        min-width: 0;
+      }
+
+      .stages {
+        display: grid;
+      }
+
+      .stage {
+        display: grid;
+        grid-template-columns: 128px minmax(0, 1fr);
+        gap: 28px;
+        padding: 23px 0 24px;
+        border-bottom: 1px solid var(--rule);
+      }
+
+      .stage__name {
+        font-family: "Noto Serif TC", serif;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1.5;
+      }
+
+      .stage__dates {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+        align-items: center;
+        font-family: "Noto Serif TC", serif;
+        font-size: 18px;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.5;
+      }
+
+      .stage__dates time + time::before {
+        content: "、";
+        display: none;
+      }
+
+      .details {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 28px;
+        padding: 28px 0 32px;
+      }
+
+      .details div {
+        display: grid;
+        gap: 8px;
+      }
+
+      .details dt {
+        color: #965039;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+
+      .details dd {
+        font-family: "Noto Serif TC", serif;
+        font-size: 17px;
+        font-variant-numeric: tabular-nums;
+        line-height: 1.5;
+      }
+
+      .run__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 28px;
+      }
+
+      .run__note {
+        max-width: 430px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      .run__action {
+        display: inline-flex;
+        min-height: 52px;
+        align-items: center;
+        justify-content: center;
+        padding: 0 26px;
+        background: var(--accent);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: background-color 180ms ease-out;
+      }
+
+      .run__action:hover {
+        background: #c94828;
+      }
+
+      .prototype-note {
+        position: fixed;
+        right: 16px;
+        bottom: 14px;
+        color: var(--muted);
+        font-size: 11px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="schedule-section">
+      <section class="schedule" aria-labelledby="schedule-title">
+        <header class="schedule__intro">
+          <h1 id="schedule-title">課程梯次</h1>
+          <p class="schedule__summary">
+            完整訓練分為三個階段，每階包含兩段實體課程。請依序確認所有日期，並預留完整的學習時間。
+          </p>
+        </header>
+
+        <article class="run">
+          <header class="run__identity">
+            <span class="run__status">開放報名</span>
+            <h2>第 9 屆<br />身心再平衡按摩<br />完整訓練課程</h2>
+            <p class="run__location">高雄・普那生活空間</p>
+          </header>
+
+          <div class="run__content">
+            <div class="stages" aria-label="三階段課程日期">
+              <section class="stage">
+                <h3 class="stage__name">第一階</h3>
+                <div class="stage__dates">
+                  <time datetime="2026-01-21/2026-01-25">2026/01/21–01/25</time>
+                  <time datetime="2026-01-28/2026-02-01">2026/01/28–02/01</time>
+                </div>
+              </section>
+              <section class="stage">
+                <h3 class="stage__name">第二階</h3>
+                <div class="stage__dates">
+                  <time datetime="2026-06-19/2026-06-23">2026/06/19–06/23</time>
+                  <time datetime="2026-06-26/2026-06-30">2026/06/26–06/30</time>
+                </div>
+              </section>
+              <section class="stage">
+                <h3 class="stage__name">第三階</h3>
+                <div class="stage__dates">
+                  <time datetime="2027-01-16/2027-01-20">2027/01/16–01/20</time>
+                  <time datetime="2027-01-23/2027-01-27">2027/01/23–01/27</time>
+                </div>
+              </section>
+            </div>
+
+            <dl class="details">
+              <div>
+                <dt>每日時間</dt>
+                <dd>09:30–18:30</dd>
+              </div>
+              <div>
+                <dt>課程費用</dt>
+                <dd>每階 NT$55,000</dd>
+              </div>
+              <div>
+                <dt>完整時數</dt>
+                <dd>每階 10 天，共 30 天</dd>
+              </div>
+            </dl>
+
+            <footer class="run__footer">
+              <p class="run__note">正式地點、費用與參與條件，請以報名頁面公告為準。</p>
+              <a class="run__action" href="#registration">查看報名方式</a>
+            </footer>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <p class="prototype-note">桌面設計示意・內容非正式招生資訊</p>
+  </body>
+</html>

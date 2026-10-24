@@ -92,13 +92,13 @@ describe('about overview', () => {
     expect(wrapper.get('.about-carousel__controls span').text()).toBe('01 / 03')
   })
 
-  it('autoplays every two seconds, loops, and has no playback toggle', async () => {
+  it('autoplays every 2.5 seconds, loops, and has no playback toggle', async () => {
     vi.useFakeTimers()
     const wrapper = mount(AboutOverview, { props: { content: aboutPageFixture } })
 
-    await vi.advanceTimersByTimeAsync(2_000)
+    await vi.advanceTimersByTimeAsync(2_500)
     expect(wrapper.get('.about-carousel__controls span').text()).toBe('02 / 03')
-    await vi.advanceTimersByTimeAsync(4_000)
+    await vi.advanceTimersByTimeAsync(5_000)
     expect(wrapper.get('.about-carousel__controls span').text()).toBe('01 / 03')
 
     expect(wrapper.find('button[aria-label="暫停精選片段"]').exists()).toBe(false)
