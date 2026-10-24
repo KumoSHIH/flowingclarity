@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import IndexPage from '../../app/pages/index.vue'
 import SiteHeader from '../../app/components/SiteHeader.vue'
 import { siteSettingsFixture } from '../../app/fixtures/siteSettings'
+import { homeSectionsContent } from '../fixtures/homeSections'
 
 const componentStubs = {
   SiteHeader,
@@ -12,13 +13,19 @@ const componentStubs = {
   HomeEvents: true,
   HomeCourses: true,
   HomeContact: true,
+  HomeSectionsState: true,
   SiteFooter: true,
   SiteFooterUnavailable: true,
 }
 
 describe('home page mobile navigation', () => {
   beforeEach(() => {
-    vi.stubGlobal('useFetch', vi.fn((url: string) => ({ data: ref(url === '/api/site-settings' ? { state: 'ready', content: siteSettingsFixture } : null) })))
+    vi.stubGlobal('useFetch', vi.fn((url: string) => ({
+      data: ref(url === '/api/site-settings'
+        ? { state: 'ready', content: siteSettingsFixture }
+        : url === '/api/home-sections' ? { state: 'ready', content: homeSectionsContent } : null),
+      status: ref('success'),
+    })))
     vi.stubGlobal('IntersectionObserver', class {
       observe = vi.fn()
       disconnect = vi.fn()

@@ -1,0 +1,996 @@
+{
+  "generatedAt": "2026-10-24T10:07:32.079Z",
+  "origin": "http://127.0.0.1:3212",
+  "viewports": [
+    {
+      "name": "home-320",
+      "innerWidth": 320,
+      "clientWidth": 320,
+      "scrollWidth": 320,
+      "scrollHeight": 6168,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "讓身心，慢慢回到自己的節奏。"
+        },
+        {
+          "level": "H2",
+          "text": "讓身體被好好聽見，讓心有地方安放。"
+        },
+        {
+          "level": "H2",
+          "text": "近期活動"
+        },
+        {
+          "level": "H3",
+          "text": "秋日靜心練習"
+        },
+        {
+          "level": "H3",
+          "text": "身體書寫之夜"
+        },
+        {
+          "level": "H3",
+          "text": "一杯茶的慢時光"
+        },
+        {
+          "level": "H2",
+          "text": "近期課程"
+        },
+        {
+          "level": "H3",
+          "text": "回到身體的呼吸練習"
+        },
+        {
+          "level": "H3",
+          "text": "溫柔觸碰按摩課"
+        },
+        {
+          "level": "H2",
+          "text": "留一段時間，好好照顧自己。"
+        }
+      ],
+      "h1Count": 1,
+      "sectionOrder": [
+        {
+          "top": 87,
+          "bottom": 1020.96875,
+          "width": 320,
+          "height": 933.96875
+        },
+        {
+          "top": 1020.96875,
+          "bottom": 2153.09375,
+          "width": 320,
+          "height": 1132.125
+        },
+        {
+          "top": 2153.09375,
+          "bottom": 3120.578125,
+          "width": 320,
+          "height": 967.484375
+        },
+        {
+          "top": 3120.578125,
+          "bottom": 4553.15625,
+          "width": 320,
+          "height": 1432.578125
+        },
+        {
+          "top": 4553.15625,
+          "bottom": 5169.28125,
+          "width": 320,
+          "height": 616.125
+        }
+      ],
+      "eventCount": 3,
+      "courseCount": 2,
+      "eventPeriods": [
+        "2026/10",
+        "2026/10",
+        "2026/11"
+      ],
+      "missingAlt": 0,
+      "nonLazyContentImages": 0,
+      "imageFailures": [],
+      "controls": [
+        {
+          "label": "愛身體頭薦骨、再平衡按摩、日式臉部按摩",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "撫慰心童年依附創傷療癒",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "究生命人類圖",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "展現美曼陀羅靜心彩繪",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "探索主題課程",
+          "width": 280,
+          "height": 72
+        },
+        {
+          "label": "寫信給我們",
+          "width": 240,
+          "height": 72
+        }
+      ],
+      "undersizedControls": [],
+      "typography": {
+        "sectionTitle": "42px",
+        "itemTitle": "22px",
+        "body": "16px",
+        "period": "14px"
+      }
+    },
+    {
+      "name": "home-390",
+      "innerWidth": 390,
+      "clientWidth": 390,
+      "scrollWidth": 390,
+      "scrollHeight": 6210,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "讓身心，慢慢回到自己的節奏。"
+        },
+        {
+          "level": "H2",
+          "text": "讓身體被好好聽見，讓心有地方安放。"
+        },
+        {
+          "level": "H2",
+          "text": "近期活動"
+        },
+        {
+          "level": "H3",
+          "text": "秋日靜心練習"
+        },
+        {
+          "level": "H3",
+          "text": "身體書寫之夜"
+        },
+        {
+          "level": "H3",
+          "text": "一杯茶的慢時光"
+        },
+        {
+          "level": "H2",
+          "text": "近期課程"
+        },
+        {
+          "level": "H3",
+          "text": "回到身體的呼吸練習"
+        },
+        {
+          "level": "H3",
+          "text": "溫柔觸碰按摩課"
+        },
+        {
+          "level": "H2",
+          "text": "留一段時間，好好照顧自己。"
+        }
+      ],
+      "h1Count": 1,
+      "sectionOrder": [
+        {
+          "top": 87,
+          "bottom": 1049.9375,
+          "width": 390,
+          "height": 962.9375
+        },
+        {
+          "top": 1049.9375,
+          "bottom": 2235.96875,
+          "width": 390,
+          "height": 1186.03125
+        },
+        {
+          "top": 2235.96875,
+          "bottom": 3203.453125,
+          "width": 390,
+          "height": 967.484375
+        },
+        {
+          "top": 3203.453125,
+          "bottom": 4748.03125,
+          "width": 390,
+          "height": 1544.578125
+        },
+        {
+          "top": 4748.03125,
+          "bottom": 5261.6875,
+          "width": 390,
+          "height": 513.65625
+        }
+      ],
+      "eventCount": 3,
+      "courseCount": 2,
+      "eventPeriods": [
+        "2026/10",
+        "2026/10",
+        "2026/11"
+      ],
+      "missingAlt": 0,
+      "nonLazyContentImages": 0,
+      "imageFailures": [],
+      "controls": [
+        {
+          "label": "愛身體頭薦骨、再平衡按摩、日式臉部按摩",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "撫慰心童年依附創傷療癒",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "究生命人類圖",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "展現美曼陀羅靜心彩繪",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "探索主題課程",
+          "width": 350,
+          "height": 72
+        },
+        {
+          "label": "寫信給我們",
+          "width": 310,
+          "height": 72
+        }
+      ],
+      "undersizedControls": [],
+      "typography": {
+        "sectionTitle": "42px",
+        "itemTitle": "22px",
+        "body": "16px",
+        "period": "14px"
+      }
+    },
+    {
+      "name": "home-768",
+      "innerWidth": 768,
+      "clientWidth": 768,
+      "scrollWidth": 768,
+      "scrollHeight": 5975,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "讓身心，慢慢回到自己的節奏。"
+        },
+        {
+          "level": "H2",
+          "text": "讓身體被好好聽見，讓心有地方安放。"
+        },
+        {
+          "level": "H2",
+          "text": "近期活動"
+        },
+        {
+          "level": "H3",
+          "text": "秋日靜心練習"
+        },
+        {
+          "level": "H3",
+          "text": "身體書寫之夜"
+        },
+        {
+          "level": "H3",
+          "text": "一杯茶的慢時光"
+        },
+        {
+          "level": "H2",
+          "text": "近期課程"
+        },
+        {
+          "level": "H3",
+          "text": "回到身體的呼吸練習"
+        },
+        {
+          "level": "H3",
+          "text": "溫柔觸碰按摩課"
+        },
+        {
+          "level": "H2",
+          "text": "留一段時間，好好照顧自己。"
+        }
+      ],
+      "h1Count": 1,
+      "sectionOrder": [
+        {
+          "top": 87,
+          "bottom": 1111,
+          "width": 768,
+          "height": 1024
+        },
+        {
+          "top": 1111,
+          "bottom": 2035.53125,
+          "width": 768,
+          "height": 924.53125
+        },
+        {
+          "top": 2035.53125,
+          "bottom": 3115.015625,
+          "width": 768,
+          "height": 1079.484375
+        },
+        {
+          "top": 3115.015625,
+          "bottom": 4295.546875,
+          "width": 768,
+          "height": 1180.53125
+        },
+        {
+          "top": 4295.546875,
+          "bottom": 4949.625,
+          "width": 768,
+          "height": 654.078125
+        }
+      ],
+      "eventCount": 3,
+      "courseCount": 2,
+      "eventPeriods": [
+        "2026/10",
+        "2026/10",
+        "2026/11"
+      ],
+      "missingAlt": 0,
+      "nonLazyContentImages": 0,
+      "imageFailures": [],
+      "controls": [
+        {
+          "label": "愛身體頭薦骨、再平衡按摩、日式臉部按摩",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "撫慰心童年依附創傷療癒",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "究生命人類圖",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "展現美曼陀羅靜心彩繪",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "探索主題課程",
+          "width": 360,
+          "height": 86.02
+        },
+        {
+          "label": "寫信給我們",
+          "width": 360,
+          "height": 86.02
+        }
+      ],
+      "undersizedControls": [],
+      "typography": {
+        "sectionTitle": "42px",
+        "itemTitle": "22px",
+        "body": "16px",
+        "period": "14px"
+      }
+    },
+    {
+      "name": "home-1023",
+      "innerWidth": 1023,
+      "clientWidth": 1008,
+      "scrollWidth": 1008,
+      "scrollHeight": 5679,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "讓身心，慢慢回到自己的節奏。"
+        },
+        {
+          "level": "H2",
+          "text": "讓身體被好好聽見，讓心有地方安放。"
+        },
+        {
+          "level": "H2",
+          "text": "近期活動"
+        },
+        {
+          "level": "H3",
+          "text": "秋日靜心練習"
+        },
+        {
+          "level": "H3",
+          "text": "身體書寫之夜"
+        },
+        {
+          "level": "H3",
+          "text": "一杯茶的慢時光"
+        },
+        {
+          "level": "H2",
+          "text": "近期課程"
+        },
+        {
+          "level": "H3",
+          "text": "回到身體的呼吸練習"
+        },
+        {
+          "level": "H3",
+          "text": "溫柔觸碰按摩課"
+        },
+        {
+          "level": "H2",
+          "text": "留一段時間，好好照顧自己。"
+        }
+      ],
+      "h1Count": 1,
+      "sectionOrder": [
+        {
+          "top": 87,
+          "bottom": 987,
+          "width": 1008,
+          "height": 900
+        },
+        {
+          "top": 987,
+          "bottom": 1837.453125,
+          "width": 1008,
+          "height": 850.453125
+        },
+        {
+          "top": 1837.453125,
+          "bottom": 2916.9375,
+          "width": 1008,
+          "height": 1079.484375
+        },
+        {
+          "top": 2916.9375,
+          "bottom": 4185.3125,
+          "width": 1008,
+          "height": 1268.375
+        },
+        {
+          "top": 4185.3125,
+          "bottom": 4828.96875,
+          "width": 1008,
+          "height": 643.65625
+        }
+      ],
+      "eventCount": 3,
+      "courseCount": 2,
+      "eventPeriods": [
+        "2026/10",
+        "2026/10",
+        "2026/11"
+      ],
+      "missingAlt": 0,
+      "nonLazyContentImages": 0,
+      "imageFailures": [],
+      "controls": [
+        {
+          "label": "愛身體頭薦骨、再平衡按摩、日式臉部按摩",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "撫慰心童年依附創傷療癒",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "究生命人類圖",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "展現美曼陀羅靜心彩繪",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "探索主題課程",
+          "width": 360,
+          "height": 75.59
+        },
+        {
+          "label": "寫信給我們",
+          "width": 360,
+          "height": 75.59
+        }
+      ],
+      "undersizedControls": [],
+      "typography": {
+        "sectionTitle": "42px",
+        "itemTitle": "22px",
+        "body": "16px",
+        "period": "14px"
+      }
+    },
+    {
+      "name": "home-1024",
+      "innerWidth": 1024,
+      "clientWidth": 1009,
+      "scrollWidth": 1009,
+      "scrollHeight": 5619,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "讓身心，慢慢回到自己的節奏。"
+        },
+        {
+          "level": "H2",
+          "text": "讓身體被好好聽見，讓心有地方安放。"
+        },
+        {
+          "level": "H2",
+          "text": "近期活動"
+        },
+        {
+          "level": "H3",
+          "text": "秋日靜心練習"
+        },
+        {
+          "level": "H3",
+          "text": "身體書寫之夜"
+        },
+        {
+          "level": "H3",
+          "text": "一杯茶的慢時光"
+        },
+        {
+          "level": "H2",
+          "text": "近期課程"
+        },
+        {
+          "level": "H3",
+          "text": "回到身體的呼吸練習"
+        },
+        {
+          "level": "H3",
+          "text": "溫柔觸碰按摩課"
+        },
+        {
+          "level": "H2",
+          "text": "留一段時間，好好照顧自己。"
+        }
+      ],
+      "h1Count": 1,
+      "sectionOrder": [
+        {
+          "top": 0,
+          "bottom": 900,
+          "width": 1009,
+          "height": 900
+        },
+        {
+          "top": 900,
+          "bottom": 1908.515625,
+          "width": 1009,
+          "height": 1008.515625
+        },
+        {
+          "top": 1908.515625,
+          "bottom": 2790.859375,
+          "width": 1009,
+          "height": 882.34375
+        },
+        {
+          "top": 2790.859375,
+          "bottom": 4066.140625,
+          "width": 1009,
+          "height": 1275.28125
+        },
+        {
+          "top": 4066.140625,
+          "bottom": 4769.453125,
+          "width": 1009,
+          "height": 703.3125
+        }
+      ],
+      "eventCount": 3,
+      "courseCount": 2,
+      "eventPeriods": [
+        "2026/10",
+        "2026/10",
+        "2026/11"
+      ],
+      "missingAlt": 0,
+      "nonLazyContentImages": 0,
+      "imageFailures": [],
+      "controls": [
+        {
+          "label": "近期活動",
+          "width": 60.48,
+          "height": 44
+        },
+        {
+          "label": "課程探索",
+          "width": 60.48,
+          "height": 44
+        },
+        {
+          "label": "個案諮詢",
+          "width": 60.48,
+          "height": 44
+        },
+        {
+          "label": "文章分享",
+          "width": 60.48,
+          "height": 44
+        },
+        {
+          "label": "關於我們",
+          "width": 60.48,
+          "height": 44
+        },
+        {
+          "label": "愛身體頭薦骨、再平衡按摩、日式臉部按摩",
+          "width": 273.53,
+          "height": 93.58
+        },
+        {
+          "label": "撫慰心童年依附創傷療癒",
+          "width": 186.28,
+          "height": 93.58
+        },
+        {
+          "label": "究生命人類圖",
+          "width": 186.28,
+          "height": 93.58
+        },
+        {
+          "label": "展現美曼陀羅靜心彩繪",
+          "width": 186.28,
+          "height": 93.58
+        },
+        {
+          "label": "普那生活空間首頁",
+          "width": 342.16,
+          "height": 102.02
+        },
+        {
+          "label": "探索主題課程",
+          "width": 342.16,
+          "height": 75.59
+        },
+        {
+          "label": "寫信給我們",
+          "width": 290.41,
+          "height": 75.59
+        }
+      ],
+      "undersizedControls": [],
+      "typography": {
+        "sectionTitle": "72px",
+        "itemTitle": "24px",
+        "body": "16px",
+        "period": "14px"
+      }
+    },
+    {
+      "name": "home-1440",
+      "innerWidth": 1440,
+      "clientWidth": 1425,
+      "scrollWidth": 1425,
+      "scrollHeight": 5620,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "讓身心，慢慢回到自己的節奏。"
+        },
+        {
+          "level": "H2",
+          "text": "讓身體被好好聽見，讓心有地方安放。"
+        },
+        {
+          "level": "H2",
+          "text": "近期活動"
+        },
+        {
+          "level": "H3",
+          "text": "秋日靜心練習"
+        },
+        {
+          "level": "H3",
+          "text": "身體書寫之夜"
+        },
+        {
+          "level": "H3",
+          "text": "一杯茶的慢時光"
+        },
+        {
+          "level": "H2",
+          "text": "近期課程"
+        },
+        {
+          "level": "H3",
+          "text": "回到身體的呼吸練習"
+        },
+        {
+          "level": "H3",
+          "text": "溫柔觸碰按摩課"
+        },
+        {
+          "level": "H2",
+          "text": "留一段時間，好好照顧自己。"
+        }
+      ],
+      "h1Count": 1,
+      "sectionOrder": [
+        {
+          "top": 0,
+          "bottom": 1000,
+          "width": 1425,
+          "height": 1000
+        },
+        {
+          "top": 1000,
+          "bottom": 1952,
+          "width": 1425,
+          "height": 952
+        },
+        {
+          "top": 1952,
+          "bottom": 2834.34375,
+          "width": 1425,
+          "height": 882.34375
+        },
+        {
+          "top": 2834.34375,
+          "bottom": 4242.75,
+          "width": 1425,
+          "height": 1408.40625
+        },
+        {
+          "top": 4242.75,
+          "bottom": 4770.40625,
+          "width": 1425,
+          "height": 527.65625
+        }
+      ],
+      "eventCount": 3,
+      "courseCount": 2,
+      "eventPeriods": [
+        "2026/10",
+        "2026/10",
+        "2026/11"
+      ],
+      "missingAlt": 0,
+      "nonLazyContentImages": 0,
+      "imageFailures": [],
+      "controls": [
+        {
+          "label": "近期活動",
+          "width": 60.48,
+          "height": 44
+        },
+        {
+          "label": "課程探索",
+          "width": 60.48,
+          "height": 44
+        },
+        {
+          "label": "個案諮詢",
+          "width": 60.48,
+          "height": 44
+        },
+        {
+          "label": "文章分享",
+          "width": 60.48,
+          "height": 44
+        },
+        {
+          "label": "關於我們",
+          "width": 60.48,
+          "height": 44
+        },
+        {
+          "label": "愛身體頭薦骨、再平衡按摩、日式臉部按摩",
+          "width": 273.53,
+          "height": 93.58
+        },
+        {
+          "label": "撫慰心童年依附創傷療癒",
+          "width": 186.28,
+          "height": 93.58
+        },
+        {
+          "label": "究生命人類圖",
+          "width": 186.28,
+          "height": 93.58
+        },
+        {
+          "label": "展現美曼陀羅靜心彩繪",
+          "width": 186.28,
+          "height": 93.58
+        },
+        {
+          "label": "普那生活空間首頁",
+          "width": 383.88,
+          "height": 105.17
+        },
+        {
+          "label": "探索主題課程",
+          "width": 360,
+          "height": 84
+        },
+        {
+          "label": "寫信給我們",
+          "width": 360,
+          "height": 84
+        }
+      ],
+      "undersizedControls": [],
+      "typography": {
+        "sectionTitle": "72px",
+        "itemTitle": "24px",
+        "body": "16px",
+        "period": "14px"
+      }
+    },
+    {
+      "name": "home-200-percent-equivalent",
+      "innerWidth": 720,
+      "clientWidth": 720,
+      "scrollWidth": 720,
+      "scrollHeight": 6802,
+      "headings": [
+        {
+          "level": "H1",
+          "text": "讓身心，慢慢回到自己的節奏。"
+        },
+        {
+          "level": "H2",
+          "text": "讓身體被好好聽見，讓心有地方安放。"
+        },
+        {
+          "level": "H2",
+          "text": "近期活動"
+        },
+        {
+          "level": "H3",
+          "text": "秋日靜心練習"
+        },
+        {
+          "level": "H3",
+          "text": "身體書寫之夜"
+        },
+        {
+          "level": "H3",
+          "text": "一杯茶的慢時光"
+        },
+        {
+          "level": "H2",
+          "text": "近期課程"
+        },
+        {
+          "level": "H3",
+          "text": "回到身體的呼吸練習"
+        },
+        {
+          "level": "H3",
+          "text": "溫柔觸碰按摩課"
+        },
+        {
+          "level": "H2",
+          "text": "留一段時間，好好照顧自己。"
+        }
+      ],
+      "h1Count": 1,
+      "sectionOrder": [
+        {
+          "top": 87,
+          "bottom": 1006.984375,
+          "width": 720,
+          "height": 919.984375
+        },
+        {
+          "top": 1006.984375,
+          "bottom": 2237.9375,
+          "width": 720,
+          "height": 1230.953125
+        },
+        {
+          "top": 2237.9375,
+          "bottom": 3253.421875,
+          "width": 720,
+          "height": 1015.484375
+        },
+        {
+          "top": 3253.421875,
+          "bottom": 5292.40625,
+          "width": 720,
+          "height": 2038.984375
+        },
+        {
+          "top": 5292.40625,
+          "bottom": 5776.0625,
+          "width": 720,
+          "height": 483.65625
+        }
+      ],
+      "eventCount": 3,
+      "courseCount": 2,
+      "eventPeriods": [
+        "2026/10",
+        "2026/10",
+        "2026/11"
+      ],
+      "missingAlt": 0,
+      "nonLazyContentImages": 0,
+      "imageFailures": [],
+      "controls": [
+        {
+          "label": "愛身體頭薦骨、再平衡按摩、日式臉部按摩",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "撫慰心童年依附創傷療癒",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "究生命人類圖",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "展現美曼陀羅靜心彩繪",
+          "width": 105.2,
+          "height": 48
+        },
+        {
+          "label": "探索主題課程",
+          "width": 360,
+          "height": 75.59
+        },
+        {
+          "label": "寫信給我們",
+          "width": 360,
+          "height": 75.59
+        }
+      ],
+      "undersizedControls": [],
+      "typography": {
+        "sectionTitle": "42px",
+        "itemTitle": "22px",
+        "body": "16px",
+        "period": "14px"
+      }
+    }
+  ],
+  "longContent": {
+    "clientWidth": 320,
+    "scrollWidth": 320,
+    "overflow": []
+  },
+  "focusAndReducedMotion": {
+    "focusedLabel": "寫信給我們",
+    "outlineStyle": "solid",
+    "outlineWidth": "2px",
+    "outlineOffset": "6px",
+    "buttonTransition": "0s",
+    "iconTransition": "0s"
+  }
+}

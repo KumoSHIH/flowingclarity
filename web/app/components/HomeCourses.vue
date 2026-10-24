@@ -1,38 +1,7 @@
 <script setup lang="ts">
-const courses = [
-  {
-    title: "回到身體的呼吸練習",
-    description:
-      "從呼吸與緩慢的動作，練習辨認緊繃，也練習在生活裡為自己留下一點空間。",
-    meta: "四週入門課程",
-    image: "/images/home-banner.jpg",
-    imageAlt: "鋪著亞麻布的安靜按摩空間",
-  },
-  {
-    title: "溫柔觸碰按摩課",
-    description:
-      "認識安全而有界線的觸碰，學習適合日常使用的肩頸與手部放鬆方法。",
-    meta: "週末工作坊",
-    image: "/images/home-banner-2.jpg",
-    imageAlt: "暖光中的療癒空間",
-  },
-  {
-    title: "回到身體的呼吸練習",
-    description:
-      "從呼吸與緩慢的動作，練習辨認緊繃，也練習在生活裡為自己留下一點空間。",
-    meta: "四週入門課程",
-    image: "/images/home-banner.jpg",
-    imageAlt: "鋪著亞麻布的安靜按摩空間",
-  },
-  {
-    title: "回到身體的呼吸練習",
-    description:
-      "從呼吸與緩慢的動作，練習辨認緊繃，也練習在生活裡為自己留下一點空間。",
-    meta: "四週入門課程",
-    image: "/images/home-banner.jpg",
-    imageAlt: "鋪著亞麻布的安靜按摩空間",
-  },
-];
+import type { HomeSectionsContent } from "#shared/types/homeSections";
+
+defineProps<{ content: HomeSectionsContent["courses"] }>();
 </script>
 
 <template>
@@ -44,45 +13,111 @@ const courses = [
     <div class="relative z-20 mx-auto max-w-[1520px]">
       <div class="mb-14">
         <div>
-          <h2 id="courses-title" class="type-title-xl text-center">近期課程</h2>
+          <h2 id="courses-title" class="type-title-xl text-center">
+            {{ content.heading }}
+          </h2>
         </div>
-        <p class="type-body mx-auto max-w-[470px] text-center text-muted">
-          用可以帶回日常的練習，一點一點培養對身體的覺察與信任。
+        <p class="type-body mx-auto mt-8 max-w-[470px] text-center text-muted">
+          {{ content.introduction }}
         </p>
       </div>
 
-      <div class="grid gap-20 md:grid-cols-2 md:gap-[clamp(56px,8vw,128px)]">
+      <div
+        v-if="content.items.length"
+        class="grid gap-20 md:grid-cols-2 md:gap-[clamp(56px,8vw,128px)]"
+      >
         <article
-          v-for="(course, index) in courses"
-          :key="course.title"
+          v-for="(course, index) in content.items"
+          :key="course.id"
           :class="index % 2 !== 0 ? 'md:mt-36' : ''"
         >
-          <div class="aspect-[5/4] overflow-hidden bg-[#d8cbbc]">
-            <img
-              :src="course.image"
-              :alt="course.imageAlt"
-              width="900"
-              height="720"
-              loading="lazy"
-              class="h-full w-full object-cover"
-              :class="index === 0 ? 'object-[60%_center]' : 'object-center'"
-            />
-          </div>
-          <div class="pb-10 pt-8 md:pt-10">
-            <div>
-              <p class="type-label mb-4 text-clay">
-                {{ course.meta }}
-              </p>
-              <h3 class="type-title-sm">
-                {{ course.title }}
-              </h3>
+          <NuxtLink
+            :to="course.href"
+            class="home-course-link block text-inherit no-underline"
+          >
+            <div
+              class="home-course-link__media aspect-[5/4] overflow-hidden bg-[#d8cbbc]"
+            >
+              <img
+                :src="course.image.src"
+                :alt="course.image.alt"
+                :width="course.image.width"
+                :height="course.image.height"
+                loading="lazy"
+                class="h-full w-full object-cover"
+                :class="index === 0 ? 'object-[60%_center]' : 'object-center'"
+                :style="
+                  course.image.objectPosition
+                    ? { objectPosition: course.image.objectPosition }
+                    : undefined
+                "
+              />
             </div>
-            <p class="type-body mt-6 max-w-[440px] text-muted">
-              {{ course.description }}
-            </p>
-          </div>
+            <div class="border-b border-[#c9bcac] pb-10 pt-8 md:pt-10">
+              <div>
+                <p class="type-label mb-4 text-clay">
+                  {{ course.meta }}
+                </p>
+                <h3 class="type-title-sm home-course-link__title">
+                  {{ course.title }}
+                </h3>
+              </div>
+              <p class="type-body mt-3 text-muted">
+                {{ course.description }}
+              </p>
+            </div>
+          </NuxtLink>
         </article>
       </div>
+      <p
+        v-else
+        class="type-body mx-auto max-w-[470px] border-t border-[#c9bcac] py-9 text-center text-muted"
+      >
+        {{ content.emptyMessage }}
+      </p>
     </div>
   </section>
 </template>
+
+<style scoped>
+.home-course-link__media img {
+  transition:
+    filter 420ms ease,
+    transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.home-course-link__title {
+  transition: color 220ms ease;
+}
+
+.home-course-link:focus-visible .home-course-link__media img {
+  filter: saturate(1.06) contrast(1.025);
+  transform: scale(1.025);
+}
+
+.home-course-link:focus-visible .home-course-link__title {
+  color: var(--interactive-title-hover);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .home-course-link:hover .home-course-link__media img {
+    filter: saturate(1.06) contrast(1.025);
+    transform: scale(1.025);
+  }
+
+  .home-course-link:hover .home-course-link__title {
+    color: var(--interactive-title-hover);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-course-link__media img,
+  .home-course-link__title {
+    transition: none;
+  }
+
+  .home-course-link:is(:hover, :focus-visible) .home-course-link__media img {
+    transform: none;
+  }
+}
+</style>

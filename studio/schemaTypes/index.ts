@@ -7,6 +7,7 @@ import { event } from './event.ts'
 import { eventDetailSchemaTypes } from './eventDetail.ts'
 import { eventsPage } from './eventsPage.ts'
 import { homeBanner } from './homeBanner.ts'
+import { homePage } from './homePage.ts'
 import { practitioner } from './practitioner.ts'
 import { sessionDetailSchemaTypes } from './sessionDetail.ts'
 import { sessionPage } from './sessionPage.ts'
@@ -21,6 +22,7 @@ import { aboutPage } from './aboutPage.ts'
 export const schemaTypes = [
   siteSettings,
   homeBanner,
+  homePage,
   courseOverviewPage,
   courseCategory,
   ...courseDetailSchemaTypes,

@@ -1,0 +1,20 @@
+{
+  "generatedAt": "2026-10-24T13:58:26.151Z",
+  "desktop": {
+    "gridTemplateColumns": "162.828px 542.812px",
+    "minHeight": "150px",
+    "dayFontSize": "38px",
+    "dayColor": "rgb(56, 52, 46)",
+    "titleFontSize": "24px",
+    "hoverTitleColor": "rgb(164, 107, 84)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "focusOutline": "2px"
+  },
+  "mobile": {
+    "gridTemplateColumns": "78px 254px",
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "minimumLinkHeight": 139.6875
+  }
+}

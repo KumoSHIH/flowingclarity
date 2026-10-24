@@ -1,3 +1,9 @@
+<script setup lang="ts">
+import type { HomeIntroductionContent } from '#shared/types/homeSections'
+
+defineProps<{ content: HomeIntroductionContent }>()
+</script>
+
 <template>
   <section
     id="about"
@@ -7,30 +13,30 @@
     <div class="relative z-20 mx-auto w-full max-w-[480px] md:mx-0">
       <div class="aspect-[4/5] overflow-hidden bg-[#d8cbbc]">
         <img
-          src="/images/home-banner-2.jpg"
-          alt="暖光照進安靜的療癒空間"
-          width="1080"
-          height="1350"
+          :src="content.image.src"
+          :alt="content.image.alt"
+          :width="content.image.width"
+          :height="content.image.height"
           loading="lazy"
           class="h-full w-full object-cover object-center"
+          :style="content.image.objectPosition ? { objectPosition: content.image.objectPosition } : undefined"
         >
       </div>
-      <p class="type-meta absolute -bottom-6 right-0 bg-paper px-6 py-4 font-editorial text-muted md:-right-8">
-        A QUIET PLACE TO BE
+      <p v-if="content.caption" class="type-meta absolute -bottom-6 right-0 bg-paper px-6 py-4 font-editorial text-muted md:-right-8">
+        {{ content.caption }}
       </p>
     </div>
 
     <div class="relative z-20 max-w-[620px] md:py-12">
-      <h2 id="about-title" class="type-title-lg">
-        讓身體被好好聽見，<br class="hidden sm:block">讓心有地方安放。
+      <h2 id="about-title" class="type-title-lg whitespace-pre-line">
+        {{ content.heading }}
       </h2>
       <p class="type-label mb-0 mt-10 flex items-center gap-4 text-clay">
         <span class="h-px w-8 bg-current" aria-hidden="true" />
-        關於普那
+        {{ content.label }}
       </p>
       <div class="type-body mt-7 max-w-[520px] space-y-8 text-muted md:ml-auto">
-        <p>普那生活空間相信，照顧自己不需要急著抵達某個答案。從一次深呼吸、一段安靜的觸碰開始，慢慢認識身體此刻真正的需要。</p>
-        <p>我們透過按摩、身體工作與小型課程，陪你在日常之間留下一段可以鬆開、整理、重新感受自己的時間。</p>
+        <p v-for="paragraph in content.paragraphs" :key="paragraph">{{ paragraph }}</p>
       </div>
     </div>
   </section>

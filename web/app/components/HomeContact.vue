@@ -1,7 +1,13 @@
+<script setup lang="ts">
+import type { HomeSectionsContent } from "#shared/types/homeSections";
+
+defineProps<{ content: NonNullable<HomeSectionsContent["contact"]> }>();
+</script>
+
 <template>
   <section
     id="contact"
-    class="px-[var(--page-gutter-mobile)] pb-8 md:pb-16 lg:px-[clamp(20px,4vw,64px)]"
+    class="max-w-[1400px] w-full mx-auto px-[var(--page-gutter-mobile)] pb-8 md:pb-16 lg:px-[clamp(20px,4vw,64px)]"
     aria-labelledby="contact-title"
   >
     <div
@@ -11,16 +17,19 @@
         class="relative grid gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-20"
       >
         <div>
-          <h2 id="contact-title" class="type-title-xl max-w-[760px]">
-            留一段時間，<br />好好照顧自己。
+          <h2
+            id="contact-title"
+            class="type-title-xl max-w-[760px] whitespace-pre-line"
+          >
+            {{ content.heading }}
           </h2>
         </div>
         <div class="max-w-[460px] lg:justify-self-end">
           <p class="type-body text-[var(--color-bark)]">
-            想了解按摩、近期活動或課程，歡迎來信與我們說說你的需要。
+            {{ content.introduction }}
           </p>
-          <a href="mailto:hello@flowingclarity.tw" class="button-primary mt-6">
-            寫信給我們
+          <a :href="`mailto:${content.email}`" class="button-primary mt-6">
+            {{ content.buttonLabel }}
             <svg
               class="h-5 w-5"
               viewBox="0 0 24 24"

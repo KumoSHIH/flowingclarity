@@ -19,7 +19,7 @@ describe('shared site settings', () => {
     const Footer = defineComponent({ props: ['content'], template: '<footer>{{ content.brandName }}</footer>' })
     const wrapper = mount(IndexPage, { global: { stubs: {
       SiteHeader: Header, SiteFooter: Footer, HomeBanner,
-      HomeIntroduction: true, HomeEvents: true, HomeCourses: true, HomeContact: true,
+      HomeIntroduction: true, HomeEvents: true, HomeCourses: true, HomeContact: true, HomeSectionsState: true,
       SiteFooterUnavailable, NuxtLink: defineComponent({ props: ['to'], template: '<a :href="to"><slot /></a>' }),
     } } })
     expect(fetchMock.mock.calls.filter(([url]) => url === '/api/site-settings')).toHaveLength(1)

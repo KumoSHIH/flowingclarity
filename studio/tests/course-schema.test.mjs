@@ -28,6 +28,7 @@ test('course content types are registered with their required semantic fields', 
     [
       'siteSettings',
       'homeBanner',
+      'homePage',
       'courseOverviewPage',
       'courseCategory',
       'courseDetailIntroduction',

@@ -5,6 +5,7 @@ import { eventsPageId } from './schemaTypes/eventsPage.ts'
 import { sessionPageId } from './schemaTypes/sessionPage.ts'
 import { articlesPageId } from './schemaTypes/articlesPage.ts'
 import { aboutPageId } from './schemaTypes/aboutPage.ts'
+import { homePageId } from './schemaTypes/homePage.ts'
 
 const courseCategories = Object.values(courseCategoryDefinitions)
 
@@ -25,6 +26,9 @@ export const structure: StructureResolver = (S) =>
             .schemaType('homeBanner')
             .documentId('homeBanner'),
         ),
+      S.listItem().id('home-page').title('首頁內容').child(
+        S.document().id(homePageId).schemaType('homePage').documentId(homePageId),
+      ),
       S.divider(),
       S.listItem()
         .id('course-overview-page')

@@ -20,6 +20,7 @@ Sanity Studio 用來編輯首頁 Banner、課程、活動、個案諮詢與文�
 - 「個案諮詢總覽頁」是固定 ID `session-page` 的單例；服務地區與服務項目是可新增 taxonomy，識別碼與順序在同類別內不可重複。執行師可複選服務地區與服務項目，總覽不使用人物照片；`isPublished` 關閉或契約不完整的文件不會出現在前台。
 - 「文章分享總覽頁」是固定 ID `articles-page` 的單例；文章固定 reference 四個課程分類之一，另可選 1–8 個可新增的文章標籤。文章與標籤使用 Sanity draft／published 狀態，不另設公開開關。文章詳情沿用同一文件，可編排純文字、左右圖文與滿寬圖片，並設定首區樣式、延伸閱讀及 SEO；本機 schema 與 API 已完成，遠端 schema 尚未部署。
 - 「關於我們」是固定 ID `about-page` 的單例，管理頁面首區、品牌理念、空間與團隊、3–10 張精選片段、聯絡引導及 SEO；地址、電話、社群、營業時間與 Google Maps 繼續由 `siteSettings` 共用，避免重複維護。
+- 「首頁內容」是固定 ID `home-page` 的單例，管理品牌介紹、活動／課程區文案與空狀態、聯絡引導；活動、課程與梯次沿用既有集合，聯絡信箱沿用 `siteSettings`，避免重複維護。
 
 ## 驗收
 
@@ -45,6 +46,8 @@ Sanity Studio 用來編輯首頁 Banner、課程、活動、個案諮詢與文�
 個案諮詢 schema 已部署至 production，並以 7 筆 taxonomy、1 筆總覽與 48 位執行師完成草稿隔離、兩次發布、匿名 published 查詢、分頁、地區篩選、1440px／390px 前台與清理後空狀態驗收。隔離測試內容已精準清除；production 只保留無內容、未發布的 `drafts.session-page`，避免單例在刪除驗收內容後停在不可編輯狀態，匿名前台仍讀不到此草稿。正式總覽文案、taxonomy 與執行師資料仍待內容負責人建立及發布。完整紀錄見 [個案諮詢規格](../web/docs/specs/session.md)。
 
 關於我們 schema 已部署至 production。2026-10-19 驗收時 `about-page` 與 `site-settings` 已由外部流程發布且無殘留草稿；匿名 published 查詢、前台 parser、5 個圖片資產、Nuxt API、SSR 與 production browser 回歸皆通過，技術狀態為 `verified`。驗收本身未修改或發布遠端文件；現行內容仍含示意／待核准字樣，照片授權、人物同意與地圖隱私揭露仍待內容負責人確認。完整紀錄見 [關於我們規格](../web/docs/specs/about.md)。
+
+首頁內容 schema 已部署至 production。2026-10-24 以隔離內容完成草稿隔離、兩次發布、匿名 published 查詢、活動／課程選取、數字年月、圖片、桌機／手機及清理驗收；驗收文件已精準清除，只保留無內容、未發布的 `drafts.home-page` 供編輯者開始填寫。登入 Studio 已確認單例入口、分組、欄位提示與 validation 可正常使用；正式首頁文案仍待內容負責人填寫及發布。完整紀錄見 [首頁內容區塊規格](../web/docs/specs/home-sections.md)。
 
 文章總覽 schema 已部署至 production，並以 10 個標籤、1 筆總覽與 24 篇文章完成草稿隔離、兩次發布、匿名 published 查詢、分類／標籤篩選、三頁分頁、桌機／手機與清理後空狀態驗收。70 個隔離測試文件已精準清除；人工後台測試另發現主要分類 picker 同時顯示新舊分類文件，現已限制為四個正式 `course-category-*` ID 並完成回歸。production 的 `articles-page` 已由 Studio 人工發布，前台 API 可匿名讀取 4 個主要分類、3 個標籤與 3 篇文章，文章總覽規格為 `verified`。單篇文章詳情擴充目前只在本機完成，尚未部署或進行遠端內容流驗收；正式內容也仍待核准。完整紀錄見 [文章分享規格](../web/docs/specs/articles.md)與[文章詳情規格](../web/docs/specs/articles-detail.md)。
 

@@ -270,7 +270,7 @@ function selectCategory(id: string, event: MouseEvent) {
 }
 
 .atlas-category:is(:hover, :focus-visible) {
-  color: #fff;
+  color: var(--color-warm-white);
 }
 
 .atlas-category--body {
@@ -374,6 +374,9 @@ function selectCategory(id: string, event: MouseEvent) {
 
 .hero-menu a {
   position: relative;
+  display: flex;
+  min-height: 44px;
+  align-items: center;
   text-decoration: none;
   font-size: var(--type-label-size);
   font-weight: var(--type-label-weight);

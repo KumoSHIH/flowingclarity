@@ -83,6 +83,7 @@
   --button-primary-tracking: 0.1em;
   --button-primary-transition: 220ms ease;
   --interactive-title-hover: var(--color-clay);
+  --home-event-date-range-size: 58px;
   --directory-filter-font-size: var(--type-body-size);
   --directory-filter-count-size: var(--type-meta-size);
   --detail-hero-title-size: var(--type-title-xl-size);
@@ -257,6 +258,7 @@
     --type-title-md-size: 26px;
     --type-title-lg-size: 42px;
     --type-title-xl-size: 42px;
+    --home-event-date-range-size: 36px;
     --button-primary-size: 14px;
     --button-primary-padding: 24px;
     --detail-hero-padding-block-start: 68px;

@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-10-24T13:55:16.954Z",
+  "desktop": {
+    "eventSvgCount": 0,
+    "courseSvgCount": 0,
+    "eventLinks": 2,
+    "courseLinks": 2,
+    "scrollWidth": 1425,
+    "clientWidth": 1425
+  },
+  "mobile": {
+    "eventSvgCount": 0,
+    "courseSvgCount": 0,
+    "scrollWidth": 390,
+    "clientWidth": 390
+  }
+}

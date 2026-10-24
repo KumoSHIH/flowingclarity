@@ -3,6 +3,7 @@ import { structureTool } from 'sanity/structure'
 import { CharacterCountInput } from './components/CharacterCountInput'
 import { schemaTypes } from './schemaTypes'
 import { structure } from './structure'
+import { hiddenGlobalTemplateIds, protectedSingletonSchemaTypes } from './lib/singletonSchemaTypes'
 
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID
 
@@ -24,21 +25,12 @@ export default defineConfig({
     },
   },
   document: {
-    actions: (prev, context) => ['siteSettings', 'eventsPage', 'sessionPage', 'articlesPage', 'aboutPage'].includes(context.schemaType)
+    actions: (prev, context) => protectedSingletonSchemaTypes.includes(context.schemaType as typeof protectedSingletonSchemaTypes[number])
       ? prev.filter(action => !['duplicate', 'delete', 'unpublish'].includes(action.action ?? ''))
       : prev,
     newDocumentOptions: (prev, { creationContext }) =>
       creationContext.type === 'global'
-        ? prev.filter(({ templateId }) => ![
-            'homeBanner',
-            'courseOverviewPage',
-            'courseCategory',
-            'siteSettings',
-            'eventsPage',
-            'sessionPage',
-            'articlesPage',
-            'aboutPage',
-          ].includes(templateId))
+        ? prev.filter(({ templateId }) => !hiddenGlobalTemplateIds.includes(templateId as typeof hiddenGlobalTemplateIds[number]))
         : prev,
   },
   schema: {
