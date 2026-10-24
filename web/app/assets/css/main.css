@@ -29,12 +29,45 @@
 
 /* Shared typography and large primary action. Layout margins belong to consumers. */
 :root {
-  --display-title-size: 56px;
-  --display-title-weight: 400;
-  --display-title-leading: 1.2;
-  --lead-text-size: 17px;
-  --lead-text-weight: 500;
-  --lead-text-leading: 1.95;
+  --page-gutter-mobile: 20px;
+  --type-meta-size: 12px;
+  --type-meta-weight: 400;
+  --type-meta-leading: 1.7;
+  --type-meta-tracking: 0.06em;
+  --type-label-size: 14px;
+  --type-label-weight: 700;
+  --type-label-leading: 1.7;
+  --type-label-tracking: 0.08em;
+  --type-body-size: 16px;
+  --type-body-weight: 400;
+  --type-body-leading: 2.1;
+  --type-body-tracking: 0.025em;
+  --type-lead-size: 17px;
+  --type-lead-weight: 400;
+  --type-lead-leading: 2;
+  --type-lead-tracking: 0.035em;
+  --type-title-sm-size: 24px;
+  --type-title-sm-weight: 400;
+  --type-title-sm-leading: 1.55;
+  --type-title-sm-tracking: 0.03em;
+  --type-title-md-size: 38px;
+  --type-title-md-weight: 400;
+  --type-title-md-leading: 1.4;
+  --type-title-md-tracking: 0.02em;
+  --type-title-lg-size: 56px;
+  --type-title-lg-weight: 400;
+  --type-title-lg-leading: 1.2;
+  --type-title-lg-tracking: 0.04em;
+  --type-title-xl-size: 72px;
+  --type-title-xl-weight: 400;
+  --type-title-xl-leading: 1.22;
+  --type-title-xl-tracking: 0.025em;
+  --display-title-size: var(--type-title-lg-size);
+  --display-title-weight: var(--type-title-lg-weight);
+  --display-title-leading: var(--type-title-lg-leading);
+  --lead-text-size: var(--type-lead-size);
+  --lead-text-weight: var(--type-lead-weight);
+  --lead-text-leading: var(--type-lead-leading);
   --text-tracking: 0.06em;
   --lead-text-inverse: #e9ded7;
   --button-primary-size: 18px;
@@ -50,15 +83,15 @@
   --button-primary-tracking: 0.1em;
   --button-primary-transition: 220ms ease;
   --interactive-title-hover: var(--color-clay);
-  --directory-filter-font-size: 16px;
-  --directory-filter-count-size: 12px;
-  --detail-hero-title-size: 72px;
+  --directory-filter-font-size: var(--type-body-size);
+  --directory-filter-count-size: var(--type-meta-size);
+  --detail-hero-title-size: var(--type-title-xl-size);
   --detail-hero-padding-block-start: 84px;
   --detail-hero-padding-block-end: 84px;
   --detail-hero-padding-inline: clamp(28px, 6vw, 116px);
-  --detail-summary-size: 17px;
-  --detail-section-title-size: 38px;
-  --detail-body-size: 16px;
+  --detail-summary-size: var(--type-lead-size);
+  --detail-section-title-size: var(--type-title-md-size);
+  --detail-body-size: var(--type-body-size);
   --detail-content-padding-block: 76px;
   --detail-content-padding-inline: clamp(48px, 7vw, 104px);
   --detail-hero-max-width: 1500px;
@@ -71,12 +104,79 @@
 }
 
 @layer components {
+  .type-meta {
+    font-family: var(--font-sans);
+    font-size: var(--type-meta-size);
+    font-weight: var(--type-meta-weight);
+    line-height: var(--type-meta-leading);
+    letter-spacing: var(--type-meta-tracking);
+  }
+
+  .type-label {
+    font-family: var(--font-sans);
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+    line-height: var(--type-label-leading);
+    letter-spacing: var(--type-label-tracking);
+  }
+
+  .type-body {
+    font-family: var(--font-sans);
+    font-size: var(--type-body-size);
+    font-weight: var(--type-body-weight);
+    line-height: var(--type-body-leading);
+    letter-spacing: var(--type-body-tracking);
+  }
+
+  .type-lead {
+    font-family: var(--font-sans);
+    font-size: var(--type-lead-size);
+    font-weight: var(--type-lead-weight);
+    line-height: var(--type-lead-leading);
+    letter-spacing: var(--type-lead-tracking);
+  }
+
+  .type-title-sm,
+  .type-title-md,
+  .type-title-lg,
+  .type-title-xl {
+    font-family: var(--font-display);
+  }
+
+  .type-title-sm {
+    font-size: var(--type-title-sm-size);
+    font-weight: var(--type-title-sm-weight);
+    line-height: var(--type-title-sm-leading);
+    letter-spacing: var(--type-title-sm-tracking);
+  }
+
+  .type-title-md {
+    font-size: var(--type-title-md-size);
+    font-weight: var(--type-title-md-weight);
+    line-height: var(--type-title-md-leading);
+    letter-spacing: var(--type-title-md-tracking);
+  }
+
+  .type-title-lg {
+    font-size: var(--type-title-lg-size);
+    font-weight: var(--type-title-lg-weight);
+    line-height: var(--type-title-lg-leading);
+    letter-spacing: var(--type-title-lg-tracking);
+  }
+
+  .type-title-xl {
+    font-size: var(--type-title-xl-size);
+    font-weight: var(--type-title-xl-weight);
+    line-height: var(--type-title-xl-leading);
+    letter-spacing: var(--type-title-xl-tracking);
+  }
+
   .display-title {
     font-family: var(--font-display);
     font-size: var(--display-title-size);
     font-weight: var(--display-title-weight);
     line-height: var(--display-title-leading);
-    letter-spacing: var(--text-tracking);
+    letter-spacing: var(--type-title-lg-tracking);
     overflow-wrap: anywhere;
   }
 
@@ -84,7 +184,7 @@
     font-size: var(--lead-text-size);
     font-weight: var(--lead-text-weight);
     line-height: var(--lead-text-leading);
-    letter-spacing: var(--text-tracking);
+    letter-spacing: var(--type-lead-tracking);
   }
 
   .lead-text--inverse {
@@ -152,20 +252,20 @@
 
 @media (max-width: 1023px) {
   :root {
-    --display-title-size: 42px;
-    --lead-text-size: 14px;
+    --type-lead-size: 16px;
+    --type-title-sm-size: 22px;
+    --type-title-md-size: 26px;
+    --type-title-lg-size: 42px;
+    --type-title-xl-size: 42px;
     --button-primary-size: 14px;
     --button-primary-padding: 24px;
-    --detail-hero-title-size: 42px;
     --detail-hero-padding-block-start: 68px;
     --detail-hero-padding-block-end: 76px;
-    --detail-hero-padding-inline: 24px;
-    --detail-summary-size: 16px;
-    --detail-section-title-size: 26px;
+    --detail-hero-padding-inline: var(--page-gutter-mobile);
     --detail-content-padding-block: 64px;
-    --detail-content-padding-inline: 24px;
-    --detail-rail-row-padding: 22px 24px;
-    --detail-rail-action-padding: 24px;
+    --detail-content-padding-inline: var(--page-gutter-mobile);
+    --detail-rail-row-padding: 22px var(--page-gutter-mobile);
+    --detail-rail-action-padding: 24px var(--page-gutter-mobile);
   }
 }
 

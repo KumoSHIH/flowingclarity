@@ -153,3 +153,9 @@
 - [x] `.about-contact__list dt` 的字級與 line-height 對齊 `.about-contact__list dd`。
 - [x] `.about-contact` 上方間距調整為桌機 `150px`、手機 `50px`。
 - [x] `.about-place` 下方間距調整為桌機 `250px`、`<= 1023px` 為 `0`。
+
+## 2026-10-24 Typography 語意角色遷移
+
+- About 的主標題、章節、導言、正文、標籤、metadata、聯絡資訊、地圖行動與狀態文字已全部改用八個共用角色；移除舊 `--detail-*` 字級別名與 10px／11px 等局部尺寸。
+- About 與全站殘餘字體規則相關 7 檔／62 項測試通過；Web 全套為 43 檔／268 項，typecheck 與 production build 成功。全站 type detector 為 0，`web/app` 元件已無數字 `font-size` 或數字字級 shorthand。
+- 本次未修改 About 內容契約、CMS schema 或遠端內容。Computer Use 服務無可用瀏覽器，因此本輪響應式、200% 文字放大與長文換行尚未重新做視覺驗收。

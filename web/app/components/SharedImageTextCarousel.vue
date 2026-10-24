@@ -349,7 +349,8 @@ onBeforeUnmount(() => {
 .about-carousel__heading {
   grid-area: heading;
   align-self: end;
-  padding: 104px var(--carousel-edge) 42px clamp(44px, 5vw, 88px);
+  padding: var(--carousel-section-block, 104px) var(--carousel-edge) 42px
+    clamp(44px, 5vw, 88px);
 }
 .about-carousel__figure {
   grid-area: media;
@@ -399,9 +400,10 @@ onBeforeUnmount(() => {
   min-height: 76px;
   padding: 20px var(--carousel-edge);
   color: var(--carousel-muted);
-  font-size: 12px;
-  line-height: 1.8;
-  letter-spacing: 0.05em;
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-meta-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 .about-carousel__copy {
   grid-area: copy;
@@ -413,7 +415,8 @@ onBeforeUnmount(() => {
   grid-area: controls;
   align-items: center;
   gap: 22px;
-  padding: 0 var(--carousel-edge) 104px clamp(44px, 5vw, 88px);
+  padding: 0 var(--carousel-edge) var(--carousel-section-block, 104px)
+    clamp(44px, 5vw, 88px);
 }
 .about-carousel__controls button {
   display: grid;
@@ -448,9 +451,11 @@ onBeforeUnmount(() => {
 .about-carousel__controls span {
   min-width: 64px;
   color: var(--carousel-muted);
-  font-size: 12px;
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-meta-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.14em;
   text-align: center;
 }
 .about-carousel__empty {
@@ -458,7 +463,7 @@ onBeforeUnmount(() => {
   display: grid;
   min-height: 340px;
   place-items: center;
-  padding: 48px var(--carousel-edge);
+  padding: var(--carousel-section-block, 48px) var(--carousel-edge);
   color: var(--carousel-muted);
   background: var(--color-sand);
 }
@@ -469,7 +474,8 @@ onBeforeUnmount(() => {
   }
   .about-carousel__heading {
     order: 0;
-    padding: 80px var(--carousel-edge) 36px;
+    padding: var(--carousel-section-block, 30px) var(--carousel-edge) 30px;
+    align-self: auto;
   }
   .about-carousel__figure {
     order: 1;
@@ -488,7 +494,7 @@ onBeforeUnmount(() => {
   .about-carousel__copy {
     order: 3;
     max-width: none;
-    padding: 32px var(--carousel-edge) 84px;
+    padding: 32px var(--carousel-edge) var(--carousel-section-block, 84px);
   }
 }
 @media (prefers-reduced-motion: reduce) {

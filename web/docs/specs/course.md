@@ -200,3 +200,7 @@ stages:
 
 #### 待修正項目
 [] 有任何問題需要協助嗎？ 這個區塊的連結按鈕 改成連去：/about#聯絡我們
+
+## 2026-10-24 總覽字體角色遷移
+
+課程總覽與 `DirectoryIntro` 已改用正式角色 token：頁面／分類標題採 `title-lg`、光片課名採 `title-sm`、摘要採 `body`、形式與補充資訊採 `label/meta`。光片 hover／focus 保留欄寬與影像變化，不再把課名字級放大為獨立尺寸。type detector 為 0，完整 Web 測試、typecheck 與 build 通過；響應式視覺驗收待補。

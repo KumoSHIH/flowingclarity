@@ -38,7 +38,7 @@ const courses = [
 <template>
   <section
     id="courses"
-    class="px-[clamp(28px,6vw,116px)] py-28 md:py-44"
+    class="px-[var(--page-gutter-mobile)] py-28 md:py-44 lg:px-[clamp(28px,6vw,116px)]"
     aria-labelledby="courses-title"
   >
     <div class="relative z-20 mx-auto max-w-[1520px]">
@@ -46,13 +46,13 @@ const courses = [
         <div>
           <h2
             id="courses-title"
-            class="text-center font-display text-[40px] font-medium tracking-[0.05em] lg:text-[72px]"
+            class="type-title-xl text-center"
           >
             近期課程
           </h2>
         </div>
         <p
-          class="max-w-[470px] text-base leading-8 tracking-[0.05em] text-muted mx-auto text-center"
+          class="type-body mx-auto max-w-[470px] text-center text-muted"
         >
           用可以帶回日常的練習，一點一點培養對身體的覺察與信任。
         </p>
@@ -78,18 +78,18 @@ const courses = [
           <div class="border-b border-[#d2c8bc] pb-10 pt-8 md:pb-12 md:pt-10">
             <div>
               <p
-                class="mb-4 text-[10px] font-semibold tracking-[0.18em] text-clay"
+                class="type-label mb-4 text-clay"
               >
                 {{ course.meta }}
               </p>
               <h3
-                class="font-display text-2xl leading-relaxed tracking-[0.05em] md:text-[30px]"
+                class="type-title-sm"
               >
                 {{ course.title }}
               </h3>
             </div>
             <p
-              class="mt-6 max-w-[440px] text-base leading-8 tracking-[0.04em] text-muted"
+              class="type-body mt-6 max-w-[440px] text-muted"
             >
               {{ course.description }}
             </p>

@@ -26,7 +26,7 @@ describe('event detail correction styles', () => {
     expect(ruleBody(eventDetail, '.event-detail__hero-media')).not.toContain('min-height')
     expect(eventDetail).not.toMatch(/\.event-detail__hero-media\s*\{[^}]*min-height/)
     expect(ruleBody(eventDetail, '.event-detail__hero-media img')).toContain('height: auto')
-    expect(eventDetail).toMatch(/@media \(max-width: 560px\)[\s\S]*?\.event-detail__fact dd\s*\{\s*font-size: 16px;/)
+    expect(eventDetail).toMatch(/@media \(max-width: 560px\)[\s\S]*?\.event-detail__fact dd\s*\{\s*font-size: var\(--type-body-size\);/)
   })
 
   it('keeps hover feedback without underlining event titles', () => {

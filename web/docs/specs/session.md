@@ -158,7 +158,11 @@
 
 #### 待修正項目
 - [] psession-filters__options button 移除下底線，改成有checkbox的樣式，手機版 font-size 14px
-- [] practitioner-row h3: font-size 桌機版 改30px，手機版 22px
+- [x] practitioner-row h3: font-size 桌機版 改30px，手機版 22px（2026-10-24：後續全站字體統一決策取代原 30px 桌機值，改採 `title-sm` 正式角色，即桌機 `24px`、手機 `22px`。）
 - [] .practitioner-row > a 手機版 gap: 0 45px
 - [] session-results 移除最大寬度設定，裡面的內容才設定最大寬度
-- [] .practitioner-row h3 font-size: clamp(27px, 2vw, 28px)
+- [x] .practitioner-row h3 font-size: clamp(27px, 2vw, 28px)（2026-10-24：依全站固定桌機／手機字級規則移除 clamp，改採 `title-sm` 的 `24px/22px`。）
+
+## 2026-10-24 字體角色遷移
+
+執行師總覽已將頁名、結果標題、姓名、英文名、地區、服務項目、篩選標示、分頁與狀態文字統一到八個正式角色；既有兩項姓名尺寸待辦依較新的全站決策改採 `title-sm` 並保留原文與完成註記。type detector 為 0，完整 Web 測試、typecheck 與 build 通過；其他未勾選的版面與 checkbox 待辦不屬本階段，維持未完成。

@@ -166,8 +166,10 @@ const {
   display: flex;
   align-items: center;
   gap: clamp(18px, 2.4vw, 42px);
-  font-size: 13px;
-  letter-spacing: 0.12em;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
 }
 
 .home-sticky-header__nav a {
@@ -187,6 +189,7 @@ const {
 
 @media (max-width: 1023px) {
   .home-sticky-header {
+    padding-inline: var(--page-gutter-mobile);
     pointer-events: auto;
     opacity: 1;
     transform: translate(-50%, 0);
@@ -202,7 +205,8 @@ const {
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    padding: 18px clamp(24px, 6vw, 56px) max(24px, env(safe-area-inset-bottom));
+    padding: 18px var(--page-gutter-mobile)
+      max(24px, env(safe-area-inset-bottom));
     overflow-y: auto;
     color: var(--color-oxblood);
     background: rgb(255 255 255 / 92%);
@@ -232,9 +236,6 @@ const {
     align-items: center;
     border-bottom: 1px solid
       color-mix(in srgb, var(--color-oxblood) 14%, transparent);
-    font-size: 18px;
-    font-weight: 400;
-    letter-spacing: 0.12em;
   }
 
   .home-sticky-header__menu-toggle {

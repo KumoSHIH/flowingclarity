@@ -13,7 +13,7 @@ defineProps<{
     class="shared-testimonials"
     :aria-labelledby="`${$attrs.id ?? 'testimonials'}-title`"
   >
-    <h2 :id="`${$attrs.id ?? 'testimonials'}-title`">
+    <h2 :id="`${$attrs.id ?? 'testimonials'}-title`" class="type-title-md">
       {{ title ?? "學員心得分享" }}
     </h2>
     <div class="shared-testimonials__list">
@@ -21,8 +21,8 @@ defineProps<{
         v-for="(item, index) in items"
         :key="`${item.sharerName}-${index}`"
       >
-        <p>{{ item.text }}</p>
-        <cite>{{ item.sharerName }}</cite>
+        <p class="type-body">{{ item.text }}</p>
+        <cite class="type-label">{{ item.sharerName }}</cite>
       </blockquote>
     </div>
   </section>
@@ -36,11 +36,6 @@ defineProps<{
 
 .shared-testimonials > h2 {
   margin: 0 auto;
-  font-family: var(--font-display);
-  font-size: var(--detail-section-title-size);
-  font-weight: 400;
-  line-height: 1.4;
-  letter-spacing: 0.02em;
 }
 
 blockquote {
@@ -56,9 +51,6 @@ blockquote:last-child {
 blockquote p {
   margin: 0;
   color: #625a51;
-  font-size: 16px;
-  line-height: 2.1;
-  letter-spacing: 0.025em;
   white-space: pre-line;
 }
 
@@ -66,10 +58,7 @@ cite {
   display: block;
   margin-top: 26px;
   color: #745142;
-  font-size: 14px;
   font-style: normal;
-  font-weight: 700;
-  letter-spacing: 0.08em;
 }
 
 cite::before {
@@ -83,7 +72,7 @@ cite::before {
 
 @media (max-width: 1023px) {
   .shared-testimonials {
-    padding: 72px 24px 80px;
+    padding: 72px var(--page-gutter-mobile) 80px;
   }
 
   blockquote {

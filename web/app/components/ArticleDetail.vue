@@ -52,8 +52,8 @@ function formatDate(value: string) {
     </div>
 
     <div v-else-if="status === 'error'" class="article-state" role="alert">
-      <h1>文章內容暫時無法載入</h1>
-      <p>請稍後再試一次；文章總覽仍可正常瀏覽。</p>
+      <h1 class="type-title-md">文章內容暫時無法載入</h1>
+      <p class="type-body">請稍後再試一次；文章總覽仍可正常瀏覽。</p>
       <div class="article-state__actions">
         <button type="button" @click="emit('retry')">重新載入</button>
         <NuxtLink to="/articles">返回文章分享</NuxtLink>
@@ -61,19 +61,19 @@ function formatDate(value: string) {
     </div>
 
     <div v-else-if="status === 'not-found' || !content" class="article-state">
-      <h1>找不到這篇文章</h1>
-      <p>文章可能尚未公開、已下架，或網址不正確。</p>
+      <h1 class="type-title-md">找不到這篇文章</h1>
+      <p class="type-body">文章可能尚未公開、已下架，或網址不正確。</p>
       <NuxtLink to="/articles">返回文章分享</NuxtLink>
     </div>
 
     <template v-else>
       <header class="article-hero">
         <aside class="article-meta" aria-label="文章資訊">
-          <strong>{{ content.category.name }}</strong>
+          <strong class="type-title-sm">{{ content.category.name }}</strong>
           <ul aria-label="文章標籤">
-            <li v-for="tag in content.tags" :key="tag.slug">{{ tag.name }}</li>
+            <li v-for="tag in content.tags" :key="tag.slug" class="type-meta">{{ tag.name }}</li>
           </ul>
-          <time :datetime="content.publishedAt">{{
+          <time class="type-label" :datetime="content.publishedAt">{{
             formatDate(content.publishedAt)
           }}</time>
         </aside>
@@ -101,8 +101,8 @@ function formatDate(value: string) {
             />
           </figure>
           <div class="article-hero__copy">
-            <h1>{{ content.title }}</h1>
-            <p>{{ content.excerpt }}</p>
+            <h1 class="type-title-xl">{{ content.title }}</h1>
+            <p class="type-lead">{{ content.excerpt }}</p>
           </div>
         </div>
       </header>
@@ -113,7 +113,7 @@ function formatDate(value: string) {
             v-if="section.type === 'richTextSection'"
             class="article-section article-section--text"
           >
-            <h2 v-if="section.heading">{{ section.heading }}</h2>
+            <h2 v-if="section.heading" class="type-title-md">{{ section.heading }}</h2>
             <ArticleRichTextContent :content="section.content" />
           </section>
 
@@ -138,7 +138,7 @@ function formatDate(value: string) {
               />
             </figure>
             <div>
-              <h2 v-if="section.heading">{{ section.heading }}</h2>
+              <h2 v-if="section.heading" class="type-title-md">{{ section.heading }}</h2>
               <ArticleRichTextContent :content="section.content" />
             </div>
           </section>
@@ -157,7 +157,7 @@ function formatDate(value: string) {
                   : undefined
               "
             />
-            <figcaption v-if="section.caption">
+            <figcaption v-if="section.caption" class="type-meta">
               {{ section.caption }}
             </figcaption>
           </figure>
@@ -170,7 +170,7 @@ function formatDate(value: string) {
         id-base="article-related"
       />
 
-      <aside v-if="content.prototypeNotice" class="article-prototype-notice">
+      <aside v-if="content.prototypeNotice" class="article-prototype-notice type-meta">
         {{ content.prototypeNotice }}
       </aside>
     </template>
@@ -199,11 +199,6 @@ function formatDate(value: string) {
   padding: 42px 34px;
   background: var(--color-sand);
 }
-.article-meta strong {
-  font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 400;
-}
 .article-meta ul {
   display: flex;
   flex-wrap: wrap;
@@ -216,13 +211,9 @@ function formatDate(value: string) {
   padding: 7px 10px;
   border: 1px solid rgb(56 52 46 / 24%);
   color: #745142;
-  font-size: 12px;
 }
 .article-meta time {
   margin-top: auto;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
 }
 .article-hero__panel {
   position: relative;
@@ -241,19 +232,11 @@ function formatDate(value: string) {
 }
 .article-hero__copy h1 {
   margin: 0;
-  font-family: var(--font-display);
-  font-size: var(--detail-hero-title-size);
-  font-weight: 400;
-  line-height: 1.3;
-  letter-spacing: 0.025em;
   text-wrap: balance;
 }
 .article-hero__copy p {
   max-width: 48em;
   margin: 28px 0 0;
-  font-size: var(--detail-summary-size);
-  line-height: 2;
-  letter-spacing: 0.035em;
 }
 .article-hero__panel--overlay {
   display: grid;
@@ -310,23 +293,18 @@ function formatDate(value: string) {
 .article-section h2 {
   max-width: 18em;
   margin: 0 0 26px;
-  font-family: var(--font-display);
-  font-size: var(--detail-section-title-size);
-  font-weight: 400;
-  line-height: 1.4;
 }
 .article-section h3 {
   margin: 34px 0 12px;
   font-family: var(--font-display);
-  font-size: 24px;
-  font-weight: 400;
+  font-size: var(--type-title-sm-size);
+  font-weight: var(--type-title-sm-weight);
+  line-height: var(--type-title-sm-leading);
+  letter-spacing: var(--type-title-sm-tracking);
 }
 .article-section p,
 .article-section li {
   color: #625a51;
-  font-size: var(--detail-body-size);
-  line-height: 2.1;
-  letter-spacing: 0.025em;
 }
 .article-section p {
   margin: 0;
@@ -352,7 +330,7 @@ function formatDate(value: string) {
 .article-section--split figure {
   width: calc(100% + var(--article-edge));
   height: 500px;
-  margin: 0 0 0 calc(var(--article-edge) * -1);
+  margin: 0 0 0 calc(0px - var(--article-edge));
 }
 .article-section--split figure img {
   display: block;
@@ -363,14 +341,14 @@ function formatDate(value: string) {
 .article-section--media-end figure {
   grid-column: 2;
   width: calc(100% + var(--article-edge));
-  margin: 0 calc(var(--article-edge) * -1) 0 0;
+  margin: 0 calc(0px - var(--article-edge)) 0 0;
 }
 .article-section--media-end > div {
   grid-column: 1;
   grid-row: 1;
 }
 .article-wide-image {
-  margin: 0 calc(var(--article-edge) * -1);
+  margin: 0 calc(0px - var(--article-edge));
 }
 .article-wide-image img {
   display: block;
@@ -381,15 +359,11 @@ function formatDate(value: string) {
 .article-wide-image figcaption {
   padding: 12px var(--article-edge) 0;
   color: #745142;
-  font-size: 12px;
-  line-height: 1.7;
 }
 .article-prototype-notice {
   padding: 24px var(--article-edge);
   color: var(--color-warm-white);
   background: var(--color-bark);
-  font-size: 12px;
-  line-height: 1.8;
 }
 .article-state {
   display: grid;
@@ -401,15 +375,11 @@ function formatDate(value: string) {
 }
 .article-state h1 {
   margin: 0;
-  font-family: var(--font-display);
-  font-size: 42px;
-  font-weight: 400;
 }
 .article-state p {
   max-width: 42em;
   margin: 0;
   color: #625a51;
-  line-height: 2;
 }
 .article-state__actions {
   display: flex;
@@ -450,7 +420,7 @@ function formatDate(value: string) {
 
 @media (max-width: 1023px) {
   .article-detail {
-    --article-edge: 24px;
+    --article-edge: var(--page-gutter-mobile);
     --article-section-gap: 64px;
   }
   .article-hero {
@@ -464,9 +434,6 @@ function formatDate(value: string) {
     grid-template-columns: 1fr auto;
     align-items: start;
     padding: 18px 20px;
-  }
-  .article-meta strong {
-    font-size: 24px;
   }
   .article-meta ul {
     justify-content: end;
@@ -485,7 +452,7 @@ function formatDate(value: string) {
   }
   .article-hero__panel--overlay .article-hero__copy {
     width: 100%;
-    padding: 36px 24px;
+    padding: 36px var(--article-edge);
   }
   .article-hero__panel--split {
     grid-template-columns: 1fr;
@@ -493,17 +460,14 @@ function formatDate(value: string) {
   }
   .article-hero__panel--split .article-hero__media {
     grid-row: 2;
-    width: calc(100% + 48px);
+    width: calc(100% + var(--article-edge) + var(--article-edge));
     height: 360px;
-    margin-left: -24px;
+    margin-left: calc(0px - var(--article-edge));
     order: initial;
   }
   .article-hero__panel--split .article-hero__copy {
     grid-row: 1;
     padding: 28px 0 0;
-  }
-  .article-hero__copy h1 {
-    font-size: var(--detail-hero-title-size);
   }
   .article-body {
     padding-bottom: 72px;
@@ -520,12 +484,12 @@ function formatDate(value: string) {
   .article-section--media-end figure {
     grid-column: 1;
     grid-row: 1;
-    width: calc(100% + 24px);
+    width: calc(100% + var(--article-edge));
     height: 320px;
-    margin: 0 0 0 -24px;
+    margin: 0 0 0 calc(0px - var(--article-edge));
   }
   .article-section--media-end figure {
-    margin: 0 -24px 0 0;
+    margin: 0 calc(0px - var(--article-edge)) 0 0;
     justify-self: end;
   }
   .article-section--split > div,
@@ -535,15 +499,6 @@ function formatDate(value: string) {
   }
   .article-wide-image {
     margin-inline: -24px;
-  }
-  .article-section h2 {
-    font-size: var(--detail-section-title-size);
-  }
-}
-
-@media (max-width: 560px) {
-  .article-hero__copy h1 {
-    font-size: 42px;
   }
 }
 

@@ -178,3 +178,7 @@
 - [x] 2026-10-16 手機修正版已統一麵包屑交叉軸、將 `.edge-body` 上內距設為 `0`、內容章節與延伸閱讀標題改為全站詳情共用 `26px`，並把 swiper 手動切換速度調整為 `1500ms`；規格與設計系統 token 已同步。
 - [x] 2026-10-16 使用者確認接續後完成 fixture 驅動 Nuxt 原型與最大長度壓力測試；詳情狀態為 `frontend-ready`，下一步是 UI 行為驗收，Sanity 串接仍未開始。
 - [x] 2026-10-16 完成詳情頁 UI 行為驗收與鍵盤 carousel 修正；狀態為 `ui-verified`，下一步為 Sanity schema、published-only API 與安全 parser。
+
+## 2026-10-24 總覽字體角色遷移
+
+文章總覽的頁名、導讀、分類／標籤、結果標題、日期、文章標題、摘要與狀態已統一改用 `title-xl/md/sm`、`lead`、`body`、`label`、`meta`。桌機中央地層與手機單欄版面不變；type detector 為 0，完整 Web 測試、typecheck 與 build 通過，瀏覽器視覺與文字放大驗收待補。

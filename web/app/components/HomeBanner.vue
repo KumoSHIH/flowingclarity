@@ -216,10 +216,10 @@ function selectCategory(id: string, event: MouseEvent) {
   position: absolute;
   z-index: 2;
   margin: 0;
-  font-size: 10px;
-  font-weight: 800;
-  line-height: 1.7;
-  letter-spacing: 0.25em;
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 
 .atlas-legend {
@@ -332,15 +332,18 @@ function selectCategory(id: string, event: MouseEvent) {
 }
 
 .atlas-category__copy strong {
-  font-size: 36px;
-  line-height: 1;
-  letter-spacing: 0.06em;
+  font-family: var(--font-display);
+  font-size: var(--type-title-md-size);
+  font-weight: var(--type-title-md-weight);
+  line-height: var(--type-title-md-leading);
+  letter-spacing: var(--type-title-md-tracking);
 }
 
 .atlas-category__copy small {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 
 .home-banner__story {
@@ -367,10 +370,10 @@ function selectCategory(id: string, event: MouseEvent) {
 .hero-menu a {
   position: relative;
   text-decoration: none;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0.15em;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
   white-space: nowrap;
   transition:
     opacity 180ms ease,
@@ -429,6 +432,7 @@ function selectCategory(id: string, event: MouseEvent) {
 
 @media (max-width: 1023px) {
   .home-banner {
+    --hero-edge: var(--page-gutter-mobile);
     display: flex;
     height: auto;
     min-height: 100svh;
@@ -489,8 +493,9 @@ function selectCategory(id: string, event: MouseEvent) {
   }
 
   .atlas-category__copy strong {
-    font-size: 16px;
-    letter-spacing: 0.04em;
+    font-size: var(--type-body-size);
+    line-height: var(--type-body-leading);
+    letter-spacing: var(--type-body-tracking);
   }
 
   .atlas-category__copy small {

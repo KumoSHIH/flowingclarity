@@ -84,3 +84,7 @@ Banner 為 ID 固定為 `homeBanner` 的單一文件，只有以下四個必填�
 
 ## 人工測試後修正清單
 - [x] banner: 左側地圖裡面的四個項目的連結（愛身體、撫慰心、究生命、展現美），幫我移動到 course 總覽頁的相關 target；2026-10-20 已分別連至 `/course#body`、`#heart`、`#life`、`#beauty`，並完成桌機／手機跨頁定位驗證
+
+## 2026-10-24 字體角色遷移
+
+Banner 的地圖註記、分類名稱、課程文字與選單已改用 `meta`、`label`、`body`、`title-md`；Story 標題與摘要的既有 class 改為 `title-lg`、`lead` 別名。type detector 為 0，完整 Web 測試、typecheck 與 build 通過；桌機／手機與文字放大仍待可用瀏覽器補驗。

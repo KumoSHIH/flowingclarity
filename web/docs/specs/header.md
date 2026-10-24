@@ -85,3 +85,9 @@ Header 使用 `header`，主要導覽使用具名稱的 `nav`；品牌為可操�
 - **實際驗證：** 7 個相關測試檔共 40 項及 Web 完整測試 41 個檔案共 242 項通過；`npm run typecheck -w web`、`npm run build -w web` 與 `git diff --check` 通過。Chrome 實際渲染驗證上述 6 個路由，桌機與手機選單均正確標示目前單元；手機展開後背景鎖定、焦點移至第一項，畫面無水平溢位。代表截圖及量測見 [Header 目前單元驗證](../design/review/header-current-unit-2026-10-23/README.md)。
 - **未完成事項：** 本次修正清單無未完成項目；typecheck 保留既有 `vue-router/volar/sfc-route-blocks` 套件匯出警告，build 保留既有 sourcemap 與字型執行期解析警告。
 - **下一步：** 後續建立新單元頁或共用 Header 至其他路由時，必須傳入所屬單元路徑並保留頁面層回歸測試；其餘 Header 發布依賴依「待決事項與下一階段輸入」處理。
+
+## 2026-10-24 Typography 語意角色遷移
+
+- 桌面與行動導覽皆改用共用 `label` 的字級、字重、行高與字距；移除原本 13px／18px 兩套局部尺寸，72px 行動操作高度及既有互動行為不變。
+- Header 3 項及全站殘餘字體規則相關 7 檔／62 項測試通過；Web 全套 43 檔／268 項、typecheck 與 production build 成功。全站 type detector 為 0。
+- Computer Use 服務無可用瀏覽器，最長導覽名稱在 1023px／390px、鍵盤焦點及 200% 文字放大的本輪視覺重驗仍待補；既有發布依賴不因本次樣式遷移改變。

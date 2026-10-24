@@ -32,22 +32,22 @@ const emit = defineEmits<{ retry: [] }>()
     </div>
 
     <div v-else-if="status === 'error'" class="event-detail__state">
-      <h1>活動內容暫時無法載入</h1>
-      <p>請稍後再試一次；其他頁面仍可正常瀏覽。</p>
+      <h1 class="type-title-md">活動內容暫時無法載入</h1>
+      <p class="type-body">請稍後再試一次；其他頁面仍可正常瀏覽。</p>
       <button type="button" @click="emit('retry')">重新載入</button>
     </div>
 
     <div v-else-if="status === 'not-found' || !content" class="event-detail__state">
-      <h1>找不到這個活動</h1>
-      <p>活動可能尚未公開、已下架，或網址不正確。</p>
+      <h1 class="type-title-md">找不到這個活動</h1>
+      <p class="type-body">活動可能尚未公開、已下架，或網址不正確。</p>
       <NuxtLink to="/events">返回活動列表</NuxtLink>
     </div>
 
     <template v-else>
       <header class="event-detail__hero">
         <div class="event-detail__hero-copy">
-          <h1>{{ content.hero.title }}</h1>
-          <p class="event-detail__summary">{{ content.hero.summary }}</p>
+          <h1 class="type-title-xl">{{ content.hero.title }}</h1>
+          <p class="event-detail__summary type-lead">{{ content.hero.summary }}</p>
         </div>
         <figure v-if="content.hero.image" class="event-detail__hero-media">
           <img
@@ -63,8 +63,8 @@ const emit = defineEmits<{ retry: [] }>()
           <div class="event-detail__facts-inner">
             <dl>
               <div v-for="fact in content.facts" :key="fact.label" class="event-detail__fact">
-                <dt>{{ fact.label }}</dt>
-                <dd>
+                <dt class="type-label">{{ fact.label }}</dt>
+                <dd class="type-title-sm">
                   <time v-if="fact.dateTime" :datetime="fact.dateTime">{{ fact.value }}</time>
                   <span v-else>{{ fact.value }}</span>
                 </dd>
@@ -87,42 +87,42 @@ const emit = defineEmits<{ retry: [] }>()
               <span v-else class="event-detail__action event-detail__action--disabled">
                 {{ content.registration.actionLabel }}
               </span>
-              <small v-if="content.registration.note">{{ content.registration.note }}</small>
+              <small v-if="content.registration.note" class="type-meta">{{ content.registration.note }}</small>
             </div>
           </div>
         </aside>
 
         <div class="event-detail__content">
           <section class="event-detail__section">
-            <h2>活動介紹</h2>
-            <p>{{ content.intro }}</p>
+            <h2 class="type-title-md">活動介紹</h2>
+            <p class="type-body">{{ content.intro }}</p>
           </section>
 
           <template v-for="block in content.body" :key="block.key">
             <section v-if="block.type === 'text'" class="event-detail__section">
-              <h2>{{ block.title }}</h2>
-              <p v-for="paragraph in block.paragraphs" :key="paragraph">{{ paragraph }}</p>
+              <h2 class="type-title-md">{{ block.title }}</h2>
+              <p v-for="paragraph in block.paragraphs" :key="paragraph" class="type-body">{{ paragraph }}</p>
             </section>
 
             <section v-else-if="block.type === 'facilitator'" class="event-detail__section">
-              <h2>帶領者介紹</h2>
-              <p class="event-detail__facilitator-name">
+              <h2 class="type-title-md">帶領者介紹</h2>
+              <p class="event-detail__facilitator-name type-title-sm">
                 {{ block.name }}
-                <span v-if="block.role">{{ block.role }}</span>
+                <span v-if="block.role" class="type-label">{{ block.role }}</span>
               </p>
-              <p>{{ block.biography }}</p>
+              <p class="type-body">{{ block.biography }}</p>
             </section>
 
             <section v-else-if="block.type === 'agenda'" class="event-detail__section">
-              <h2>{{ block.title }}</h2>
-              <p>{{ block.description }}</p>
+              <h2 class="type-title-md">{{ block.title }}</h2>
+              <p class="type-body">{{ block.description }}</p>
               <ol class="event-detail__agenda">
                 <li v-for="item in block.items" :key="item.key">
-                  <time v-if="item.dateTime" :datetime="item.dateTime">{{ item.timeLabel }}</time>
-                  <span v-else class="event-detail__agenda-time">{{ item.timeLabel }}</span>
+                  <time v-if="item.dateTime" class="type-label" :datetime="item.dateTime">{{ item.timeLabel }}</time>
+                  <span v-else class="event-detail__agenda-time type-label">{{ item.timeLabel }}</span>
                   <div>
-                    <h3>{{ item.title }}</h3>
-                    <p v-if="item.description">{{ item.description }}</p>
+                    <h3 class="type-title-sm">{{ item.title }}</h3>
+                    <p v-if="item.description" class="type-body">{{ item.description }}</p>
                   </div>
                 </li>
               </ol>
@@ -136,19 +136,19 @@ const emit = defineEmits<{ retry: [] }>()
             />
 
             <section v-else-if="block.type === 'list'" class="event-detail__section">
-              <h2>{{ block.title }}</h2>
-              <ul class="event-detail__list">
+              <h2 class="type-title-md">{{ block.title }}</h2>
+              <ul class="event-detail__list type-body">
                 <li v-for="item in block.items" :key="item">{{ item }}</li>
               </ul>
             </section>
 
             <blockquote v-else-if="block.type === 'quote'" class="event-detail__quote">
-              <p>{{ block.text }}</p>
-              <cite v-if="block.attribution">{{ block.attribution }}</cite>
+              <p class="type-title-sm">{{ block.text }}</p>
+              <cite v-if="block.attribution" class="type-label">{{ block.attribution }}</cite>
             </blockquote>
 
             <section v-else-if="block.type === 'media'" class="event-detail__section">
-              <h2 v-if="block.title">{{ block.title }}</h2>
+              <h2 v-if="block.title" class="type-title-md">{{ block.title }}</h2>
               <div class="event-detail__media" :class="{ 'event-detail__media--pair': block.items.length === 2 }">
                 <figure v-for="item in block.items" :key="item.key">
                   <img
@@ -156,7 +156,7 @@ const emit = defineEmits<{ retry: [] }>()
                     :alt="item.image.alt"
                     :style="item.image.objectPosition ? { objectPosition: item.image.objectPosition } : undefined"
                   >
-                  <figcaption v-if="item.caption">{{ item.caption }}</figcaption>
+                  <figcaption v-if="item.caption" class="type-meta">{{ item.caption }}</figcaption>
                 </figure>
               </div>
             </section>
@@ -192,8 +192,8 @@ const emit = defineEmits<{ retry: [] }>()
 }
 
 .event-detail__hero-copy { min-width: 0; }
-.event-detail__hero h1 { max-width: 11em; margin: 0; font-family: var(--font-display); font-size: var(--detail-hero-title-size); font-weight: 400; line-height: 1.22; letter-spacing: 0.025em; text-wrap: balance; }
-.event-detail__summary { max-width: 42em; margin: 30px 0 0; color: #625a51; font-size: var(--detail-summary-size); line-height: 2; letter-spacing: 0.035em; white-space: pre-line; }
+.event-detail__hero h1 { max-width: 11em; margin: 0; text-wrap: balance; }
+.event-detail__summary { max-width: 42em; margin: 30px 0 0; color: #625a51; white-space: pre-line; }
 .event-detail__hero-media { margin: 0; }
 .event-detail__hero-media img { display: block; width: 100%; height: auto; object-fit: cover; }
 
@@ -202,38 +202,38 @@ const emit = defineEmits<{ retry: [] }>()
 .event-detail__facts-inner { position: sticky; top: 87px; }
 .event-detail__facts dl { margin: 0; }
 .event-detail__fact { padding: var(--detail-rail-row-padding); border-bottom: 1px solid rgb(56 52 46 / 24%); }
-.event-detail__fact dt { margin-bottom: 8px; color: #745142; font-size: 14px; font-weight: 700; letter-spacing: 0.08em; }
-.event-detail__fact dd { margin: 0; font-family: var(--font-display); font-size: 20px; line-height: 1.55; }
+.event-detail__fact dt { margin-bottom: 8px; color: #745142; }
+.event-detail__fact dd { margin: 0; }
 .event-detail__action-wrap { padding: var(--detail-rail-action-padding); }
 .event-detail__action--disabled { display: flex; min-height: 76px; align-items: center; padding: 0 28px; color: var(--color-warm-white); background: var(--color-bark); cursor: not-allowed; }
-.event-detail__action-wrap small { display: block; margin-top: 12px; color: #745142; font-size: 14px; line-height: 1.7; }
+.event-detail__action-wrap small { display: block; margin-top: 12px; color: #745142; }
 
 .event-detail__content { min-width: 0; }
 .event-detail__section { padding: var(--detail-content-padding-block) var(--detail-content-padding-inline); border-bottom: 1px solid rgb(56 52 46 / 24%); }
-.event-detail__section h2 { max-width: 14em; margin: 0 0 22px; font-family: var(--font-display); font-size: var(--detail-section-title-size); font-weight: 400; line-height: 1.4; letter-spacing: 0.02em; }
-.event-detail__section > p { max-width: 68ch; margin: 0; color: #625a51; font-size: var(--detail-body-size); line-height: 2.1; letter-spacing: 0.025em; white-space: pre-line; }
+.event-detail__section h2 { max-width: 14em; margin: 0 0 22px; }
+.event-detail__section > p { max-width: 68ch; margin: 0; color: #625a51; white-space: pre-line; }
 .event-detail__section > p + p { margin-top: 18px; }
-.event-detail__facilitator-name { color: var(--color-ink) !important; font-family: var(--font-display); font-size: 24px !important; line-height: 1.6 !important; }
-.event-detail__facilitator-name span { display: block; margin-top: 7px; color: #745142; font-family: var(--font-sans); font-size: 14px; font-weight: 700; letter-spacing: 0.08em; }
+.event-detail__facilitator-name { color: var(--color-ink) !important; }
+.event-detail__facilitator-name span { display: block; margin-top: 7px; color: #745142; }
 
 .event-detail__agenda { padding: 0; margin: 38px 0 0; list-style: none; }
 .event-detail__agenda li { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 30px; padding: 28px 0; border-bottom: 1px solid rgb(56 52 46 / 24%); }
-.event-detail__agenda time, .event-detail__agenda-time { color: #745142; font-size: 14px; font-weight: 700; letter-spacing: 0.06em; }
-.event-detail__agenda h3 { margin: 0 0 8px; font-family: var(--font-display); font-size: 22px; font-weight: 400; line-height: 1.5; }
-.event-detail__agenda p { margin: 0; color: #625a51; font-size: 16px; line-height: 1.9; }
-.event-detail__list { max-width: 68ch; padding-left: 1.2em; margin: 0; color: #625a51; font-size: 16px; line-height: 2.1; }
+.event-detail__agenda time, .event-detail__agenda-time { color: #745142; }
+.event-detail__agenda h3 { margin: 0 0 8px; }
+.event-detail__agenda p { margin: 0; color: #625a51; }
+.event-detail__list { max-width: 68ch; padding-left: 1.2em; margin: 0; color: #625a51; }
 .event-detail__quote { padding: 72px clamp(48px, 7vw, 104px); margin: 0; border-bottom: 1px solid rgb(56 52 46 / 24%); }
-.event-detail__quote p { max-width: 28em; margin: 0; font-family: var(--font-display); font-size: 28px; line-height: 1.7; }
-.event-detail__quote cite { display: block; margin-top: 20px; color: #745142; font-size: 14px; font-style: normal; }
+.event-detail__quote p { max-width: 28em; margin: 0; }
+.event-detail__quote cite { display: block; margin-top: 20px; color: #745142; font-style: normal; }
 .event-detail__media { display: grid; gap: 20px; }
 .event-detail__media--pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .event-detail__media figure { margin: 0; }
 .event-detail__media img { display: block; width: 100%; max-height: 640px; object-fit: cover; }
-.event-detail__media figcaption { margin-top: 10px; color: #745142; font-size: 14px; line-height: 1.7; }
+.event-detail__media figcaption { margin-top: 10px; color: #745142; }
 
-.event-detail__state { display: grid; min-height: 64vh; place-content: center; justify-items: start; gap: 18px; padding: 80px 24px; }
-.event-detail__state h1 { margin: 0; font-family: var(--font-display); font-size: 42px; font-weight: 400; }
-.event-detail__state p { max-width: 42em; margin: 0; color: #625a51; line-height: 2; }
+.event-detail__state { display: grid; min-height: 64vh; place-content: center; justify-items: start; gap: 18px; padding: 80px var(--page-gutter-mobile); }
+.event-detail__state h1 { margin: 0; }
+.event-detail__state p { max-width: 42em; margin: 0; color: #625a51; }
 .event-detail__state a, .event-detail__state button { display: inline-flex; min-height: 48px; align-items: center; padding: 0 20px; color: var(--color-warm-white); background: var(--color-bark); border: 0; text-decoration: none; }
 .event-detail__skeleton { width: min(68vw, 620px); height: 18px; background: var(--color-sand); animation: event-detail-pulse 1.4s ease-in-out infinite alternate; }
 .event-detail__skeleton--title { width: min(48vw, 420px); height: 54px; }
@@ -247,7 +247,7 @@ const emit = defineEmits<{ retry: [] }>()
   .event-detail__fact:nth-child(odd) { border-right: 1px solid rgb(56 52 46 / 24%); }
   .event-detail__action-wrap { grid-column: 1 / -1; }
   .event-detail__section { padding: var(--detail-content-padding-block) var(--detail-content-padding-inline); }
-  .event-detail__quote { padding: 64px 24px; }
+  .event-detail__quote { padding: 64px var(--page-gutter-mobile); }
   .event-detail__agenda li { grid-template-columns: 88px minmax(0, 1fr); gap: 20px; }
 }
 
@@ -256,7 +256,7 @@ const emit = defineEmits<{ retry: [] }>()
   .event-detail__facts-inner { grid-template-columns: 1fr; }
   .event-detail__fact:nth-child(odd) { border-right: 0; }
   .event-detail__action-wrap { grid-column: auto; }
-  .event-detail__fact dd { font-size: 16px; }
+  .event-detail__fact dd { font-size: var(--type-body-size); }
   .event-detail__agenda li { grid-template-columns: 1fr; gap: 8px; }
 }
 

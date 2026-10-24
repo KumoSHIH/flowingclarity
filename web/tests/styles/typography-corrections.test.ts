@@ -27,6 +27,14 @@ describe('shared typography corrections', () => {
     }
   })
 
+  it('keeps component font sizes on semantic role tokens', () => {
+    for (const path of sourceFiles(appRoot).filter((path) => path.endsWith('.vue'))) {
+      const source = readFileSync(path, 'utf8')
+      expect(source, path).not.toMatch(/font-size:\s*\d+(?:\.\d+)?(?:px|rem|em)/)
+      expect(source, path).not.toMatch(/font:\s*[^;]*\d+(?:\.\d+)?px/)
+    }
+  })
+
   it('keeps primary actions regular weight at 18px desktop and 14px mobile', () => {
     const stylesheet = read('../../app/assets/css/main.css')
     const courseDetail = read('../../app/components/CourseDetail.vue')
@@ -41,8 +49,8 @@ describe('shared typography corrections', () => {
     expect(courseDetail.match(/class="button-primary(?:\s|")/g)).toHaveLength(4)
     expect(stylesheet).toContain('.button-primary:is(:disabled, [aria-disabled="true"])')
     expect(stylesheet).toContain('.button-primary:not(:disabled):not([aria-disabled="true"]):is(:hover, :focus-visible) .button-primary__icon')
-    expect(courseDetail).toMatch(/\.curriculum-list button span \{[^}]*font-weight: 400;/)
-    expect(courseDetail).toMatch(/\.curriculum-list button strong \{[^}]*font-weight: 400;/)
+    expect(courseDetail).toMatch(/\.curriculum-list button span \{[^}]*font-weight: var\(--type-body-weight\);/)
+    expect(courseDetail).toMatch(/\.curriculum-list button strong \{[^}]*font-weight: var\(--type-body-weight\);/)
     expect(eventDetail).not.toMatch(/\.event-detail__action \{[^}]*font-weight:/)
     expect(sessionDetail).toContain('class="session-detail__booking button-primary"')
   })
@@ -55,5 +63,89 @@ describe('shared typography corrections', () => {
     expect(stylesheet).toContain('--interactive-title-hover: var(--color-clay);')
     expect(eventOverview).toMatch(/\.event-row__copy:is\(:hover, :focus-visible\) h4 \{\s*color: var\(--interactive-title-hover\);/)
     expect(relatedArticles.match(/color: var\(--interactive-title-hover\);/g)).toHaveLength(2)
+  })
+
+  it('centralizes detail typography in semantic role tokens', () => {
+    const stylesheet = read('../../app/assets/css/main.css')
+    const migratedComponents = [
+      read('../../app/components/ArticleDetail.vue'),
+      read('../../app/components/ArticleRichTextContent.vue'),
+      read('../../app/components/EventDetail.vue'),
+      read('../../app/components/SessionDetail.vue'),
+      read('../../app/components/CourseDetail.vue'),
+      read('../../app/components/SharedRelatedArticles.vue'),
+      read('../../app/components/SharedTestimonials.vue'),
+    ]
+
+    for (const role of ['meta', 'label', 'body', 'lead', 'title-sm', 'title-md', 'title-lg', 'title-xl']) {
+      expect(stylesheet).toContain(`--type-${role}-size:`)
+      expect(stylesheet).toContain(`.type-${role}`)
+    }
+
+    expect(stylesheet).toMatch(/@media \(max-width: 1023px\)[\s\S]*--type-title-xl-size: 42px;/)
+    expect(stylesheet).toContain('--detail-hero-title-size: var(--type-title-xl-size);')
+    expect(stylesheet).toContain('--detail-section-title-size: var(--type-title-md-size);')
+    expect(stylesheet).toContain('--detail-body-size: var(--type-body-size);')
+
+    for (const component of migratedComponents) {
+      expect(component).not.toMatch(/font-size:\s*var\(--detail-(?:hero-title|summary|section-title|body)-size\)/)
+    }
+
+    expect(migratedComponents.join('\n')).toContain('type-title-xl')
+    expect(migratedComponents.join('\n')).toContain('type-title-md')
+    expect(migratedComponents.join('\n')).toContain('type-body')
+  })
+
+  it('centralizes home and overview typography in the same role tokens', () => {
+    const stylesheet = read('../../app/assets/css/main.css')
+    const migratedComponents = [
+      'HomeBanner.vue',
+      'HomeContact.vue',
+      'HomeCourses.vue',
+      'HomeEvents.vue',
+      'HomeIntroduction.vue',
+      'DirectoryIntro.vue',
+      'ArticleOverview.vue',
+      'CourseOverview.vue',
+      'EventOverview.vue',
+      'SessionOverview.vue',
+    ].map((file) => read(`../../app/components/${file}`))
+
+    expect(stylesheet).toContain('--display-title-size: var(--type-title-lg-size);')
+    expect(stylesheet).toContain('--lead-text-size: var(--type-lead-size);')
+
+    for (const component of migratedComponents) {
+      expect(component).not.toMatch(/font-size:\s*(?:\d+(?:\.\d+)?(?:px|rem|em)|clamp\()/)
+      expect(component).not.toMatch(/\btext-(?:xs|sm|base|lg|xl|[2-9]xl)\b/)
+      expect(component).not.toMatch(/text-\[(?:\d|clamp\()/)
+    }
+
+    expect(migratedComponents.join('\n')).toContain('var(--type-title-xl-size)')
+    expect(migratedComponents.join('\n')).toContain('var(--type-title-lg-size)')
+    expect(migratedComponents.join('\n')).toContain('var(--type-title-sm-size)')
+    expect(migratedComponents.join('\n')).toContain('var(--type-body-size)')
+    expect(migratedComponents.join('\n')).toContain('var(--type-meta-size)')
+  })
+
+  it('removes the final local type sizes from About, Header, and Footer', () => {
+    const migratedComponents = [
+      read('../../app/components/AboutOverview.vue'),
+      read('../../app/components/SiteHeader.vue'),
+      read('../../app/components/SiteFooter.vue'),
+    ]
+
+    for (const component of migratedComponents) {
+      expect(component).not.toMatch(/font-size:\s*(?:\d+(?:\.\d+)?(?:px|rem|em)|clamp\()/)
+      expect(component).not.toMatch(/font:\s*[^;]*\d+(?:\.\d+)?px/)
+      expect(component).not.toMatch(/font-size:\s*var\(--detail-/)
+    }
+
+    const typography = migratedComponents.join('\n')
+    expect(typography).toContain('var(--type-meta-size)')
+    expect(typography).toContain('var(--type-label-size)')
+    expect(typography).toContain('var(--type-body-size)')
+    expect(typography).toContain('var(--type-lead-size)')
+    expect(typography).toContain('var(--type-title-lg-size)')
+    expect(typography).toContain('var(--type-title-xl-size)')
   })
 })

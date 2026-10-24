@@ -172,3 +172,9 @@ Sanity 驗證須阻止缺少品牌名稱、5 項已確認導覽或版權文字�
 
 #### 筆記，不需要執行，可忽略
 - 使用 `web/.agents/skills/develop-feature/SKILL.md` 從 web/docs/specs/footer.md 接續下一個流程
+
+## 2026-10-24 Typography 語意角色遷移
+
+- 品牌文字備援使用 `title-sm`，中文收束句使用 `title-md`，英文品牌主張使用 `title-lg`，聯絡與導覽使用 `label`，版權使用 `meta`；原 28px／36px／60px shorthand、2.4px／3.6px 局部字距及手機 36px 覆寫已由角色 token 取代。
+- Footer 15 項及全站殘餘字體規則相關 7 檔／62 項測試通過；Web 全套 43 檔／268 項、typecheck 與 production build 成功。全站 type detector 為 0。
+- 本次未變更內容、動畫、CMS 或遠端資料。Computer Use 服務無可用瀏覽器，320／390／560px 操作區、長聯絡資料、200% 文字放大與完整 Footer 截圖仍待人工驗收；原清單中的對比與操作區待辦維持未完成。

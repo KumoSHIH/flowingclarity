@@ -340,10 +340,10 @@ watch(
   max-width: 6em;
   margin: 0;
   font-family: var(--font-display);
-  font-size: 60px;
-  font-weight: 400;
-  line-height: 1.18;
-  letter-spacing: 0.035em;
+  font-size: var(--type-title-lg-size);
+  font-weight: var(--type-title-lg-weight);
+  line-height: var(--type-title-lg-leading);
+  letter-spacing: var(--type-title-lg-tracking);
   white-space: pre-line;
 }
 
@@ -351,9 +351,10 @@ watch(
   max-width: 20em;
   margin: 24px 0 0;
   color: var(--session-muted);
-  font-size: 14px;
-  line-height: 1.9;
-  letter-spacing: 0.045em;
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
 }
 
 .session-filters {
@@ -373,9 +374,10 @@ watch(
   margin-bottom: 6px;
   color: var(--session-clay);
   border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 24%, transparent);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
 }
 
 .session-filters__options {
@@ -431,8 +433,9 @@ watch(
   border: 0;
   border-bottom: 1px solid currentColor;
   font: inherit;
-  font-size: 12px;
-  letter-spacing: 0.07em;
+  font-size: var(--type-meta-size);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
   cursor: pointer;
 }
 
@@ -440,8 +443,9 @@ watch(
   max-width: 24em;
   margin: 36px 0 0;
   color: var(--session-muted);
-  font-size: 11px;
-  line-height: 1.8;
+  font-size: var(--type-meta-size);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 
 .session-results {
@@ -462,17 +466,19 @@ watch(
 .session-results__header h2 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 42px;
-  font-weight: 400;
-  letter-spacing: 0.035em;
+  font-size: var(--type-title-md-size);
+  font-weight: var(--type-title-md-weight);
+  line-height: var(--type-title-md-leading);
+  letter-spacing: var(--type-title-md-tracking);
 }
 
 .session-results__count {
   margin: 0;
   color: var(--session-muted);
-  font-size: 12px;
+  font-size: var(--type-meta-size);
+  line-height: var(--type-meta-leading);
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--type-meta-tracking);
 }
 
 .practitioner-list {
@@ -507,10 +513,10 @@ watch(
 .practitioner-row h3 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 500;
-  line-height: 1.25;
-  letter-spacing: 0.035em;
+  font-size: var(--type-title-sm-size);
+  font-weight: var(--type-title-sm-weight);
+  line-height: var(--type-title-sm-leading);
+  letter-spacing: var(--type-title-sm-tracking);
 }
 
 .practitioner-row h3 span {
@@ -518,17 +524,19 @@ watch(
   margin-top: 8px;
   color: var(--session-muted);
   font-family: var(--font-sans);
-  font-size: 0.55em;
-  font-weight: 500;
-  letter-spacing: 0.03em;
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-meta-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 
 .practitioner-row__regions {
   margin: 0;
   color: var(--session-clay);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
 }
 
 .practitioner-row__methods {
@@ -538,8 +546,9 @@ watch(
   padding: 0;
   margin: 0;
   color: var(--session-muted);
-  font-size: 16px;
-  line-height: 1.7;
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
   list-style: none;
 }
 
@@ -583,8 +592,10 @@ watch(
   gap: clamp(18px, 3vw, 40px);
   max-width: 620px;
   margin: 64px auto;
-  font-size: 14px;
-  letter-spacing: 0.08em;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
   text-align: center;
 }
 
@@ -654,8 +665,9 @@ watch(
   max-width: 34em;
   margin: 0;
   color: var(--session-muted);
-  font-size: 16px;
-  line-height: 2;
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
 }
 
 .session-state button {
@@ -703,14 +715,10 @@ watch(
     position: static;
     width: 100%;
     height: auto;
-    padding: 72px clamp(28px, 7vw, 72px) 48px;
+    padding: 72px var(--page-gutter-mobile) 48px;
     overflow: visible;
     border-bottom: 1px solid
       color-mix(in srgb, var(--color-ink) 24%, transparent);
-  }
-
-  .session-directory__intro h1 {
-    font-size: 48px;
   }
 
   .session-filters__options {
@@ -719,12 +727,12 @@ watch(
 
   .session-results__header {
     min-height: 130px;
-    padding: 42px clamp(28px, 7vw, 72px) 28px;
+    padding: 42px var(--page-gutter-mobile) 28px;
   }
 
   .practitioner-row > a {
     grid-template-columns: minmax(180px, 0.8fr) minmax(0, 1fr) 36px;
-    padding: 26px clamp(28px, 7vw, 72px);
+    padding: 26px var(--page-gutter-mobile);
   }
 
   .practitioner-row__regions {
@@ -744,7 +752,7 @@ watch(
 
 @media (max-width: 620px) {
   .session-directory__aside {
-    padding-inline: 24px;
+    padding-inline: var(--page-gutter-mobile);
   }
 
   .session-directory__intro h1 {
@@ -754,8 +762,6 @@ watch(
 
   .session-directory__intro > p {
     margin-top: 20px;
-    font-size: 14px;
-    line-height: 1.85;
   }
 
   .session-filters {
@@ -796,11 +802,7 @@ watch(
 
   .session-results__header {
     min-height: 118px;
-    padding: 34px 24px 22px;
-  }
-
-  .session-results__header h2 {
-    font-size: 30px;
+    padding: 34px var(--page-gutter-mobile) 22px;
   }
 
   .session-results__header {
@@ -815,18 +817,16 @@ watch(
     min-height: 156px;
     grid-template-columns: minmax(0, 1fr) auto 28px;
     gap: 12px 14px;
-    padding: 24px;
+    padding: 24px var(--page-gutter-mobile);
   }
 
   .practitioner-row h3 {
     min-width: 0;
-    font-size: 27px;
     overflow-wrap: anywhere;
   }
 
   .practitioner-row h3 span {
     margin-top: 5px;
-    font-size: 0.5em;
   }
 
   .practitioner-row__methods {
@@ -846,7 +846,6 @@ watch(
     grid-row: auto;
     gap: 3px 12px;
     padding-top: 2px;
-    font-size: 14px;
   }
 
   .practitioner-row svg {
@@ -859,7 +858,7 @@ watch(
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 12px 24px;
     margin: 48px auto;
-    padding: 0 24px;
+    padding: 0 var(--page-gutter-mobile);
   }
 
   .session-pagination ol {
@@ -881,7 +880,7 @@ watch(
 
   .session-state {
     min-height: 48svh;
-    padding: 64px 24px;
+    padding: 64px var(--page-gutter-mobile);
   }
 
   @media (hover: none) {
@@ -898,11 +897,7 @@ watch(
 
 @media (max-width: 359px) {
   .session-directory__aside {
-    padding-inline: 24px;
-  }
-
-  .session-directory__intro h1 {
-    font-size: 47px;
+    padding-inline: var(--page-gutter-mobile);
   }
 
   .session-filters__options:not(.session-filters__options--regions) {
@@ -912,7 +907,7 @@ watch(
   .session-results__header,
   .practitioner-row > a,
   .session-state {
-    padding-inline: 20px;
+    padding-inline: var(--page-gutter-mobile);
   }
 
   .practitioner-row > a {

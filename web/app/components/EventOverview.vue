@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from "vue";
 import type {
   DisplayEvent,
   EventOverviewContent,
   EventOverviewStatus,
   EventView,
-} from '#shared/types/event'
+} from "#shared/types/event";
 import {
   deriveEventCollections,
   getEventDetailPath,
@@ -13,258 +20,283 @@ import {
   getPaginationItems,
   isSafeRegistrationUrl,
   paginateEvents,
-} from '#shared/utils/events'
-import DirectoryIntro from './DirectoryIntro.vue'
+} from "#shared/utils/events";
+import DirectoryIntro from "./DirectoryIntro.vue";
 
-const props = withDefaults(defineProps<{
-  content: EventOverviewContent
-  status?: EventOverviewStatus
-  view?: EventView
-  page?: number
-  now?: Date | string | number
-}>(), {
-  status: 'ready',
-  view: 'upcoming',
-  page: 1,
-  now: undefined,
-})
+const props = withDefaults(
+  defineProps<{
+    content: EventOverviewContent;
+    status?: EventOverviewStatus;
+    view?: EventView;
+    page?: number;
+    now?: Date | string | number;
+  }>(),
+  {
+    status: "ready",
+    view: "upcoming",
+    page: 1,
+    now: undefined,
+  },
+);
 
 const emit = defineEmits<{
-  navigate: [view: EventView, page: number]
-  normalize: [view: EventView, page: number]
-  retry: []
-}>()
+  navigate: [view: EventView, page: number];
+  normalize: [view: EventView, page: number];
+  retry: [];
+}>();
 
 const statusLabels = {
-  scheduled: '尚未開放',
-  open: '名額尚餘',
-  full: '名額已滿',
-  closed: '報名已截止',
-} as const
+  scheduled: "尚未開放",
+  open: "名額尚餘",
+  full: "名額已滿",
+  closed: "報名已截止",
+} as const;
 
 const deliveryModeLabels = {
-  inPerson: '實體',
-  online: '線上',
-  hybrid: '實體・線上',
-} as const
+  inPerson: "實體",
+  online: "線上",
+  hybrid: "實體・線上",
+} as const;
 
-const controlledNow = computed(() => props.now !== undefined)
-const clock = ref(new Date(props.now ?? Date.now()))
-const collectionHeading = ref<HTMLElement | null>(null)
-let boundaryTimer: ReturnType<typeof setTimeout> | undefined
-let mounted = false
+const controlledNow = computed(() => props.now !== undefined);
+const clock = ref(new Date(props.now ?? Date.now()));
+const collectionHeading = ref<HTMLElement | null>(null);
+let boundaryTimer: ReturnType<typeof setTimeout> | undefined;
+let mounted = false;
 
-watch(() => props.now, value => {
-  if (value !== undefined) clock.value = new Date(value)
-})
+watch(
+  () => props.now,
+  (value) => {
+    if (value !== undefined) clock.value = new Date(value);
+  },
+);
 
-const collections = computed(() => deriveEventCollections(props.content.events, clock.value))
-const hasAnyEvents = computed(() => (
-  collections.value.upcoming.length > 0 || collections.value.past.length > 0
-))
-const activeEvents = computed(() => collections.value[props.view])
-const pagination = computed(() => paginateEvents(activeEvents.value, props.page))
-const paginationItems = computed(() => getPaginationItems(
-  pagination.value.currentPage,
-  pagination.value.totalPages,
-))
-const activeHeading = computed(() => props.view === 'upcoming'
-  ? props.content.upcomingHeading
-  : props.content.pastHeading)
+const collections = computed(() =>
+  deriveEventCollections(props.content.events, clock.value),
+);
+const hasAnyEvents = computed(
+  () =>
+    collections.value.upcoming.length > 0 || collections.value.past.length > 0,
+);
+const activeEvents = computed(() => collections.value[props.view]);
+const pagination = computed(() =>
+  paginateEvents(activeEvents.value, props.page),
+);
+const paginationItems = computed(() =>
+  getPaginationItems(pagination.value.currentPage, pagination.value.totalPages),
+);
+const activeHeading = computed(() =>
+  props.view === "upcoming"
+    ? props.content.upcomingHeading
+    : props.content.pastHeading,
+);
 
 interface MonthGroup {
-  key: string
-  label: string
-  events: DisplayEvent[]
+  key: string;
+  label: string;
+  events: DisplayEvent[];
 }
 
 const monthNames = [
-  '一月', '二月', '三月', '四月', '五月', '六月',
-  '七月', '八月', '九月', '十月', '十一月', '十二月',
-]
+  "一月",
+  "二月",
+  "三月",
+  "四月",
+  "五月",
+  "六月",
+  "七月",
+  "八月",
+  "九月",
+  "十月",
+  "十一月",
+  "十二月",
+];
 
 const monthGroups = computed<MonthGroup[]>(() => {
-  const groups = new Map<string, MonthGroup>()
+  const groups = new Map<string, MonthGroup>();
   for (const event of pagination.value.items) {
-    const date = new Date(event.startAt)
-    const year = new Intl.DateTimeFormat('en', {
+    const date = new Date(event.startAt);
+    const year = new Intl.DateTimeFormat("en", {
       timeZone: event.timezone,
-      year: 'numeric',
-    }).format(date)
-    const month = Number(new Intl.DateTimeFormat('en', {
-      timeZone: event.timezone,
-      month: 'numeric',
-    }).format(date))
-    const key = `${year}-${String(month).padStart(2, '0')}`
+      year: "numeric",
+    }).format(date);
+    const month = Number(
+      new Intl.DateTimeFormat("en", {
+        timeZone: event.timezone,
+        month: "numeric",
+      }).format(date),
+    );
+    const key = `${year}-${String(month).padStart(2, "0")}`;
     const group = groups.get(key) ?? {
       key,
       label: `${monthNames[month - 1]} ${year}`,
       events: [],
-    }
-    group.events.push(event)
-    groups.set(key, group)
+    };
+    group.events.push(event);
+    groups.set(key, group);
   }
-  return [...groups.values()]
-})
+  return [...groups.values()];
+});
 
 function formatDay(event: DisplayEvent): string {
-  const days = eventCalendarDays(event)
-  const firstDay = days[0]?.day ?? ''
-  const lastDay = days.at(-1)?.day ?? firstDay
-  return days.length > 1 ? `${firstDay}–${lastDay}` : firstDay
+  const days = eventCalendarDays(event);
+  const firstDay = days[0]?.day ?? "";
+  const lastDay = days.at(-1)?.day ?? firstDay;
+  return days.length > 1 ? `${firstDay}–${lastDay}` : firstDay;
 }
 
 interface EventCalendarDay {
-  day: string
-  isoDate: string
-  shortDate: string
-  weekday: string
+  day: string;
+  isoDate: string;
+  shortDate: string;
+  weekday: string;
 }
 
 function eventCalendarDays(event: DisplayEvent): EventCalendarDay[] {
-  const start = new Date(event.startAt)
-  const inclusiveEnd = new Date(Math.max(
-    start.getTime(),
-    new Date(event.endAt).getTime() - 1,
-  ))
-  const partsFormatter = new Intl.DateTimeFormat('en', {
+  const start = new Date(event.startAt);
+  const inclusiveEnd = new Date(
+    Math.max(start.getTime(), new Date(event.endAt).getTime() - 1),
+  );
+  const partsFormatter = new Intl.DateTimeFormat("en", {
     timeZone: event.timezone,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  })
-  const dateParts = (date: Date) => Object.fromEntries(
-    partsFormatter.formatToParts(date).map(part => [part.type, part.value]),
-  )
-  const startParts = dateParts(start)
-  const endParts = dateParts(inclusiveEnd)
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const dateParts = (date: Date) =>
+    Object.fromEntries(
+      partsFormatter.formatToParts(date).map((part) => [part.type, part.value]),
+    );
+  const startParts = dateParts(start);
+  const endParts = dateParts(inclusiveEnd);
   const startOrdinal = Date.UTC(
     Number(startParts.year),
     Number(startParts.month) - 1,
     Number(startParts.day),
-  )
+  );
   const endOrdinal = Date.UTC(
     Number(endParts.year),
     Number(endParts.month) - 1,
     Number(endParts.day),
-  )
-  const totalDays = Math.max(1, Math.round(
-    (endOrdinal - startOrdinal) / 86_400_000,
-  ) + 1)
+  );
+  const totalDays = Math.max(
+    1,
+    Math.round((endOrdinal - startOrdinal) / 86_400_000) + 1,
+  );
 
   return Array.from({ length: totalDays }, (_, index) => {
-    const date = new Date(start.getTime() + index * 86_400_000)
-    const parts = dateParts(date)
+    const date = new Date(start.getTime() + index * 86_400_000);
+    const parts = dateParts(date);
     return {
-      day: parts.day ?? '',
+      day: parts.day ?? "",
       isoDate: `${parts.year}-${parts.month}-${parts.day}`,
-      shortDate: new Intl.DateTimeFormat('zh-TW', {
+      shortDate: new Intl.DateTimeFormat("zh-TW", {
         timeZone: event.timezone,
-        month: '2-digit',
-        day: '2-digit',
+        month: "2-digit",
+        day: "2-digit",
       }).format(date),
-      weekday: new Intl.DateTimeFormat('zh-TW', {
+      weekday: new Intl.DateTimeFormat("zh-TW", {
         timeZone: event.timezone,
-        weekday: 'short',
+        weekday: "short",
       }).format(date),
-    }
-  })
+    };
+  });
 }
 
 function formatTimeRange(event: DisplayEvent): string {
-  if (event.scheduleNote) return event.scheduleNote
-  const start = new Date(event.startAt)
-  const end = new Date(event.endAt)
-  const dateFormatter = new Intl.DateTimeFormat('en-CA', {
+  if (event.scheduleNote) return event.scheduleNote;
+  const start = new Date(event.startAt);
+  const end = new Date(event.endAt);
+  const dateFormatter = new Intl.DateTimeFormat("en-CA", {
     timeZone: event.timezone,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  })
-  const timeFormatter = new Intl.DateTimeFormat('zh-TW', {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const timeFormatter = new Intl.DateTimeFormat("zh-TW", {
     timeZone: event.timezone,
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h23',
-  })
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  });
   if (dateFormatter.format(start) === dateFormatter.format(end)) {
-    return `${timeFormatter.format(start)}–${timeFormatter.format(end)}`
+    return `${timeFormatter.format(start)}–${timeFormatter.format(end)}`;
   }
-  const shortDateFormatter = new Intl.DateTimeFormat('zh-TW', {
+  const shortDateFormatter = new Intl.DateTimeFormat("zh-TW", {
     timeZone: event.timezone,
-    month: 'numeric',
-    day: 'numeric',
-  })
-  return `${shortDateFormatter.format(start)}–${shortDateFormatter.format(end)}`
+    month: "numeric",
+    day: "numeric",
+  });
+  return `${shortDateFormatter.format(start)}–${shortDateFormatter.format(end)}`;
 }
 
 function locationLabel(event: DisplayEvent): string {
-  if (event.deliveryMode === 'online') return event.city ?? '線上'
-  return [event.city, event.venue].filter(Boolean).join('・')
+  if (event.deliveryMode === "online") return event.city ?? "線上";
+  return [event.city, event.venue].filter(Boolean).join("・");
 }
 
 function statusLabel(event: DisplayEvent): string {
-  return statusLabels[event.effectiveStatus]
+  return statusLabels[event.effectiveStatus];
 }
 
 function registrationIsAvailable(event: DisplayEvent): boolean {
-  return event.effectiveStatus === 'open' && isSafeRegistrationUrl(event.registrationUrl)
+  return (
+    event.effectiveStatus === "open" &&
+    isSafeRegistrationUrl(event.registrationUrl)
+  );
 }
 
 function navigate(event: MouseEvent, view: EventView, page: number) {
-  event.preventDefault()
-  emit('navigate', view, page)
+  event.preventDefault();
+  emit("navigate", view, page);
 }
 
 function scheduleBoundaryUpdate() {
-  if (boundaryTimer) clearTimeout(boundaryTimer)
-  if (controlledNow.value) return
+  if (boundaryTimer) clearTimeout(boundaryTimer);
+  if (controlledNow.value) return;
 
-  const now = clock.value.getTime()
+  const now = clock.value.getTime();
   const nextBoundary = props.content.events
-    .flatMap(event => [Date.parse(event.startAt), Date.parse(event.endAt)])
-    .filter(value => Number.isFinite(value) && value > now)
-    .sort((first, second) => first - second)[0]
+    .flatMap((event) => [Date.parse(event.startAt), Date.parse(event.endAt)])
+    .filter((value) => Number.isFinite(value) && value > now)
+    .sort((first, second) => first - second)[0];
 
-  if (!nextBoundary) return
-  const delay = Math.min(Math.max(nextBoundary - now + 50, 50), 2_147_483_647)
+  if (!nextBoundary) return;
+  const delay = Math.min(Math.max(nextBoundary - now + 50, 50), 2_147_483_647);
   boundaryTimer = setTimeout(() => {
-    clock.value = new Date()
-    scheduleBoundaryUpdate()
-  }, delay)
+    clock.value = new Date();
+    scheduleBoundaryUpdate();
+  }, delay);
 }
 
 watch(
   () => [props.view, props.page, pagination.value.totalPages] as const,
   async ([view, requestedPage], previous) => {
     if (requestedPage !== pagination.value.currentPage) {
-      emit('normalize', view, pagination.value.currentPage)
-      return
+      emit("normalize", view, pagination.value.currentPage);
+      return;
     }
-    if (!mounted || !previous) return
-    await nextTick()
-    collectionHeading.value?.focus()
+    if (!mounted || !previous) return;
+    await nextTick();
+    collectionHeading.value?.focus();
   },
   { immediate: true },
-)
+);
 
 onMounted(() => {
-  mounted = true
-  scheduleBoundaryUpdate()
-})
+  mounted = true;
+  scheduleBoundaryUpdate();
+});
 
 onBeforeUnmount(() => {
-  if (boundaryTimer) clearTimeout(boundaryTimer)
-})
+  if (boundaryTimer) clearTimeout(boundaryTimer);
+});
 </script>
 
 <template>
   <div class="event-directory" :aria-busy="status === 'loading'">
     <aside class="event-directory__index">
-      <DirectoryIntro
-        :title="content.pageTitle"
-        :description="content.intro"
-      />
+      <DirectoryIntro :title="content.pageTitle" :description="content.intro" />
 
       <nav v-if="status === 'ready'" aria-label="活動檢視">
         <ul>
@@ -339,24 +371,34 @@ onBeforeUnmount(() => {
 
         <div v-if="pagination.totalItems === 0" class="event-collection__empty">
           <p>
-            {{ view === 'upcoming'
-              ? content.emptyMessage
-              : '目前沒有可公開瀏覽的過去活動。' }}
+            {{
+              view === "upcoming"
+                ? content.emptyMessage
+                : "目前沒有可公開瀏覽的過去活動。"
+            }}
           </p>
         </div>
 
         <template v-else>
-          <div v-for="group in monthGroups" :key="group.key" class="event-month">
+          <div
+            v-for="group in monthGroups"
+            :key="group.key"
+            class="event-month"
+          >
             <h3>{{ group.label }}</h3>
             <ol>
               <li
                 v-for="item in group.events"
                 :key="item.id"
                 class="event-row"
-                :class="{ 'event-row--multi-day': eventCalendarDays(item).length > 1 }"
+                :class="{
+                  'event-row--multi-day': eventCalendarDays(item).length > 1,
+                }"
               >
                 <div class="event-row__date">
-                  <span class="event-row__day" aria-hidden="true">{{ formatDay(item) }}</span>
+                  <span class="event-row__day" aria-hidden="true">{{
+                    formatDay(item)
+                  }}</span>
                   <span class="event-row__date-list">
                     <template
                       v-for="(day, dayIndex) in eventCalendarDays(item)"
@@ -366,13 +408,16 @@ onBeforeUnmount(() => {
                         v-if="dayIndex > 0"
                         class="event-row__date-separator"
                         aria-hidden="true"
-                      >-</span>
+                        >-</span
+                      >
                       <time
                         :datetime="day.isoDate"
                         class="event-row__date-item"
                       >
                         <span>{{ day.shortDate }}</span>
-                        <span class="event-row__weekday">({{ day.weekday }})</span>
+                        <span class="event-row__weekday"
+                          >({{ day.weekday }})</span
+                        >
                       </time>
                     </template>
                   </span>
@@ -387,7 +432,9 @@ onBeforeUnmount(() => {
                   <h4>{{ item.title }}</h4>
                   <p class="event-row__meta">
                     <span>{{ deliveryModeLabels[item.deliveryMode] }}</span>
-                    <span v-if="locationLabel(item)">{{ locationLabel(item) }}</span>
+                    <span v-if="locationLabel(item)">{{
+                      locationLabel(item)
+                    }}</span>
                     <span>{{ formatTimeRange(item) }}</span>
                   </p>
                   <p class="event-row__summary">{{ item.summary }}</p>
@@ -404,7 +451,11 @@ onBeforeUnmount(() => {
                     :aria-label="`${item.title}：前往報名（另開新視窗）`"
                   >
                     <span>前往報名</span>
-                    <svg class="button-primary__icon" viewBox="0 0 20 20" aria-hidden="true">
+                    <svg
+                      class="button-primary__icon"
+                      viewBox="0 0 20 20"
+                      aria-hidden="true"
+                    >
                       <path d="M4 10h11M11 6l4 4-4 4" />
                     </svg>
                   </a>
@@ -412,7 +463,8 @@ onBeforeUnmount(() => {
                     v-else-if="item.relatedCourseHref"
                     :href="item.relatedCourseHref"
                     class="event-row__course-link"
-                  >了解課程</a>
+                    >了解課程</a
+                  >
                 </div>
               </li>
             </ol>
@@ -423,14 +475,17 @@ onBeforeUnmount(() => {
             class="event-pagination"
             :aria-label="`${activeHeading}分頁`"
           >
-            <button v-if="pagination.currentPage === 1" type="button" disabled>上一頁</button>
+            <button v-if="pagination.currentPage === 1" type="button" disabled>
+              上一頁
+            </button>
             <a
               v-else
               :href="getEventsPath(view, pagination.currentPage - 1)"
               class="event-pagination__step"
               rel="prev"
               @click="navigate($event, view, pagination.currentPage - 1)"
-            >上一頁</a>
+              >上一頁</a
+            >
             <ol class="event-pagination__pages">
               <li
                 v-for="(item, index) in paginationItems"
@@ -440,33 +495,39 @@ onBeforeUnmount(() => {
                   v-if="item === 'ellipsis'"
                   class="event-pagination__ellipsis"
                   aria-hidden="true"
-                >…</span>
+                  >…</span
+                >
                 <span
                   v-else-if="item === pagination.currentPage"
                   class="event-pagination__page"
                   aria-current="page"
-                >{{ item }}</span>
+                  >{{ item }}</span
+                >
                 <a
                   v-else
                   :href="getEventsPath(view, item)"
                   class="event-pagination__page"
                   :aria-label="`${activeHeading}第 ${item} 頁`"
                   @click="navigate($event, view, item)"
-                >{{ item }}</a>
+                  >{{ item }}</a
+                >
               </li>
             </ol>
             <button
               v-if="pagination.currentPage === pagination.totalPages"
               type="button"
               disabled
-            >下一頁</button>
+            >
+              下一頁
+            </button>
             <a
               v-else
               :href="getEventsPath(view, pagination.currentPage + 1)"
               class="event-pagination__step"
               rel="next"
               @click="navigate($event, view, pagination.currentPage + 1)"
-            >下一頁</a>
+              >下一頁</a
+            >
           </nav>
         </template>
       </section>
@@ -476,8 +537,16 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .event-directory {
-  --event-text-muted: color-mix(in srgb, var(--color-muted) 80%, var(--color-ink));
-  --event-text-clay: color-mix(in srgb, var(--color-clay) 80%, var(--color-ink));
+  --event-text-muted: color-mix(
+    in srgb,
+    var(--color-muted) 80%,
+    var(--color-ink)
+  );
+  --event-text-clay: color-mix(
+    in srgb,
+    var(--color-clay) 80%,
+    var(--color-ink)
+  );
   display: grid;
   grid-template-columns: var(--split-layout-rail-width) minmax(0, 1fr);
   align-items: start;
@@ -495,7 +564,8 @@ onBeforeUnmount(() => {
   padding: clamp(64px, 7vw, 112px) clamp(28px, 3.2vw, 58px) 48px;
   overflow-y: auto;
   background: var(--color-sand);
-  scrollbar-color: color-mix(in srgb, var(--color-saffron) 70%, transparent) transparent;
+  scrollbar-color: color-mix(in srgb, var(--color-saffron) 70%, transparent)
+    transparent;
   scrollbar-width: thin;
 }
 
@@ -521,7 +591,9 @@ onBeforeUnmount(() => {
   border-top: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
   text-decoration: none;
   letter-spacing: 0.07em;
-  transition: color 180ms ease, background 180ms ease;
+  transition:
+    color 180ms ease,
+    background 180ms ease;
 }
 
 .event-directory__index li:last-child a {
@@ -556,9 +628,10 @@ onBeforeUnmount(() => {
 .event-directory__notice {
   max-width: 28em;
   margin: 0;
-  font-size: 11px;
-  line-height: 1.8;
-  letter-spacing: 0.08em;
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-meta-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 
 .event-directory__content {
@@ -581,10 +654,10 @@ onBeforeUnmount(() => {
 .event-collection__heading h2 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 60px;
-  font-weight: 400;
-  line-height: 1.05;
-  letter-spacing: 0.05em;
+  font-size: var(--type-title-lg-size);
+  font-weight: var(--type-title-lg-weight);
+  line-height: var(--type-title-lg-leading);
+  letter-spacing: var(--type-title-lg-tracking);
 }
 
 .event-month {
@@ -597,10 +670,10 @@ onBeforeUnmount(() => {
   gap: 22px;
   margin: 0;
   font-family: var(--font-display);
-  font-size: 38px;
-  font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: 0.05em;
+  font-size: var(--type-title-md-size);
+  font-weight: var(--type-title-md-weight);
+  line-height: var(--type-title-md-leading);
+  letter-spacing: var(--type-title-md-tracking);
 }
 
 .event-month h3::after {
@@ -618,7 +691,10 @@ onBeforeUnmount(() => {
 
 .event-row {
   display: grid;
-  grid-template-columns: minmax(82px, 0.55fr) minmax(0, 3fr) minmax(140px, 0.85fr);
+  grid-template-columns: minmax(82px, 0.55fr) minmax(0, 3fr) minmax(
+      140px,
+      0.85fr
+    );
   gap: clamp(22px, 3vw, 46px);
   align-items: center;
   min-height: 150px;
@@ -631,15 +707,19 @@ onBeforeUnmount(() => {
 }
 
 .event-row--multi-day {
-  grid-template-columns: minmax(150px, 0.9fr) minmax(0, 3fr) minmax(140px, 0.85fr);
+  grid-template-columns: minmax(150px, 0.9fr) minmax(0, 3fr) minmax(
+      140px,
+      0.85fr
+    );
 }
 
 .event-row__date {
   display: flex;
   flex-direction: column;
   color: var(--event-text-muted);
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  font-size: var(--type-meta-size);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
   white-space: nowrap;
 }
 
@@ -661,19 +741,19 @@ onBeforeUnmount(() => {
 .event-row__day {
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: 50px;
-  line-height: 0.95;
-  letter-spacing: 0;
+  font-size: var(--type-title-md-size);
+  line-height: var(--type-title-md-leading);
+  letter-spacing: var(--type-title-md-tracking);
   font-variant-numeric: tabular-nums;
 }
 
 .event-row__type {
   margin: 0 0 4px;
   color: var(--event-text-clay);
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.7;
-  letter-spacing: 0.18em;
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 
 .event-row__copy {
@@ -684,10 +764,10 @@ onBeforeUnmount(() => {
 .event-row__copy h4 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 24px;
-  font-weight: 500;
-  line-height: 1.45;
-  letter-spacing: 0.04em;
+  font-size: var(--type-title-sm-size);
+  font-weight: var(--type-title-sm-weight);
+  line-height: var(--type-title-sm-leading);
+  letter-spacing: var(--type-title-sm-tracking);
   overflow-wrap: anywhere;
   transition: color 180ms ease;
 }
@@ -702,17 +782,17 @@ onBeforeUnmount(() => {
   gap: 4px 18px;
   margin: 6px 0 0;
   color: var(--event-text-muted);
-  font-size: 12px;
-  line-height: 1.7;
-  letter-spacing: 0.06em;
+  font-size: var(--type-meta-size);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 
 .event-row__summary {
   max-width: 70ch;
   margin: 5px 0 0;
-  font-size: 14px;
-  line-height: 1.7;
-  letter-spacing: 0.04em;
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
 }
 
 .event-row__action {
@@ -723,10 +803,10 @@ onBeforeUnmount(() => {
 
 .event-row__status {
   color: var(--event-text-clay);
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.7;
-  letter-spacing: 0.1em;
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
   text-align: center;
 }
 
@@ -746,8 +826,10 @@ onBeforeUnmount(() => {
   gap: clamp(18px, 3vw, 40px);
   max-width: 620px;
   margin: 64px auto 0;
-  font-size: 14px;
-  letter-spacing: 0.08em;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
   text-align: center;
 }
 
@@ -824,9 +906,9 @@ onBeforeUnmount(() => {
   max-width: 34em;
   margin: 0;
   color: var(--color-muted);
-  font-size: 16px;
-  line-height: 2;
-  letter-spacing: 0.05em;
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
 }
 
 .event-state {
@@ -840,10 +922,10 @@ onBeforeUnmount(() => {
   max-width: 12em;
   margin: 0 0 30px;
   font-family: var(--font-display);
-  font-size: 60px;
-  font-weight: 400;
-  line-height: 1.35;
-  letter-spacing: 0.04em;
+  font-size: var(--type-title-lg-size);
+  font-weight: var(--type-title-lg-weight);
+  line-height: var(--type-title-lg-leading);
+  letter-spacing: var(--type-title-lg-tracking);
 }
 
 .event-state p {
@@ -888,7 +970,10 @@ onBeforeUnmount(() => {
 @media (min-width: 1024px) {
   .event-row,
   .event-row--multi-day {
-    grid-template-columns: minmax(150px, 0.9fr) minmax(0, 3fr) minmax(140px, 0.85fr);
+    grid-template-columns: minmax(150px, 0.9fr) minmax(0, 3fr) minmax(
+        140px,
+        0.85fr
+      );
   }
 
   .event-row__date {
@@ -911,7 +996,7 @@ onBeforeUnmount(() => {
     min-width: 0;
     height: auto;
     min-height: 0;
-    padding: 72px clamp(28px, 7vw, 72px) 48px;
+    padding: 72px var(--page-gutter-mobile) 48px;
     overflow: visible;
   }
 
@@ -930,26 +1015,7 @@ onBeforeUnmount(() => {
   .event-collection {
     min-height: auto;
     padding-block: 80px;
-  }
-
-  .event-collection__heading h2 {
-    font-size: 44px;
-  }
-
-  .event-month h3 {
-    font-size: 28px;
-  }
-
-  .event-row__day {
-    font-size: 42px;
-  }
-
-  .event-row__copy h4 {
-    font-size: 20px;
-  }
-
-  .event-state h2 {
-    font-size: 40px;
+    padding-inline: var(--page-gutter-mobile);
   }
 
   .event-row {
@@ -975,10 +1041,8 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 520px) {
-  .event-directory__index,
-  .event-collection,
   .event-state {
-    padding-inline: 24px;
+    padding-inline: var(--page-gutter-mobile);
   }
 
   .event-directory__index a {
@@ -1019,10 +1083,6 @@ onBeforeUnmount(() => {
 
   .event-row__date-separator {
     display: inline;
-  }
-
-  .event-row__copy h4 {
-    font-size: 22px;
   }
 
   .event-row__copy,
@@ -1071,6 +1131,5 @@ onBeforeUnmount(() => {
   .event-row__copy h4 {
     transition: none;
   }
-
 }
 </style>

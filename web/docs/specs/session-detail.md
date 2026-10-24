@@ -99,11 +99,11 @@ SEO 不得加入頁面未呈現或未核准的資格、療效、價格與服務�
 
 ## 響應式、語意與無障礙
 
-- 桌面 hero 使用最大 `1500px` 的置中雙欄構圖，banner 不設左右 padding；下方內容外層保持全寬，但以 `1500px` 置中基準的左側 gutter 對齊活動詳情，sticky 資訊側欄固定 `400px`，雙欄外層不使用 `border-top`。Hero 上下與主要內容間距沿用詳情頁 token；`<= 1023px` 的 banner 左右 padding 為 `24px`。正文及經歷清單以 `68ch` 控制閱讀寬度。DOM 順序維持姓名與摘要、服務項目、服務地區、聯繫方式、完整介紹、經歷。窄版回到同順序的單欄，320–390px 不得水平捲動。
+- 桌面 hero 使用最大 `1500px` 的置中雙欄構圖，banner 不設左右 padding；下方內容外層保持全寬，但以 `1500px` 置中基準的左側 gutter 對齊活動詳情，sticky 資訊側欄固定 `400px`，雙欄外層不使用 `border-top`。Hero 上下與主要內容間距沿用詳情頁 token；`<= 1023px` 的 banner 左右 padding 為 `20px`。正文及經歷清單以 `68ch` 控制閱讀寬度。DOM 順序維持姓名與摘要、服務項目、服務地區、聯繫方式、完整介紹、經歷。窄版回到同順序的單欄，320–390px 不得水平捲動。
 - 延續 `DESIGN.md` 的 paper、sand、ink、clay、saffron、persimmon、night、字體與直角控制項；不直接複製舊站的大型英文標籤，也不使用圓角卡片牆、陰影或柔焦療癒圖像。
 - 與 `/events/[slug]` 及後續相似內容頁共用固定詳情字級：桌機 `h1` 為 `72px`、摘要 `17px / 2`、`h2` 為 `38px / 1.4`、正文 `16px / 2.1`；`<= 1023px` 分別為 `42px`、`16px`、`26px`、`16px`。正文閱讀寬度約 `68ch`，不得在單頁另創相近尺寸。
 - 桌機 fixed／sticky 左側資訊欄不使用 `border-right`，只以 surface 色、留白及欄內分隔建立層級；`<= 1023px` 單欄可保留底線與項目分隔。
-- fixed／sticky 資訊欄沿用活動詳情共用 padding：桌機資料列 `26px clamp(28px, 3.2vw, 50px)`，`<= 1023px` 為 `22px 24px`；服務地區、服務項目與聯繫方式皆使用此資料列 padding。「聯繫方式」標題須與「服務項目」等資訊小標題相同；聯繫內容、輔助標籤與預約按鈕文字統一為 `14px`，聯繫清單不使用 `border-top` 或 `border-bottom`。相似元件不得另訂近似值。
+- fixed／sticky 資訊欄沿用活動詳情共用 padding：桌機資料列 `26px clamp(28px, 3.2vw, 50px)`，`<= 1023px` 為 `22px 20px`；服務地區、服務項目與聯繫方式皆使用此資料列 padding。「聯繫方式」標題須與「服務項目」等資訊小標題相同；聯繫內容、輔助標籤與預約按鈕文字統一為 `14px`，聯繫清單不使用 `border-top` 或 `border-bottom`。相似元件不得另訂近似值。
 - 右側連續 `.profile-section` 不使用 `border-top` 或額外 `padding-top`；章節間只以桌機 `76px`、窄版 `64px` 的 margin 維持節奏。
 - `main` 只有一個 `h1`；主要章節使用 `section` 與 `h2`，經歷、地點及服務項目使用語意清單。聯繫入口使用 `<a>`，不用非連結元素模擬。
 - 人物照有意義時必須提供適當 alt；純裝飾圖形使用空 alt 或從輔助技術隱藏。不可把姓名、服務或聯絡文字烘焙進圖片。
@@ -177,13 +177,15 @@ SEO 不得加入頁面未呈現或未核准的資格、療效、價格與服務�
 
 2026-10-21 依最新人工驗收修正：共用 `--detail-hero-max-width` 更新為 `1500px`，執行師桌機 banner 移除左右 padding，`.session-detail__layout` 移除 `border-top`。原先與活動詳情共用桌機水平 hero padding 的紀錄已由本規則取代；上下間距與 content padding 維持既有詳情頁節奏。
 
-2026-10-21 手機版追補：桌機 banner 左右 padding 維持 `0`，`<= 1023px` 改回共用 token 的 `24px`，避免窄螢幕文字貼齊視窗邊緣。Chrome 量測確認 390px 為 `24px`、1024／1440／1920px 為 `0px`，四個尺寸皆無水平溢位；Web 40 個測試檔／237 項測試、typecheck、production build、layout detector 與 `git diff --check` 通過。
+2026-10-21 手機版追補：桌機 banner 左右 padding 維持 `0`，`<= 1023px` 當時改回共用 token 的 `24px`，避免窄螢幕文字貼齊視窗邊緣；2026-10-24 已由全站 `20px` 手機 gutter 規則取代。原 Chrome 量測確認 390px 為 `24px`、1024／1440／1920px 為 `0px`，屬歷史驗證紀錄；新版 20px 實際畫面仍待重驗。
 
 2026-10-23 同步人工 CSS 調整：人物照 stage 最低高度由 `360px` 提升為 `440px`，四周 padding 調整為 `50px`；`cover` 模式的人物 figure 不再另設 `360px` 最低高度，而是完整填滿 stage。既有 2026-10-21 截圖與量測早於本次調整，本條只記錄目前實作值，尚未宣告新一輪瀏覽器視覺驗收完成。
 
 2026-10-23 主要預約入口改用全站 `.button-primary` 與 `.button-primary__icon`，只在執行師側欄保留 `28px` 上距；顏色、寬高、字級、箭頭互動、focus 與 reduced-motion 不再由頁面重複定義。選填與外部安全連結契約不變。
 
 本輪元件測試確認預約連結帶有共用按鈕與箭頭 class；Web 全套 43 個測試檔、261 項測試、typecheck 與 production build 通過。Production 兩筆執行師內容目前都沒有預約網址，因此未把真實內容的瀏覽器畫面記為已完成；共用狀態量測見 [主要行動按鈕統一驗證](../design/review/primary-action-unification-2026-10-23/README.md)。
+
+2026-10-24 完成 Typography 第一階段：hero、摘要、服務標籤與值、章節標題、正文、狀態文字及 prototype note 改用全站 `.type-*` 語意角色；桌機／手機的詳情主標題、摘要、章節與正文尺寸維持原契約。相關元件與樣式回歸測試已通過；完整 typecheck、build、detector 與瀏覽器驗收結果記錄於全站設計系統階段紀錄。下列既有手機人工修正清單不在本階段範圍，維持未完成。
 
 #### 筆記，不需要執行，可忽略
 
@@ -195,7 +197,7 @@ SEO 不得加入頁面未呈現或未核准的資格、療效、價格與服務�
 - [x] banner、content 間距比照 events-detail；2026-10-21 已同步 hero 容器、欄比例、圖片高度、gap 與下方內容起點，後續依最新驗收要求將 session 桌機 banner 水平 padding 改為 `0`
 - [x] 桌機 banner 區域移除左右 padding，並將 `--detail-hero-max-width` 更新為 `1500px`
 - [x] `.session-detail__layout` 移除 `border-top`
-- [x] 手機版 banner 補回左右 padding `24px`
+- [x] 手機版 banner 左右 padding 統一為全站 `20px` token
 - [] session-detail__value: 手機版 font-size 14px
 - [] .session-detail__portrait-stage--cover .session-detail__portrait 手機版 aspect-ratio: 9/8
 - [] profile-section > p 、session-detail__experience li ：手機版 font-size 14px

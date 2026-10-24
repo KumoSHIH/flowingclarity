@@ -143,6 +143,7 @@ SEO 不得加入頁面未呈現或未核准的療效、資格與事實。not fou
 
 ## 階段紀錄
 
+- 2026-10-24：完成 Typography 第一階段。文章 hero、摘要、資訊牌、正文 h2／h3、Portable Text 段落與清單、圖說、狀態文字及延伸閱讀改用全站 `.type-*` 語意角色；空白段落高度改由 `--type-body-size × --type-body-leading` 計算。相關元件與樣式回歸測試已通過；完整 typecheck、build、detector 與瀏覽器驗收結果記錄於全站設計系統階段紀錄。首頁、總覽頁與課程詳情仍待後續遷移。
 - 2026-10-23：同步人工版面調整。正式 Vue 的純文字 `richTextSection` 改為 `max-width: 900px; margin: 0 auto`，取代早期設計稿的偏移 `68ch` 閱讀軸；圖文段落的文字欄仍維持既有 `68ch` 限制。既有 2026-10-16 原型與截圖保留為歷史證據，不回溯改寫。
 - 2026-10-20：將延伸閱讀的響應式欄數、切換、觸控方向門檻、Tab 範圍、進度、live region、hover／focus 與 reduced-motion 行為抽成 `SharedRelatedArticles`，供課程詳情固定頁尾的延伸閱讀共用；Article 的內容契約與視覺維持不變，完整 Web 回歸測試通過。
 - 2026-10-20：延伸閱讀標題與 CTA 的 hover／`focus-visible` 顏色改為引用全站 `--interactive-title-hover`，與活動列表的可點擊內容標題共用同一語意 token；既有圖片縮放、箭頭位移、焦點框與 reduced-motion 行為不變。Web 39 個測試檔、226 項測試、typecheck、production build 與 `git diff --check` 通過；正式內容的瀏覽器互動仍待部署後驗收。

@@ -296,31 +296,38 @@ function paragraphSegments(paragraph: AboutRichTextParagraph) {
 }
 
 .about-overview h1 {
-  font: 400 var(--detail-hero-title-size)/1.22 var(--font-display);
-  letter-spacing: 0.025em;
+  font-family: var(--font-display);
+  font-size: var(--type-title-xl-size);
+  font-weight: var(--type-title-xl-weight);
+  line-height: var(--type-title-xl-leading);
+  letter-spacing: var(--type-title-xl-tracking);
   white-space: nowrap;
 }
 
 .about-overview h2 {
   max-width: 18em;
-  font: 400 var(--detail-section-title-size)/1.4 var(--font-display);
-  letter-spacing: 0.02em;
+  font-family: var(--font-display);
+  font-size: var(--type-title-md-size);
+  font-weight: var(--type-title-md-weight);
+  line-height: var(--type-title-md-leading);
+  letter-spacing: var(--type-title-md-tracking);
 }
 
 .about-label {
   margin-bottom: 18px !important;
   color: var(--about-label);
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.7;
-  letter-spacing: 0.18em;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
 }
 
 .about-copy,
 .about-lead {
-  font-size: var(--detail-body-size);
-  line-height: 2.1;
-  letter-spacing: 0.025em;
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
 }
 
 .about-copy p + p {
@@ -348,26 +355,29 @@ function paragraphSegments(paragraph: AboutRichTextParagraph) {
   gap: 24px;
   margin-bottom: clamp(70px, 10vh, 116px);
   color: var(--about-muted);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-meta-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 
 .about-lead {
   max-width: 31em;
   margin-top: 38px !important;
-  font-size: var(--detail-summary-size);
-  line-height: 2;
-  letter-spacing: 0.035em;
+  font-size: var(--type-lead-size);
+  font-weight: var(--type-lead-weight);
+  line-height: var(--type-lead-leading);
+  letter-spacing: var(--type-lead-tracking);
 }
 
 .about-prototype-note {
   max-width: 52em;
   margin-top: 36px !important;
   color: var(--about-muted);
-  font-size: 11px;
-  line-height: 1.8;
-  letter-spacing: 0.07em;
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-meta-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 
 .about-hero__media,
@@ -399,7 +409,10 @@ function paragraphSegments(paragraph: AboutRichTextParagraph) {
   padding: 32px;
   color: var(--about-muted);
   text-align: center;
-  line-height: 1.8;
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
 }
 
 .about-brand {
@@ -493,19 +506,20 @@ function paragraphSegments(paragraph: AboutRichTextParagraph) {
 
 .about-contact__list dt {
   color: var(--about-muted);
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.9;
-  letter-spacing: 0.16em;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
   text-transform: uppercase;
 }
 
 .about-contact__list dd,
 .about-contact__list a {
   color: var(--color-ink);
-  font-size: 14px;
-  line-height: 1.9;
-  letter-spacing: 0.04em;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
   overflow-wrap: anywhere;
 }
 
@@ -524,7 +538,10 @@ function paragraphSegments(paragraph: AboutRichTextParagraph) {
   padding: 24px 0;
   border-block: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
   color: var(--about-muted);
-  line-height: 1.9;
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
 }
 
 .about-map {
@@ -551,8 +568,10 @@ function paragraphSegments(paragraph: AboutRichTextParagraph) {
   padding: 0 22px;
   color: var(--color-paper);
   background: var(--color-oxblood);
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
   text-decoration: none;
 }
 
@@ -572,7 +591,10 @@ function paragraphSegments(paragraph: AboutRichTextParagraph) {
 
 .about-state > p:not(.about-label) {
   max-width: 42em;
-  line-height: 2;
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
 }
 
 .about-state button {
@@ -582,6 +604,10 @@ function paragraphSegments(paragraph: AboutRichTextParagraph) {
   background: var(--color-oxblood);
   border: 0;
   border-radius: 0;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
   cursor: pointer;
 }
 
@@ -605,7 +631,7 @@ function paragraphSegments(paragraph: AboutRichTextParagraph) {
 
 @media (max-width: 1023px) {
   .about-overview {
-    --about-edge: clamp(24px, 6vw, 56px);
+    --about-edge: var(--page-gutter-mobile);
   }
 
   .about-hero {

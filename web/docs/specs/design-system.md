@@ -2,19 +2,26 @@
 
 ## 狀態與範圍
 
-狀態：已抽成共用 CSS，由 Banner、活動列表／詳情、課程詳情及執行師預約入口使用。2026-10-23 完成全站字級、主要按鈕、按鈕字重與互動標題色修正；以下數值是目前實作基準，不代表已完成實體裝置或螢幕閱讀器驗收。
+狀態：共用 CSS 已包含八個正式文字角色。2026-10-24 四階段程式遷移完成，首頁、總覽、詳情、About、Header 與 Footer 均已採用；全站 type detector 為 0。主要按鈕、按鈕字重與互動標題色規則維持既有實作；以下數值不代表已完成本輪瀏覽器、實體裝置或螢幕閱讀器驗收。
 
 本文件管理文字角色、按鈕外觀與跨頁 split layout 尺寸；其他容器寬度、區塊排列及元素間距仍由各頁規格管理。[Banner 規格](home-banner.md) 是第一個文字 token 引用案例。樣式角色不取代 HTML 語意，標題層級仍依內容結構選擇。
 
 ## 文字角色
 
-候選字體沿用 `--font-sans`：`BIZ UDPGothic`、`Noto Sans TC`，再使用系統無襯線字體。下表以桌面大於 1023px、手機不大於 1023px 為目前參考。
+內文與介面文字沿用 `--font-sans`：`BIZ UDPGothic`、`Noto Sans TC`，再使用系統無襯線字體；標題沿用 `--font-display`。下表以桌面大於 1023px、手機不大於 1023px 為正式基準。
 
-| 候選角色 | 用途 | 桌面字級 | 手機字級 | 字重／行高／字距 |
+| 正式角色 | 用途 | 桌面字級 | 手機字級 | 字重／行高／字距 |
 | --- | --- | --- | --- | --- |
-| 展示標題 | 首屏主要訊息 | `56px` | `42px` | `400`／`1.2`／`0.06em` |
-| 引導敘述 | 展示標題下的短文 | `17px` | `14px` | `500`／`1.95`／`0.06em` |
-| 行動文字 | 主要按鈕標籤 | `18px` | `14px` | `400`／`1.4`／`0.1em` |
+| `meta` | 日期、編號、圖說與補充資訊 | `12px` | `12px` | `400`／`1.7`／`0.06em` |
+| `label` | 導覽、標籤、篩選與欄位名稱 | `14px` | `14px` | `700`／`1.7`／`0.08em` |
+| `body` | 一般正文與長文清單 | `16px` | `16px` | `400`／`2.1`／`0.025em` |
+| `lead` | 頁首摘要與引導敘述 | `17px` | `16px` | `400`／`2`／`0.035em` |
+| `title-sm` | 卡片標題、人物名稱與內文小標 | `24px` | `22px` | `400`／`1.55`／`0.03em` |
+| `title-md` | 內容章節標題 | `38px` | `26px` | `400`／`1.4`／`0.02em` |
+| `title-lg` | 總覽頁與一般頁面標題 | `56px` | `42px` | `400`／`1.2`／`0.04em` |
+| `title-xl` | 首屏與內容詳情主標題 | `72px` | `42px` | `400`／`1.22`／`0.025em` |
+
+主要按鈕是元件專屬角色，維持桌面 `18px`、手機 `14px`、字重 `400` 與 `0.1em` 字距，不納入通用文字角色。既有 `--detail-hero-title-size`、`--detail-summary-size`、`--detail-section-title-size`、`--detail-body-size` 保留為相容別名，實際值改由 `--type-*` token 提供；新元件不得直接新增另一組詳情字級。
 
 目前淺色 Banner Story 欄的標題與敘述繼承 `#38342e`，背景為 `#e8dfd2`；深色表面使用 `#f7f6f4`，次要文字使用 `#d8c7b8`。一般區塊標題不直接沿用首屏字級。
 
@@ -40,8 +47,8 @@
 
 ## 套用與驗收
 
-1. 先在使用頁規格指定文字角色、按鈕變體與適用表面，再確認候選數值。確認後在本文件記錄日期與採用範圍。
-2. 共用數值及 class 已集中至 `web/app/assets/css/main.css`；其他頁面以加入 class 的方式逐步採用，不修改所有 `h1`、`p` 或 `a`。目前沒有另建 Vue 按鈕元件。
+1. 先在使用頁規格指定文字角色、按鈕變體與適用表面；需要新角色時先更新本文件，不以相近局部數值繞過既有角色。
+2. 共用數值及 `.type-*` class 集中於 `web/app/assets/css/main.css`；其他頁面以加入語意 class 的方式逐步採用，不直接依標籤名稱修改所有 `h1`、`p` 或 `a`。目前沒有另建 Vue 按鈕元件。
 3. 套用時驗證桌面、手機、斷點及長文案：不得裁切、重疊或水平溢位；鍵盤焦點可見，連結及操作行為正確。
 4. 2026-10-23 已完成 Chrome 桌機、平板與手機檢視；配色對比、文字放大、實體裝置與螢幕閱讀器仍待後續驗收。
 
@@ -58,7 +65,7 @@
 
 深色背景的敘述加上 `lead-text--inverse`；淺色 Banner 使用基本 `.lead-text` 並繼承容器文字顏色。`.button-primary` 代表全站大型主要行動，可用於連結或原生按鈕；`.button-primary__icon` 統一箭頭尺寸、線條與互動。共用 class 放在 `@layer components`，頁面只保留外距與配置，不得重新定義同角色的顏色、字級、高度、最大寬度、焦點或 disabled 狀態。
 
-共用 token 分為 `--display-title-*`、`--lead-text-*`、`--text-tracking`、`--button-primary-*`、`--interactive-title-hover` 及 `--control-focus-*`，字體和主色沿用既有 `--font-sans`、`--color-persimmon` 與 `--color-clay`。手機數值在 `max-width: 1023px` 統一切換。文字字級使用桌面與手機兩組固定值，不使用 `clamp()`；間距、容器與非文字尺寸仍可依既有版面需求使用流體尺度。修改全站數值時同步更新本文件。
+共用文字 token 使用 `--type-<role>-size|weight|leading|tracking`；按鈕、互動標題色及焦點仍使用 `--button-primary-*`、`--interactive-title-hover` 與 `--control-focus-*`。字體和主色沿用既有 `--font-sans`、`--font-display`、`--color-persimmon` 與 `--color-clay`。手機數值在 `max-width: 1023px` 統一切換。文字字級使用桌面與手機兩組固定值，不使用 `clamp()`；間距、容器與非文字尺寸仍可依既有版面需求使用流體尺度。修改全站數值時同步更新本文件與 `DESIGN.md`。
 
 ## 互動標題顏色
 
@@ -68,7 +75,9 @@
 
 ## 詳情頁間距
 
-活動與執行師詳情共用 `--detail-hero-max-width: 1500px`、`--detail-layout-max-width: 1500px`、hero 上下間距與主要內容間距。桌機 hero 為 `1500px` 置中容器，上下內距為 `84px`；活動詳情保留水平 `clamp(28px, 6vw, 116px)`，執行師詳情 banner 的水平 padding 為 `0`。主要內容為 `76px clamp(48px, 7vw, 104px)`。`<= 1023px` 的 hero 上下內距改為 `68px / 76px`，兩頁水平內距皆為 `24px`；主要內容改為 `64px 24px`。執行師詳情的雙欄外層保持全寬，只以 `calc((100% - 1500px) / 2)` 左側 gutter 對齊活動詳情，且不使用 `border-top`；內容可用 `68ch` 控制正文及清單閱讀寬度。
+活動與執行師詳情共用 `--detail-hero-max-width: 1500px`、`--detail-layout-max-width: 1500px`、hero 上下間距與主要內容間距。桌機 hero 為 `1500px` 置中容器，上下內距為 `84px`；活動詳情保留水平 `clamp(28px, 6vw, 116px)`，執行師詳情 banner 的水平 padding 為 `0`。主要內容為 `76px clamp(48px, 7vw, 104px)`。`<= 1023px` 的 hero 上下內距改為 `68px / 76px`，兩頁與主要內容的水平內距皆引用 `--page-gutter-mobile: 20px`；主要內容垂直內距為 `64px`。執行師詳情的雙欄外層保持全寬，只以 `calc((100% - 1500px) / 2)` 左側 gutter 對齊活動詳情，且不使用 `border-top`；內容可用 `68ch` 控制正文及清單閱讀寬度。
+
+2026-10-24 起，所有手機與單欄頁面的外側左右 gutter 統一為 `--page-gutter-mobile: 20px`。頁面 section、hero、總覽 rail、Header、Footer 與共用內容元件必須引用此 token；按鈕、卡片、清單列及控制項的內部 padding 不在此規則內。本輪新增 21 項 gutter 回歸測試，Web 全套 44 檔／290 項、typecheck、production build、layout detector 與 `git diff --check` 均通過；390px 實際畫面仍待可用瀏覽器環境補驗。
 
 ## 共用雙欄版面
 
@@ -122,6 +131,36 @@ Footer 採主色 bark（`#766254`）表面與 paper 文字，保留 2.4px 連結
 - Chrome 實測 `/`、`/course`、`/events`、`/session`、`/articles` 於 1440、1023、390px，共 15 組頁面／斷點皆無水平溢位；CTA 字級與按鈕字重符合規格，活動標題 hover／focus 色彩與可見焦點通過。代表截圖與量測見 [瀏覽器驗證記錄](../design/review/design-system-corrections-2026-10-23/README.md)。
 - `typography-corrections.test.ts` 通過 3 項回歸測試；`npm run test -w web` 通過 42 個測試檔、245 項測試。`npm run typecheck -w web`、`npm run build -w web` 與 `git diff --check` 通過。typecheck 保留既有 `vue-router/volar/sfc-route-blocks` 套件匯出警告；build 保留既有 sourcemap 與字型執行期解析警告。
 - 實體觸控裝置、Safari／Firefox、文字放大與螢幕閱讀器未於本輪執行；不得視為已完成。
+
+## 2026-10-24 Typography 語意角色第一階段
+
+- 在 `main.css` 建立 `meta`、`label`、`body`、`lead`、`title-sm`、`title-md`、`title-lg`、`title-xl` 八個角色的 size、weight、leading 與 tracking token，以及對應 `.type-*` class；桌面／`<= 1023px` 使用固定字級。
+- 舊 `--detail-*` 字級保留為相容別名並指向新角色。文章、活動、執行師詳情，以及 `ArticleRichTextContent`、`SharedRelatedArticles`、`SharedTestimonials` 已完成遷移；首頁、總覽頁、課程詳情、Header 與 Footer 尚待後續階段。
+- 新增語意角色回歸測試。`npm run test -w web` 通過 43 個測試檔、264 項測試；`npm run typecheck -w web` 與 `npm run build -w web` 成功。typecheck 保留既有 Volar package export 警告；build 保留既有 sourcemap 與字型 runtime resolve 警告。
+- Impeccable type detector 由遷移前 160 項 advisory 降至 84 項；本階段六個已遷移元件為 0 項，剩餘項目皆位於後續範圍。
+- 嘗試啟動 Chrome、內建瀏覽器與原生 Computer Use 服務，但環境回報無可用瀏覽器；因此桌機／手機 computed style、溢位、200% 文字放大與代表截圖仍待人工驗收，不以自動測試替代。
+- 下一階段：遷移首頁與四個總覽頁，再處理變體最多的課程詳情；完成後統一驗證 1440、1023、390px 與 200% 文字放大。
+
+## 2026-10-24 Typography 語意角色第二階段
+
+- 首頁五個區塊、共用 `DirectoryIntro`，以及文章、課程、活動、執行師四個總覽元件已全部改由八個 `--type-*` 角色控制字級、字重、行高與字距；遷移範圍不再保留數字字級或 Tailwind `text-*` 尺寸。
+- `display-title` 與 `lead-text` 保留為首頁相容 class，但其數值改為 `title-lg` 與 `lead` 的別名。課程光片標題不再於 hover／focus 另創 `36px` 尺寸，互動仍由光片寬度、影像與焦點樣式表達。
+- Impeccable type detector 對本階段 10 個元件回報 0 項，全站 advisory 由第一階段後的 84 項降至 29 項；剩餘只在課程詳情 24 項、About 2 項、Header 2 項與 Footer 1 項。`npm run test -w web` 通過 43 個測試檔、265 項測試，typecheck 與 production build 成功，`git diff --check` 通過。既有 Volar package export、sourcemap 與字型 runtime resolve 警告仍存在。
+- 目前執行環境沒有可用瀏覽器，因此 1440、1023、390px、200% 文字放大、長文換行與代表截圖仍待人工驗收。下一階段處理課程詳情，再盤點 About、Header、Footer 等共用殘餘。
+
+## 2026-10-24 Typography 語意角色第三階段
+
+- 課程詳情的 Hero、內容章節、圖冊、帶領者、引言、課綱、影片、適合對象、梯次、報名與空狀態已全部改用八個正式角色；一般段落與清單也明確套用 `body`，不再依賴頁面根層的局部行高與字距。
+- CourseDetail 的 24 項 type advisory 已清為 0；全站剩餘 5 項只在 About 2 項、Header 2 項及 Footer 1 項，留待最後一階段處理。
+- 課程相關 4 檔／32 項與 Web 全套 43 檔／266 項測試、typecheck 及 production build 通過。既有 Volar package export、sourcemap 與字型 runtime resolve 警告仍存在。
+- 本階段未修改 CMS 或遠端內容。環境仍無可用瀏覽器，因此 1440、1023、390px、200% 文字放大及長文換行的人工視覺驗收尚未完成。
+
+## 2026-10-24 Typography 語意角色第四階段
+
+- About 的 Hero、章節、導言、正文、標籤、metadata、聯絡資訊、地圖行動與狀態文字已移除舊 `--detail-*` 別名及局部數值；Header 導覽統一使用 `label`；Footer 品牌文字、雙語主張、聯絡／導覽與版權分別對應標題、`label`、`meta` 角色。
+- 額外移除 detector 未涵蓋的 `font` shorthand、Footer 手機展示字級，以及文章小標、執行師側欄、共用麵包屑／輪播與目錄篩選別名的合法階梯數字。`web/app` 元件已無數字 `font-size` 或數字字級 shorthand；全站 type detector 從最初 160 項降至 0。
+- 相關 7 檔／62 項與 Web 全套 43 檔／268 項測試、typecheck 及 production build 通過；既有 Volar package export、sourcemap 與字型 runtime resolve 警告仍存在。
+- 程式遷移已完成，不再有待遷移元件。Computer Use 服務仍無可用瀏覽器，因此 1440、1023、390px、200% 文字放大、長文字換行與操作區尺寸仍待人工驗收。
 
 ## 待修正項目
 

@@ -41,9 +41,9 @@
 
 共用 CSS 只定義 `.detail-*` 的排版、字級角色、1px 分隔線、焦點與狀態；各頁以 modifier 或 CSS custom properties 決定構圖。沿用 `main.css` 的 paper、sand、ink、clay、saffron、persimmon、night、字體與控制項 token，不把三款決策稿的特殊構圖升格為全站規則。
 
-活動、執行師與文章等內容詳情頁依 [`DESIGN.md`](../../DESIGN.md) 沿用固定閱讀字級：桌機 `h1` 為 `72px`、摘要 `17px / 2`、章節 `h2` 為 `38px / 1.4`、正文 `16px / 2.1`；`<= 1023px` 的 `h1` 為 `42px`、摘要與正文為 `16px`、內容章節 `h2` 為 `26px`，正文最寬約 `68ch`。課程桌機保留已核准的展示尺寸，但手機同樣使用 26px。桌機 fixed／sticky facts rail 不使用 `border-right`，只以表面色、留白及欄內分隔建立層級。活動與執行師詳情共用 `1500px` 置中 hero 外框與 `1500px` 雙欄起點；執行師詳情不限制最外層右界，且其桌機 banner 不使用活動詳情的水平 padding，手機則同為 `24px`。單欄斷點仍可保留底線與項目分隔。
+活動、執行師與文章等內容詳情頁依 [`DESIGN.md`](../../DESIGN.md) 沿用固定閱讀字級：桌機 `h1` 為 `72px`、摘要 `17px / 2`、章節 `h2` 為 `38px / 1.4`、正文 `16px / 2.1`；`<= 1023px` 的 `h1` 為 `42px`、摘要與正文為 `16px`、內容章節 `h2` 為 `26px`，正文最寬約 `68ch`。課程桌機保留已核准的展示尺寸，但手機同樣使用 26px。桌機 fixed／sticky facts rail 不使用 `border-right`，只以表面色、留白及欄內分隔建立層級。活動與執行師詳情共用 `1500px` 置中 hero 外框與 `1500px` 雙欄起點；執行師詳情不限制最外層右界，且其桌機 banner 不使用活動詳情的水平 padding，手機則同為 `20px`。單欄斷點仍可保留底線與項目分隔。
 
-相似詳情元件也沿用同一 rail spacing：桌機資料列 `26px clamp(28px, 3.2vw, 50px)`、操作區 `34px clamp(28px, 3.2vw, 50px)`；`<= 1023px` 資料列 `22px 24px`、操作區 `24px`。連續閱讀章節可依內容使用 margin 分段，不以 `border-top` 或額外 `padding-top` 重複切割視覺。
+相似詳情元件也沿用同一 rail spacing：桌機資料列 `26px clamp(28px, 3.2vw, 50px)`、操作區 `34px clamp(28px, 3.2vw, 50px)`；`<= 1023px` 資料列 `22px 20px`、操作區 `24px 20px`。連續閱讀章節可依內容使用 margin 分段，不以 `border-top` 或額外 `padding-top` 重複切割視覺。
 
 ## 三款設計方向
 
@@ -88,6 +88,13 @@
 - 本輪畫面驗收：Computer Use 服務無法啟動且沒有可用瀏覽器，未能執行桌機／手機 hover、鍵盤焦點、溢位與截圖檢查；不得用自動測試取代此項，清單維持待驗證。
 - 待處理：正式活動素材審核與發布；課程詳情尚未接入共用心得 schema 與 renderer。
 - 未執行：本輪桌機／手機瀏覽器回歸，以及 Safari／Firefox、實體觸控裝置與螢幕閱讀器驗收。
+
+### 2026-10-24 Typography 第一階段
+
+- 已將 hero、摘要、章節標題、正文、流程小標、欄位標籤、圖說與狀態文字改用全站 `.type-*` 語意角色；共用 `SharedTestimonials` 同步遷移。
+- 手機活動資訊值保留窄欄密度例外，但改引用 `--type-body-size`，不再硬編 `16px`。
+- 相關元件與樣式回歸測試已通過；完整 typecheck、build、detector 與瀏覽器桌機／手機畫面驗收結果記錄於全站設計系統階段紀錄。
+- 尚未處理總覽頁及首頁字級；既有內容 padding 待修正項目不在本階段範圍，維持未完成。
 
 
 #### 筆記，不需要執行，可忽略

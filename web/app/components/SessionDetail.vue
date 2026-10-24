@@ -68,8 +68,8 @@ function opensNewTab(href?: string): boolean {
       class="session-detail__state"
       role="alert"
     >
-      <h1>執行師資料暫時無法載入</h1>
-      <p>請稍後再試一次，或先返回執行師名錄。</p>
+      <h1 class="type-title-md">執行師資料暫時無法載入</h1>
+      <p class="type-body">請稍後再試一次，或先返回執行師名錄。</p>
       <button type="button" @click="emit('retry')">重新載入</button>
     </div>
 
@@ -77,8 +77,8 @@ function opensNewTab(href?: string): boolean {
       v-else-if="status === 'not-found' || !content"
       class="session-detail__state"
     >
-      <h1>找不到這位執行師</h1>
-      <p>資料可能尚未公開、已下架，或網址不正確。</p>
+      <h1 class="type-title-md">找不到這位執行師</h1>
+      <p class="type-body">資料可能尚未公開、已下架，或網址不正確。</p>
       <NuxtLink to="/session">返回執行師名錄</NuxtLink>
     </div>
 
@@ -89,15 +89,15 @@ function opensNewTab(href?: string): boolean {
       >
         <div class="session-detail__hero-copy">
           <div>
-            <h1>{{ content.name }}</h1>
-            <p v-if="content.englishName" class="session-detail__english-name">
+            <h1 class="type-title-xl">{{ content.name }}</h1>
+            <p v-if="content.englishName" class="session-detail__english-name type-label">
               {{ content.englishName }}
             </p>
             <div class="session-detail__summary-grid">
-              <p class="session-detail__summary">{{ content.summary }}</p>
+              <p class="session-detail__summary type-lead">{{ content.summary }}</p>
               <div>
-                <span class="session-detail__label">服務地區</span>
-                <p class="session-detail__value">{{ publicCities }}</p>
+                <span class="session-detail__label type-label">服務地區</span>
+                <p class="session-detail__value type-title-sm">{{ publicCities }}</p>
               </div>
             </div>
           </div>
@@ -127,9 +127,9 @@ function opensNewTab(href?: string): boolean {
           <div class="session-detail__rail-inner">
             <dl class="session-detail__facts">
               <div class="session-detail__fact">
-                <dt>服務項目</dt>
+                <dt class="type-label">服務項目</dt>
                 <dd>
-                  <ul class="session-detail__methods">
+                  <ul class="session-detail__methods type-body">
                     <li v-for="method in content.methods" :key="method">
                       {{ method }}
                     </li>
@@ -137,14 +137,14 @@ function opensNewTab(href?: string): boolean {
                 </dd>
               </div>
               <div class="session-detail__fact">
-                <dt>服務地區</dt>
+                <dt class="type-label">服務地區</dt>
                 <dd>
                   <ul class="session-detail__locations">
                     <li
                       v-for="location in content.serviceLocations"
                       :key="location.key"
                     >
-                      <strong>{{ location.cities.join("、") }}</strong>
+                      <strong class="type-title-sm">{{ location.cities.join("、") }}</strong>
                       <span v-if="locationDetail(location)">{{
                         locationDetail(location)
                       }}</span>
@@ -158,7 +158,7 @@ function opensNewTab(href?: string): boolean {
               class="session-detail__contact"
               aria-labelledby="session-contact-title"
             >
-              <h2 id="session-contact-title">聯繫方式</h2>
+              <h2 id="session-contact-title" class="type-label">聯繫方式</h2>
               <p v-if="content.contactIntro">{{ content.contactIntro }}</p>
               <ul>
                 <li v-for="item in content.contactItems" :key="item.key">
@@ -205,8 +205,8 @@ function opensNewTab(href?: string): boolean {
             class="profile-section"
             aria-labelledby="session-about-title"
           >
-            <h2 id="session-about-title">關於執行師</h2>
-            <p v-for="paragraph in content.bio" :key="paragraph">
+            <h2 id="session-about-title" class="type-title-md">關於執行師</h2>
+            <p v-for="paragraph in content.bio" :key="paragraph" class="type-body">
               {{ paragraph }}
             </p>
           </section>
@@ -216,7 +216,7 @@ function opensNewTab(href?: string): boolean {
             class="profile-section"
             aria-labelledby="session-experience-title"
           >
-            <h2 id="session-experience-title">經歷</h2>
+            <h2 id="session-experience-title" class="type-title-md">經歷</h2>
             <ul class="session-detail__experience">
               <li v-for="item in content.experienceItems" :key="item">
                 {{ item }}
@@ -224,7 +224,7 @@ function opensNewTab(href?: string): boolean {
             </ul>
           </section>
 
-          <p v-if="content.prototypeNotice" class="session-detail__notice">
+          <p v-if="content.prototypeNotice" class="session-detail__notice type-meta">
             {{ content.prototypeNotice }}
           </p>
         </div>
@@ -263,18 +263,11 @@ function opensNewTab(href?: string): boolean {
 .session-detail h1 {
   max-width: 11em;
   margin: 0;
-  font-family: var(--font-display);
-  font-size: var(--detail-hero-title-size);
-  font-weight: 400;
-  line-height: 1.22;
-  letter-spacing: 0.025em;
   text-wrap: balance;
 }
 .session-detail__english-name {
   margin: 14px 0 0;
   color: #745142;
-  font-size: 14px;
-  font-weight: 700;
   letter-spacing: 0.14em;
 }
 .session-detail__summary-grid {
@@ -290,23 +283,14 @@ function opensNewTab(href?: string): boolean {
   max-width: 42em;
   margin: 0;
   color: #625a51;
-  font-size: var(--detail-summary-size);
-  line-height: 2;
-  letter-spacing: 0.035em;
 }
 .session-detail__label {
   display: block;
   margin-bottom: 8px;
   color: #745142;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
 }
 .session-detail__value {
   margin: 0;
-  font-family: var(--font-display);
-  font-size: 20px;
-  line-height: 1.55;
 }
 .session-detail__portrait-stage {
   display: grid;
@@ -377,11 +361,6 @@ function opensNewTab(href?: string): boolean {
 .session-detail__contact h2 {
   margin: 0 0 8px;
   color: #745142;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: inherit;
-  letter-spacing: 0.08em;
 }
 .session-detail__fact dd {
   margin: 0;
@@ -400,17 +379,15 @@ function opensNewTab(href?: string): boolean {
 }
 .session-detail__locations strong {
   display: block;
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 400;
-  line-height: 1.55;
 }
 .session-detail__locations span {
   display: block;
   margin-top: 4px;
   color: #625a51;
-  font-size: 14px;
-  line-height: 1.8;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
 }
 .session-detail__methods li {
   position: relative;
@@ -433,8 +410,10 @@ function opensNewTab(href?: string): boolean {
 .session-detail__contact > p {
   margin: 0 0 18px;
   color: #625a51;
-  font-size: 14px;
-  line-height: 1.8;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
 }
 .session-detail__contact a:not(.session-detail__booking),
 .session-detail__contact-text {
@@ -444,8 +423,10 @@ function opensNewTab(href?: string): boolean {
   justify-content: space-between;
   gap: 20px;
   padding: 10px 0;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
   text-decoration: none;
 }
 .session-detail__contact a:not(.session-detail__booking) > span:last-child {
@@ -456,7 +437,10 @@ function opensNewTab(href?: string): boolean {
 .session-detail__contact small {
   display: block;
   color: #745142;
-  font-size: 14px;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
 }
 .session-detail__booking {
   margin-top: 28px;
@@ -476,19 +460,11 @@ function opensNewTab(href?: string): boolean {
 .profile-section h2 {
   max-width: 14em;
   margin: 0 0 22px;
-  font-family: var(--font-display);
-  font-size: var(--detail-section-title-size);
-  font-weight: 400;
-  line-height: 1.4;
-  letter-spacing: 0.02em;
 }
 .profile-section > p {
   max-width: 68ch;
   margin: 0;
   color: #625a51;
-  font-size: var(--detail-body-size);
-  line-height: 2.1;
-  letter-spacing: 0.025em;
   white-space: pre-line;
 }
 .profile-section > p + p {
@@ -502,8 +478,10 @@ function opensNewTab(href?: string): boolean {
   padding: 22px 0;
   border-bottom: 1px solid rgb(56 52 46 / 24%);
   font-family: var(--font-display);
-  font-size: 16px;
-  line-height: 1.7;
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
 }
 .session-detail__notice {
   max-width: 68ch;
@@ -511,8 +489,6 @@ function opensNewTab(href?: string): boolean {
   padding-top: 18px;
   border-top: 1px solid rgb(56 52 46 / 24%);
   color: #745142;
-  font-size: 12px;
-  line-height: 1.8;
 }
 
 .session-detail__state {
@@ -521,19 +497,15 @@ function opensNewTab(href?: string): boolean {
   place-content: center;
   justify-items: start;
   gap: 18px;
-  padding: 80px 24px;
+  padding: 80px var(--page-gutter-mobile);
 }
 .session-detail__state h1 {
   margin: 0;
-  font-family: var(--font-display);
-  font-size: 42px;
-  font-weight: 400;
 }
 .session-detail__state p {
   max-width: 42em;
   margin: 0;
   color: #625a51;
-  line-height: 2;
 }
 .session-detail__state a,
 .session-detail__state button {
@@ -579,7 +551,7 @@ function opensNewTab(href?: string): boolean {
   }
   .session-detail__portrait-stage {
     min-height: 340px;
-    padding: 48px 24px;
+    padding: 48px var(--page-gutter-mobile);
   }
   .session-detail__portrait {
     width: min(220px, 70vw);

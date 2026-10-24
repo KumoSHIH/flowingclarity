@@ -30,7 +30,7 @@ const events = [
 <template>
   <section
     id="events"
-    class="bg-[#e8dfd2] px-[clamp(28px,6vw,116px)] py-28 md:py-36"
+    class="bg-[#e8dfd2] px-[var(--page-gutter-mobile)] py-28 md:py-36 lg:px-[clamp(28px,6vw,116px)]"
     aria-labelledby="events-title"
   >
     <div
@@ -40,13 +40,13 @@ const events = [
         <div>
           <h2
             id="events-title"
-            class="font-display text-[40px] font-medium tracking-[0.05em] lg:text-[72px]"
+            class="type-title-xl"
           >
             近期活動
           </h2>
         </div>
         <p
-          class="max-w-[330px] text-base leading-8 tracking-[0.05em] text-muted"
+          class="type-body max-w-[330px] text-muted"
         >
           在不大的空間裡相遇，分享一段專心感受當下的時間。
         </p>
@@ -63,25 +63,25 @@ const events = [
             :datetime="event.date"
           >
             <span
-              class="font-editorial text-[11px] tracking-[0.14em] text-muted"
+              class="type-meta font-editorial text-muted"
               >{{ event.month }}</span
             >
             <span
-              class="font-editorial text-[56px] leading-none text-clay sm:text-[72px]"
+              class="type-title-xl font-editorial leading-none text-clay"
               >{{ event.day }}</span
             >
           </time>
           <div>
             <p
-              class="mb-2 text-[10px] font-semibold tracking-[0.18em] text-clay"
+              class="type-label mb-2 text-clay"
             >
               {{ event.category }}
             </p>
-            <h3 class="font-display text-xl tracking-[0.06em] md:text-3xl">
+            <h3 class="type-title-sm">
               {{ event.title }}
             </h3>
           </div>
-          <p class="col-start-2 text-xs tracking-[0.08em] text-muted">
+          <p class="type-meta col-start-2 text-muted">
             {{ event.time }}
           </p>
         </li>

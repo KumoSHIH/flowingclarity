@@ -16,53 +16,53 @@ colors:
   persimmon: "#df5b35"
   warm-white: "#f7f6f4"
 typography:
-  display:
-    fontFamily: '"Noto Serif TC", "Songti TC", "PMingLiU", serif'
-    fontSize: "56px"
+  meta:
+    fontFamily: '"BIZ UDPGothic", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif'
+    fontSize: "12px"
     fontWeight: 400
-    lineHeight: 1.2
+    lineHeight: 1.7
     letterSpacing: "0.06em"
+  label:
+    fontFamily: '"BIZ UDPGothic", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif'
+    fontSize: "14px"
+    fontWeight: 700
+    lineHeight: 1.7
+    letterSpacing: "0.08em"
   body:
     fontFamily: '"BIZ UDPGothic", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif'
     fontSize: "16px"
     fontWeight: 400
-    lineHeight: 2
-    letterSpacing: "0.05em"
-  lead:
-    fontFamily: '"BIZ UDPGothic", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif'
-    fontSize: "17px"
-    fontWeight: 500
-    lineHeight: 1.95
-    letterSpacing: "0.06em"
-  label:
-    fontFamily: '"BIZ UDPGothic", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif'
-    fontSize: "10px"
-    fontWeight: 600
-    lineHeight: 1.7
-    letterSpacing: "0.18em"
-  detailHero:
-    fontFamily: '"Noto Serif TC", "Songti TC", "PMingLiU", serif'
-    fontSize: "72px"
-    fontWeight: 400
-    lineHeight: 1.22
+    lineHeight: 2.1
     letterSpacing: "0.025em"
-  detailSummary:
+  lead:
     fontFamily: '"BIZ UDPGothic", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif'
     fontSize: "17px"
     fontWeight: 400
     lineHeight: 2
     letterSpacing: "0.035em"
-  detailSection:
+  titleSm:
+    fontFamily: '"Noto Serif TC", "Songti TC", "PMingLiU", serif'
+    fontSize: "24px"
+    fontWeight: 400
+    lineHeight: 1.55
+    letterSpacing: "0.03em"
+  titleMd:
     fontFamily: '"Noto Serif TC", "Songti TC", "PMingLiU", serif'
     fontSize: "38px"
     fontWeight: 400
     lineHeight: 1.4
     letterSpacing: "0.02em"
-  detailBody:
-    fontFamily: '"BIZ UDPGothic", "Noto Sans TC", ui-sans-serif, system-ui, sans-serif'
-    fontSize: "16px"
+  titleLg:
+    fontFamily: '"Noto Serif TC", "Songti TC", "PMingLiU", serif'
+    fontSize: "56px"
     fontWeight: 400
-    lineHeight: 2.1
+    lineHeight: 1.2
+    letterSpacing: "0.04em"
+  titleXl:
+    fontFamily: '"Noto Serif TC", "Songti TC", "PMingLiU", serif'
+    fontSize: "72px"
+    fontWeight: 400
+    lineHeight: 1.22
     letterSpacing: "0.025em"
 components:
   button-primary:
@@ -111,17 +111,23 @@ components:
 
 標題使用具人文感的繁中襯線字體，內文、導覽與控制項使用清楚的東亞無襯線字體。展示標題只用於首屏；文字字級採桌面與 `<= 1023px` 兩組固定值，不使用 `clamp()`，正文保持寬鬆行距並控制在約 65–75 個半形字元內。
 
+全站字級以八個語意角色管理：`meta`、`label`、`body`、`lead`、`title-sm`、`title-md`、`title-lg`、`title-xl`。元件應引用 `--type-<role>-*` 或對應 `.type-<role>` class，不得因單一頁面另建相近尺寸。桌機角色依 frontmatter；`<= 1023px` 的 `lead` 為 `16px`、`title-sm` 為 `22px`、`title-md` 為 `26px`、`title-lg` 與 `title-xl` 皆為 `42px`。主要按鈕維持元件專屬的 `18px`／`14px`，不新增通用文字角色。
+
+截至 2026-10-24 第四階段，全站頁面與共用 Header／Footer 的程式字體設定皆已遷移至上述角色；type detector 為 0。瀏覽器、實體裝置與螢幕閱讀器驗收屬獨立發布檢查，不因程式遷移完成而自動視為通過。
+
 **The Quiet Rhythm Rule.** 中文標題不使用全大寫效果；以留白、換行與字距建立節奏，避免額外裝飾字型。
 
-**The Detail Continuity Rule.** 活動、執行師與文章等內容詳情頁沿用固定閱讀字級：桌機 `h1` 為 `72px`、摘要 `17px / 2`、章節 `h2` 為 `38px / 1.4`、正文 `16px / 2.1`；`<= 1023px` 的 `h1` 為 `42px`、摘要與正文為 `16px`、內容章節 `h2` 為 `26px`，正文最寬約 `68ch`。活動與執行師詳情的 hero 共用桌機 `84px / 84px`、手機 `68px / 76px` 的上下內距；活動詳情桌機保留水平 `clamp(28px, 6vw, 116px)`，執行師詳情桌機 banner 不設左右 padding，兩頁手機皆使用 `24px`。主要內容共用桌機 `76px clamp(48px, 7vw, 104px)`、手機 `64px 24px`，不得再用內層置中容器改變內容左緣。課程桌機保留已核准的章節展示尺寸，不套用 38px，但手機同樣收斂為 26px。新內容詳情頁不得另創相近手機尺寸；頁面首區展示標題與引言式 blockquote 不視為內容章節 `h2`。
+**The Detail Continuity Rule.** 活動、執行師與文章等內容詳情頁沿用固定閱讀字級：桌機 `h1` 為 `72px`、摘要 `17px / 2`、章節 `h2` 為 `38px / 1.4`、正文 `16px / 2.1`；`<= 1023px` 的 `h1` 為 `42px`、摘要與正文為 `16px`、內容章節 `h2` 為 `26px`，正文最寬約 `68ch`。活動與執行師詳情的 hero 共用桌機 `84px / 84px`、手機 `68px / 76px` 的上下內距；活動詳情桌機保留水平 `clamp(28px, 6vw, 116px)`，執行師詳情桌機 banner 不設左右 padding，兩頁手機皆使用全站 `--page-gutter-mobile: 20px`。主要內容共用桌機 `76px clamp(48px, 7vw, 104px)`、手機 `64px 20px`，不得再用內層置中容器改變內容左緣。課程桌機保留已核准的章節展示尺寸，不套用 38px，但手機同樣收斂為 26px。新內容詳情頁不得另創相近手機尺寸；頁面首區展示標題與引言式 blockquote 不視為內容章節 `h2`。
 
 ## Layout
 
 全幅敘事頁面最大寬度可到 `1920px`，主要內容左右留白使用 `clamp(28px, 6vw, 116px)`，區塊垂直間距以 `112–176px` 為主。採左側目錄／篩選 rail 與右側主內容的總覽頁，桌機左欄固定 `400px` 並貼齊視窗左側，右側內容填滿剩餘欄寬且不設定最大寬度；不大於 `1023px` 回到單欄。詳情頁依上方 hero 的構圖決定內容起點，不以總覽頁規則限制最外層寬度。桌面首頁首屏仍採 65%／35% 地圖與敘事雙欄，1024–1250px 改為 60%／40%；固定導覽高度為 `87px`。內容圖片維持明確比例並允許自然裁切。
 
+手機與單欄版面的頁面外側左右留白統一引用 `--page-gutter-mobile: 20px`。此 token 只控制頁面、section、hero、rail 與共用導覽／頁尾的外側 gutter；按鈕、卡片、清單列與控制項的內部 padding 依其元件規格維持。
+
 內容詳情頁的桌機固定左側欄以底色、留白與內部分隔建立層級，不使用 `border-right`；不大於 `1023px` 回到單欄後，可保留區塊底線與項目內部分隔。此規則適用於所有採 fixed／sticky facts rail 的相似頁面。
 
-**The Detail Rail Rule.** 相似詳情頁的 facts rail 必須共用 `/events/[slug]` 的節奏：桌機資料列為 `26px clamp(28px, 3.2vw, 50px)`，獨立主要操作區為 `34px clamp(28px, 3.2vw, 50px)`；`<= 1023px` 資料列為 `22px 24px`、獨立主要操作區為 `24px`。聯繫資料須與上方服務項目、服務地區使用相同 padding；側欄資訊小標題統一為 14px、粗體與 `.08em` 字距，聯繫內容與按鈕文字皆為 14px，聯繫清單不使用 `border-top` 或 `border-bottom`。桌機側欄本身無右框線。閱讀內容的連續 `profile-section` 不以 `border-top` 或額外 `padding-top` 切段，只使用章節間距維持節奏。
+**The Detail Rail Rule.** 相似詳情頁的 facts rail 必須共用 `/events/[slug]` 的節奏：桌機資料列為 `26px clamp(28px, 3.2vw, 50px)`，獨立主要操作區為 `34px clamp(28px, 3.2vw, 50px)`；`<= 1023px` 資料列為 `22px 20px`、獨立主要操作區為 `24px 20px`。聯繫資料須與上方服務項目、服務地區使用相同 padding；側欄資訊小標題統一為 14px、粗體與 `.08em` 字距，聯繫內容與按鈕文字皆為 14px，聯繫清單不使用 `border-top` 或 `border-bottom`。桌機側欄本身無右框線。閱讀內容的連續 `profile-section` 不以 `border-top` 或額外 `padding-top` 切段，只使用章節間距維持節奏。
 
 **The Split Layout Rule.** 課程、活動、執行師總覽只共用 `--split-layout-rail-width: 400px`。桌機 grid 使用固定左欄與 `minmax(0, 1fr)` 主欄；外層保持全寬、左欄無外距，右側內容不設最大寬度並填滿剩餘欄寬。活動與執行師詳情的 hero 共用 `1500px` 置中外框，雙欄起點也以 `1500px` 置中基準對齊；活動詳情限制整個雙欄寬度，執行師詳情維持全寬，只加入同等左側 gutter，且雙欄銜接處不加上框線。不得把詳情頁規則套到總覽頁。
 
@@ -172,3 +178,22 @@ components:
 - **Don't** 使用通用療癒網站常見的柔焦人物照、漂浮漸層或大量膠囊卡片。
 - **Don't** 在一般容器加入圓角與陰影，或把柿橘色擴張成大面積背景。
 - **Don't** 把頁面專屬構圖、CMS 內容或示範文案誤當成全站設計 token。
+
+## 2026-10-24 Typography 語意角色第二階段
+
+- 首頁與課程、活動、執行師、文章總覽已統一引用八個正式文字角色；`DirectoryIntro` 同步成為總覽頁 `title-lg`／`lead` 的共用入口。
+- 首頁舊 `display-title`／`lead-text` token 改為正式角色別名，不再維護第二套數值。課程卡 hover 不再改變字級，避免互動狀態產生未登錄的尺寸。
+- 本階段 10 個元件的 type detector 為 0 項，全站 advisory 由 84 項降至 29 項；Web 43 檔／265 項測試、typecheck、production build 與 `git diff --check` 通過。瀏覽器視覺驗收因環境無可用瀏覽器而待補。
+- 尚待遷移：課程詳情、About、Header 與 Footer；下一階段先處理課程詳情，再做全站殘餘掃描。
+
+## 2026-10-24 Typography 語意角色第三階段
+
+- 課程詳情已將 Hero、內容章節、引言、圖冊、帶領者、課綱、梯次、報名與狀態文字映射至八個正式角色；一般段落與清單同樣明確使用 `body` 的 size、weight、leading 與 tracking。
+- CourseDetail 的 type detector 由 24 項降至 0 項，全站剩餘 5 項僅在 About、Header 與 Footer。課程相關 4 檔／32 項及 Web 全套 43 檔／266 項測試、typecheck 與 production build 通過。
+- 瀏覽器視覺驗收因環境無可用瀏覽器而待補；最後階段應清理 About、Header、Footer，並統一驗證 1440、1023、390px、200% 文字放大與長文換行。
+
+## 2026-10-24 Typography 語意角色第四階段
+
+- About、Header 與 Footer 已完成最後遷移；全站殘餘掃描也收斂文章小標、執行師側欄、共用麵包屑／輪播及目錄篩選別名。`web/app` 元件不再使用數字 `font-size`、數字字級 shorthand 或舊詳情字級別名。
+- 全站 type detector 由最初 160 項降至 0。新增全元件回歸測試，Web 全套 43 檔／268 項測試、typecheck 與 production build 通過。
+- 程式端字體角色統一完成；環境無可用瀏覽器，仍須補做 1440、1023、390px、200% 文字放大、長文字換行與 Footer 操作區尺寸的人工驗收。

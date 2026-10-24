@@ -214,3 +214,7 @@
 
 ## 人工測試後修正清單
 - [] 一進去該單元的網址為 .../events?view=upcoming&page=1，這樣是正常的嗎？
+
+## 2026-10-24 字體角色遷移
+
+活動總覽與共用左欄導讀已統一使用 `title-lg`、`title-md`、`title-sm`、`body`、`label`、`meta`，取代歷史紀錄中的 `50/42/22/14/12px` 局部尺寸；日期、摘要、狀態及分頁現在皆由角色 token 控制。type detector 為 0，完整 Web 測試、typecheck 與 build 通過；瀏覽器視覺驗收待補。

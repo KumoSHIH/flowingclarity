@@ -31,9 +31,10 @@ defineProps<{
   padding: 0;
   margin: 0;
   color: var(--color-muted);
-  font-size: 12px;
-  line-height: 1.6;
-  letter-spacing: 0.04em;
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-meta-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
   list-style: none;
 }
 
@@ -61,7 +62,7 @@ defineProps<{
 
 @media (max-width: 1023px) {
   .detail-breadcrumb {
-    padding: 18px 24px 14px;
+    padding: 18px var(--page-gutter-mobile) 14px;
   }
 }
 </style>

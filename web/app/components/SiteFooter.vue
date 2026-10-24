@@ -207,14 +207,21 @@ const paths = [
 }
 .site-footer__brand-name {
   color: var(--color-paper);
-  font: 400 28px/1.5 var(--font-display);
+  font-family: var(--font-display);
+  font-size: var(--type-title-sm-size);
+  font-weight: var(--type-title-sm-weight);
+  line-height: var(--type-title-sm-leading);
+  letter-spacing: var(--type-title-sm-tracking);
 }
 .site-footer__closing {
   max-width: 13em;
   margin: 0;
-  font: 400 36px/1.35 var(--font-display);
   color: var(--color-paper);
-  letter-spacing: 2.4px;
+  font-family: var(--font-display);
+  font-size: var(--type-title-md-size);
+  font-weight: var(--type-title-md-weight);
+  line-height: var(--type-title-md-leading);
+  letter-spacing: var(--type-title-md-tracking);
 }
 .site-footer__content {
   padding: clamp(80px, 10vw, 150px) clamp(28px, 6vw, 116px) 48px
@@ -222,8 +229,11 @@ const paths = [
 }
 .site-footer__statement {
   color: var(--color-paper);
-  font: 400 60px var(--font-display);
-  letter-spacing: 3.6px;
+  font-family: var(--font-display);
+  font-size: var(--type-title-lg-size);
+  font-weight: var(--type-title-lg-weight);
+  line-height: var(--type-title-lg-leading);
+  letter-spacing: var(--type-title-lg-tracking);
   text-wrap: balance;
 }
 .site-footer__bottom {
@@ -237,20 +247,21 @@ const paths = [
 .site-footer__contact {
   min-width: 0;
   color: var(--color-paper);
-  font-size: 14px;
-  line-height: 1.75;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
 }
 .site-footer__bottom nav {
   max-width: 400px;
   width: 100%;
-  margin: 0 auto;
+  margin-left: auto;
 }
 .site-footer__contact > span,
 .site-footer__contact a {
   display: flex;
   align-items: center;
   min-height: 48px;
-  letter-spacing: 2.4px;
   transition: color 0.3s ease-in-out;
 }
 .site-footer__nav {
@@ -267,7 +278,10 @@ const paths = [
   justify-content: space-between;
   gap: 20px;
   min-height: 58px;
-  font-size: 14px;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
   color: var(--color-paper);
 }
 .site-footer__nav svg {
@@ -276,7 +290,6 @@ const paths = [
 .site-footer a:not(.site-footer__brand) {
   color: var(--color-paper);
   text-decoration: none;
-  letter-spacing: 2.4px;
   transition: color 0.3s ease-in-out;
 }
 .site-footer a:not(.site-footer__brand):hover,
@@ -290,9 +303,10 @@ const paths = [
 .site-footer__legal {
   margin: 42px 0 0;
   text-align: right;
-  font-size: 12px;
-  line-height: 1.7;
-  letter-spacing: 1.8px;
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-meta-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
   color: var(--color-paper);
 }
 .site-footer__flow {
@@ -375,7 +389,7 @@ const paths = [
     grid-template-columns: minmax(0, 1fr);
   }
   .site-footer__brand-column {
-    padding: 48px 28px 0;
+    padding: 48px var(--page-gutter-mobile) 0;
   }
   .site-footer__brand img {
     width: 140px;
@@ -384,11 +398,14 @@ const paths = [
     display: none;
   }
   .site-footer__content {
-    padding: 40px 28px 42px;
+    padding: 40px var(--page-gutter-mobile) 42px;
   }
   .site-footer__bottom {
     grid-template-columns: minmax(0, 1fr);
-    gap: 65px;
+    gap: 30px;
+  }
+  .site-footer__bottom nav {
+    margin: 0;
   }
   .site-footer__flow {
     width: 150%;
@@ -402,18 +419,18 @@ const paths = [
 }
 @media (max-width: 560px) {
   .site-footer__brand-column {
-    padding-inline: 24px;
+    padding-inline: var(--page-gutter-mobile);
   }
   .site-footer__content {
-    padding-inline: 24px;
-  }
-  .site-footer__statement {
-    font-size: 36px;
-    line-height: 1.5;
+    padding-inline: var(--page-gutter-mobile);
+    padding-top: 20px;
   }
   .site-footer__bottom {
     padding-top: 40px;
     gap: 40px;
+  }
+  .site-footer__bottom nav {
+    max-width: none;
   }
   .site-footer__flow {
     width: 190%;

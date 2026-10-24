@@ -16,28 +16,22 @@ defineProps<{
 .directory-intro h1 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 60px;
-  font-weight: 400;
-  line-height: 1.28;
-  letter-spacing: 0.04em;
+  font-size: var(--type-title-lg-size);
+  font-weight: var(--type-title-lg-weight);
+  line-height: var(--type-title-lg-leading);
+  letter-spacing: var(--type-title-lg-tracking);
 }
 
 .directory-intro__description {
   max-width: 12em;
   margin: 28px 0 0;
-  font-size: 22px;
-  line-height: 1.8;
-  letter-spacing: 0.08em;
+  font-size: var(--type-lead-size);
+  font-weight: var(--type-lead-weight);
+  line-height: var(--type-lead-leading);
+  letter-spacing: var(--type-lead-tracking);
 }
 
 @media (max-width: 1023px) {
-  .directory-intro h1 {
-    font-size: 44px;
-  }
-
-  .directory-intro__description {
-    max-width: none;
-    font-size: 17px;
-  }
+  .directory-intro__description { max-width: none; }
 }
 </style>

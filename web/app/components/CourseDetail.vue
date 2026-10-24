@@ -323,13 +323,21 @@ onBeforeUnmount(() => {
             :href="content.hero.actionUrl"
           >
             <span>{{ content.hero.actionLabel }}</span>
-            <svg class="button-primary__icon" viewBox="0 0 20 20" aria-hidden="true">
+            <svg
+              class="button-primary__icon"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
               <path d="M4 10h11M11 6l4 4-4 4" />
             </svg>
           </a>
           <button v-else class="button-primary" type="button" disabled>
             <span>{{ content.hero.actionLabel }}</span>
-            <svg class="button-primary__icon" viewBox="0 0 20 20" aria-hidden="true">
+            <svg
+              class="button-primary__icon"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
               <path d="M4 10h11M11 6l4 4-4 4" />
             </svg>
           </button>
@@ -382,7 +390,9 @@ onBeforeUnmount(() => {
         >
           <header>
             <h2>{{ block.title }}</h2>
-            <p v-if="block.description" class="body-copy preserve-lines">{{ block.description }}</p>
+            <p v-if="block.description" class="body-copy preserve-lines">
+              {{ block.description }}
+            </p>
           </header>
           <div
             v-if="block.items.length"
@@ -411,7 +421,9 @@ onBeforeUnmount(() => {
               <div v-if="block.layout !== 'collage'" class="gallery-item__copy">
                 <span v-if="item.group">{{ item.group }}</span>
                 <h3 v-if="item.title">{{ item.title }}</h3>
-                <p v-if="item.description" class="preserve-lines">{{ item.description }}</p>
+                <p v-if="item.description" class="preserve-lines">
+                  {{ item.description }}
+                </p>
                 <ul v-if="item.points?.length">
                   <li v-for="point in item.points" :key="point">{{ point }}</li>
                 </ul>
@@ -471,7 +483,9 @@ onBeforeUnmount(() => {
         >
           <header>
             <h2>{{ block.title }}</h2>
-            <p v-if="block.description" class="body-copy preserve-lines">{{ block.description }}</p>
+            <p v-if="block.description" class="body-copy preserve-lines">
+              {{ block.description }}
+            </p>
           </header>
           <div v-if="block.units.length" class="curriculum-list">
             <article v-for="unit in block.units" :key="unit.key">
@@ -558,7 +572,9 @@ onBeforeUnmount(() => {
         >
           <h2>{{ block.title }}</h2>
           <div>
-            <p v-if="block.description" class="body-copy preserve-lines">{{ block.description }}</p>
+            <p v-if="block.description" class="body-copy preserve-lines">
+              {{ block.description }}
+            </p>
             <ul v-if="block.items.length">
               <li v-for="item in block.items" :key="item">
                 <i aria-hidden="true" />{{ item }}
@@ -605,7 +621,10 @@ onBeforeUnmount(() => {
         <div class="course-schedule__inner">
           <header class="course-schedule__intro">
             <h2>{{ content.schedule.title }}</h2>
-            <p v-if="content.schedule.description" class="body-copy preserve-lines">
+            <p
+              v-if="content.schedule.description"
+              class="body-copy preserve-lines"
+            >
               {{ content.schedule.description }}
             </p>
           </header>
@@ -672,20 +691,30 @@ onBeforeUnmount(() => {
       >
         <div>
           <h2>{{ content.registration.title }}</h2>
-          <p v-if="content.registration.description" class="preserve-lines">{{ content.registration.description }}</p>
+          <p v-if="content.registration.description" class="preserve-lines">
+            {{ content.registration.description }}
+          </p>
           <a
             v-if="content.registration.actionUrl"
             class="button-primary"
             :href="content.registration.actionUrl"
           >
             <span>{{ content.registration.actionLabel }}</span>
-            <svg class="button-primary__icon" viewBox="0 0 20 20" aria-hidden="true">
+            <svg
+              class="button-primary__icon"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
               <path d="M4 10h11M11 6l4 4-4 4" />
             </svg>
           </a>
           <button v-else class="button-primary" type="button" disabled>
             <span>{{ content.registration.actionLabel }}</span>
-            <svg class="button-primary__icon" viewBox="0 0 20 20" aria-hidden="true">
+            <svg
+              class="button-primary__icon"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
               <path d="M4 10h11M11 6l4 4-4 4" />
             </svg>
           </button>
@@ -717,12 +746,12 @@ onBeforeUnmount(() => {
 <style scoped>
 .course-detail {
   --chapter-height: 68px;
+  --course-section-block: 96px;
+  --course-section-inline: clamp(42px, 7vw, 112px);
   --line: #cec3b5;
   --local-muted: #696158;
   color: var(--color-ink);
   background: var(--color-paper);
-  line-height: 1.9;
-  letter-spacing: 0.045em;
 }
 .course-detail :is([id^="content-"], #schedule, #registration) {
   scroll-margin-top: calc(
@@ -750,18 +779,25 @@ onBeforeUnmount(() => {
   padding: 14px clamp(22px, 5.4vw, 84px);
   color: var(--color-warm-white);
   background: var(--color-night);
-  font-size: 14px;
-  letter-spacing: 0.12em;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
 }
 .body-copy {
   margin: 0;
   color: var(--local-muted);
-  line-height: 2;
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
 }
 .lede {
   margin: 0;
-  font-size: 18px;
-  line-height: 1.9;
+  font-size: var(--type-lead-size);
+  font-weight: var(--type-lead-weight);
+  line-height: var(--type-lead-leading);
+  letter-spacing: var(--type-lead-tracking);
 }
 .asset-label {
   position: absolute;
@@ -771,9 +807,10 @@ onBeforeUnmount(() => {
   padding: 5px 9px;
   color: var(--color-warm-white);
   background: rgb(36 23 16 / 78%);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 .course-hero {
   display: grid;
@@ -798,9 +835,9 @@ onBeforeUnmount(() => {
   right: -100px;
   top: 140px;
   color: var(--color-warm-white);
-  font-size: 88px;
-  line-height: 1.05;
-  letter-spacing: 4.5px;
+  font-size: var(--type-title-xl-size);
+  line-height: var(--type-title-xl-leading);
+  letter-spacing: var(--type-title-xl-tracking);
   white-space: pre-line;
   text-shadow: 2px 3px 25px #dfd5ca;
 }
@@ -813,9 +850,10 @@ onBeforeUnmount(() => {
 .course-hero__english {
   margin: 0 0 24px;
   color: var(--color-saffron);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
 }
 .course-hero hr {
   margin: 32px 0 22px;
@@ -827,7 +865,9 @@ onBeforeUnmount(() => {
   grid-template-columns: 1fr 1fr;
   gap: 18px 30px;
   margin: 0;
-  font-size: 16px;
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
 }
 .course-hero dl div {
   min-width: 0;
@@ -837,8 +877,7 @@ onBeforeUnmount(() => {
 }
 .course-hero dt {
   color: var(--color-saffron);
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-weight: var(--type-label-weight);
 }
 .course-hero dd {
   margin: 0;
@@ -863,9 +902,10 @@ onBeforeUnmount(() => {
   place-items: center;
   border-right: 1px solid var(--line);
   color: inherit;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
   text-decoration: none;
   white-space: nowrap;
 }
@@ -879,7 +919,8 @@ onBeforeUnmount(() => {
   display: flex;
   min-height: clamp(720px, 82svh, 900px);
   align-items: center;
-  padding: 96px clamp(42px, 7vw, 112px);
+  padding-block: var(--course-section-block);
+  padding-inline: var(--course-section-inline);
 }
 .course-intro__inner {
   width: min(100%, 900px);
@@ -903,7 +944,8 @@ onBeforeUnmount(() => {
   margin-top: 22px;
 }
 .course-gallery {
-  padding: 80px clamp(42px, 7vw, 112px) 80px;
+  padding-block: var(--course-section-block);
+  padding-inline: var(--course-section-inline);
   background: var(--color-sand);
 }
 .course-gallery > header,
@@ -932,20 +974,37 @@ onBeforeUnmount(() => {
   padding: 18px 22px;
   color: var(--color-warm-white);
   background: rgb(36 23 16 / 90%);
-  font-size: 12px;
+  font-size: var(--type-meta-size);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 .gallery-item__copy > span {
   color: var(--color-oxblood);
-  font-size: 14px;
-  font-weight: 700;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
 }
 .gallery-item__copy h3 {
   margin: 8px 0 18px;
-  font-size: 30px;
+  font-size: var(--type-title-sm-size);
+  line-height: var(--type-title-sm-leading);
+  letter-spacing: var(--type-title-sm-tracking);
 }
 .gallery-item__copy p {
   margin: 0;
   color: var(--local-muted);
+}
+.gallery-item__copy :is(p, li),
+.curriculum-panel,
+.course-audience li,
+.course-registration p,
+.inline-empty,
+.course-detail-state p {
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
 }
 .gallery-item__copy ul {
   padding-left: 1.25em;
@@ -997,8 +1056,9 @@ onBeforeUnmount(() => {
   padding: 32px;
   color: var(--color-warm-white);
   background: var(--color-bark);
-  font-size: 23px;
-  line-height: 1.65;
+  font-size: var(--type-title-sm-size);
+  line-height: var(--type-title-sm-leading);
+  letter-spacing: var(--type-title-sm-tracking);
 }
 .gallery-panel--stages {
   grid-template-columns: repeat(4, 1fr);
@@ -1046,7 +1106,10 @@ onBeforeUnmount(() => {
   top: 17px;
   left: 0;
   font-family: var(--font-display);
-  font-size: 24px;
+  font-size: var(--type-title-sm-size);
+  font-weight: var(--type-title-sm-weight);
+  line-height: var(--type-title-sm-leading);
+  letter-spacing: var(--type-title-sm-tracking);
 }
 .gallery-panel--dossier {
   grid-template-columns: 0.85fr 1.15fr;
@@ -1071,7 +1134,9 @@ onBeforeUnmount(() => {
   grid-row: 1 / span 3;
   padding-top: 18px;
   border-top: 1px solid var(--color-ink);
-  font-size: 42px;
+  font-size: var(--type-title-md-size);
+  line-height: var(--type-title-md-leading);
+  letter-spacing: var(--type-title-md-tracking);
 }
 .course-teacher {
   display: grid;
@@ -1087,8 +1152,9 @@ onBeforeUnmount(() => {
   overflow: hidden;
   color: var(--color-warm-white);
   background: var(--color-bark);
-  font-size: 10px;
-  letter-spacing: 0.14em;
+  font-size: var(--type-meta-size);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 .course-teacher__portrait img {
   max-width: 500px;
@@ -1097,14 +1163,18 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 90px clamp(60px, 8vw, 150px);
+  padding-block: var(--course-section-block);
+  padding-inline: var(--course-section-inline);
 }
 .course-teacher__name {
   margin-bottom: 28px;
-  font-size: 28px;
+  font-size: var(--type-title-sm-size);
+  line-height: var(--type-title-sm-leading);
+  letter-spacing: var(--type-title-sm-tracking);
 }
 .course-carousel {
-  --carousel-edge: clamp(42px, 7vw, 112px);
+  --carousel-edge: var(--course-section-inline);
+  --carousel-section-block: var(--course-section-block);
   --carousel-muted: var(--local-muted);
   background: var(--color-paper);
 }
@@ -1112,7 +1182,8 @@ onBeforeUnmount(() => {
   align-self: start;
 }
 .course-testimonials {
-  padding: 90px clamp(42px, 7vw, 112px) 100px;
+  padding-block: var(--course-section-block);
+  padding-inline: var(--course-section-inline);
   background: var(--color-paper);
 }
 .course-testimonials :deep(.shared-testimonials) {
@@ -1122,13 +1193,18 @@ onBeforeUnmount(() => {
   border-bottom: 0;
 }
 .course-related {
-  --related-edge: clamp(42px, 7vw, 112px);
+  --related-edge: var(--course-section-inline);
+  --related-section-block: var(--course-section-block);
 }
 .course-teacher__name small {
   display: block;
   margin-top: 10px;
   font: inherit;
-  font-size: 0.48em;
+  font-family: var(--font-sans);
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-meta-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 .course-teacher .lede {
   margin: 20px 0;
@@ -1137,26 +1213,31 @@ onBeforeUnmount(() => {
   display: grid;
   min-height: 520px;
   place-items: center;
-  padding: 90px 9vw;
+  padding-block: var(--course-section-block);
+  padding-inline: var(--course-section-inline);
   color: var(--color-warm-white);
   text-align: center;
   background: var(--color-bark);
 }
 .course-quote blockquote {
   max-width: 1030px;
-  font-size: 68px;
-  line-height: 1.55;
+  font-size: var(--type-title-lg-size);
+  line-height: var(--type-title-lg-leading);
+  letter-spacing: var(--type-title-lg-tracking);
 }
 .course-quote cite {
-  font-size: 14px;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
   font-style: normal;
-  letter-spacing: 0.15em;
 }
 .course-curriculum {
   display: grid;
   grid-template-columns: 0.8fr 1.2fr;
   gap: 110px;
-  padding: 150px clamp(42px, 7vw, 112px);
+  padding-block: var(--course-section-block);
+  padding-inline: var(--course-section-inline);
 }
 .course-curriculum header p {
   margin-top: 28px;
@@ -1183,13 +1264,17 @@ onBeforeUnmount(() => {
 }
 .curriculum-list button span {
   color: var(--color-oxblood);
-  font-size: 14px;
-  font-weight: 400;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
 }
 .curriculum-list button strong {
   font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 400;
+  font-size: var(--type-title-sm-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-title-sm-leading);
+  letter-spacing: var(--type-title-sm-tracking);
 }
 .curriculum-list button i {
   position: relative;
@@ -1212,10 +1297,10 @@ onBeforeUnmount(() => {
 .curriculum-panel {
   padding: 0 46px 30px 98px;
   color: var(--local-muted);
-  line-height: 2;
 }
 .course-video {
-  padding: 80px clamp(42px, 7vw, 112px);
+  padding-block: var(--course-section-block);
+  padding-inline: var(--course-section-inline);
   color: var(--color-warm-white);
   background: var(--color-night);
 }
@@ -1246,14 +1331,16 @@ onBeforeUnmount(() => {
 .course-video__status {
   margin: 18px 0 0;
   color: var(--color-warm-muted);
-  font-size: 12px;
-  letter-spacing: 0.08em;
+  font-size: var(--type-meta-size);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 .course-audience {
   display: grid;
   grid-template-columns: 0.72fr 1.28fr;
   gap: 110px;
-  padding: 80px clamp(42px, 7vw, 112px);
+  padding-block: var(--course-section-block);
+  padding-inline: var(--course-section-inline);
   background: var(--color-sand);
 }
 .course-audience ul {
@@ -1280,7 +1367,8 @@ onBeforeUnmount(() => {
   display: flex;
   min-height: 100svh;
   align-items: center;
-  padding: 96px clamp(42px, 7vw, 112px);
+  padding-block: var(--course-section-block);
+  padding-inline: var(--course-section-inline);
 }
 .course-schedule__inner {
   width: min(100%, 900px);
@@ -1295,9 +1383,10 @@ onBeforeUnmount(() => {
   border-bottom: 1px solid var(--color-ink);
 }
 .course-detail .course-schedule .course-schedule__intro h2 {
-  font-size: 58px;
-  letter-spacing: -0.025em;
-  line-height: 1.1;
+  font-size: var(--type-title-lg-size);
+  font-weight: var(--type-title-lg-weight);
+  line-height: var(--type-title-lg-leading);
+  letter-spacing: var(--type-title-lg-tracking);
 }
 .course-schedule__intro > *,
 .schedule-session > * {
@@ -1330,20 +1419,24 @@ onBeforeUnmount(() => {
 .schedule-session__identity strong {
   padding: 6px 10px 5px;
   background: var(--color-saffron);
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  line-height: 1.6;
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 .schedule-session__identity h3 {
-  font-size: 27px;
-  line-height: 1.5;
+  font-size: var(--type-title-sm-size);
+  line-height: var(--type-title-sm-leading);
+  letter-spacing: var(--type-title-sm-tracking);
   overflow-wrap: anywhere;
 }
 .schedule-session__location {
   margin: 0;
   color: var(--local-muted);
-  font-size: 14px;
-  line-height: 1.7;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
 }
 .schedule-session__content {
   min-width: 0;
@@ -1362,9 +1455,10 @@ onBeforeUnmount(() => {
 }
 .schedule-stage-list dt {
   font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1.5;
+  font-size: var(--type-title-sm-size);
+  font-weight: var(--type-title-sm-weight);
+  line-height: var(--type-title-sm-leading);
+  letter-spacing: var(--type-title-sm-tracking);
 }
 .schedule-stage-list dd {
   display: grid;
@@ -1373,9 +1467,11 @@ onBeforeUnmount(() => {
   margin: 0;
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: 18px;
+  font-size: var(--type-lead-size);
+  font-weight: var(--type-lead-weight);
   font-variant-numeric: tabular-nums;
-  line-height: 1.5;
+  line-height: var(--type-lead-leading);
+  letter-spacing: var(--type-lead-tracking);
 }
 .schedule-details {
   display: grid;
@@ -1390,17 +1486,20 @@ onBeforeUnmount(() => {
 }
 .schedule-details dt {
   color: #965039;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
 }
 .schedule-details dd {
   margin: 0;
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: 17px;
+  font-size: var(--type-lead-size);
+  font-weight: var(--type-lead-weight);
   font-variant-numeric: tabular-nums;
-  line-height: 1.5;
+  line-height: var(--type-lead-leading);
+  letter-spacing: var(--type-lead-tracking);
 }
 .schedule-session__footer {
   display: flex;
@@ -1412,8 +1511,9 @@ onBeforeUnmount(() => {
   max-width: 430px;
   margin: 0;
   color: var(--local-muted);
-  font-size: 13px;
-  line-height: 1.7;
+  font-size: var(--type-meta-size);
+  line-height: var(--type-meta-leading);
+  letter-spacing: var(--type-meta-tracking);
 }
 .schedule-session__action {
   display: flex;
@@ -1425,8 +1525,10 @@ onBeforeUnmount(() => {
   padding: 0 26px;
   color: var(--color-warm-white);
   background: var(--color-persimmon);
-  font-size: 14px;
-  font-weight: 700;
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-leading);
+  letter-spacing: var(--type-label-tracking);
   text-decoration: none;
   transition: background-color 180ms ease-out;
 }
@@ -1450,7 +1552,8 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 90px clamp(42px, 7vw, 112px);
+  padding-block: var(--course-section-block);
+  padding-inline: var(--course-section-inline);
 }
 .course-registration h2 {
   margin-bottom: 26px;
@@ -1468,9 +1571,10 @@ onBeforeUnmount(() => {
     .course-carousel
   )
   h2 {
-  font-size: var(--detail-section-title-size);
-  line-height: 1.4;
-  letter-spacing: 0.02em;
+  font-size: var(--type-title-md-size);
+  font-weight: var(--type-title-md-weight);
+  line-height: var(--type-title-md-leading);
+  letter-spacing: var(--type-title-md-tracking);
 }
 .course-registration p {
   max-width: 68ch;
@@ -1503,7 +1607,10 @@ onBeforeUnmount(() => {
 }
 .course-detail-state h1 {
   max-width: 12em;
-  font-size: 92px;
+  font-size: var(--type-title-xl-size);
+  font-weight: var(--type-title-xl-weight);
+  line-height: var(--type-title-xl-leading);
+  letter-spacing: var(--type-title-xl-tracking);
 }
 .course-detail-state p {
   margin: 0;
@@ -1559,7 +1666,7 @@ onBeforeUnmount(() => {
     width: calc(100vw - 44px);
     max-width: none;
     overflow-wrap: anywhere;
-    font-size: 36px;
+    font-size: var(--type-title-xl-size);
   }
   .course-hero__copy {
     gap: 70px;
@@ -1578,9 +1685,6 @@ onBeforeUnmount(() => {
   .course-teacher__portrait {
     min-height: 500px;
   }
-  .course-teacher__name {
-    font-size: 24px;
-  }
   .course-curriculum,
   .course-audience {
     gap: 64px;
@@ -1588,18 +1692,16 @@ onBeforeUnmount(() => {
   .course-registration figure {
     min-height: 520px;
   }
-  .curriculum-list button strong {
-    font-size: 16px;
-  }
 }
 
 @media (max-width: 767px) {
   .course-detail {
     --chapter-height: 58px;
-    letter-spacing: 0.035em;
+    --course-section-block: 40px;
+    --course-section-inline: var(--page-gutter-mobile);
   }
   .course-detail__notice {
-    padding-inline: 22px;
+    padding-inline: var(--page-gutter-mobile);
   }
   .course-hero {
     width: 100%;
@@ -1620,11 +1722,12 @@ onBeforeUnmount(() => {
   .course-hero h1 {
     right: auto;
     bottom: 30px;
-    left: 22px;
-    width: calc(100vw - 44px);
+    left: var(--page-gutter-mobile);
+    width: calc(
+      100vw - var(--page-gutter-mobile) - var(--page-gutter-mobile)
+    );
     max-width: none;
     overflow-wrap: anywhere;
-    font-size: 36px;
     text-wrap: wrap;
     word-break: break-all;
   }
@@ -1634,14 +1737,11 @@ onBeforeUnmount(() => {
     width: 100vw;
     min-width: 0;
     max-width: 100vw;
-    padding: 48px 22px 54px;
+    padding: 48px var(--page-gutter-mobile) 54px;
     overflow-wrap: anywhere;
   }
   .course-hero dl {
     grid-template-columns: 1fr;
-  }
-  .lede {
-    font-size: 16px;
   }
   .course-chapters {
     grid-template-columns: repeat(8, minmax(122px, 1fr));
@@ -1652,30 +1752,23 @@ onBeforeUnmount(() => {
   }
   .course-intro {
     min-height: 0;
-    padding: 88px 22px 102px;
   }
   .course-intro__inner > h2 {
     margin-bottom: 34px;
   }
-  .course-testimonials {
-    padding: 72px 22px 80px;
-  }
   .course-intro h2,
   .course-audience h2 {
-    font-size: var(--detail-section-title-size);
-  }
-  .course-gallery {
-    padding: 86px 22px 104px;
+    font-size: var(--type-title-md-size);
   }
   .course-gallery > header {
     margin-bottom: 46px;
   }
   .course-gallery h2,
   .course-curriculum h2 {
-    font-size: var(--detail-section-title-size);
+    font-size: var(--type-title-md-size);
   }
   .course-detail .course-schedule .course-schedule__intro h2 {
-    font-size: var(--detail-section-title-size);
+    font-size: var(--type-title-md-size);
   }
   .gallery-panel--collage {
     display: grid;
@@ -1702,7 +1795,6 @@ onBeforeUnmount(() => {
     width: 88%;
     margin-left: auto;
     padding: 26px;
-    font-size: 21px;
   }
   .gallery-item figcaption {
     position: static;
@@ -1758,34 +1850,20 @@ onBeforeUnmount(() => {
     padding: 24px;
     background: var(--color-bark);
     color: var(--color-warm-white);
-    font-size: 30px;
+    font-size: var(--type-title-md-size);
   }
   .course-teacher__portrait {
     min-height: 370px;
   }
-  .course-teacher__copy {
-    padding: 72px 22px 84px;
-  }
-  .course-teacher__name {
-    font-size: 22px;
-  }
   .course-quote {
     min-height: 440px;
-    padding: 74px 22px;
-  }
-  .course-quote blockquote {
-    font-size: 33px;
   }
   .course-quote cite {
     text-align: center;
   }
-  .course-detail-state h1 {
-    font-size: 48px;
-  }
   .course-curriculum,
   .course-audience {
     gap: 46px;
-    padding: 90px 22px;
   }
   .curriculum-list button {
     grid-template-columns: 60px 1fr 24px;
@@ -1794,18 +1872,14 @@ onBeforeUnmount(() => {
   .curriculum-panel {
     padding: 0 8px 28px 76px;
   }
-  .course-video {
-    padding: 80px 22px;
-  }
   .course-video h2 {
-    font-size: var(--detail-section-title-size);
+    font-size: var(--type-title-md-size);
   }
   .course-audience li {
     min-height: 92px;
   }
   .course-schedule {
     min-height: 0;
-    padding: 90px 22px 104px;
   }
   .course-schedule__intro {
     gap: 24px;
@@ -1822,7 +1896,6 @@ onBeforeUnmount(() => {
     padding-top: 40px;
   }
   .schedule-session__identity h3 {
-    font-size: 25px;
     text-wrap: wrap;
   }
   .schedule-stage-list > div {
@@ -1831,13 +1904,9 @@ onBeforeUnmount(() => {
     align-items: start;
     padding-block: 20px;
   }
-  .schedule-stage-list dt {
-    font-size: 17px;
-  }
   .schedule-stage-list dd {
     grid-template-columns: 1fr;
     gap: 6px;
-    font-size: 16px;
   }
   .schedule-details {
     grid-template-columns: 1fr;
@@ -1854,13 +1923,15 @@ onBeforeUnmount(() => {
   }
   .course-registration > div {
     min-height: 540px;
-    padding: 72px 22px;
   }
   .course-registration h2 {
-    font-size: var(--detail-section-title-size);
+    font-size: var(--type-title-md-size);
   }
   .course-registration figure {
     min-height: 430px;
+  }
+  .course-detail-state {
+    padding-inline: var(--page-gutter-mobile);
   }
 }
 
