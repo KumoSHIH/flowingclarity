@@ -82,8 +82,11 @@
   --button-primary-icon-size: 22px;
   --button-primary-tracking: 0.1em;
   --button-primary-transition: 220ms ease;
+  --button-small-size: 16px;
+  --button-small-width: 170px;
+  --button-small-height: 56px;
+  --button-small-padding: 24px;
   --interactive-title-hover: var(--color-clay);
-  --home-event-date-range-size: 58px;
   --directory-filter-font-size: var(--type-body-size);
   --directory-filter-count-size: var(--type-meta-size);
   --detail-hero-title-size: var(--type-title-xl-size);
@@ -242,6 +245,14 @@
     transform: translateX(4px);
   }
 
+  .button-primary.button-primary--small {
+    width: min(100%, var(--button-small-width));
+    max-width: var(--button-small-width);
+    min-height: var(--button-small-height);
+    padding-inline: var(--button-small-padding);
+    font-size: var(--button-small-size);
+  }
+
   .directory-filter__link {
     font-size: var(--directory-filter-font-size);
   }
@@ -258,9 +269,9 @@
     --type-title-md-size: 26px;
     --type-title-lg-size: 42px;
     --type-title-xl-size: 42px;
-    --home-event-date-range-size: 36px;
     --button-primary-size: 14px;
     --button-primary-padding: 24px;
+    --button-small-size: 14px;
     --detail-hero-padding-block-start: 68px;
     --detail-hero-padding-block-end: 76px;
     --detail-hero-padding-inline: var(--page-gutter-mobile);

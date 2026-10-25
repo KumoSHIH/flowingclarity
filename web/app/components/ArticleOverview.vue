@@ -459,10 +459,10 @@ onMounted(() => {
   padding: 0 clamp(18px, 2vw, 34px);
   color: var(--color-ink);
   font-family: var(--font-display);
-  font-size: var(--type-label-size);
-  font-weight: var(--type-label-weight);
-  line-height: var(--type-label-leading);
-  letter-spacing: var(--type-label-tracking);
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
   text-decoration: none;
 }
 

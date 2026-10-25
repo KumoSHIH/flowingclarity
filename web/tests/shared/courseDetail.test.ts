@@ -17,8 +17,10 @@ describe('course detail parser', () => {
         actionUrl: 'https://forms.example.com/course',
       },
       body: expect.arrayContaining([
-        expect.objectContaining({ key: 'gallery-weave', type: 'gallery', layout: 'weave' }),
+        expect.objectContaining({ key: 'gallery-weave', type: 'gallery', layout: 'weave', contentRole: 'general' }),
       ]),
+      testimonials: expect.objectContaining({ type: 'testimonials', title: '學員心得分享' }),
+      highlights: expect.objectContaining({ type: 'carousel', title: '練習中的片段' }),
       schedule: {
         sessions: [{
           key: 'course-run-2027-spring',
@@ -100,7 +102,7 @@ describe('course detail parser', () => {
     expect(content?.body.find(block => block.type === 'video')).toMatchObject({ embedUrl: undefined })
   })
 
-  it('defaults missing video status copy and isolates malformed optional video blocks', () => {
+  it('defaults missing video status copy and keeps video blocks without an optional cover', () => {
     const missingStatus = structuredClone(sanityCourseDetail)
     const video = missingStatus.course.detail.body.find(block => block.type === 'video')
     if (!video || video.type !== 'video') throw new Error('Missing video fixture')
@@ -111,14 +113,36 @@ describe('course detail parser', () => {
       embedUrl: 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ',
     })
 
-    const malformedVideo = structuredClone(sanityCourseDetail)
-    const malformed = malformedVideo.course.detail.body.find(block => block.type === 'video')
-    if (!malformed || malformed.type !== 'video') throw new Error('Missing video fixture')
-    delete malformed.image
+    const missingCover = structuredClone(sanityCourseDetail)
+    const coverlessVideo = missingCover.course.detail.body.find(block => block.type === 'video')
+    if (!coverlessVideo || coverlessVideo.type !== 'video') throw new Error('Missing video fixture')
+    delete coverlessVideo.image
+    delete coverlessVideo.url
+    delete coverlessVideo.statusLabel
 
-    const parsed = parseCourseDetail(malformedVideo)
-    expect(parsed).not.toBeNull()
-    expect(parsed?.body.some(block => block.type === 'video')).toBe(false)
+    expect(parseCourseDetail(missingCover)?.body.find(block => block.type === 'video')).toMatchObject({
+      type: 'video',
+      image: undefined,
+      embedUrl: undefined,
+      statusLabel: '課程影片待上架',
+    })
+  })
+
+  it('maps a text paragraph from the content editor', () => {
+    const value = structuredClone(sanityCourseDetail)
+    value.course.detail.body.splice(1, 0, {
+      key: 'learning-context',
+      type: 'text',
+      title: '學習之前，先理解練習脈絡',
+      text: '這是一段由後台自由新增的文字內容。\n換行會在前台保留。',
+    } as never)
+
+    expect(parseCourseDetail(value)?.body[1]).toEqual({
+      key: 'learning-context',
+      type: 'text',
+      title: '學習之前，先理解練習脈絡',
+      text: '這是一段由後台自由新增的文字內容。\n換行會在前台保留。',
+    })
   })
 
   it('keeps a complete page when optional audience and curriculum blocks are omitted', () => {
@@ -146,6 +170,23 @@ describe('course detail parser', () => {
 
     const galleries = parseCourseDetail(value)?.body.filter(block => block.type === 'gallery')
     expect(galleries?.map(block => block.layout)).toEqual(['weave', 'folio'])
+  })
+
+  it('maps a gallery curriculum role and rejects a second accordion curriculum', () => {
+    const visual = structuredClone(sanityCourseDetail)
+    const gallery = visual.course.detail.body.find(block => block.type === 'gallery')
+    if (!gallery || gallery.type !== 'gallery') throw new Error('Missing gallery fixture')
+    gallery.contentRole = 'curriculum'
+    visual.course.detail.body = visual.course.detail.body.filter(block => block.type !== 'curriculum')
+
+    expect(parseCourseDetail(visual)?.body.find(block => block.type === 'gallery')).toMatchObject({
+      contentRole: 'curriculum',
+    })
+
+    visual.course.detail.body.push(structuredClone(
+      sanityCourseDetail.course.detail.body.find(block => block.type === 'curriculum')!,
+    ))
+    expect(parseCourseDetail(visual)).toBeNull()
   })
 
   it('keeps a gallery when supporting copy and item titles are omitted', () => {
@@ -237,8 +278,10 @@ describe('course detail parser', () => {
 
   it('enforces one testimonial block and skips invalid or duplicate related articles', () => {
     const duplicateTestimonials = structuredClone(sanityCourseDetail)
-    const testimonial = duplicateTestimonials.course.detail.body.find(block => block.type === 'testimonials')!
-    duplicateTestimonials.course.detail.body.push({ ...testimonial, key: 'testimonials-copy' })
+    duplicateTestimonials.course.detail.body.push({
+      ...structuredClone(duplicateTestimonials.course.detail.testimonials),
+      key: 'testimonials-copy',
+    })
     expect(parseCourseDetail(duplicateTestimonials)).toBeNull()
 
     const related = structuredClone(sanityCourseDetail)
@@ -247,6 +290,21 @@ describe('course detail parser', () => {
       { ...structuredClone(related.course.detail.relatedArticles[0]!), id: 'drafts.invalid-related' },
     )
     expect(parseCourseDetail(related)?.relatedArticles).toHaveLength(1)
+  })
+
+  it('normalizes legacy body testimonials and highlights into their fixed frontend positions', () => {
+    const value = structuredClone(sanityCourseDetail)
+    value.course.detail.body.push(
+      structuredClone(value.course.detail.testimonials),
+      structuredClone(value.course.detail.highlights),
+    )
+    delete value.course.detail.testimonials
+    delete value.course.detail.highlights
+
+    const parsed = parseCourseDetail(value)
+    expect(parsed?.testimonials?.type).toBe('testimonials')
+    expect(parsed?.highlights?.type).toBe('carousel')
+    expect(parsed?.body.some(block => block.type === 'testimonials' || block.type === 'carousel')).toBe(false)
   })
 
   it('filters an open run whose registration URL is not a valid HTTPS URL', () => {

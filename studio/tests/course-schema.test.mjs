@@ -16,6 +16,7 @@ import {
   courseDetailGalleryItem,
   courseDetailRegistration,
   courseDetailSchedule,
+  courseDetailText,
   courseDetailVideo,
   validateCourseDetailBody,
 } from '../schemaTypes/courseDetail.ts'
@@ -32,6 +33,7 @@ test('course content types are registered with their required semantic fields', 
       'courseOverviewPage',
       'courseCategory',
       'courseDetailIntroduction',
+      'courseDetailText',
       'courseDetailGalleryItem',
       'courseDetailGallery',
       'courseDetailTeacher',
@@ -117,6 +119,8 @@ test('course content types are registered with their required semantic fields', 
     'englishTitle',
     'body',
     'schedule',
+    'testimonials',
+    'highlights',
     'registration',
     'relatedArticles',
   ])
@@ -124,13 +128,13 @@ test('course content types are registered with their required semantic fields', 
     courseDetailContent.fields.find(({ name }) => name === 'body').of.map(({ type }) => type),
     [
       'courseDetailIntroduction',
+      'courseDetailText',
       'courseDetailGallery',
       'courseDetailTeacher',
       'courseDetailQuote',
       'courseDetailCurriculum',
       'courseDetailVideo',
       'courseDetailAudience',
-      'sharedTestimonialBlock',
       'courseDetailCarousel',
     ],
   )
@@ -138,11 +142,15 @@ test('course content types are registered with their required semantic fields', 
     courseDetailGallery.fields.find(({ name }) => name === 'layout').options.list.map(({ value }) => value),
     ['collage', 'stages', 'weave', 'folio', 'dossier'],
   )
+  assert.deepEqual(
+    courseDetailGallery.fields.find(({ name }) => name === 'contentRole').options.list.map(({ value }) => value),
+    ['general', 'curriculum'],
+  )
   const multilineFields = schemaTypes
     .filter(({ name }) => name.startsWith('courseDetail'))
     .flatMap(({ fields = [] }) => fields.flatMap(field => [field, ...(field.of ?? [])]))
     .filter(({ type }) => type === 'text')
-  assert.equal(multilineFields.length, 15)
+  assert.equal(multilineFields.length, 16)
   assert.equal(multilineFields.every(({ description }) => description === '可按 Enter 換行，前台會保留段落。'), true)
   const curriculumUnitTitle = courseDetailCurriculumUnit.fields.find(({ name }) => name === 'title')
   assert.equal(curriculumUnitTitle.type, 'text')
@@ -162,15 +170,16 @@ test('course detail body supports ordered mixed blocks and requires core content
   assert.match(validateCourseDetailBody(coreBlocks.slice(0, 1)), /圖文版型區塊/)
   assert.match(validateCourseDetailBody([
     ...coreBlocks,
-    { _type: 'sharedTestimonialBlock' },
-    { _type: 'sharedTestimonialBlock' },
-  ]), /只能新增一個/)
+    { _type: 'courseDetailGallery', contentRole: 'curriculum' },
+  ]), /課程架構只能選擇一種/)
   assert.equal(courseDetailGallery.title, '圖文版型區塊')
+  assert.equal(courseDetailCurriculum.title, '課程架構（摺疊列表）')
 })
 
-test('audience and curriculum blocks and video status copy are optional', () => {
+test('audience and curriculum blocks, video status copy and video cover are optional', () => {
   const body = courseDetailContent.fields.find(({ name }) => name === 'body')
   const statusLabel = courseDetailVideo.fields.find(({ name }) => name === 'statusLabel')
+  const videoImage = courseDetailVideo.fields.find(({ name }) => name === 'image')
   const bodyCalls = []
   const calls = []
   body.validation({
@@ -187,6 +196,8 @@ test('audience and curriculum blocks and video status copy are optional', () => 
 
   assert.equal(bodyCalls.some(call => Array.isArray(call) && call[0] === 'min' && call[1] === 2), true)
   assert.equal(calls.includes('required'), false)
+  assert.equal(videoImage.validation, undefined)
+  assert.equal(courseDetailText.title, '文字段落')
 })
 
 test('gallery supporting copy and item titles are optional but keep length limits', () => {

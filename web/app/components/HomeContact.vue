@@ -7,7 +7,7 @@ defineProps<{ content: NonNullable<HomeSectionsContent["contact"]> }>();
 <template>
   <section
     id="contact"
-    class="max-w-[1400px] w-full mx-auto px-[var(--page-gutter-mobile)] pb-8 md:pb-16 lg:px-[clamp(20px,4vw,64px)]"
+    class="max-w-[1520px] w-full mx-auto px-[var(--page-gutter-mobile)] pb-8 md:pb-16 lg:px-[clamp(20px,4vw,64px)]"
     aria-labelledby="contact-title"
   >
     <div

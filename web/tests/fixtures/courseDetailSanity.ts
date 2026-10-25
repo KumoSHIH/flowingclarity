@@ -28,6 +28,7 @@ export const sanityCourseDetail = {
           title: '從觀看，到親手辨認。',
           description: '以一組經過核准的圖文內容，說明課程中的觀察與實作方法。',
           layout: 'weave',
+          contentRole: 'general',
           note: '適合每個階段都有完整說明與代表圖片的課程。',
           items: [{
             key: 'support',
@@ -78,23 +79,23 @@ export const sanityCourseDetail = {
           description: '適合希望完整學習觸碰方法並理解操作界線的人。',
           items: ['對按摩與身體工作感興趣的人'],
         },
-        {
-          key: 'testimonials',
-          type: 'testimonials',
-          title: '學員心得分享',
-          items: [{ text: '這段測試心得用來驗證課程詳情能安全呈現共用學員分享內容。', sharerName: '測試分享者' }],
-        },
-        {
-          key: 'practice-carousel',
-          type: 'carousel',
-          title: '練習中的片段',
-          text: '固定文字說明這組圖片所呈現的學習脈絡與觀察重點。',
-          items: [{ key: 'carousel-one', caption: '支撐練習', image: image('carousel-one', '肩頸支撐練習') }],
-        },
       ],
       schedule: {
         title: '把參與條件看清楚，再安心決定。',
         description: '只顯示已公開梯次中經過確認的日期、地點與參與條件。',
+      },
+      testimonials: {
+        key: 'testimonials',
+        type: 'testimonials',
+        title: '學員心得分享',
+        items: [{ text: '這段測試心得用來驗證課程詳情能安全呈現共用學員分享內容。', sharerName: '測試分享者' }],
+      },
+      highlights: {
+        key: 'highlights',
+        type: 'carousel',
+        title: '練習中的片段',
+        text: '固定文字說明這組圖片所呈現的學習脈絡與觀察重點。',
+        items: [{ key: 'carousel-one', caption: '支撐練習', image: image('carousel-one', '肩頸支撐練習') }],
       },
       registration: {
         title: '為自己留下一段完整的學習時間。',

@@ -1,17 +1,23 @@
 <script setup lang="ts">
-import type { EventDetailContent, EventDetailStatus } from '#shared/types/eventDetail'
-import DetailBreadcrumb from './DetailBreadcrumb.vue'
-import SharedTestimonials from './SharedTestimonials.vue'
+import type {
+  EventDetailContent,
+  EventDetailStatus,
+} from "#shared/types/eventDetail";
+import DetailBreadcrumb from "./DetailBreadcrumb.vue";
+import SharedTestimonials from "./SharedTestimonials.vue";
 
-withDefaults(defineProps<{
-  content?: EventDetailContent
-  status?: EventDetailStatus
-}>(), {
-  content: undefined,
-  status: 'ready',
-})
+withDefaults(
+  defineProps<{
+    content?: EventDetailContent;
+    status?: EventDetailStatus;
+  }>(),
+  {
+    content: undefined,
+    status: "ready",
+  },
+);
 
-const emit = defineEmits<{ retry: [] }>()
+const emit = defineEmits<{ retry: [] }>();
 </script>
 
 <template>
@@ -37,7 +43,10 @@ const emit = defineEmits<{ retry: [] }>()
       <button type="button" @click="emit('retry')">重新載入</button>
     </div>
 
-    <div v-else-if="status === 'not-found' || !content" class="event-detail__state">
+    <div
+      v-else-if="status === 'not-found' || !content"
+      class="event-detail__state"
+    >
       <h1 class="type-title-md">找不到這個活動</h1>
       <p class="type-body">活動可能尚未公開、已下架，或網址不正確。</p>
       <NuxtLink to="/events">返回活動列表</NuxtLink>
@@ -47,14 +56,20 @@ const emit = defineEmits<{ retry: [] }>()
       <header class="event-detail__hero">
         <div class="event-detail__hero-copy">
           <h1 class="type-title-xl">{{ content.hero.title }}</h1>
-          <p class="event-detail__summary type-lead">{{ content.hero.summary }}</p>
+          <p class="event-detail__summary type-lead">
+            {{ content.hero.summary }}
+          </p>
         </div>
         <figure v-if="content.hero.image" class="event-detail__hero-media">
           <img
             :src="content.hero.image.src"
             :alt="content.hero.image.alt"
-            :style="content.hero.image.objectPosition ? { objectPosition: content.hero.image.objectPosition } : undefined"
-          >
+            :style="
+              content.hero.image.objectPosition
+                ? { objectPosition: content.hero.image.objectPosition }
+                : undefined
+            "
+          />
         </figure>
       </header>
 
@@ -62,17 +77,26 @@ const emit = defineEmits<{ retry: [] }>()
         <aside class="event-detail__facts" aria-label="活動資訊與報名">
           <div class="event-detail__facts-inner">
             <dl>
-              <div v-for="fact in content.facts" :key="fact.label" class="event-detail__fact">
+              <div
+                v-for="fact in content.facts"
+                :key="fact.label"
+                class="event-detail__fact"
+              >
                 <dt class="type-label">{{ fact.label }}</dt>
-                <dd class="type-title-sm">
-                  <time v-if="fact.dateTime" :datetime="fact.dateTime">{{ fact.value }}</time>
+                <dd class="type-lead">
+                  <time v-if="fact.dateTime" :datetime="fact.dateTime">{{
+                    fact.value
+                  }}</time>
                   <span v-else>{{ fact.value }}</span>
                 </dd>
               </div>
             </dl>
             <div class="event-detail__action-wrap">
               <a
-                v-if="content.registration.status === 'open' && content.registration.actionUrl"
+                v-if="
+                  content.registration.status === 'open' &&
+                  content.registration.actionUrl
+                "
                 class="event-detail__action button-primary"
                 :href="content.registration.actionUrl"
                 target="_blank"
@@ -80,14 +104,23 @@ const emit = defineEmits<{ retry: [] }>()
                 :aria-label="`${content.registration.actionLabel}（另開新視窗）`"
               >
                 <span>{{ content.registration.actionLabel }}</span>
-                <svg class="button-primary__icon" viewBox="0 0 20 20" aria-hidden="true">
+                <svg
+                  class="button-primary__icon"
+                  viewBox="0 0 20 20"
+                  aria-hidden="true"
+                >
                   <path d="M4 10h11M11 6l4 4-4 4" />
                 </svg>
               </a>
-              <span v-else class="event-detail__action event-detail__action--disabled">
+              <span
+                v-else
+                class="event-detail__action event-detail__action--disabled"
+              >
                 {{ content.registration.actionLabel }}
               </span>
-              <small v-if="content.registration.note" class="type-meta">{{ content.registration.note }}</small>
+              <small v-if="content.registration.note" class="type-meta">{{
+                content.registration.note
+              }}</small>
             </div>
           </div>
         </aside>
@@ -101,28 +134,51 @@ const emit = defineEmits<{ retry: [] }>()
           <template v-for="block in content.body" :key="block.key">
             <section v-if="block.type === 'text'" class="event-detail__section">
               <h2 class="type-title-md">{{ block.title }}</h2>
-              <p v-for="paragraph in block.paragraphs" :key="paragraph" class="type-body">{{ paragraph }}</p>
+              <p
+                v-for="paragraph in block.paragraphs"
+                :key="paragraph"
+                class="type-body"
+              >
+                {{ paragraph }}
+              </p>
             </section>
 
-            <section v-else-if="block.type === 'facilitator'" class="event-detail__section">
+            <section
+              v-else-if="block.type === 'facilitator'"
+              class="event-detail__section"
+            >
               <h2 class="type-title-md">帶領者介紹</h2>
               <p class="event-detail__facilitator-name type-title-sm">
                 {{ block.name }}
-                <span v-if="block.role" class="type-label">{{ block.role }}</span>
+                <span v-if="block.role" class="type-label">{{
+                  block.role
+                }}</span>
               </p>
               <p class="type-body">{{ block.biography }}</p>
             </section>
 
-            <section v-else-if="block.type === 'agenda'" class="event-detail__section">
+            <section
+              v-else-if="block.type === 'agenda'"
+              class="event-detail__section"
+            >
               <h2 class="type-title-md">{{ block.title }}</h2>
               <p class="type-body">{{ block.description }}</p>
               <ol class="event-detail__agenda">
                 <li v-for="item in block.items" :key="item.key">
-                  <time v-if="item.dateTime" class="type-label" :datetime="item.dateTime">{{ item.timeLabel }}</time>
-                  <span v-else class="event-detail__agenda-time type-label">{{ item.timeLabel }}</span>
+                  <time
+                    v-if="item.dateTime"
+                    class="type-label"
+                    :datetime="item.dateTime"
+                    >{{ item.timeLabel }}</time
+                  >
+                  <span v-else class="event-detail__agenda-time type-label">{{
+                    item.timeLabel
+                  }}</span>
                   <div>
                     <h3 class="type-title-sm">{{ item.title }}</h3>
-                    <p v-if="item.description" class="type-body">{{ item.description }}</p>
+                    <p v-if="item.description" class="type-body">
+                      {{ item.description }}
+                    </p>
                   </div>
                 </li>
               </ol>
@@ -135,28 +191,52 @@ const emit = defineEmits<{ retry: [] }>()
               :items="block.items"
             />
 
-            <section v-else-if="block.type === 'list'" class="event-detail__section">
+            <section
+              v-else-if="block.type === 'list'"
+              class="event-detail__section"
+            >
               <h2 class="type-title-md">{{ block.title }}</h2>
               <ul class="event-detail__list type-body">
                 <li v-for="item in block.items" :key="item">{{ item }}</li>
               </ul>
             </section>
 
-            <blockquote v-else-if="block.type === 'quote'" class="event-detail__quote">
+            <blockquote
+              v-else-if="block.type === 'quote'"
+              class="event-detail__quote"
+            >
               <p class="type-title-sm">{{ block.text }}</p>
-              <cite v-if="block.attribution" class="type-label">{{ block.attribution }}</cite>
+              <cite v-if="block.attribution" class="type-label">{{
+                block.attribution
+              }}</cite>
             </blockquote>
 
-            <section v-else-if="block.type === 'media'" class="event-detail__section">
-              <h2 v-if="block.title" class="type-title-md">{{ block.title }}</h2>
-              <div class="event-detail__media" :class="{ 'event-detail__media--pair': block.items.length === 2 }">
+            <section
+              v-else-if="block.type === 'media'"
+              class="event-detail__section"
+            >
+              <h2 v-if="block.title" class="type-title-md">
+                {{ block.title }}
+              </h2>
+              <div
+                class="event-detail__media"
+                :class="{
+                  'event-detail__media--pair': block.items.length === 2,
+                }"
+              >
                 <figure v-for="item in block.items" :key="item.key">
                   <img
                     :src="item.image.src"
                     :alt="item.image.alt"
-                    :style="item.image.objectPosition ? { objectPosition: item.image.objectPosition } : undefined"
-                  >
-                  <figcaption v-if="item.caption" class="type-meta">{{ item.caption }}</figcaption>
+                    :style="
+                      item.image.objectPosition
+                        ? { objectPosition: item.image.objectPosition }
+                        : undefined
+                    "
+                  />
+                  <figcaption v-if="item.caption" class="type-meta">
+                    {{ item.caption }}
+                  </figcaption>
                 </figure>
               </div>
             </section>
@@ -182,8 +262,7 @@ const emit = defineEmits<{ retry: [] }>()
   width: min(100%, var(--detail-hero-max-width));
   min-height: 560px;
   padding: var(--detail-hero-padding-block-start)
-    var(--detail-hero-padding-inline)
-    var(--detail-hero-padding-block-end);
+    var(--detail-hero-padding-inline) var(--detail-hero-padding-block-end);
   margin: 0 auto;
 }
 
@@ -191,77 +270,276 @@ const emit = defineEmits<{ retry: [] }>()
   grid-template-columns: 1fr;
 }
 
-.event-detail__hero-copy { min-width: 0; }
-.event-detail__hero h1 { max-width: 11em; margin: 0; text-wrap: balance; }
-.event-detail__summary { max-width: 42em; margin: 30px 0 0; color: #625a51; white-space: pre-line; }
-.event-detail__hero-media { margin: 0; }
-.event-detail__hero-media img { display: block; width: 100%; height: auto; object-fit: cover; }
+.event-detail__hero-copy {
+  min-width: 0;
+}
+.event-detail__hero h1 {
+  max-width: 11em;
+  margin: 0;
+  text-wrap: balance;
+}
+.event-detail__summary {
+  max-width: 42em;
+  margin: 30px 0 0;
+  color: #625a51;
+  white-space: pre-line;
+}
+.event-detail__hero-media {
+  margin: 0;
+}
+.event-detail__hero-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
 
-.event-detail__layout { display: grid; grid-template-columns: var(--split-layout-rail-width) minmax(0, 1fr); width: min(100%, var(--detail-layout-max-width)); margin: 0 auto; }
-.event-detail__facts { background: var(--color-sand); }
-.event-detail__facts-inner { position: sticky; top: 87px; }
-.event-detail__facts dl { margin: 0; }
-.event-detail__fact { padding: var(--detail-rail-row-padding); border-bottom: 1px solid rgb(56 52 46 / 24%); }
-.event-detail__fact dt { margin-bottom: 8px; color: #745142; }
-.event-detail__fact dd { margin: 0; }
-.event-detail__action-wrap { padding: var(--detail-rail-action-padding); }
-.event-detail__action--disabled { display: flex; min-height: 76px; align-items: center; padding: 0 28px; color: var(--color-warm-white); background: var(--color-bark); cursor: not-allowed; }
-.event-detail__action-wrap small { display: block; margin-top: 12px; color: #745142; }
+.event-detail__layout {
+  display: grid;
+  grid-template-columns: var(--split-layout-rail-width) minmax(0, 1fr);
+  width: min(100%, var(--detail-layout-max-width));
+  margin: 0 auto;
+}
+.event-detail__facts {
+  background: var(--color-sand);
+}
+.event-detail__facts-inner {
+  position: sticky;
+  top: 87px;
+}
+.event-detail__facts dl {
+  margin: 0;
+}
+.event-detail__fact {
+  padding: var(--detail-rail-row-padding);
+  border-bottom: 1px solid rgb(56 52 46 / 24%);
+}
+.event-detail__fact dt {
+  margin-bottom: 8px;
+  color: #745142;
+}
+.event-detail__fact dd {
+  margin: 0;
+}
+.event-detail__action-wrap {
+  padding: var(--detail-rail-action-padding);
+}
+.event-detail__action--disabled {
+  display: flex;
+  min-height: 76px;
+  align-items: center;
+  padding: 0 28px;
+  color: var(--color-warm-white);
+  background: var(--color-bark);
+  cursor: not-allowed;
+}
+.event-detail__action-wrap small {
+  display: block;
+  margin-top: 12px;
+  color: #745142;
+}
 
-.event-detail__content { min-width: 0; }
-.event-detail__section { padding: var(--detail-content-padding-block) var(--detail-content-padding-inline); border-bottom: 1px solid rgb(56 52 46 / 24%); }
-.event-detail__section h2 { max-width: 14em; margin: 0 0 22px; }
-.event-detail__section > p { max-width: 68ch; margin: 0; color: #625a51; white-space: pre-line; }
-.event-detail__section > p + p { margin-top: 18px; }
-.event-detail__facilitator-name { color: var(--color-ink) !important; }
-.event-detail__facilitator-name span { display: block; margin-top: 7px; color: #745142; }
+.event-detail__content {
+  min-width: 0;
+}
+.event-detail__section {
+  padding: var(--detail-content-padding-block)
+    var(--detail-content-padding-inline);
+  border-bottom: 1px solid rgb(56 52 46 / 24%);
+}
+.event-detail__section h2 {
+  max-width: 14em;
+  margin: 0 0 22px;
+}
+.event-detail__section > p {
+  max-width: 68ch;
+  margin: 0;
+  color: #625a51;
+  white-space: pre-line;
+}
+.event-detail__section > p + p {
+  margin-top: 18px;
+}
+.event-detail__facilitator-name {
+  color: var(--color-ink) !important;
+}
+.event-detail__facilitator-name span {
+  display: block;
+  margin-top: 7px;
+  color: #745142;
+}
 
-.event-detail__agenda { padding: 0; margin: 38px 0 0; list-style: none; }
-.event-detail__agenda li { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 30px; padding: 28px 0; border-bottom: 1px solid rgb(56 52 46 / 24%); }
-.event-detail__agenda time, .event-detail__agenda-time { color: #745142; }
-.event-detail__agenda h3 { margin: 0 0 8px; }
-.event-detail__agenda p { margin: 0; color: #625a51; }
-.event-detail__list { max-width: 68ch; padding-left: 1.2em; margin: 0; color: #625a51; }
-.event-detail__quote { padding: 72px clamp(48px, 7vw, 104px); margin: 0; border-bottom: 1px solid rgb(56 52 46 / 24%); }
-.event-detail__quote p { max-width: 28em; margin: 0; }
-.event-detail__quote cite { display: block; margin-top: 20px; color: #745142; font-style: normal; }
-.event-detail__media { display: grid; gap: 20px; }
-.event-detail__media--pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.event-detail__media figure { margin: 0; }
-.event-detail__media img { display: block; width: 100%; max-height: 640px; object-fit: cover; }
-.event-detail__media figcaption { margin-top: 10px; color: #745142; }
+.event-detail__agenda {
+  padding: 0;
+  margin: 38px 0 0;
+  list-style: none;
+}
+.event-detail__agenda li {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: 30px;
+  padding: 28px 0;
+  border-bottom: 1px solid rgb(56 52 46 / 24%);
+}
+.event-detail__agenda li:last-child {
+  border-bottom: 0;
+}
+.event-detail__agenda time,
+.event-detail__agenda-time {
+  color: #745142;
+}
+.event-detail__agenda h3 {
+  margin: 0 0 8px;
+}
+.event-detail__agenda p {
+  margin: 0;
+  color: #625a51;
+}
+.event-detail__list {
+  max-width: 68ch;
+  padding-left: 1.2em;
+  margin: 0;
+  color: #625a51;
+}
+.event-detail__quote {
+  padding: 72px clamp(48px, 7vw, 104px);
+  margin: 0;
+  border-bottom: 1px solid rgb(56 52 46 / 24%);
+}
+.event-detail__quote p {
+  max-width: 28em;
+  margin: 0;
+}
+.event-detail__quote cite {
+  display: block;
+  margin-top: 20px;
+  color: #745142;
+  font-style: normal;
+}
+.event-detail__media {
+  display: grid;
+  gap: 20px;
+}
+.event-detail__media--pair {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.event-detail__media figure {
+  margin: 0;
+}
+.event-detail__media img {
+  display: block;
+  width: 100%;
+  max-height: 640px;
+  object-fit: cover;
+}
+.event-detail__media figcaption {
+  margin-top: 10px;
+  color: #745142;
+}
 
-.event-detail__state { display: grid; min-height: 64vh; place-content: center; justify-items: start; gap: 18px; padding: 80px var(--page-gutter-mobile); }
-.event-detail__state h1 { margin: 0; }
-.event-detail__state p { max-width: 42em; margin: 0; color: #625a51; }
-.event-detail__state a, .event-detail__state button { display: inline-flex; min-height: 48px; align-items: center; padding: 0 20px; color: var(--color-warm-white); background: var(--color-bark); border: 0; text-decoration: none; }
-.event-detail__skeleton { width: min(68vw, 620px); height: 18px; background: var(--color-sand); animation: event-detail-pulse 1.4s ease-in-out infinite alternate; }
-.event-detail__skeleton--title { width: min(48vw, 420px); height: 54px; }
-@keyframes event-detail-pulse { to { opacity: 0.42; } }
+.event-detail__state {
+  display: grid;
+  min-height: 64vh;
+  place-content: center;
+  justify-items: start;
+  gap: 18px;
+  padding: 80px var(--page-gutter-mobile);
+}
+.event-detail__state h1 {
+  margin: 0;
+}
+.event-detail__state p {
+  max-width: 42em;
+  margin: 0;
+  color: #625a51;
+}
+.event-detail__state a,
+.event-detail__state button {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  padding: 0 20px;
+  color: var(--color-warm-white);
+  background: var(--color-bark);
+  border: 0;
+  text-decoration: none;
+}
+.event-detail__skeleton {
+  width: min(68vw, 620px);
+  height: 18px;
+  background: var(--color-sand);
+  animation: event-detail-pulse 1.4s ease-in-out infinite alternate;
+}
+.event-detail__skeleton--title {
+  width: min(48vw, 420px);
+  height: 54px;
+}
+@keyframes event-detail-pulse {
+  to {
+    opacity: 0.42;
+  }
+}
 
 @media (max-width: 1023px) {
-  .event-detail__hero { grid-template-columns: 1fr; min-height: auto; }
-  .event-detail__layout { display: block; }
-  .event-detail__facts { border-bottom: 1px solid rgb(56 52 46 / 24%); }
-  .event-detail__facts-inner { position: static; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .event-detail__fact:nth-child(odd) { border-right: 1px solid rgb(56 52 46 / 24%); }
-  .event-detail__action-wrap { grid-column: 1 / -1; }
-  .event-detail__section { padding: var(--detail-content-padding-block) var(--detail-content-padding-inline); }
-  .event-detail__quote { padding: 64px var(--page-gutter-mobile); }
-  .event-detail__agenda li { grid-template-columns: 88px minmax(0, 1fr); gap: 20px; }
+  .event-detail__hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .event-detail__layout {
+    display: block;
+  }
+  .event-detail__facts {
+    border-bottom: 1px solid rgb(56 52 46 / 24%);
+  }
+  .event-detail__facts-inner {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .event-detail__fact:nth-child(odd) {
+    border-right: 1px solid rgb(56 52 46 / 24%);
+  }
+  .event-detail__action-wrap {
+    grid-column: 1 / -1;
+  }
+  .event-detail__section {
+    padding: var(--detail-content-padding-block)
+      var(--detail-content-padding-inline);
+  }
+  .event-detail__quote {
+    padding: 64px var(--page-gutter-mobile);
+  }
+  .event-detail__agenda li {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 20px;
+  }
 }
 
 @media (max-width: 560px) {
-  .event-detail__media--pair { grid-template-columns: 1fr; }
-  .event-detail__facts-inner { grid-template-columns: 1fr; }
-  .event-detail__fact:nth-child(odd) { border-right: 0; }
-  .event-detail__action-wrap { grid-column: auto; }
-  .event-detail__fact dd { font-size: var(--type-body-size); }
-  .event-detail__agenda li { grid-template-columns: 1fr; gap: 8px; }
+  .event-detail__media--pair {
+    grid-template-columns: 1fr;
+  }
+  .event-detail__facts-inner {
+    grid-template-columns: 1fr;
+  }
+  .event-detail__fact:nth-child(odd) {
+    border-right: 0;
+  }
+  .event-detail__action-wrap {
+    grid-column: auto;
+  }
+  .event-detail__fact dd {
+    font-size: var(--type-body-size);
+  }
+  .event-detail__agenda li {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .event-detail__skeleton { animation: none; }
+  .event-detail__skeleton {
+    animation: none;
+  }
 }
 </style>
-

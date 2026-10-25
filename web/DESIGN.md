@@ -75,6 +75,12 @@ components:
     maxWidth: "360px"
     fontSize: "18px"
     fontWeight: 400
+  button-primary-small:
+    extends: "{components.button-primary}"
+    width: "170px"
+    height: "56px"
+    fontSize: "16px"
+    mobileFontSize: "14px"
   button-primary-hover:
     backgroundColor: "#c94f34"
     textColor: "{colors.warm-white}"
@@ -149,6 +155,8 @@ components:
 
 大型主要按鈕寬度可依容器縮小，但不得超過 `360px`。可點擊內容標題在 hover 與 `focus-visible` 時統一改為 `clay`；可同時使用底線、影像縮放或箭頭位移補強回饋，但不得另用相近棕色建立同角色變體。
 
+小型主要按鈕使用 `.button-primary.button-primary--small`，沿用大型按鈕的顏色、直角、箭頭、hover、focus、disabled 與 reduced-motion 行為，固定寬度 `170px`、最小高度 `56px`；文字桌機為 `16px`，`<= 1023px` 為 `14px`。小型按鈕用於內容清單內的詳情操作，不取代 hero 或詳情頁的主要轉換 CTA。
+
 ### Go Top Button
 
 全站回頂按鈕是固定於右下角的直角座標控制：桌機為 56px、手機為 52px，深夜棕底搭配暖紙色線性箭頭，hover 轉為陶土色。位置使用 `clamp(20px, 3vw, 48px)` 並納入裝置 safe area；層級低於固定 Header。頁面捲動超過 480px 後才顯示，進出只使用短距離垂直位移與透明度；`prefers-reduced-motion` 下停用過渡並立即回頂。元件保持平面、直角、無陰影，不延伸成圓形浮動操作按鈕。
@@ -156,6 +164,8 @@ components:
 ### Cards / Containers
 
 課程卡片不使用外框盒或陰影；圖片、標題與摘要依序排列，底部以暖灰細線收尾。桌面可錯落排列，但手機維持單欄閱讀順序。
+
+首頁近期課程沿用雙欄錯落卡片：桌機固定保留兩欄軌道，即使只有一筆也只占單欄，不橫向撐滿；手機改為單欄。圖片比例維持 `5:4`，下方依序為分類日期、`title-sm` 課名、摘要與靠左小型主要按鈕，每筆以暖灰細線收尾。
 
 ### Navigation
 

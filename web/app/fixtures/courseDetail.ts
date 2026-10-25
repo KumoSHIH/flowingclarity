@@ -149,21 +149,6 @@ export const courseDetailFixture: CourseDetailContent = {
       ],
     },
     {
-      key: "testimonials",
-      type: "testimonials",
-      title: "學員心得分享",
-      items: [
-        { text: "這段示意文字用來確認課程頁能以共用元件呈現經核准的學員分享。", sharerName: "測試分享者" },
-      ],
-    },
-    {
-      key: "practice-carousel",
-      type: "carousel",
-      title: "在練習之間，看見方法如何落地。",
-      text: "圖片可以依課程內容排序，右側文字在切換時維持固定，讓閱讀者專注比較不同練習片段。",
-      items: galleryItems.slice(0, 3).map(item => ({ id: item.key, image: item.image, caption: item.title })),
-    },
-    {
       key: "folio",
       type: "gallery",
       title: "把練習整理成一冊。",
@@ -211,6 +196,21 @@ export const courseDetailFixture: CourseDetailContent = {
       },
     ],
   },
+  testimonials: {
+    key: "testimonials",
+    type: "testimonials",
+    title: "學員心得分享",
+    items: [
+      { text: "這段示意文字用來確認課程頁能以共用元件呈現經核准的學員分享。", sharerName: "測試分享者" },
+    ],
+  },
+  highlights: {
+    key: "practice-carousel",
+    type: "carousel",
+    title: "在練習之間，看見方法如何落地。",
+    text: "圖片可以依課程內容排序，右側文字在切換時維持固定，讓閱讀者專注比較不同練習片段。",
+    items: galleryItems.slice(0, 3).map(item => ({ id: item.key, image: item.image, caption: item.title })),
+  },
   registration: {
     title: "為自己留下一段完整的學習時間。",
     description: "報名連結與本期招生資訊尚未核准，因此不顯示假價格、倒數或可點擊的報名連結。",
@@ -241,8 +241,22 @@ export const minimalCourseDetailFixture: CourseDetailContent = {
   body: courseDetailFixture.body.filter((block) =>
     !["teacher", "quote", "video", "testimonials", "carousel"].includes(block.type)
     && (block.type !== "gallery" || block.key === "collage")),
+  testimonials: undefined,
+  highlights: undefined,
   registration: { ...courseDetailFixture.registration, image: undefined },
   relatedArticles: [],
+};
+
+export const visualCurriculumCourseDetailFixture: CourseDetailContent = {
+  ...courseDetailFixture,
+  slug: "visual-curriculum-course",
+  body: courseDetailFixture.body
+    .filter((block) => block.type !== "curriculum")
+    .map((block) =>
+      block.type === "gallery" && block.key === "stages"
+        ? { ...block, contentRole: "curriculum" as const }
+        : block,
+    ),
 };
 
 export const emptyCourseDetailFixture: CourseDetailContent = {
@@ -262,4 +276,5 @@ export const courseDetailFixtures: Record<string, CourseDetailContent> = {
   [longCourseDetailFixture.slug]: longCourseDetailFixture,
   [minimalCourseDetailFixture.slug]: minimalCourseDetailFixture,
   [emptyCourseDetailFixture.slug]: emptyCourseDetailFixture,
+  [visualCurriculumCourseDetailFixture.slug]: visualCurriculumCourseDetailFixture,
 };

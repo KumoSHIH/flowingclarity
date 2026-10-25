@@ -25,10 +25,12 @@ export const courseDetailQuery = `{
           lead,
           paragraphs
         },
+        _type == "courseDetailText" => {title, text},
         _type == "courseDetailGallery" => {
           title,
           description,
           layout,
+          contentRole,
           note,
           statement,
           items[]{
@@ -93,6 +95,29 @@ export const courseDetailQuery = `{
         }
       },
       schedule{title, description},
+      testimonials{
+        "key": "testimonials",
+        "type": _type,
+        title,
+        items[]{text, sharerName}
+      },
+      highlights{
+        "key": "highlights",
+        "type": _type,
+        title,
+        text,
+        items[]{
+          "key": _key,
+          caption,
+          image{
+            "src": asset->url,
+            "width": asset->metadata.dimensions.width,
+            "height": asset->metadata.dimensions.height,
+            alt,
+            hotspot{x, y}
+          }
+        }
+      },
       registration{
         title,
         description,

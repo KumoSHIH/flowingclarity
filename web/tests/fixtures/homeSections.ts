@@ -16,7 +16,7 @@ export const homeSectionsContent: HomeSectionsContent = {
     introduction: '在不大的空間裡相遇，分享一段專心感受當下的時間。',
     emptyMessage: '目前沒有近期活動，歡迎稍後再回來看看。',
     items: [
-      { id: 'event-1', href: '/events/autumn-meditation', date: '2026-10-12', period: '2026/10', day: '12、13', weekday: '週一、週二', title: '秋日靜心練習', category: '兩日工作坊', time: '兩日皆為 14:00—16:00' },
+      { id: 'event-1', href: '/events/autumn-meditation', date: '2026-10-12', period: '2026/10', day: '12-13', weekday: '週一、週二', title: '秋日靜心練習', category: '兩日工作坊', time: '兩日皆為 14:00—16:00' },
       { id: 'event-2', href: '/events/body-writing-night', date: '2026-10-26', period: '2026/10', day: '26', weekday: '週一', title: '身體書寫之夜', category: '主題活動', time: '19:00—21:00' },
       { id: 'event-3', href: '/events/slow-tea-time', date: '2026-11-09', period: '2026/11', day: '09', weekday: '週一', title: '一杯茶的慢時光', category: '生活練習', time: '15:00—17:00' },
     ],

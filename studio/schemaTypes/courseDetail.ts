@@ -37,6 +37,27 @@ export const courseDetailIntroduction = defineType({
   },
 })
 
+export const courseDetailText = defineType({
+  name: 'courseDetailText',
+  title: '文字段落',
+  type: 'object',
+  fields: [
+    defineField({ name: 'title', title: '標題', type: 'string', validation: Rule => Rule.required().min(2).max(100) }),
+    defineField({
+      name: 'text',
+      title: '正文',
+      type: 'text',
+      rows: 10,
+      description: '可按 Enter 換行，前台會保留段落。',
+      validation: Rule => Rule.required().min(8).max(2000),
+    }),
+  ],
+  preview: {
+    select: { title: 'title', subtitle: 'text' },
+    prepare: ({ title, subtitle }) => ({ title: title ?? '未命名文字段落', subtitle: `文字段落 · ${subtitle ?? '尚未填寫正文'}` }),
+  },
+})
+
 export const courseDetailGalleryItem = defineType({
   name: 'courseDetailGalleryItem',
   title: '學習片段',
@@ -71,6 +92,23 @@ export const courseDetailGallery = defineType({
   title: '圖文版型區塊',
   type: 'object',
   fields: [
+    defineField({
+      name: 'contentRole',
+      title: '內容用途',
+      type: 'string',
+      description: '一般圖文會使用區塊標題；選擇課程架構時，會與摺疊課綱互斥並共用「課程架構」章節導覽。',
+      initialValue: 'general',
+      options: {
+        list: [
+          { title: '一般圖文', value: 'general' },
+          { title: '課程架構', value: 'curriculum' },
+        ],
+        layout: 'radio',
+      },
+      validation: Rule => Rule.custom(value => value === undefined || value === 'general' || value === 'curriculum'
+        ? true
+        : '請選擇一般圖文或課程架構。'),
+    }),
     defineField({ name: 'title', title: '標題', type: 'string', validation: Rule => Rule.required().min(4).max(100) }),
     defineField({ name: 'description', title: '說明（選填）', type: 'text', rows: 4, description: '可按 Enter 換行，前台會保留段落。', validation: Rule => Rule.min(10).max(300) }),
     defineField({
@@ -92,10 +130,10 @@ export const courseDetailGallery = defineType({
     }),
   ],
   preview: {
-    select: { title: 'title', layout: 'layout', media: 'items.0.image' },
-    prepare: ({ title, layout, media }) => ({
+    select: { title: 'title', layout: 'layout', contentRole: 'contentRole', media: 'items.0.image' },
+    prepare: ({ title, layout, contentRole, media }) => ({
       title: title ?? '未命名圖文版型',
-      subtitle: galleryLayoutOptions.find(option => option.value === layout)?.title ?? '尚未選擇版型',
+      subtitle: `${contentRole === 'curriculum' ? '課程架構' : '一般圖文'}｜${galleryLayoutOptions.find(option => option.value === layout)?.title ?? '尚未選擇版型'}`,
       media,
     }),
   },
@@ -161,7 +199,7 @@ export const courseDetailCurriculumUnit = defineType({
 
 export const courseDetailCurriculum = defineType({
   name: 'courseDetailCurriculum',
-  title: '課程架構',
+  title: '課程架構（摺疊列表）',
   type: 'object',
   fields: [
     defineField({ name: 'title', title: '標題', type: 'string', validation: Rule => Rule.required().min(4).max(100) }),
@@ -211,11 +249,11 @@ export const courseDetailVideo = defineType({
     }),
     defineField({
       name: 'image',
-      title: '影片封面',
+      title: '影片封面（選填）',
       type: 'image',
+      description: '沒有 YouTube 網址時可作為預告封面；留空時前台仍會顯示標題與狀態文字。',
       options: { hotspot: true },
       fields: [requiredAltField],
-      validation: Rule => Rule.required(),
     }),
   ],
   preview: {
@@ -324,8 +362,12 @@ export function validateCourseDetailBody(value: unknown): true | string {
     .filter(item => item && typeof item === 'object' && '_type' in item)
     .map(item => (item as { _type?: string })._type)
   const missing = requiredBodyBlockTypes.filter(type => !types.includes(type))
-  const testimonialCount = types.filter(type => type === 'sharedTestimonialBlock').length
-  if (testimonialCount > 1) return '學員心得分享只能新增一個。'
+  const curriculumCount = value.filter(item => item && typeof item === 'object' && (
+    (item as { _type?: string })._type === 'courseDetailCurriculum'
+    || ((item as { _type?: string, contentRole?: string })._type === 'courseDetailGallery'
+      && (item as { contentRole?: string }).contentRole === 'curriculum')
+  )).length
+  if (curriculumCount > 1) return '課程架構只能選擇一種：圖文版型或摺疊列表。'
   if (missing.length === 0) return true
   const labels: Record<string, string> = {
     courseDetailIntroduction: '課程介紹',
@@ -345,21 +387,33 @@ export const courseDetailContent = defineType({
       name: 'body',
       title: '內容編排',
       type: 'array',
-      description: '拖曳即可調整前台順序。圖文版型與圖片輪播可重複新增；學員心得分享最多一個。',
+      description: '拖曳即可調整前台順序。課程架構可用圖文版型或摺疊列表，兩者合計最多一個。學員分享請使用下方固定欄位。',
       of: [
         defineArrayMember({ type: 'courseDetailIntroduction' }),
+        defineArrayMember({ type: 'courseDetailText' }),
         defineArrayMember({ type: 'courseDetailGallery' }),
         defineArrayMember({ type: 'courseDetailTeacher' }),
         defineArrayMember({ type: 'courseDetailQuote' }),
         defineArrayMember({ type: 'courseDetailCurriculum' }),
         defineArrayMember({ type: 'courseDetailVideo' }),
         defineArrayMember({ type: 'courseDetailAudience' }),
-        defineArrayMember({ type: 'sharedTestimonialBlock' }),
         defineArrayMember({ type: 'courseDetailCarousel' }),
       ],
       validation: Rule => Rule.required().min(2).max(20).custom(validateCourseDetailBody),
     }),
     defineField({ name: 'schedule', title: '課程梯次', type: 'courseDetailSchedule', validation: Rule => Rule.required() }),
+    defineField({
+      name: 'testimonials',
+      title: '學員分享（選填）',
+      type: 'sharedTestimonialBlock',
+      description: '有內容時固定顯示在課程梯次後方，每門課最多一個。',
+    }),
+    defineField({
+      name: 'highlights',
+      title: '課程花絮（選填）',
+      type: 'courseDetailCarousel',
+      description: '有內容時固定顯示在學員分享後方，每門課最多一個。',
+    }),
     defineField({ name: 'registration', title: '報名區塊', type: 'courseDetailRegistration', validation: Rule => Rule.required() }),
     defineField({
       name: 'relatedArticles',
@@ -374,6 +428,7 @@ export const courseDetailContent = defineType({
 
 export const courseDetailSchemaTypes = [
   courseDetailIntroduction,
+  courseDetailText,
   courseDetailGalleryItem,
   courseDetailGallery,
   courseDetailTeacher,

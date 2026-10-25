@@ -1,0 +1,1102 @@
+[
+  {
+    "name": "accordion-desktop-1440",
+    "url": "http://127.0.0.1:3100/course-detail-prototype-validation?variant=default#schedule",
+    "innerWidth": 1440,
+    "clientWidth": 1425,
+    "scrollWidth": 1425,
+    "overflowElements": [
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -753,
+        "right": -603,
+        "width": 150
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -603,
+        "right": -453,
+        "width": 150
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -453,
+        "right": -303,
+        "width": 150
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -303,
+        "right": -153,
+        "width": 150
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -153,
+        "right": -3,
+        "width": 150
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -3,
+        "right": 147,
+        "width": 150
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__track",
+        "left": -798,
+        "right": 0,
+        "width": 798
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": -798,
+        "right": 0,
+        "width": 798
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": -798,
+        "right": 0,
+        "width": 798
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": 798,
+        "right": 1596,
+        "width": 798
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": 798,
+        "right": 1596,
+        "width": 798
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": 1596,
+        "right": 2394,
+        "width": 798
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": 1596,
+        "right": 2394,
+        "width": 798
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": 2394,
+        "right": 3192,
+        "width": 798
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": 2394,
+        "right": 3192,
+        "width": 798
+      }
+    ],
+    "h1Count": 1,
+    "chapterLabels": [
+      "課程介紹",
+      "從觀看，到親手辨認。",
+      "帶領者",
+      "讓每個階段都有位置。",
+      "課程架構",
+      "課程影片",
+      "圖像與文字交錯前進。",
+      "適合對象",
+      "把練習整理成一冊。",
+      "把方法拆成可查閱的檔案。",
+      "課程梯次",
+      "學員分享",
+      "課程花絮",
+      "報名"
+    ],
+    "chapterTargets": [
+      "#content-introduction",
+      "#content-collage",
+      "#content-teacher",
+      "#content-stages",
+      "#content-curriculum",
+      "#content-video",
+      "#content-weave",
+      "#content-audience",
+      "#content-folio",
+      "#content-dossier",
+      "#schedule",
+      "#testimonials",
+      "#highlights",
+      "#registration"
+    ],
+    "quoteInNavigation": false,
+    "curriculumChapterCount": 1,
+    "orderedSections": [
+      {
+        "selector": "#schedule",
+        "top": 11822
+      },
+      {
+        "selector": "#testimonials",
+        "top": 12822
+      },
+      {
+        "selector": "#highlights",
+        "top": 13256
+      },
+      {
+        "selector": "#registration",
+        "top": 13864
+      },
+      {
+        "selector": ".course-related",
+        "top": 14933
+      }
+    ],
+    "orderIsAscending": true,
+    "missingImageAlt": 0,
+    "activeAfterClick": "#schedule",
+    "focusedHref": "#schedule",
+    "focusOutlineStyle": "none",
+    "focusOutlineWidth": "3px"
+  },
+  {
+    "name": "visual-desktop-1440",
+    "url": "http://127.0.0.1:3100/course-detail-prototype-validation?variant=visual-curriculum#schedule",
+    "innerWidth": 1440,
+    "clientWidth": 1425,
+    "scrollWidth": 1425,
+    "overflowElements": [
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -603,
+        "right": -453,
+        "width": 150
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -453,
+        "right": -303,
+        "width": 150
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -303,
+        "right": -153,
+        "width": 150
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -153,
+        "right": -3,
+        "width": 150
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -3,
+        "right": 147,
+        "width": 150
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__track",
+        "left": -798,
+        "right": 0,
+        "width": 798
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": -798,
+        "right": 0,
+        "width": 798
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": -798,
+        "right": 0,
+        "width": 798
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": 798,
+        "right": 1596,
+        "width": 798
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": 798,
+        "right": 1596,
+        "width": 798
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": 1596,
+        "right": 2394,
+        "width": 798
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": 1596,
+        "right": 2394,
+        "width": 798
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": 2394,
+        "right": 3192,
+        "width": 798
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": 2394,
+        "right": 3192,
+        "width": 798
+      }
+    ],
+    "h1Count": 1,
+    "chapterLabels": [
+      "課程介紹",
+      "從觀看，到親手辨認。",
+      "帶領者",
+      "課程架構",
+      "課程影片",
+      "圖像與文字交錯前進。",
+      "適合對象",
+      "把練習整理成一冊。",
+      "把方法拆成可查閱的檔案。",
+      "課程梯次",
+      "學員分享",
+      "課程花絮",
+      "報名"
+    ],
+    "chapterTargets": [
+      "#content-introduction",
+      "#content-collage",
+      "#content-teacher",
+      "#content-stages",
+      "#content-video",
+      "#content-weave",
+      "#content-audience",
+      "#content-folio",
+      "#content-dossier",
+      "#schedule",
+      "#testimonials",
+      "#highlights",
+      "#registration"
+    ],
+    "quoteInNavigation": false,
+    "curriculumChapterCount": 1,
+    "orderedSections": [
+      {
+        "selector": "#schedule",
+        "top": 11240
+      },
+      {
+        "selector": "#testimonials",
+        "top": 12240
+      },
+      {
+        "selector": "#highlights",
+        "top": 12675
+      },
+      {
+        "selector": "#registration",
+        "top": 13283
+      },
+      {
+        "selector": ".course-related",
+        "top": 14352
+      }
+    ],
+    "orderIsAscending": true,
+    "missingImageAlt": 0,
+    "activeAfterClick": "#schedule",
+    "focusedHref": "#schedule",
+    "focusOutlineStyle": "none",
+    "focusOutlineWidth": "3px"
+  },
+  {
+    "name": "visual-tablet-1023",
+    "url": "http://127.0.0.1:3100/course-detail-prototype-validation?variant=visual-curriculum#schedule",
+    "innerWidth": 1023,
+    "clientWidth": 1008,
+    "scrollWidth": 1008,
+    "overflowElements": [
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -825,
+        "right": -687,
+        "width": 138
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -687,
+        "right": -549,
+        "width": 138
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -549,
+        "right": -411,
+        "width": 138
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -411,
+        "right": -273,
+        "width": 138
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -273,
+        "right": -135,
+        "width": 138
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -135,
+        "right": 3,
+        "width": 138
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": 879,
+        "right": 1029,
+        "width": 150
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__track",
+        "left": -564,
+        "right": 0,
+        "width": 564
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": -564,
+        "right": 0,
+        "width": 564
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": -564,
+        "right": 0,
+        "width": 564
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": 564,
+        "right": 1129,
+        "width": 564
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": 564,
+        "right": 1129,
+        "width": 564
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": 1129,
+        "right": 1693,
+        "width": 564
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": 1129,
+        "right": 1693,
+        "width": 564
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": 1693,
+        "right": 2258,
+        "width": 564
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": 1693,
+        "right": 2258,
+        "width": 564
+      }
+    ],
+    "h1Count": 1,
+    "chapterLabels": [
+      "課程介紹",
+      "從觀看，到親手辨認。",
+      "帶領者",
+      "課程架構",
+      "課程影片",
+      "圖像與文字交錯前進。",
+      "適合對象",
+      "把練習整理成一冊。",
+      "把方法拆成可查閱的檔案。",
+      "課程梯次",
+      "學員分享",
+      "課程花絮",
+      "報名"
+    ],
+    "chapterTargets": [
+      "#content-introduction",
+      "#content-collage",
+      "#content-teacher",
+      "#content-stages",
+      "#content-video",
+      "#content-weave",
+      "#content-audience",
+      "#content-folio",
+      "#content-dossier",
+      "#schedule",
+      "#testimonials",
+      "#highlights",
+      "#registration"
+    ],
+    "quoteInNavigation": false,
+    "curriculumChapterCount": 1,
+    "orderedSections": [
+      {
+        "selector": "#schedule",
+        "top": 12842
+      },
+      {
+        "selector": "#testimonials",
+        "top": 14011
+      },
+      {
+        "selector": "#highlights",
+        "top": 14406
+      },
+      {
+        "selector": "#registration",
+        "top": 14910
+      },
+      {
+        "selector": ".course-related",
+        "top": 16878
+      }
+    ],
+    "orderIsAscending": true,
+    "missingImageAlt": 0,
+    "activeAfterClick": "#schedule",
+    "focusedHref": "#schedule",
+    "focusOutlineStyle": "none",
+    "focusOutlineWidth": "3px"
+  },
+  {
+    "name": "visual-zoom-200-720",
+    "url": "http://127.0.0.1:3100/course-detail-prototype-validation?variant=visual-curriculum#schedule",
+    "innerWidth": 720,
+    "clientWidth": 705,
+    "scrollWidth": 705,
+    "overflowElements": [
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "course-hero__visual",
+        "left": 0,
+        "right": 720,
+        "width": 720
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": 0,
+        "right": 720,
+        "width": 720
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "course-hero__copy",
+        "left": 0,
+        "right": 720,
+        "width": 720
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -849,
+        "right": -727,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -727,
+        "right": -605,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -605,
+        "right": -483,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -483,
+        "right": -361,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -361,
+        "right": -239,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -239,
+        "right": -117,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -117,
+        "right": 5,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": 577,
+        "right": 727,
+        "width": 150
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": 727,
+        "right": 877,
+        "width": 150
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__track",
+        "left": -705,
+        "right": 0,
+        "width": 705
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": -705,
+        "right": 0,
+        "width": 705
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": -705,
+        "right": 0,
+        "width": 705
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": 705,
+        "right": 1410,
+        "width": 705
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": 705,
+        "right": 1410,
+        "width": 705
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": 1410,
+        "right": 2115,
+        "width": 705
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": 1410,
+        "right": 2115,
+        "width": 705
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": 2115,
+        "right": 2820,
+        "width": 705
+      }
+    ],
+    "h1Count": 1,
+    "chapterLabels": [
+      "課程介紹",
+      "從觀看，到親手辨認。",
+      "帶領者",
+      "課程架構",
+      "課程影片",
+      "圖像與文字交錯前進。",
+      "適合對象",
+      "把練習整理成一冊。",
+      "把方法拆成可查閱的檔案。",
+      "課程梯次",
+      "學員分享",
+      "課程花絮",
+      "報名"
+    ],
+    "chapterTargets": [
+      "#content-introduction",
+      "#content-collage",
+      "#content-teacher",
+      "#content-stages",
+      "#content-video",
+      "#content-weave",
+      "#content-audience",
+      "#content-folio",
+      "#content-dossier",
+      "#schedule",
+      "#testimonials",
+      "#highlights",
+      "#registration"
+    ],
+    "quoteInNavigation": false,
+    "curriculumChapterCount": 1,
+    "orderedSections": [
+      {
+        "selector": "#schedule",
+        "top": 14879
+      },
+      {
+        "selector": "#testimonials",
+        "top": 16077
+      },
+      {
+        "selector": "#highlights",
+        "top": 16360
+      },
+      {
+        "selector": "#registration",
+        "top": 17212
+      },
+      {
+        "selector": ".course-related",
+        "top": 18809
+      }
+    ],
+    "orderIsAscending": true,
+    "missingImageAlt": 0,
+    "activeAfterClick": "#schedule",
+    "focusedHref": "#schedule",
+    "focusOutlineStyle": "none",
+    "focusOutlineWidth": "3px"
+  },
+  {
+    "name": "visual-mobile-390",
+    "url": "http://127.0.0.1:3100/course-detail-prototype-validation?variant=visual-curriculum#schedule",
+    "innerWidth": 390,
+    "clientWidth": 390,
+    "scrollWidth": 390,
+    "overflowElements": [
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -1006,
+        "right": -884,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -884,
+        "right": -762,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -762,
+        "right": -640,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -640,
+        "right": -518,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -518,
+        "right": -396,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -396,
+        "right": -274,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -274,
+        "right": -152,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -152,
+        "right": -30,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -30,
+        "right": 120,
+        "width": 150
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": 270,
+        "right": 420,
+        "width": 150
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": 420,
+        "right": 570,
+        "width": 150
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": 570,
+        "right": 720,
+        "width": 150
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__track",
+        "left": -390,
+        "right": 0,
+        "width": 390
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": -390,
+        "right": 0,
+        "width": 390
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": -390,
+        "right": 0,
+        "width": 390
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": 390,
+        "right": 780,
+        "width": 390
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": 390,
+        "right": 780,
+        "width": 390
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": 780,
+        "right": 1170,
+        "width": 390
+      },
+      {
+        "tag": "IMG",
+        "id": "",
+        "className": "",
+        "left": 780,
+        "right": 1170,
+        "width": 390
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "className": "about-carousel__slide",
+        "left": 1170,
+        "right": 1560,
+        "width": 390
+      }
+    ],
+    "h1Count": 1,
+    "chapterLabels": [
+      "課程介紹",
+      "從觀看，到親手辨認。",
+      "帶領者",
+      "課程架構",
+      "課程影片",
+      "圖像與文字交錯前進。",
+      "適合對象",
+      "把練習整理成一冊。",
+      "把方法拆成可查閱的檔案。",
+      "課程梯次",
+      "學員分享",
+      "課程花絮",
+      "報名"
+    ],
+    "chapterTargets": [
+      "#content-introduction",
+      "#content-collage",
+      "#content-teacher",
+      "#content-stages",
+      "#content-video",
+      "#content-weave",
+      "#content-audience",
+      "#content-folio",
+      "#content-dossier",
+      "#schedule",
+      "#testimonials",
+      "#highlights",
+      "#registration"
+    ],
+    "quoteInNavigation": false,
+    "curriculumChapterCount": 1,
+    "orderedSections": [
+      {
+        "selector": "#schedule",
+        "top": 15622
+      },
+      {
+        "selector": "#testimonials",
+        "top": 16884
+      },
+      {
+        "selector": "#highlights",
+        "top": 17202
+      },
+      {
+        "selector": "#registration",
+        "top": 17887
+      },
+      {
+        "selector": ".course-related",
+        "top": 19011
+      }
+    ],
+    "orderIsAscending": true,
+    "missingImageAlt": 0,
+    "activeAfterClick": "#schedule",
+    "focusedHref": "#schedule",
+    "focusOutlineStyle": "none",
+    "focusOutlineWidth": "3px"
+  },
+  {
+    "name": "minimal-mobile-390",
+    "url": "http://127.0.0.1:3100/course-detail-prototype-validation?variant=minimal#schedule",
+    "innerWidth": 390,
+    "clientWidth": 390,
+    "scrollWidth": 390,
+    "overflowElements": [
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -354,
+        "right": -232,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -232,
+        "right": -110,
+        "width": 122
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "className": "",
+        "left": -110,
+        "right": 12,
+        "width": 122
+      }
+    ],
+    "h1Count": 1,
+    "chapterLabels": [
+      "課程介紹",
+      "從觀看，到親手辨認。",
+      "課程架構",
+      "適合對象",
+      "課程梯次",
+      "報名"
+    ],
+    "chapterTargets": [
+      "#content-introduction",
+      "#content-collage",
+      "#content-curriculum",
+      "#content-audience",
+      "#schedule",
+      "#registration"
+    ],
+    "quoteInNavigation": false,
+    "curriculumChapterCount": 1,
+    "orderedSections": [
+      {
+        "selector": "#schedule",
+        "top": 5108
+      },
+      {
+        "selector": "#registration",
+        "top": 6370
+      }
+    ],
+    "orderIsAscending": true,
+    "missingImageAlt": 0,
+    "activeAfterClick": "#schedule",
+    "focusedHref": "#schedule",
+    "focusOutlineStyle": "none",
+    "focusOutlineWidth": "3px"
+  }
+]

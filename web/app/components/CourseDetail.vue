@@ -30,6 +30,7 @@ const emit = defineEmits<{ retry: [] }>();
 
 const chapterLabels: Record<CourseDetailBodyBlock["type"], string> = {
   introduction: "課程介紹",
+  text: "文字段落",
   gallery: "圖文內容",
   teacher: "帶領者",
   quote: "課程引言",
@@ -40,17 +41,43 @@ const chapterLabels: Record<CourseDetailBodyBlock["type"], string> = {
   carousel: "圖片輪播",
 };
 const blockId = (key: string) => `content-${key}`;
+const contentBody = computed(
+  () =>
+    props.content?.body.filter(
+      (block) => block.type !== "testimonials" && block.type !== "carousel",
+    ) ?? [],
+);
+const testimonialsBlock = computed(
+  () =>
+    props.content?.testimonials ??
+    props.content?.body.find((block) => block.type === "testimonials"),
+);
+const highlightsBlock = computed(
+  () =>
+    props.content?.highlights ??
+    props.content?.body.find((block) => block.type === "carousel"),
+);
+const isPrimaryChapter = (block: CourseDetailBodyBlock) =>
+  block.type !== "quote" &&
+  block.type !== "testimonials" &&
+  block.type !== "carousel";
 const curriculumPanelKey = (blockKey: string, unitKey: string) =>
   `${blockKey}:${unitKey}`;
 const chapterLinks = computed(() => [
-  ...(props.content?.body.map((block) => ({
+  ...contentBody.value.filter(isPrimaryChapter).map((block) => ({
     id: blockId(block.key),
     label:
-      block.type === "gallery" || block.type === "carousel"
-        ? block.title
-        : chapterLabels[block.type],
-  })) ?? []),
+      block.type === "gallery" && block.contentRole === "curriculum"
+        ? "課程架構"
+        : block.type === "gallery" || block.type === "text"
+          ? block.title
+          : chapterLabels[block.type],
+  })),
   { id: "schedule", label: "課程梯次" },
+  ...(testimonialsBlock.value
+    ? [{ id: "testimonials", label: "學員分享" }]
+    : []),
+  ...(highlightsBlock.value ? [{ id: "highlights", label: "課程花絮" }] : []),
   { id: "registration", label: "報名" },
 ]);
 
@@ -184,10 +211,8 @@ watch(
   () => props.content,
   (content) => {
     if (!content) return;
-    activeChapter.value = content.body[0]
-      ? blockId(content.body[0].key)
-      : "schedule";
-    openCurriculumKeys.value = content.body.flatMap((block) =>
+    activeChapter.value = chapterLinks.value[0]?.id ?? "schedule";
+    openCurriculumKeys.value = contentBody.value.flatMap((block) =>
       block.type === "curriculum" && block.units[0]
         ? [curriculumPanelKey(block.key, block.units[0].key)]
         : [],
@@ -360,7 +385,7 @@ onBeforeUnmount(() => {
         >
       </nav>
 
-      <template v-for="block in content.body" :key="block.key">
+      <template v-for="block in contentBody" :key="block.key">
         <section
           v-if="block.type === 'introduction'"
           :id="blockId(block.key)"
@@ -379,6 +404,18 @@ onBeforeUnmount(() => {
                 {{ paragraph }}
               </p>
             </div>
+          </div>
+        </section>
+
+        <section
+          v-else-if="block.type === 'text'"
+          :id="blockId(block.key)"
+          :ref="setObservedSection"
+          class="course-text course-intro"
+        >
+          <div class="course-intro__inner">
+            <h2>{{ block.title }}</h2>
+            <p class="body-copy preserve-lines">{{ block.text }}</p>
           </div>
         </section>
 
@@ -529,7 +566,10 @@ onBeforeUnmount(() => {
         >
           <div class="course-video__inner">
             <h2>{{ block.title }}</h2>
-            <div class="course-video__media">
+            <div
+              v-if="block.embedUrl || block.image"
+              class="course-video__media"
+            >
               <iframe
                 v-if="block.embedUrl"
                 :src="block.embedUrl"
@@ -547,7 +587,7 @@ onBeforeUnmount(() => {
                 referrerpolicy="strict-origin-when-cross-origin"
                 allowfullscreen
               />
-              <template v-else>
+              <template v-else-if="block.image">
                 <img
                   :src="block.image.src"
                   :alt="block.image.alt"
@@ -583,38 +623,6 @@ onBeforeUnmount(() => {
             <p v-else class="inline-empty">適合對象資訊仍在整理中。</p>
           </div>
         </section>
-
-        <div
-          v-else-if="block.type === 'testimonials'"
-          :id="blockId(block.key)"
-          :ref="setObservedSection"
-          class="course-testimonials"
-        >
-          <SharedTestimonials
-            :id="`course-testimonials-${block.key}`"
-            :title="block.title"
-            :items="block.items"
-          />
-        </div>
-
-        <div
-          v-else-if="block.type === 'carousel'"
-          :id="blockId(block.key)"
-          :ref="setObservedSection"
-          class="course-carousel"
-        >
-          <SharedImageTextCarousel :items="block.items" :label="block.title">
-            <template #heading
-              ><h2>{{ block.title }}</h2></template
-            >
-            <template #copy
-              ><p class="body-copy preserve-lines">
-                {{ block.text }}
-              </p></template
-            >
-            <template #empty><p>輪播圖片仍在整理中。</p></template>
-          </SharedImageTextCarousel>
-        </div>
       </template>
 
       <section id="schedule" :ref="setObservedSection" class="course-schedule">
@@ -683,6 +691,39 @@ onBeforeUnmount(() => {
           <p v-else class="inline-empty">目前沒有已確認的課程梯次。</p>
         </div>
       </section>
+
+      <div
+        v-if="testimonialsBlock"
+        id="testimonials"
+        :ref="setObservedSection"
+        class="course-testimonials"
+      >
+        <SharedTestimonials
+          :id="`course-testimonials-${testimonialsBlock.key}`"
+          :title="testimonialsBlock.title"
+          :items="testimonialsBlock.items"
+        />
+      </div>
+
+      <div
+        v-if="highlightsBlock"
+        id="highlights"
+        :ref="setObservedSection"
+        class="course-carousel"
+      >
+        <SharedImageTextCarousel
+          :items="highlightsBlock.items"
+          :label="highlightsBlock.title"
+        >
+          <template #heading
+            ><h2>{{ highlightsBlock.title }}</h2></template
+          >
+          <template #copy>
+            <p class="body-copy preserve-lines">{{ highlightsBlock.text }}</p>
+          </template>
+          <template #empty><p>輪播圖片仍在整理中。</p></template>
+        </SharedImageTextCarousel>
+      </div>
 
       <section
         id="registration"
@@ -917,7 +958,6 @@ onBeforeUnmount(() => {
 }
 .course-intro {
   display: flex;
-  min-height: clamp(720px, 82svh, 900px);
   align-items: center;
   padding-block: var(--course-section-block);
   padding-inline: var(--course-section-inline);
@@ -1198,13 +1238,11 @@ onBeforeUnmount(() => {
 }
 .course-teacher__name small {
   display: block;
-  margin-top: 10px;
-  font: inherit;
   font-family: var(--font-sans);
-  font-size: var(--type-meta-size);
-  font-weight: var(--type-meta-weight);
-  line-height: var(--type-meta-leading);
-  letter-spacing: var(--type-meta-tracking);
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-leading);
+  letter-spacing: var(--type-body-tracking);
 }
 .course-teacher .lede {
   margin: 20px 0;
@@ -1663,7 +1701,7 @@ onBeforeUnmount(() => {
     right: auto;
     bottom: 30px;
     left: 50px;
-    width: calc(100vw - 44px);
+    width: calc(100vw - 100px);
     max-width: none;
     overflow-wrap: anywhere;
     font-size: var(--type-title-xl-size);
@@ -1723,9 +1761,7 @@ onBeforeUnmount(() => {
     right: auto;
     bottom: 30px;
     left: var(--page-gutter-mobile);
-    width: calc(
-      100vw - var(--page-gutter-mobile) - var(--page-gutter-mobile)
-    );
+    width: calc(100vw - var(--page-gutter-mobile) - var(--page-gutter-mobile));
     max-width: none;
     overflow-wrap: anywhere;
     text-wrap: wrap;

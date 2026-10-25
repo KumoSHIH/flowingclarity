@@ -42,7 +42,7 @@ Sanity 為正式內容管理方式。課程分類與授課形式如下：
 - 首頁包含品牌介紹、活動、課程與聯絡區塊，內容仍為示範資料；課程區塊尚未提供報名連結。
 - Banner 從 Sanity 讀取已發布的大標題、敘述、按鈕文字及按鈕連結；內容不完整或讀取失敗時使用本機示範內容。玫瑰底圖、課程分類與動畫由前端維護；地圖四分類固定連至 `/course` 的 body、heart、life、beauty 分類錨點。
 - `/course` 已完成 Sanity 課程總覽、固定分類、課程與梯次 schema、伺服器查詢及 production 內容流驗收；遠端 schema 已部署，公開分類 ID migration 已完成。頁面不再以 fixture 作為主要資料，目前 production 有 1 門初步課程，其餘正式內容仍待內容負責人審核與發布。
-- `/course/[slug]` 既有響應式前端、Sanity 整合與 production 內容流已驗證；2026-10-20 另於本機加入最多一個共用學員心得、可重複左圖右文圖片輪播及固定頁尾的 0–8 篇延伸閱讀，並統一桌機／手機內容標題。新版 schema、published-only 投影、parser、Vue、測試與 Chrome 1440px／390px 驗收已完成，但更新後 schema 尚未部署、遠端內容流尚未回歸；正式內容仍待核准。
+- `/course/[slug]` 既有響應式前端、Sanity 整合與 production 內容流已驗證；2026-10-25 已於本機把內容順序固定為自由內容、梯次、選填學員分享、選填課程花絮及報名，並讓課程架構可擇一使用既有圖文版型或摺疊列表。內容編排新增文字段落並移除新建學員心得選項，影片封面改為選填且無媒體時仍顯示標題與狀態。新版 schema、published-only 投影、parser、Vue、完整測試與 Chrome 響應式驗收已完成，且相容舊 body 資料；更新後 schema 尚未部署、遠端資料尚未遷移或回歸，正式內容仍待核准。
 - `/events` 已完成 fixture 驅動的前端原型：左側可切換近期／過去活動，右側以月份長譜呈現目前集合，支援每頁 8 筆、URL query、自動截止、結束後歸檔，以及 loading／empty／error 狀態。此階段尚未串接 Sanity，頁面活動內容皆為明確標示的示範資料。
 - `/events/[slug]` 已完成前端、Sanity 整合與 production 內容流驗收：活動總覽與詳情頁共用單一公開開關，公開前必須有完整詳情；另提供可排序語意區塊、published-only slug API 與安全 parser。心得只包含文字與分享者名稱，不設逐筆公開同意欄位；草稿隔離、兩次發布、匿名讀取、1440px／390px 完整頁及測試內容清除均已驗證。正式活動內容仍待核准；課程詳情已於本機接入相同心得 schema，遠端回歸尚未執行。
 - `/articles/[slug]` 已完成響應式前端、UI 行為驗收與本機 Sanity 整合：同一份 `article` 文件提供 `overlay`／`split` 首區、三種可排序正文區塊、受限 Portable Text、人工排序延伸閱讀與 SEO；published-only slug API 以嚴格 parser 區分 404、無效發布內容及讀取失敗，前端不再以 fixture 作為主要資料。遠端 schema 尚未部署，草稿隔離、匿名發布讀取、真實圖片與 production 內容流程仍待驗證。

@@ -1,20 +1,23 @@
 {
-  "generatedAt": "2026-10-24T13:58:26.151Z",
+  "generatedAt": "2026-10-25T03:32:53.514Z",
   "desktop": {
-    "gridTemplateColumns": "162.828px 542.812px",
-    "minHeight": "150px",
+    "day": "30-31",
     "dayFontSize": "38px",
-    "dayColor": "rgb(56, 52, 46)",
-    "titleFontSize": "24px",
-    "hoverTitleColor": "rgb(164, 107, 84)",
+    "dayLeft": 604.78,
+    "dateLeft": 604.78,
+    "scrollX": 0,
+    "rowHeight": 150,
     "scrollWidth": 1440,
-    "clientWidth": 1440,
-    "focusOutline": "2px"
+    "clientWidth": 1440
   },
   "mobile": {
-    "gridTemplateColumns": "78px 254px",
+    "day": "30-31",
+    "dayFontSize": "26px",
+    "dayLeft": 20,
+    "dateLeft": 20,
+    "scrollX": 0,
+    "rowHeight": 243.48,
     "scrollWidth": 390,
-    "clientWidth": 390,
-    "minimumLinkHeight": 139.6875
+    "clientWidth": 390
   }
 }

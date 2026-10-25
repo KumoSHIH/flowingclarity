@@ -65,7 +65,7 @@
 
 ## 目前狀態與後續工作
 
-- 目前狀態：既有 production 版本為 `verified`；2026-10-22 的六項本機介面修正已實作並完成自動驗證，尚待瀏覽器驗收且未部署。
+- 目前狀態：既有 production 版本為 `verified`；2026-10-25 已讓活動流程最後一筆不顯示下分隔線並加入回歸測試，尚待瀏覽器驗收且未部署。
 - 已完成：舊頁欄位盤點、資料契約、共用元件邊界、前三輪歷史紀錄、第四輪三款互動原型、B「固定邊欄」選案精修，以及 `/events/[slug]` fixture 路由、詳情元件、共用心得元件與 ready／loading／error／not-found 狀態。
 - 已驗證：2026-10-13 以 Chrome 檢查第四輪三案的 320、390、768、1023、1024 與 1440 寬度。18 組均無水平溢位、只有一個可見 `h1`、標題與 Banner 圖片位於 viewport 內、自託管字體載入，且非停用操作項目最小高度為 48px；真實 `ArrowRight` 鍵可同步移動 tab 選取與焦點。另檢查六張完整頁面截圖。
 - 品質檢查：Impeccable detector 第四輪執行一次；已修正概念說明文字對比。首輪畫面檢查修正 B 的平板圖片比例及焦點證據；選案後再移除帶領者照片與深色背景、縮短章節間距，並重拍 18 組驗證證據。2026-10-14 起，既有實作字級已提升為全站內容詳情頁共用契約並記錄於 `DESIGN.md`。
@@ -85,6 +85,7 @@
 - 視覺調整：移除桌機 `.event-detail__facts` 的右框線；平板／手機既有資訊項目分隔與底線維持不變。2026-10-14 起此行為列為相似內容詳情頁共用規則。production preview 可啟動且 build 通過；本次瀏覽器控制程序因本機 sandbox 錯誤無法啟動，因此未新增畫面截圖。
 - 麵包屑：2026-10-18 加入共用 `DetailBreadcrumb`，呈現「首頁／近期活動／目前活動」；目前頁為帶有 `aria-current="page"` 的純文字。Chrome 以 production 內容 `/events/test` 檢查 1440 × 900 與 390 × 844，無水平溢位或錯位；截圖位於 `/private/tmp/event-*-breadcrumb.png`。相關四組詳情測試 37 項、Web 全套 37 檔共 211 項、typecheck 與 production build 均通過；typecheck 僅保留既有 Volar 套件警告。
 - 2026-10-22 修正實作：移除心得標題與最後一筆心得的下分隔線、將活動詳情報名操作改為暖白字與 SVG 箭頭並加入 hover／鍵盤焦點位移、移除流程上框線與 Banner 圖片最小高度、活動列表標題 hover 不再顯示底線，並將手機活動資訊值縮為 16px。新增 5 項回歸測試；Web 全套 41 檔共 242 項測試、typecheck 與 production build 通過。typecheck 僅輸出既有 Volar 套件警告，build 僅輸出既有 sourcemap 與字體 runtime resolve 警告。
+- 2026-10-25 流程分隔線修正：`.event-detail__agenda li:last-child` 移除 `border-bottom`，並補上樣式回歸測試；瀏覽器畫面驗收尚未執行。
 - 本輪畫面驗收：Computer Use 服務無法啟動且沒有可用瀏覽器，未能執行桌機／手機 hover、鍵盤焦點、溢位與截圖檢查；不得用自動測試取代此項，清單維持待驗證。
 - 待處理：正式活動素材審核與發布；課程詳情尚未接入共用心得 schema 與 renderer。
 - 未執行：本輪桌機／手機瀏覽器回歸，以及 Safari／Firefox、實體觸控裝置與螢幕閱讀器驗收。
@@ -105,6 +106,7 @@
 - [x] 學員心得分享區塊：標題移除下底線，blockquote 最後一個不要 border-bottom；2026-10-22 已實作並通過回歸測試，待桌機／手機畫面驗證
 - [x] 報名按鈕：改成白色的字，右邊的icon是一個箭頭，此按鈕需要使用者互動；2026-10-22 已改用共用主要按鈕、SVG 箭頭及 hover／focus-visible 位移並通過回歸測試，待互動與畫面驗證
 - [x] 活動流程:event-detail__agenda 移除 border-top；2026-10-22 已實作並通過回歸測試，待畫面驗證
+- [x] 活動流程最後一個 `.event-detail__agenda li` 不顯示下底線；2026-10-25 已實作並加入回歸測試，待畫面驗證
 - [x] event-row__copy ，hover效果 標題不要出現下底線；2026-10-22 已保留統一陶土色回饋並移除底線，通過回歸測試，待滑鼠與鍵盤畫面驗證
 - [x] banner 裡的圖片 移除 min-height；2026-10-22 已改為圖片自然高度並通過回歸測試，待桌機／手機比例與版面位移驗證
 - [x] .event-detail__fact dd 手機 font-size: 16px；2026-10-22 已於 `<= 560px` 實作並通過回歸測試，待手機畫面驗證

@@ -96,7 +96,7 @@ function eventDisplay(startAt: Date, endAt: Date, scheduleNote: unknown) {
       : `${startDate.year}/${startDate.month}–${inclusiveEndDate.year}/${inclusiveEndDate.month}`
   const day = startDate.day === inclusiveEndDate.day && sameMonth
     ? startDate.day
-    : `${startDate.day}、${inclusiveEndDate.day}`
+    : `${startDate.day}-${inclusiveEndDate.day}`
   const weekdayFormatter = new Intl.DateTimeFormat('zh-TW', { timeZone: 'Asia/Taipei', weekday: 'short' })
   const startWeekday = weekdayFormatter.format(startAt)
   const endWeekday = weekdayFormatter.format(inclusiveEndAt)

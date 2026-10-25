@@ -26,6 +26,8 @@ export type CourseDetailGalleryLayout =
   | 'folio'
   | 'dossier'
 
+export type CourseDetailGalleryRole = 'general' | 'curriculum'
+
 export interface CourseDetailIntroductionBlock {
   key: string
   type: 'introduction'
@@ -34,12 +36,20 @@ export interface CourseDetailIntroductionBlock {
   paragraphs: string[]
 }
 
+export interface CourseDetailTextBlock {
+  key: string
+  type: 'text'
+  title: string
+  text: string
+}
+
 export interface CourseDetailGalleryBlock {
   key: string
   type: 'gallery'
   title: string
   description?: string
   layout: CourseDetailGalleryLayout
+  contentRole?: CourseDetailGalleryRole
   note?: string
   statement?: string
   items: CourseDetailGalleryItem[]
@@ -98,7 +108,7 @@ export interface CourseDetailVideoBlock {
   type: 'video'
   title: string
   statusLabel: string
-  image: CourseDetailImage
+  image?: CourseDetailImage
   embedUrl?: string
 }
 
@@ -133,6 +143,7 @@ export interface CourseDetailCarouselBlock {
 
 export type CourseDetailBodyBlock =
   | CourseDetailIntroductionBlock
+  | CourseDetailTextBlock
   | CourseDetailGalleryBlock
   | CourseDetailTeacherBlock
   | CourseDetailQuoteBlock
@@ -160,6 +171,8 @@ export interface CourseDetailContent {
     description?: string
     sessions: CourseDetailSession[]
   }
+  testimonials?: CourseDetailTestimonialBlock
+  highlights?: CourseDetailCarouselBlock
   registration: {
     title: string
     description?: string

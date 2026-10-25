@@ -20,6 +20,7 @@ describe('event detail correction styles', () => {
     expect(ruleBody(testimonials, '.shared-testimonials > h2')).not.toContain('border-bottom')
     expect(ruleBody(testimonials, 'blockquote:last-child')).toContain('border-bottom: 0')
     expect(ruleBody(eventDetail, '.event-detail__agenda')).not.toContain('border-top')
+    expect(ruleBody(eventDetail, '.event-detail__agenda li:last-child')).toContain('border-bottom: 0')
   })
 
   it('lets the hero image use its intrinsic height and reduces mobile fact values', () => {

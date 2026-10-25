@@ -13,6 +13,7 @@ import type {
   CourseDetailQuoteBlock,
   CourseDetailSession,
   CourseDetailTeacherBlock,
+  CourseDetailTextBlock,
   CourseDetailTestimonialBlock,
   CourseDetailVideoBlock,
 } from '../types/courseDetail'
@@ -249,6 +250,7 @@ function parseGalleryBlock(value: Record<string, unknown>, key: string): CourseD
   const note = optionalText(value.note, 4, 160)
   const statement = optionalText(value.statement, 8, 300)
   const items = Array.isArray(value.items) ? value.items.map(parseGalleryItem) : []
+  const contentRole = value.contentRole === 'curriculum' ? 'curriculum' : 'general'
   if (!title || description === null || typeof layout !== 'string'
     || !galleryLayouts.includes(layout as CourseDetailGalleryLayout)
     || note === null || statement === null || items.length < 1 || items.some(item => !item)) return null
@@ -258,6 +260,7 @@ function parseGalleryBlock(value: Record<string, unknown>, key: string): CourseD
     title,
     description,
     layout: layout as CourseDetailGalleryLayout,
+    contentRole,
     note,
     statement,
     items: items as CourseDetailGalleryItem[],
@@ -272,6 +275,12 @@ function parseTeacherBlock(value: Record<string, unknown>, key: string): CourseD
   const image = parseImage(value.image, false)
   if (!name || englishName === null || !lead || !biography || image === null) return null
   return { key, type: 'teacher', name, englishName, lead, biography, image }
+}
+
+function parseTextBlock(value: Record<string, unknown>, key: string): CourseDetailTextBlock | null {
+  const title = textInRange(value.title, 2, 100)
+  const text = textInRange(value.text, 8, 2000)
+  return title && text ? { key, type: 'text', title, text } : null
 }
 
 function parseQuoteBlock(value: Record<string, unknown>, key: string): CourseDetailQuoteBlock | null {
@@ -305,8 +314,8 @@ function parseVideoBlock(value: Record<string, unknown>, key: string): CourseDet
   const embedUrl = parseYouTubeEmbedUrl(value.url)
   const authoredStatusLabel = optionalText(value.statusLabel, 2, 40)
   const statusLabel = authoredStatusLabel ?? (embedUrl ? '觀看課程影片' : '課程影片待上架')
-  const image = parseImage(value.image)
-  if (!title || authoredStatusLabel === null || !image) return null
+  const image = parseImage(value.image, false) ?? undefined
+  if (!title || authoredStatusLabel === null) return null
   return { key, type: 'video', title, statusLabel, image, embedUrl }
 }
 
@@ -359,6 +368,7 @@ function parseBodyBlock(value: unknown): CourseDetailBodyBlock | null {
   if (!key || typeof value.type !== 'string') return null
   const type = value.type.replace(/^courseDetail/, '').toLowerCase()
   if (type === 'introduction') return parseIntroductionBlock(value, key)
+  if (type === 'text') return parseTextBlock(value, key)
   if (type === 'gallery') return parseGalleryBlock(value, key)
   if (type === 'teacher') return parseTeacherBlock(value, key)
   if (type === 'quote') return parseQuoteBlock(value, key)
@@ -400,10 +410,26 @@ export function parseCourseDetail(value: unknown, expectedSlug?: string): Course
     return type === 'video' ? [] : [null]
   })
   const bodyKeys = body.map(block => block?.key).filter((key): key is string => Boolean(key))
+  const legacyTestimonials = body.filter((block): block is CourseDetailTestimonialBlock => block?.type === 'testimonials')
+  const legacyHighlights = body.filter((block): block is CourseDetailCarouselBlock => block?.type === 'carousel')
+  const topLevelTestimonials = isRecord(detail.testimonials)
+    ? parseTestimonialBlock(detail.testimonials, 'testimonials')
+    : undefined
+  const topLevelHighlights = isRecord(detail.highlights)
+    ? parseCarouselBlock(detail.highlights, 'highlights')
+    : undefined
+  const contentBody = body.filter((block): block is Exclude<CourseDetailBodyBlock, CourseDetailTestimonialBlock | CourseDetailCarouselBlock> =>
+    Boolean(block) && block?.type !== 'testimonials' && block?.type !== 'carousel')
   const requiredBodyTypes = ['introduction', 'gallery']
   if (body.length < 1 || body.some(block => !block) || new Set(bodyKeys).size !== bodyKeys.length
-    || body.filter(block => block?.type === 'testimonials').length > 1
-    || requiredBodyTypes.some(type => !body.some(block => block?.type === type))) return null
+    || legacyTestimonials.length > 1 || legacyHighlights.length > 1
+    || (detail.testimonials !== undefined && detail.testimonials !== null && !topLevelTestimonials)
+    || (detail.highlights !== undefined && detail.highlights !== null && !topLevelHighlights)
+    || (topLevelTestimonials && legacyTestimonials.length > 0)
+    || (topLevelHighlights && legacyHighlights.length > 0)
+    || contentBody.filter(block => block.type === 'curriculum'
+      || (block.type === 'gallery' && block.contentRole === 'curriculum')).length > 1
+    || requiredBodyTypes.some(type => !contentBody.some(block => block.type === type))) return null
 
   const scheduleTitle = textInRange(detail.schedule.title, 4, 100)
   const scheduleDescription = optionalText(detail.schedule.description, 8, 300)
@@ -454,12 +480,14 @@ export function parseCourseDetail(value: unknown, expectedSlug?: string): Course
       actionLabel,
       actionUrl: firstOpenRun?.registrationUrl,
     },
-    body: body as CourseDetailBodyBlock[],
+    body: contentBody,
     schedule: {
       title: scheduleTitle,
       description: scheduleDescription,
       sessions,
     },
+    testimonials: topLevelTestimonials ?? legacyTestimonials[0],
+    highlights: topLevelHighlights ?? legacyHighlights[0],
     registration: {
       title: registrationTitle,
       description: registrationDescription,

@@ -38,14 +38,46 @@ describe('home content sections', () => {
     expect(courses.findAll('article').length).toBeLessThanOrEqual(3)
   })
 
-  it('links event rows and course cards to their detail routes', () => {
+  it('keeps a single recent course within one desktop grid column', () => {
+    const content = {
+      ...homeSectionsContent.courses,
+      items: homeSectionsContent.courses.items.slice(0, 1),
+    }
+    const courses = mount(HomeCourses, { props: { content }, global })
+
+    expect(courses.get('.home-courses__list').classes()).toContain('md:grid-cols-2')
+    expect(courses.findAll('.home-course-item')).toHaveLength(1)
+  })
+
+  it('links each compact more action to its matching event or course detail', () => {
     const events = mount(HomeEvents, { props: { content: homeSectionsContent.events }, global })
     const courses = mount(HomeCourses, { props: { content: homeSectionsContent.courses }, global })
 
-    expect(events.get('ol > li > a').attributes('href')).toBe(homeSectionsContent.events.items[0]?.href)
+    expect(events.get('.home-event-link').attributes('href')).toBe(homeSectionsContent.events.items[0]?.href)
     expect(courses.get('article > a').attributes('href')).toBe(homeSectionsContent.courses.items[0]?.href)
-    expect(events.find('svg').exists()).toBe(false)
-    expect(courses.find('svg').exists()).toBe(false)
+
+    const eventActions = events.findAll('.home-section-more')
+    expect(eventActions).toHaveLength(homeSectionsContent.events.items.length)
+    eventActions.forEach((action, index) => {
+      const event = homeSectionsContent.events.items[index]!
+      expect(action.classes()).toContain('button-primary--small')
+      expect(action.attributes('href')).toBe(event.href)
+      expect(action.attributes('aria-label')).toBe(`查看更多活動：${event.title}`)
+      expect(action.get('svg').attributes('aria-hidden')).toBe('true')
+    })
+
+    const courseActions = courses.findAll('.home-section-more')
+    expect(courseActions).toHaveLength(homeSectionsContent.courses.items.length)
+    courseActions.forEach((action, index) => {
+      const course = homeSectionsContent.courses.items[index]!
+      expect(action.classes()).toContain('button-primary--small')
+      expect(action.attributes('href')).toBe(course.href)
+      expect(action.attributes('aria-label')).toBe(`查看更多課程：${course.title}`)
+      expect(action.get('svg').attributes('aria-hidden')).toBe('true')
+    })
+
+    expect(events.find('.home-event-link > svg').exists()).toBe(false)
+    expect(courses.find('.home-course-link > svg').exists()).toBe(false)
   })
 
   it('lazy-loads content imagery and provides alternative text', () => {

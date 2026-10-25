@@ -81,10 +81,18 @@
 
 近期活動整列與近期課程整張卡片已改為詳情連結，分別使用 `/events/{slug}` 與 `/course/{slug}`。首頁 API 同步讀取已發布文件的 `slug.current`，邊界 parser 只接受安全的 kebab-case slug；缺少或不安全者不顯示，避免首頁產生失效或越界路徑。活動 hover／focus 以淡陶土底與標題色回饋；課程以圖片微幅放大與標題色回饋，兩者皆不顯示箭頭，並在 reduced motion 下取消轉場與縮放。
 
-首頁近期活動列保留原有日期樣式：數字年月採 `meta` 並置於上方，日期採陶土色 `title-xl` 置於下方；右側依序為 `label` 類型、`title-sm` 名稱與 `label` 時間。列高、間距及細分隔線維持目前節奏。首頁維持精簡內容，不重複總覽頁的地點、摘要與報名狀態；整列連結及既有 hover／focus 行為不變。
+首頁近期活動列保留原有日期樣式：數字年月置於上方，日期採陶土色 `title-md` 置於下方；右側依序為 `label` 類型、`title-sm` 名稱，以及 `label` 星期與時間。列高、間距及細分隔線維持目前節奏。首頁維持精簡內容，不重複總覽頁的地點、摘要與報名狀態；整列連結及既有 hover／focus 行為不變。
 
-跨日活動須顯示開始日至實際涵蓋結束日，不得只顯示第一天。日期範圍依 Asia/Taipei 計算，並將 `endAt` 視為結束時間而非額外活動日：同月兩日以 `30、31`／`2027/01` 顯示，跨月以 `30、01`／`2026/11–12` 顯示；若活動恰於次日 00:00 結束，日期仍只計到前一日。日期下方須由相同起訖時間自動顯示星期，單日如 `週六`，兩日如 `週六、週日`，不得要求編輯者在 `scheduleNote` 重複維護。
+跨日活動須顯示開始日至實際涵蓋結束日，不得只顯示第一天。日期範圍依 Asia/Taipei 計算，並將 `endAt` 視為結束時間而非額外活動日：同月兩日以 `30-31`／`2027/01` 顯示，跨月以 `30-01`／`2026/11–12` 顯示；若活動恰於次日 00:00 結束，日期仍只計到前一日。星期置於右側時間資訊列並由相同起訖時間自動產生，單日如 `週六`，兩日如 `週六、週日`；520px 以下星期與時段改為上下排列，不得要求編輯者在 `scheduleNote` 重複維護。
 
-Chrome 於 1440px 與 390px 驗證日期樣式、兩日活動 `30、31` 及 `週六、週日` 顯示：年月在上、陶土色日期在中、星期在下；兩種尺寸皆無文字碰撞或水平溢位。Web 全套 48 檔／312 項測試、typecheck、production build 與 `git diff --check` 皆通過；typecheck／build 僅保留既有的 Volar package export、sourcemap 與字型 runtime resolve 警告。詳細證據見 [首頁近期活動與總覽格式對齊](../design/review/home-events-overview-alignment/README.md)。Safari、Firefox、實體觸控裝置與螢幕閱讀器仍待發布前交叉驗證。
+Chrome 於 1440px 與 390px 驗證日期樣式、兩日活動 `30-31` 及右側 `週六、週日` 顯示：桌機星期與時段並排，手機同欄上下排列；兩種尺寸皆無文字碰撞、截字或水平溢位。Web 全套 48 檔／313 項測試、typecheck、production build 與 `git diff --check` 皆通過；typecheck／build 僅保留既有的 Volar package export、sourcemap 與字型 runtime resolve 警告。詳細證據見 [首頁近期活動與總覽格式對齊](../design/review/home-events-overview-alignment/README.md)。Safari、Firefox、實體觸控裝置與螢幕閱讀器仍待發布前交叉驗證。
 
 Chrome 於 1440 × 1000 與 390 × 844 的代表內容驗證通過：活動與課程 href 正確、鍵盤焦點外框為 2px、手機無水平溢位，操作區最小高度分別約 178px 與 518px，reduced-motion 轉場為 `0s`。Web 全套 48 檔／310 項測試、typecheck、production build、Impeccable detector 與 `git diff --check` 通過；保留既有 Volar package export、sourcemap 與字型 runtime resolve 警告。證據見 [首頁活動與課程連結驗收](../design/review/home-sections-linked-cards/README.md)。未執行 Safari、Firefox、實體觸控裝置或螢幕閱讀器驗收；本次未修改 Sanity schema、部署或遠端內容。
+
+## 2026-10-25 區塊 More 操作與課程圖片比例
+
+近期活動與近期課程的 `more` 使用共用 `.button-primary--small`，沿用 hero CTA 的色彩、箭頭與互動，尺寸為 170 × 56px，文字桌機 16px、手機 14px。每筆活動的按鈕位於該列最右側，與整列主連結相同皆連往該筆 `event.href`；每張課程的按鈕位於內容下方靠左，與整卡主連結相同皆連往該筆 `course.href`。按鈕的輔助名稱包含活動或課程標題，空狀態不顯示沒有詳情目標的按鈕。
+
+近期課程維持原有雙欄錯落卡片；桌機固定保留兩欄軌道，即使只有一筆也只占單欄，不橫向撐滿，手機則維持單欄。每筆依序顯示 5:4 圖片、分類日期、`title-sm` 課名、摘要、靠左小按鈕及底部分隔線。整卡詳情連結、內容契約與最多三筆規則不變。Chrome 於 1440px 與 390px 逐筆驗證詳情 href、圖片比例、按鈕尺寸與字級、活動列右側／窄版下方排列、課程靠左排列、hover 變色與箭頭位移及無水平溢位；詳細證據見 [首頁活動與課程 More 操作驗收](../design/review/home-sections-more-actions/README.md)。Safari、Firefox、實體觸控裝置與螢幕閱讀器仍待發布前交叉驗證。
+
+Web 全套 48 檔／313 項測試、typecheck、production build、Impeccable detector 與 `git diff --check` 通過；typecheck／build 僅保留既有的 Volar package export、sourcemap 與字型 runtime resolve 警告。本階段未修改 Sanity schema、部署或遠端內容。

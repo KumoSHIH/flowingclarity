@@ -77,4 +77,8 @@ describe('course detail correction styles', () => {
     expect(source).toMatch(/--carousel-section-block: var\(--course-section-block\);/)
     expect(source).toMatch(/--related-section-block: var\(--course-section-block\);/)
   })
+
+  it('keeps the tablet hero title inside equal horizontal gutters', () => {
+    expect(source).toMatch(/@media \(max-width: 1099px\)[\s\S]*\.course-hero h1\s*\{[^}]*left: 50px;[^}]*width: calc\(100vw - 100px\);/)
+  })
 })

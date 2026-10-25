@@ -6,6 +6,7 @@ import {
   emptyCourseDetailFixture,
   longCourseDetailFixture,
   minimalCourseDetailFixture,
+  visualCurriculumCourseDetailFixture,
 } from "../../app/fixtures/courseDetail";
 
 const nuxtLinkStub = {
@@ -77,6 +78,30 @@ describe("CourseDetail", () => {
     });
     expect(iframe.attributes("title")).toContain(video.title);
     expect(wrapper.find(".course-video a").exists()).toBe(false);
+  });
+
+  it("renders video copy without an optional cover and renders a text paragraph", async () => {
+    const content = structuredClone(courseDetailFixture);
+    const video = content.body.find((block) => block.type === "video");
+    if (!video || video.type !== "video") throw new Error("Missing video fixture");
+    delete video.image;
+    content.body.splice(1, 0, {
+      key: "learning-context",
+      type: "text",
+      title: "練習脈絡",
+      text: "第一段文字。\n第二段文字。",
+    });
+
+    const wrapper = mount(CourseDetail, {
+      props: { content },
+      global: { stubs: { NuxtLink: nuxtLinkStub } },
+    });
+
+    expect(wrapper.get(".course-video h2").text()).toBe(video.title);
+    expect(wrapper.find(".course-video__media").exists()).toBe(false);
+    expect(wrapper.get(".course-video__status").text()).toBe(video.statusLabel);
+    expect(wrapper.get("#content-learning-context .body-copy").text()).toBe("第一段文字。\n第二段文字。");
+    expect(wrapper.get("a[href='#content-learning-context']").text()).toBe("練習脈絡");
   });
 
   it("renders each course stage and date range instead of one continuous date", async () => {
@@ -191,16 +216,35 @@ describe("CourseDetail", () => {
     expect(wrapper.findAll(".course-testimonials blockquote")).toHaveLength(1);
     expect(wrapper.get(".course-carousel h2").text()).toContain("在練習之間");
     expect(
-      wrapper.get(".course-chapters a[href='#content-practice-carousel']").text(),
-    ).toBe("在練習之間，看見方法如何落地。");
+      wrapper.get(".course-chapters a[href='#highlights']").text(),
+    ).toBe("課程花絮");
     expect(wrapper.get(".course-carousel .about-carousel__controls span").text()).toBe("01 / 03");
     await wrapper.findAll(".course-carousel .about-carousel__controls button")[1]!.trigger("click");
     expect(wrapper.get(".course-carousel .about-carousel__controls span").text()).toBe("02 / 03");
     expect(wrapper.findAll(".course-related .article-related__track > li")).toHaveLength(1);
 
+    const schedule = wrapper.get("#schedule").element;
+    const testimonials = wrapper.get("#testimonials").element;
+    const highlights = wrapper.get("#highlights").element;
     const registration = wrapper.get("#registration").element;
     const related = wrapper.get(".course-related").element;
+    expect(schedule.compareDocumentPosition(testimonials) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(testimonials.compareDocumentPosition(highlights) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(highlights.compareDocumentPosition(registration) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(registration.compareDocumentPosition(related) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("keeps supporting quotes out of chapters and labels a visual curriculum as one course structure chapter", async () => {
+    const wrapper = mount(CourseDetail, {
+      props: { content: visualCurriculumCourseDetailFixture },
+      global: { stubs: { NuxtLink: nuxtLinkStub } },
+    });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find(".course-chapters a[href='#content-quote']").exists()).toBe(false);
+    expect(wrapper.get(".course-chapters a[href='#content-stages']").text()).toBe("課程架構");
+    expect(wrapper.find(".course-chapters a[href='#content-curriculum']").exists()).toBe(false);
+    expect(wrapper.get("#content-quote").exists()).toBe(true);
   });
 
   it("does not render empty paragraphs when optional description fields are omitted", () => {
@@ -242,8 +286,8 @@ describe("CourseDetail", () => {
 
     expect(wrapper.find("a[href='#content-teacher']").exists()).toBe(false);
     expect(wrapper.find("a[href='#content-video']").exists()).toBe(false);
-    expect(wrapper.find("a[href='#content-testimonials']").exists()).toBe(false);
-    expect(wrapper.find("a[href='#content-practice-carousel']").exists()).toBe(false);
+    expect(wrapper.find("a[href='#testimonials']").exists()).toBe(false);
+    expect(wrapper.find("a[href='#highlights']").exists()).toBe(false);
     expect(wrapper.find("a[href='#content-curriculum']").exists()).toBe(true);
     expect(wrapper.find(".gallery-tabs").exists()).toBe(false);
     expect(wrapper.get(".gallery-panel").attributes("role")).toBeUndefined();

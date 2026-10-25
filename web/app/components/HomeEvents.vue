@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { HomeSectionsContent } from "#shared/types/homeSections";
+import HomeMoreLink from "./HomeMoreLink.vue";
 
 defineProps<{ content: HomeSectionsContent["events"] }>();
 </script>
@@ -22,40 +23,49 @@ defineProps<{ content: HomeSectionsContent["events"] }>();
         </p>
       </div>
 
-      <ol v-if="content.items.length" class="border-t border-[#bcae9c]">
-        <li
-          v-for="event in content.items"
-          :key="event.id"
-          class="home-event-item"
-        >
-          <NuxtLink :to="event.href" class="home-event-link">
-            <time class="home-event-link__date" :datetime="event.date">
-              <span class="home-event-link__period type-lead font-editorial">{{
-                event.period
-              }}</span>
-              <span
-                class="home-event-link__day type-title-md font-editorial leading-none"
-                >{{ event.day }}</span
-              >
-            </time>
-            <div class="home-event-link__copy">
-              <p class="home-event-link__category type-label">
-                {{ event.category }}
-              </p>
-              <h3 class="type-title-sm home-event-link__title">
-                {{ event.title }}
-              </h3>
-              <p class="home-event-link__meta type-label">
-                <span>{{ event.weekday }}</span>
-                <span>{{ event.time }}</span>
-              </p>
+      <div>
+        <ol v-if="content.items.length" class="border-t border-[#bcae9c]">
+          <li
+            v-for="event in content.items"
+            :key="event.id"
+            class="home-event-item"
+          >
+            <div class="home-event-row">
+              <NuxtLink :to="event.href" class="home-event-link">
+                <time class="home-event-link__date" :datetime="event.date">
+                  <span class="home-event-link__period type-lead font-editorial">{{
+                    event.period
+                  }}</span>
+                  <span
+                    class="home-event-link__day type-title-md font-editorial leading-none"
+                    >{{ event.day }}</span
+                  >
+                </time>
+                <div class="home-event-link__copy">
+                  <p class="home-event-link__category type-label">
+                    {{ event.category }}
+                  </p>
+                  <h3 class="type-title-sm home-event-link__title">
+                    {{ event.title }}
+                  </h3>
+                  <p class="home-event-link__meta type-label">
+                    <span>{{ event.weekday }}</span>
+                    <span>{{ event.time }}</span>
+                  </p>
+                </div>
+              </NuxtLink>
+              <HomeMoreLink
+                class="home-event-row__more"
+                :to="event.href"
+                :ariaLabel="`查看更多活動：${event.title}`"
+              />
             </div>
-          </NuxtLink>
-        </li>
-      </ol>
-      <p v-else class="type-body border-t border-[#bcae9c] py-9 text-muted">
-        {{ content.emptyMessage }}
-      </p>
+          </li>
+        </ol>
+        <p v-else class="type-body border-t border-[#bcae9c] py-9 text-muted">
+          {{ content.emptyMessage }}
+        </p>
+      </div>
     </div>
   </section>
 </template>
@@ -65,13 +75,20 @@ defineProps<{ content: HomeSectionsContent["events"] }>();
   border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 16%, transparent);
 }
 
+.home-event-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--button-small-width);
+  gap: 32px;
+  align-items: center;
+  min-height: 150px;
+  padding: 24px 0;
+}
+
 .home-event-link {
   display: grid;
   grid-template-columns: minmax(180px, 0.9fr) minmax(0, 3fr);
   gap: clamp(22px, 3vw, 46px);
   align-items: center;
-  min-height: 150px;
-  padding: 24px 0;
   color: inherit;
   text-decoration: none;
 }
@@ -87,10 +104,6 @@ defineProps<{ content: HomeSectionsContent["events"] }>();
 .home-event-link__day {
   color: var(--color-clay);
   font-variant-numeric: tabular-nums;
-}
-
-.home-event-link__day--range {
-  font-size: var(--home-event-date-range-size);
 }
 
 .home-event-link__period {
@@ -131,6 +144,17 @@ defineProps<{ content: HomeSectionsContent["events"] }>();
     grid-template-columns: 112px minmax(0, 1fr);
     gap: 18px;
     min-height: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .home-event-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .home-event-row__more {
+    justify-self: end;
   }
 }
 

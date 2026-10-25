@@ -45,8 +45,8 @@ describe('home sections content mapping', () => {
     }, now)
 
     expect(content?.events.items.map(({ period, day, weekday }) => ({ period, day, weekday }))).toEqual([
-      { period: '2026/11', day: '07、08', weekday: '週六、週日' },
-      { period: '2026/11–12', day: '30、01', weekday: '週一、週二' },
+      { period: '2026/11', day: '07-08', weekday: '週六、週日' },
+      { period: '2026/11–12', day: '30-01', weekday: '週一、週二' },
       { period: '2026/12', day: '05', weekday: '週六' },
     ])
   })

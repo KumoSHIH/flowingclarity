@@ -21,7 +21,7 @@
 | `title-lg` | 總覽頁與一般頁面標題 | `56px` | `42px` | `400`／`1.2`／`0.04em` |
 | `title-xl` | 首屏與內容詳情主標題 | `72px` | `42px` | `400`／`1.22`／`0.025em` |
 
-主要按鈕是元件專屬角色，維持桌面 `18px`、手機 `14px`、字重 `400` 與 `0.1em` 字距，不納入通用文字角色。既有 `--detail-hero-title-size`、`--detail-summary-size`、`--detail-section-title-size`、`--detail-body-size` 保留為相容別名，實際值改由 `--type-*` token 提供；新元件不得直接新增另一組詳情字級。
+主要按鈕是元件專屬角色；大型按鈕維持桌面 `18px`、手機 `14px`，小型按鈕為桌面 `16px`、手機 `14px`，兩者字重皆為 `400`、字距皆為 `0.1em`，不納入通用文字角色。既有 `--detail-hero-title-size`、`--detail-summary-size`、`--detail-section-title-size`、`--detail-body-size` 保留為相容別名，實際值改由 `--type-*` token 提供；新元件不得直接新增另一組詳情字級。
 
 目前淺色 Banner Story 欄的標題與敘述繼承 `#38342e`，背景為 `#e8dfd2`；深色表面使用 `#f7f6f4`，次要文字使用 `#d8c7b8`。一般區塊標題不直接沿用首屏字級。
 
@@ -43,7 +43,9 @@
 | 箭頭互動 | `.button-primary__icon` 為 `22 × 22px`、1.5px 線條；hover／focus 向右移動 4px |
 | 減少動態 | 停用按鈕與箭頭過渡 |
 
-導向目的地使用 `<a href>`；執行操作使用 `<button>`。沒有有效目的地的主要行動使用原生 disabled button，不以無效連結模擬。Loading、一般尺寸與 pressed 變體尚未定義；有使用案例時再補齊。父容器決定按鈕外距，共用按鈕管理自身寬度、外觀、內距與互動狀態。
+小型主要按鈕加上 `.button-primary--small`，寬度 `170px`、最小高度 `56px`、左右內距 `24px`，桌機字級 `16px`、手機字級 `14px`；其餘配色、箭頭、hover、focus、disabled 與 reduced-motion 全部繼承大型按鈕。小型按鈕用於活動、課程等內容清單的詳情操作，hero 與詳情頁主要轉換仍使用大型按鈕。
+
+導向目的地使用 `<a href>`；執行操作使用 `<button>`。沒有有效目的地的主要行動使用原生 disabled button，不以無效連結模擬。Loading 與 pressed 變體尚未定義；有使用案例時再補齊。父容器決定按鈕外距，共用按鈕管理自身寬度、外觀、內距與互動狀態。
 
 ## 套用與驗收
 
@@ -61,9 +63,13 @@
   <span>探索課程</span>
   <svg class="button-primary__icon" aria-hidden="true"><!-- 圖示 --></svg>
 </a>
+<a class="button-primary button-primary--small" href="/course/example">
+  <span>more</span>
+  <svg class="button-primary__icon" aria-hidden="true"><!-- 圖示 --></svg>
+</a>
 ```
 
-深色背景的敘述加上 `lead-text--inverse`；淺色 Banner 使用基本 `.lead-text` 並繼承容器文字顏色。`.button-primary` 代表全站大型主要行動，可用於連結或原生按鈕；`.button-primary__icon` 統一箭頭尺寸、線條與互動。共用 class 放在 `@layer components`，頁面只保留外距與配置，不得重新定義同角色的顏色、字級、高度、最大寬度、焦點或 disabled 狀態。
+深色背景的敘述加上 `lead-text--inverse`；淺色 Banner 使用基本 `.lead-text` 並繼承容器文字顏色。`.button-primary` 代表全站大型主要行動，搭配 `.button-primary--small` 成為小型內容詳情操作，可用於連結或原生按鈕；`.button-primary__icon` 統一箭頭尺寸、線條與互動。共用 class 放在 `@layer components`，頁面只保留外距與配置，不得重新定義同角色的顏色、字級、高度、最大寬度、焦點或 disabled 狀態。
 
 共用文字 token 使用 `--type-<role>-size|weight|leading|tracking`；按鈕、互動標題色及焦點仍使用 `--button-primary-*`、`--interactive-title-hover` 與 `--control-focus-*`。字體和主色沿用既有 `--font-sans`、`--font-display`、`--color-persimmon` 與 `--color-clay`。手機數值在 `max-width: 1023px` 統一切換。文字字級使用桌面與手機兩組固定值，不使用 `clamp()`；間距、容器與非文字尺寸仍可依既有版面需求使用流體尺度。修改全站數值時同步更新本文件與 `DESIGN.md`。
 

@@ -43,6 +43,11 @@ describe('shared typography corrections', () => {
 
     expect(stylesheet).toContain('--button-primary-size: 18px;')
     expect(stylesheet).toMatch(/@media \(max-width: 1023px\)[\s\S]*--button-primary-size: 14px;/)
+    expect(stylesheet).toContain('--button-small-size: 16px;')
+    expect(stylesheet).toContain('--button-small-width: 170px;')
+    expect(stylesheet).toContain('--button-small-height: 56px;')
+    expect(stylesheet).toMatch(/@media \(max-width: 1023px\)[\s\S]*--button-small-size: 14px;/)
+    expect(stylesheet).toMatch(/\.button-primary\.button-primary--small \{[\s\S]*?font-size: var\(--button-small-size\);/)
     expect(stylesheet).toMatch(/button \{\s*font-weight: 400;/)
     expect(stylesheet).toMatch(/\.button-primary \{[\s\S]*?font-weight: 400;/)
     expect(courseDetail).not.toContain('primary-action')

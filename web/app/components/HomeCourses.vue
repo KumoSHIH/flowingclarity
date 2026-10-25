@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { HomeSectionsContent } from "#shared/types/homeSections";
+import HomeMoreLink from "./HomeMoreLink.vue";
 
 defineProps<{ content: HomeSectionsContent["courses"] }>();
 </script>
@@ -24,11 +25,12 @@ defineProps<{ content: HomeSectionsContent["courses"] }>();
 
       <div
         v-if="content.items.length"
-        class="grid gap-20 md:grid-cols-2 md:gap-[clamp(56px,8vw,128px)]"
+        class="home-courses__list grid gap-20 md:grid-cols-2 md:gap-[clamp(56px,8vw,128px)]"
       >
         <article
           v-for="(course, index) in content.items"
           :key="course.id"
+          class="home-course-item"
           :class="index % 2 !== 0 ? 'md:mt-36' : ''"
         >
           <NuxtLink
@@ -53,7 +55,7 @@ defineProps<{ content: HomeSectionsContent["courses"] }>();
                 "
               />
             </div>
-            <div class="border-b border-[#c9bcac] pb-10 pt-8 md:pt-10">
+            <div class="home-course-link__copy">
               <div>
                 <p class="type-label mb-4 text-clay">
                   {{ course.meta }}
@@ -62,11 +64,16 @@ defineProps<{ content: HomeSectionsContent["courses"] }>();
                   {{ course.title }}
                 </h3>
               </div>
-              <p class="type-body mt-3 text-muted">
+              <p class="type-body home-course-link__description text-muted">
                 {{ course.description }}
               </p>
             </div>
           </NuxtLink>
+          <HomeMoreLink
+            class="home-course-item__more"
+            :to="course.href"
+            :ariaLabel="`查看更多課程：${course.title}`"
+          />
         </article>
       </div>
       <p
@@ -80,10 +87,30 @@ defineProps<{ content: HomeSectionsContent["courses"] }>();
 </template>
 
 <style scoped>
+.home-course-item {
+  display: grid;
+  align-content: start;
+  padding-bottom: 40px;
+  border-bottom: 1px solid #c9bcac;
+}
+
 .home-course-link__media img {
   transition:
     filter 420ms ease,
     transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.home-course-link__copy {
+  padding-top: 32px;
+}
+
+.home-course-link__description {
+  max-width: 72ch;
+  margin-top: 16px;
+}
+
+.home-course-item__more {
+  margin-top: 32px;
 }
 
 .home-course-link__title {
@@ -107,6 +134,18 @@ defineProps<{ content: HomeSectionsContent["courses"] }>();
 
   .home-course-link:hover .home-course-link__title {
     color: var(--interactive-title-hover);
+  }
+}
+
+@media (max-width: 767px) {
+  .home-course-item {
+    padding-bottom: 40px;
+  }
+}
+
+@media (min-width: 768px) {
+  .home-course-link__copy {
+    padding-top: 40px;
   }
 }
 

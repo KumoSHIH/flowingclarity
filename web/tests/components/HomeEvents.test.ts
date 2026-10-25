@@ -23,7 +23,7 @@ describe('HomeEvents', () => {
     const wrapper = mount(HomeEvents, { props: { content: homeSectionsContent.events }, global: { stubs: { NuxtLink } } })
     const firstEvent = wrapper.get('ol > li')
 
-    expect(firstEvent.findAll('time > span').map(part => part.text())).toEqual(['2026/10', '12、13'])
+    expect(firstEvent.findAll('time > span').map(part => part.text())).toEqual(['2026/10', '12-13'])
     expect(firstEvent.get('.home-event-link__category').text()).toBe('兩日工作坊')
     expect(firstEvent.get('h3').text()).toBe('秋日靜心練習')
     expect(firstEvent.findAll('.home-event-link__meta > span').map(part => part.text())).toEqual([
@@ -35,7 +35,7 @@ describe('HomeEvents', () => {
   it('links each complete event row to its detail page', () => {
     const wrapper = mount(HomeEvents, { props: { content: homeSectionsContent.events }, global: { stubs: { NuxtLink } } })
 
-    expect(wrapper.findAll('ol > li > a').map(link => link.attributes('href'))).toEqual([
+    expect(wrapper.findAll('.home-event-link').map(link => link.attributes('href'))).toEqual([
       '/events/autumn-meditation',
       '/events/body-writing-night',
       '/events/slow-tea-time',
