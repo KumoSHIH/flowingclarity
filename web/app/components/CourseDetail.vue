@@ -1259,9 +1259,9 @@ onBeforeUnmount(() => {
 }
 .course-quote blockquote {
   max-width: 1030px;
-  font-size: var(--type-title-lg-size);
-  line-height: var(--type-title-lg-leading);
-  letter-spacing: var(--type-title-lg-tracking);
+  font-size: var(--type-title-md-size);
+  line-height: var(--type-title-md-leading);
+  letter-spacing: var(--type-title-md-tracking);
 }
 .course-quote cite {
   font-size: var(--type-label-size);
@@ -1485,18 +1485,18 @@ onBeforeUnmount(() => {
 }
 .schedule-stage-list > div {
   display: grid;
-  grid-template-columns: 128px minmax(0, 1fr);
-  gap: 28px;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 25px;
   align-items: center;
   min-height: 88px;
   border-bottom: 1px solid var(--line);
 }
 .schedule-stage-list dt {
   font-family: var(--font-display);
-  font-size: var(--type-title-sm-size);
-  font-weight: var(--type-title-sm-weight);
-  line-height: var(--type-title-sm-leading);
-  letter-spacing: var(--type-title-sm-tracking);
+  font-size: var(--type-lead-size);
+  font-weight: var(--type-lead-weight);
+  line-height: var(--type-lead-leading);
+  letter-spacing: var(--type-lead-tracking);
 }
 .schedule-stage-list dd {
   display: grid;
@@ -1513,8 +1513,7 @@ onBeforeUnmount(() => {
 }
 .schedule-details {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 28px;
+  gap: 25px;
   margin: 0;
   padding: 28px 0 30px;
 }
@@ -1956,9 +1955,6 @@ onBeforeUnmount(() => {
   .schedule-session__action {
     width: 100%;
     min-height: 56px;
-  }
-  .course-registration > div {
-    min-height: 540px;
   }
   .course-registration h2 {
     font-size: var(--type-title-md-size);

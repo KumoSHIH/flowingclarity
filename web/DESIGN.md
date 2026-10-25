@@ -117,7 +117,7 @@ components:
 
 標題使用具人文感的繁中襯線字體，內文、導覽與控制項使用清楚的東亞無襯線字體。展示標題只用於首屏；文字字級採桌面與 `<= 1023px` 兩組固定值，不使用 `clamp()`，正文保持寬鬆行距並控制在約 65–75 個半形字元內。
 
-全站字級以八個語意角色管理：`meta`、`label`、`body`、`lead`、`title-sm`、`title-md`、`title-lg`、`title-xl`。元件應引用 `--type-<role>-*` 或對應 `.type-<role>` class，不得因單一頁面另建相近尺寸。桌機角色依 frontmatter；`<= 1023px` 的 `lead` 為 `16px`、`title-sm` 為 `22px`、`title-md` 為 `26px`、`title-lg` 與 `title-xl` 皆為 `42px`。主要按鈕維持元件專屬的 `18px`／`14px`，不新增通用文字角色。
+全站字級以八個語意角色管理：`meta`、`label`、`body`、`lead`、`title-sm`、`title-md`、`title-lg`、`title-xl`。元件應引用 `--type-<role>-*` 或對應 `.type-<role>` class，不得因單一頁面另建相近尺寸。桌機角色依 frontmatter；`<= 1023px` 的 `lead` 為 `16px`、`title-sm` 為 `18px`、`title-md` 為 `26px`、`title-lg` 與 `title-xl` 皆為 `42px`。主要按鈕維持元件專屬的 `18px`／`14px`，不新增通用文字角色。
 
 截至 2026-10-24 第四階段，全站頁面與共用 Header／Footer 的程式字體設定皆已遷移至上述角色；type detector 為 0。瀏覽器、實體裝置與螢幕閱讀器驗收屬獨立發布檢查，不因程式遷移完成而自動視為通過。
 
@@ -206,4 +206,6 @@ components:
 
 - About、Header 與 Footer 已完成最後遷移；全站殘餘掃描也收斂文章小標、執行師側欄、共用麵包屑／輪播及目錄篩選別名。`web/app` 元件不再使用數字 `font-size`、數字字級 shorthand 或舊詳情字級別名。
 - 全站 type detector 由最初 160 項降至 0。新增全元件回歸測試，Web 全套 43 檔／268 項測試、typecheck 與 production build 通過。
+
+2026-10-25 使用者手動將 `<= 1023px` 的 `title-sm` 由 `22px` 收斂為 `18px`；桌機 `24px` 與既有行高、字距、字重不變。此為共用 token 調整，所有引用 `--type-title-sm-size` 或 `.type-title-sm` 的手機／平板元件一併生效；本次只同步文件，尚未執行新的全站響應式畫面驗收。
 - 程式端字體角色統一完成；環境無可用瀏覽器，仍須補做 1440、1023、390px、200% 文字放大、長文字換行與 Footer 操作區尺寸的人工驗收。

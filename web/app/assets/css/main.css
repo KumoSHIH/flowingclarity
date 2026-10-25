@@ -265,7 +265,7 @@
 @media (max-width: 1023px) {
   :root {
     --type-lead-size: 16px;
-    --type-title-sm-size: 22px;
+    --type-title-sm-size: 18px;
     --type-title-md-size: 26px;
     --type-title-lg-size: 42px;
     --type-title-xl-size: 42px;
