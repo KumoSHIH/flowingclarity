@@ -83,6 +83,8 @@ const paths = [
             :width="content.footerLogo.width"
             :height="content.footerLogo.height"
             alt=""
+            loading="lazy"
+            decoding="async"
             @error="logoFailed = true"
           />
           <span v-else class="site-footer__brand-name">{{

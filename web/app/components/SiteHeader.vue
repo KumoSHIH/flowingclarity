@@ -73,6 +73,8 @@ const {
         alt=""
         :width="settings.brandLogo.width"
         :height="settings.brandLogo.height"
+        loading="eager"
+        decoding="async"
         draggable="false"
         @error="logoFailed = true"
       />

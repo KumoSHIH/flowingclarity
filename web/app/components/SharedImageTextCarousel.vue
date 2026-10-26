@@ -291,7 +291,7 @@ onBeforeUnmount(() => {
                 :width="slide.item.image.width"
                 :height="slide.item.image.height"
                 :style="{ objectPosition: slide.item.image.objectPosition }"
-                :loading="slide.originalIndex === 0 ? 'eager' : 'lazy'"
+                loading="lazy"
                 decoding="async"
                 draggable="false"
                 @error="markImageFailed(slide.item.image.src)"

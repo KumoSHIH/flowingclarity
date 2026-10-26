@@ -229,6 +229,7 @@ onBeforeUnmount(() => {
                       width="640"
                       height="960"
                       loading="lazy"
+                      decoding="async"
                     />
                   </span>
                   <span

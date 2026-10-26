@@ -107,6 +107,12 @@ Footer 採主色 bark（`#766254`）表面與 paper 文字，保留 2.4px 連結
 
 實際瀏覽器已於首頁驗證 1440 × 900 與 390 × 844：頂端按鈕數量為 0，捲動 700px 後各顯示一個按鈕，尺寸分別為 56px 與 52px，焦點外框為 2px，頁面無水平溢位；點擊後 `scrollY` 回到 0 且按鈕隱藏。元件測試另覆蓋 480px 顯示邊界、accessible name、smooth scrolling、reduced motion 與 listener cleanup；Web 34 個測試檔共 190 項、typecheck、production build 及 `git diff --check` 通過，Impeccable detector 為 0 項。實體觸控裝置及螢幕閱讀器尚未執行，不記為已完成。
 
+## 全站內容進場動畫
+
+狀態：2026-10-26 已在 `app.vue` 掛載共用 `useRevealMotion`。正式頁面的標題、段落、圖片／畫布、卡片、清單、表格、表單、內容導覽與操作在客戶端掛載前先進入 `pending` 並設定 `opacity: 0`，首次進入 viewport 後才播放至 `1`；巢狀內容以最外層語意單元為主，避免卡片及其每個子元素重複動畫。所有內容使用 `800ms` 純淡入，相鄰元素延遲上限 `24ms`；reduced motion 使用較短的 `300ms` 淡入。
+
+SSR 與無 JavaScript 狀態不輸出隱藏樣式；客戶端在 observer 註冊前才設定 opacity 0。Intersection Observer 觸發後解除 inline opacity，由 Web Animations API 以 backwards fill 從 0 播放至 1；若動畫 API 不可用則立即恢復可見。Mutation Observer 會接續處理 API 狀態切換及路由後新增的節點，卸載時中止 observer 與未完成動畫。動畫單元測試 3 項、typecheck 與 production build 通過；全套 324 項中 323 項通過，唯一失敗仍是既有課程詳情 `.course-intro` 高度契約。Computer Use 無可用瀏覽器，桌機、手機、快速捲動及實體 reduced-motion 視覺驗收仍待補；下一階段應於 1440px、390px 與 reduced-motion 各抽驗首頁、總覽及詳情頁。
+
 ### 既有抽取驗證
 
 2026-10-04：前端 30 項測試、typecheck 與正式 build 通過。以原始 CSS 和抽取後 CSS 建立本機 Banner 文字區測試頁，在 Chrome 比對 390、1023、1024、1180、1440px 的字級、行高、顏色、內距及元素位置／尺寸，結果一致；減少動態模式確認為零秒過渡，並檢視手機與桌面截圖。此紀錄早於 2026-10-05 的標題尺寸與 Banner 版面調整，不代表目前版本已完成視覺驗收。

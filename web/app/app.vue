@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useRevealMotion } from './composables/useRevealMotion'
+
+const appRoot = ref<HTMLElement>()
+
+useRevealMotion(appRoot)
+
 useHead({
   htmlAttrs: { lang: 'zh-Hant' },
   title: 'Flowing Clarity',
@@ -19,7 +26,7 @@ useHead({
 </script>
 
 <template>
-  <div>
+  <div ref="appRoot">
     <NuxtRouteAnnouncer />
     <NuxtPage />
     <GoTopButton />

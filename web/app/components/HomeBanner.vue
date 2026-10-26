@@ -91,6 +91,8 @@ function selectCategory(id: string, event: MouseEvent) {
         alt="暖黃色地形線交疊成一朵玫瑰，象徵由身體出發的感知地圖"
         width="2000"
         height="1786"
+        loading="eager"
+        decoding="async"
         fetchpriority="high"
         draggable="false"
       />
@@ -130,6 +132,8 @@ function selectCategory(id: string, event: MouseEvent) {
             alt=""
             width="896"
             height="496"
+            loading="eager"
+            decoding="async"
             draggable="false"
           />
         </a>

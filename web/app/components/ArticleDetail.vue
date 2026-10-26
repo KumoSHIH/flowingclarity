@@ -91,6 +91,7 @@ function formatDate(value: string) {
               :alt="content.coverImage.alt"
               :width="content.coverImage.width"
               :height="content.coverImage.height"
+              loading="eager"
               decoding="async"
               fetchpriority="high"
               :style="

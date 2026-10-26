@@ -74,6 +74,9 @@ function paragraphSegments(paragraph: AboutRichTextParagraph) {
             :alt="content.heroImage.alt"
             :width="content.heroImage.width"
             :height="content.heroImage.height"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
             :style="{ objectPosition: content.heroImage.objectPosition }"
             @error="markImageFailed(content.heroImage.src)"
           />
@@ -110,6 +113,8 @@ function paragraphSegments(paragraph: AboutRichTextParagraph) {
             :alt="content.brandStory.image.alt"
             :width="content.brandStory.image.width"
             :height="content.brandStory.image.height"
+            loading="lazy"
+            decoding="async"
             @error="markImageFailed(content.brandStory.image.src)"
           />
           <p v-else class="about-image-fallback">
@@ -150,6 +155,8 @@ function paragraphSegments(paragraph: AboutRichTextParagraph) {
             :alt="content.placeAndTeam.image.alt"
             :width="content.placeAndTeam.image.width"
             :height="content.placeAndTeam.image.height"
+            loading="lazy"
+            decoding="async"
             :style="{
               objectPosition: content.placeAndTeam.image.objectPosition,
             }"

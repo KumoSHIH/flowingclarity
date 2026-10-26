@@ -175,6 +175,12 @@ components:
 
 地圖分類以圓形座標點搭配文字，選取、hover 與鍵盤焦點只增強暖白光暈。語意文字與操作元件必須由 HTML 呈現，不可烘焙進背景圖。
 
+### Content Reveal Motion
+
+全站內容進場由 `useRevealMotion` 統一管理：標題、段落、媒體、卡片、清單、導覽與主要操作註冊時先進入 `pending` 狀態並設定 `opacity: 0`，首次進入視窗後才淡入至 `1`，不加入 `transform` 位移。動畫使用 `800ms`；相鄰內容只允許每項 `8ms`、最多三項的短錯開，避免長列表延遲累積。
+
+內容在 SSR 與無 JavaScript 時必須維持可見；`opacity: 0` 只由客戶端在掛載前套用。動畫透過 Web Animations API 觸發；若 API 不可用，必須立即解除 pending 並恢復可見。`prefers-reduced-motion` 使用較短的 `300ms` 淡入。固定 Header 沿用自身顯示邏輯，不納入內容進場；既有首頁地圖與 Footer 線條仍是品牌主動態，不與共用淡入疊加。
+
 ## Do's and Don'ts
 
 ### Do:

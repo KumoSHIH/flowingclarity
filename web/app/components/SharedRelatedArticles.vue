@@ -107,7 +107,14 @@ watch(() => props.items.map(item => item.id).join("|"), () => {
         <li v-for="(article, index) in items" :key="article.id" :aria-hidden="isEnhanced && !isVisible(index) ? 'true' : undefined">
           <NuxtLink class="article-related__link" :to="`/articles/${article.slug}`" :tabindex="isEnhanced && !isVisible(index) ? -1 : undefined">
             <span class="article-related__media">
-              <img :src="article.coverImage.src" :alt="article.coverImage.alt" :width="article.coverImage.width" :height="article.coverImage.height" decoding="async" loading="lazy">
+              <img
+                :src="article.coverImage.src"
+                :alt="article.coverImage.alt"
+                :width="article.coverImage.width"
+                :height="article.coverImage.height"
+                loading="lazy"
+                decoding="async"
+              >
             </span>
             <small class="type-label">{{ article.category.name }}</small>
             <h3 class="type-title-sm">{{ article.title }}</h3>

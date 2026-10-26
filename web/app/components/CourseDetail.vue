@@ -316,6 +316,9 @@ onBeforeUnmount(() => {
             "
             width="1200"
             height="960"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
           />
           <span v-if="content.hero.image.label" class="asset-label">{{
             content.hero.image.label
@@ -447,6 +450,7 @@ onBeforeUnmount(() => {
                   width="900"
                   height="680"
                   loading="lazy"
+                  decoding="async"
                 />
                 <figcaption
                   v-if="block.layout === 'collage' && item.description"
@@ -489,6 +493,8 @@ onBeforeUnmount(() => {
               v-if="block.image"
               :src="block.image.src"
               :alt="block.image.alt"
+              loading="lazy"
+              decoding="async"
             />
             <span v-else>帶領者正式肖像待提供</span>
           </div>
@@ -592,6 +598,7 @@ onBeforeUnmount(() => {
                   :src="block.image.src"
                   :alt="block.image.alt"
                   loading="lazy"
+                  decoding="async"
                 />
                 <span v-if="block.image.label" class="asset-label">{{
                   block.image.label
@@ -765,6 +772,7 @@ onBeforeUnmount(() => {
             :src="content.registration.image.src"
             :alt="content.registration.image.alt"
             loading="lazy"
+            decoding="async"
           />
           <figcaption
             v-if="content.registration.image.label"

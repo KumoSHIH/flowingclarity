@@ -18,6 +18,7 @@ defineProps<{ content: HomeIntroductionContent }>()
           :width="content.image.width"
           :height="content.image.height"
           loading="lazy"
+          decoding="async"
           class="h-full w-full object-cover object-center"
           :style="content.image.objectPosition ? { objectPosition: content.image.objectPosition } : undefined"
         >

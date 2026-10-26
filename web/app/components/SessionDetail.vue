@@ -112,6 +112,9 @@ function opensNewTab(href?: string): boolean {
             <img
               :src="content.portrait.src"
               :alt="content.portrait.alt"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
               :style="
                 content.portrait.objectPosition
                   ? { objectPosition: content.portrait.objectPosition }

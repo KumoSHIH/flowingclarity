@@ -274,6 +274,7 @@ onMounted(() => {
                   :width="article.coverImage.width"
                   :height="article.coverImage.height"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div

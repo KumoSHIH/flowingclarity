@@ -64,6 +64,9 @@ const emit = defineEmits<{ retry: [] }>();
           <img
             :src="content.hero.image.src"
             :alt="content.hero.image.alt"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
             :style="
               content.hero.image.objectPosition
                 ? { objectPosition: content.hero.image.objectPosition }
@@ -228,6 +231,8 @@ const emit = defineEmits<{ retry: [] }>();
                   <img
                     :src="item.image.src"
                     :alt="item.image.alt"
+                    loading="lazy"
+                    decoding="async"
                     :style="
                       item.image.objectPosition
                         ? { objectPosition: item.image.objectPosition }

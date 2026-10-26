@@ -46,6 +46,7 @@ defineProps<{ content: HomeSectionsContent["courses"] }>();
                 :width="course.image.width"
                 :height="course.image.height"
                 loading="lazy"
+                decoding="async"
                 class="h-full w-full object-cover"
                 :class="index === 0 ? 'object-[60%_center]' : 'object-center'"
                 :style="
