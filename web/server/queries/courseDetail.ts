@@ -11,6 +11,8 @@ export const courseDetailQuery = `{
     isPublished,
     image{
       "src": asset->url,
+      "width": asset->metadata.dimensions.width,
+      "height": asset->metadata.dimensions.height,
       alt,
       hotspot{x, y}
     },
@@ -53,6 +55,8 @@ export const courseDetailQuery = `{
           biography,
           image{
             "src": asset->url,
+            "width": asset->metadata.dimensions.width,
+            "height": asset->metadata.dimensions.height,
             alt,
             hotspot{x, y}
           }

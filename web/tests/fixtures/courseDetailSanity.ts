@@ -10,7 +10,7 @@ export const sanityCourseDetail = {
     slug: 'japanese-facial-massage',
     deliveryModes: ['inPerson'],
     summary: '從觸碰、呼吸與細微觀察開始，學習一套能回到完整個案的面部按摩方法。',
-    image: image('hero', '日式臉部按摩課堂操作'),
+    image: { ...image('hero', '日式臉部按摩課堂操作'), width: 900, height: 1350 },
     isPublished: true,
     detail: {
       englishTitle: 'Japanese Facial Massage',
@@ -45,6 +45,7 @@ export const sanityCourseDetail = {
           name: '測試帶領者',
           lead: '從身體工作與教學經驗出發，支持學員建立清楚而安全的練習。',
           biography: '本段為測試資料，用來確認已核准的帶領者資料能經由轉換層呈現在課程內頁。',
+          image: { ...image('teacher-landscape', '帶領者在課堂示範'), width: 1600, height: 900 },
         },
         {
           key: 'quote',

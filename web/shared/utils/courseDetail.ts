@@ -81,6 +81,11 @@ function parseImage(value: unknown, required = true): CourseDetailImage | undefi
   }
 
   const image: CourseDetailImage = { src: url.toString(), alt }
+  if (typeof value.width === 'number' && Number.isFinite(value.width) && value.width > 0
+    && typeof value.height === 'number' && Number.isFinite(value.height) && value.height > 0) {
+    image.width = value.width
+    image.height = value.height
+  }
   if (isRecord(value.hotspot)
     && typeof value.hotspot.x === 'number' && value.hotspot.x >= 0 && value.hotspot.x <= 1
     && typeof value.hotspot.y === 'number' && value.hotspot.y >= 0 && value.hotspot.y <= 1) {

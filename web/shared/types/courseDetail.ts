@@ -6,6 +6,8 @@ export type CourseDetailStatus = 'loading' | 'ready' | 'not-found' | 'error'
 export interface CourseDetailImage {
   src: string
   alt: string
+  width?: number
+  height?: number
   label?: string
   objectPosition?: string
 }

@@ -13,11 +13,17 @@ describe('course detail parser', () => {
       slug: 'japanese-facial-massage',
       hero: {
         title: '日式臉部按摩',
+        image: expect.objectContaining({ width: 900, height: 1350 }),
         actionLabel: '前往報名',
         actionUrl: 'https://forms.example.com/course',
       },
       body: expect.arrayContaining([
         expect.objectContaining({ key: 'gallery-weave', type: 'gallery', layout: 'weave', contentRole: 'general' }),
+        expect.objectContaining({
+          key: 'teacher',
+          type: 'teacher',
+          image: expect.objectContaining({ width: 1600, height: 900 }),
+        }),
       ]),
       testimonials: expect.objectContaining({ type: 'testimonials', title: '學員心得分享' }),
       highlights: expect.objectContaining({ type: 'carousel', title: '練習中的片段' }),

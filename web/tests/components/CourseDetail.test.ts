@@ -57,6 +57,26 @@ describe("CourseDetail", () => {
     expect(wrapper.get(".course-video__status").text()).toBe("課程影片待上架");
   });
 
+  it("constrains a portrait banner image without changing its aspect ratio", async () => {
+    const content = structuredClone(courseDetailFixture);
+    content.hero.image = {
+      ...content.hero.image,
+      width: 900,
+      height: 1350,
+    };
+
+    const wrapper = mount(CourseDetail, {
+      props: { content },
+      global: { stubs: { NuxtLink: nuxtLinkStub } },
+    });
+    await wrapper.vm.$nextTick();
+
+    const visual = wrapper.get(".course-hero__visual");
+    const image = visual.get("img");
+    expect(visual.classes()).toContain("course-hero__visual--portrait");
+    expect(image.attributes()).toMatchObject({ width: "900", height: "1350" });
+  });
+
   it("embeds an available YouTube video without rendering an external link", async () => {
     const content = structuredClone(courseDetailFixture);
     const video = content.body.find((block) => block.type === "video");
@@ -167,6 +187,8 @@ describe("CourseDetail", () => {
       "gallery-panel--folio",
       "gallery-panel--dossier",
     ]);
+    expect(wrapper.get(".course-gallery--folio > header").exists()).toBe(true);
+    expect(wrapper.get(".gallery-panel--folio").findAll(".gallery-item__copy > strong")).toHaveLength(0);
     expect(wrapper.find(".course-gallery footer").exists()).toBe(false);
   });
 
@@ -182,6 +204,53 @@ describe("CourseDetail", () => {
     expect(wrapper.find(".course-teacher__heading").exists()).toBe(false);
     expect(wrapper.get(".course-teacher__name").text()).toContain(teacher.name);
     expect(wrapper.get(".course-teacher__name").element.tagName).toBe("H2");
+  });
+
+  it.each([
+    { orientation: "landscape", width: 1600, height: 900 },
+    { orientation: "square", width: 1200, height: 1200 },
+  ])("preserves the natural ratio of a $orientation teacher image", async ({ width, height }) => {
+    const content = structuredClone(courseDetailFixture);
+    const teacher = content.body.find(block => block.type === "teacher");
+    if (!teacher || teacher.type !== "teacher") throw new Error("Missing teacher fixture");
+    teacher.image = {
+      src: "/images/course-detail/facial-class.jpg",
+      alt: "帶領者在課堂示範",
+      width,
+      height,
+    };
+
+    const wrapper = mount(CourseDetail, {
+      props: { content },
+      global: { stubs: { NuxtLink: nuxtLinkStub } },
+    });
+    await wrapper.vm.$nextTick();
+
+    const image = wrapper.get(".course-teacher__portrait img");
+    expect(image.classes()).toContain("course-teacher__portrait-image--non-portrait");
+    expect(image.attributes()).toMatchObject({ width: String(width), height: String(height) });
+  });
+
+  it("keeps the portrait teacher image rule for a vertical image", async () => {
+    const content = structuredClone(courseDetailFixture);
+    const teacher = content.body.find(block => block.type === "teacher");
+    if (!teacher || teacher.type !== "teacher") throw new Error("Missing teacher fixture");
+    teacher.image = {
+      src: "/images/course-detail/facial-class.jpg",
+      alt: "帶領者直式肖像",
+      width: 900,
+      height: 1350,
+    };
+
+    const wrapper = mount(CourseDetail, {
+      props: { content },
+      global: { stubs: { NuxtLink: nuxtLinkStub } },
+    });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.get(".course-teacher__portrait img").classes()).not.toContain(
+      "course-teacher__portrait-image--non-portrait",
+    );
   });
 
   it("omits empty optional gallery copy without removing the gallery", async () => {

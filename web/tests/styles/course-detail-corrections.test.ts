@@ -20,11 +20,46 @@ describe('course detail correction styles', () => {
   it('keeps the teacher surface full-width while limiting the portrait image', () => {
     expect(source).toMatch(/\.course-teacher__portrait\s*\{[^}]*background: var\(--color-bark\);/)
     expect(source).toMatch(/\.course-teacher__portrait img\s*\{\s*max-width: 500px;/)
+    expect(source).toMatch(/\.course-teacher__portrait img\.course-teacher__portrait-image--non-portrait\s*\{[^}]*width: 100%;[^}]*max-width: none;[^}]*height: auto;[^}]*object-fit: contain;/)
+    expect(source).toMatch(/block\.image\.width >= block\.image\.height/)
+  })
+
+  it('constrains portrait banner images at each responsive height without distortion', () => {
+    expect(source).toMatch(/\.course-hero__visual--portrait\s*\{[^}]*height: 720px;[^}]*min-height: 0;[^}]*overflow: visible;/)
+    expect(source).toMatch(/\.course-hero h1\s*\{[^}]*right: -100px;/)
+    expect(source).toMatch(/@media \(max-width: 1099px\)[\s\S]*\.course-hero__visual--portrait\s*\{[^}]*height: 610px;[^}]*min-height: 0;/)
+    expect(source).toMatch(/@media \(max-width: 767px\)[\s\S]*\.course-hero__visual--portrait\s*\{[^}]*height: 430px;[^}]*min-height: 0;/)
+    expect(source).toMatch(/\.course-detail img\s*\{[^}]*width: 100%;[^}]*height: 100%;[^}]*object-fit: cover;/)
   })
 
   it('does not render or position a course gallery footer', () => {
     expect(source).not.toMatch(/<footer>[\s\S]*?galleryLayoutLabels/)
     expect(source).not.toMatch(/\.gallery-panel(?:--[\w-]+)? footer/)
+  })
+
+  it('separates the stages and folio headers from their image grids', () => {
+    expect(source).toMatch(/:class="\['course-gallery', `course-gallery--\$\{block\.layout\}`\]"/)
+    expect(source).toMatch(/\.course-gallery--stages > header,\s*\.course-gallery--folio > header\s*\{[^}]*padding-bottom: 28px;[^}]*border-bottom: 1px solid var\(--line\);/)
+  })
+
+  it('uses the approved folio group and item title hierarchy', () => {
+    expect(source).toMatch(/\.gallery-panel--folio \.gallery-item__copy > span\s*\{[^}]*font-size: var\(--type-title-sm-size\);/)
+    expect(source).toMatch(/\.gallery-panel--folio \.gallery-item__copy h3\s*\{[^}]*font-size: var\(--type-body-size\);/)
+    expect(source).toMatch(/\.gallery-panel--folio \.gallery-item__copy\s*\{[^}]*padding: 18px 20px 0;/)
+    expect(source).toMatch(/@media \(max-width: 1099px\)[\s\S]*\.gallery-panel--folio \.gallery-item__copy\s*\{[^}]*padding: 18px 0px 0;/)
+  })
+
+  it('uses full-width gallery images on mobile for the manually approved layouts', () => {
+    expect(source).toMatch(/@media \(max-width: 767px\)[\s\S]*\.gallery-panel--stages \.gallery-item:nth-child\(even\),\s*\.gallery-panel--folio \.gallery-item:nth-child\(even\)\s*\{[^}]*width: 100%;/)
+    expect(source).toMatch(/@media \(max-width: 767px\)[\s\S]*\.gallery-panel--weave figure\s*\{[^}]*width: 100%;/)
+    expect(source).toMatch(/@media \(max-width: 767px\)[\s\S]*\.gallery-panel--dossier \.gallery-item figure\s*\{[^}]*width: 100%;/)
+  })
+
+  it('caps registration image height and preserves its ratio at each breakpoint', () => {
+    expect(source).toMatch(/\.course-registration figure\s*\{[^}]*align-self: center;[^}]*height: 600px;[^}]*max-height: 600px;[^}]*min-height: 0;[^}]*overflow: hidden;/)
+    expect(source).toMatch(/\.course-registration figure img\s*\{[^}]*object-fit: cover;/)
+    expect(source).toMatch(/@media \(max-width: 1099px\)[\s\S]*\.course-registration figure\s*\{[^}]*height: 520px;[^}]*max-height: 520px;/)
+    expect(source).toMatch(/@media \(max-width: 767px\)[\s\S]*\.course-registration figure\s*\{[^}]*height: 430px;[^}]*max-height: 430px;/)
   })
 
   it('centers the course video in a responsive 760px container', () => {
@@ -42,8 +77,9 @@ describe('course detail correction styles', () => {
     expect(source).toMatch(/\.schedule-stage-list > div\s*\{[^}]*border-bottom: 1px solid var\(--line\);/)
   })
 
-  it('uses the schedule reading width for the introduction and course testimonials', () => {
-    expect(source).toMatch(/\.course-intro\s*\{[^}]*min-height: clamp\(720px, 82svh, 900px\);[^}]*align-items: center;/)
+  it('uses the schedule reading width without forcing introduction height', () => {
+    expect(source).toMatch(/\.course-intro\s*\{[^}]*align-items: center;/)
+    expect(source).not.toMatch(/\.course-intro\s*\{[^}]*min-height: clamp\(720px, 82svh, 900px\);/)
     expect(source).toMatch(/\.course-intro__inner\s*\{[^}]*width: min\(100%, 900px\);[^}]*margin-inline: auto;/)
     expect(source).toMatch(/\.course-intro__inner > h2,\s*\.course-intro__body\s*\{[^}]*margin-inline: auto;/)
     expect(source).not.toMatch(/\.course-intro__inner > h2,\s*\.course-intro__body\s*\{[^}]*width:/)

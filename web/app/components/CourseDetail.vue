@@ -305,7 +305,15 @@ onBeforeUnmount(() => {
       </aside>
 
       <section class="course-hero">
-        <div class="course-hero__visual">
+        <div
+          :class="{
+            'course-hero__visual': true,
+            'course-hero__visual--portrait':
+              content.hero.image.width &&
+              content.hero.image.height &&
+              content.hero.image.height > content.hero.image.width,
+          }"
+        >
           <img
             :src="content.hero.image.src"
             :alt="content.hero.image.alt"
@@ -314,8 +322,8 @@ onBeforeUnmount(() => {
                 ? { objectPosition: content.hero.image.objectPosition }
                 : undefined
             "
-            width="1200"
-            height="960"
+            :width="content.hero.image.width ?? 1200"
+            :height="content.hero.image.height ?? 960"
             loading="eager"
             decoding="async"
             fetchpriority="high"
@@ -426,7 +434,7 @@ onBeforeUnmount(() => {
           v-else-if="block.type === 'gallery'"
           :id="blockId(block.key)"
           :ref="setObservedSection"
-          class="course-gallery"
+          :class="['course-gallery', `course-gallery--${block.layout}`]"
         >
           <header>
             <h2>{{ block.title }}</h2>
@@ -439,7 +447,7 @@ onBeforeUnmount(() => {
             :class="['gallery-panel', `gallery-panel--${block.layout}`]"
           >
             <article
-              v-for="(item, index) in block.items"
+              v-for="item in block.items"
               :key="item.key"
               class="gallery-item"
             >
@@ -468,9 +476,6 @@ onBeforeUnmount(() => {
                 <ul v-if="item.points?.length">
                   <li v-for="point in item.points" :key="point">{{ point }}</li>
                 </ul>
-                <strong v-if="block.layout === 'folio'" aria-hidden="true">{{
-                  index + 1
-                }}</strong>
               </div>
             </article>
             <blockquote v-if="block.statement" class="preserve-lines">
@@ -493,6 +498,14 @@ onBeforeUnmount(() => {
               v-if="block.image"
               :src="block.image.src"
               :alt="block.image.alt"
+              :width="block.image.width"
+              :height="block.image.height"
+              :class="{
+                'course-teacher__portrait-image--non-portrait':
+                  block.image.width &&
+                  block.image.height &&
+                  block.image.width >= block.image.height,
+              }"
               loading="lazy"
               decoding="async"
             />
@@ -872,6 +885,12 @@ onBeforeUnmount(() => {
   position: relative;
   min-height: 720px;
 }
+.course-hero__visual--portrait {
+  align-self: start;
+  height: 720px;
+  min-height: 0;
+  overflow: visible;
+}
 .course-hero__visual::after {
   position: absolute;
   inset: 0;
@@ -1003,6 +1022,11 @@ onBeforeUnmount(() => {
   gap: 90px;
   align-items: end;
   margin-bottom: 70px;
+}
+.course-gallery--stages > header,
+.course-gallery--folio > header {
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--line);
 }
 .gallery-panel {
   display: grid;
@@ -1146,18 +1170,13 @@ onBeforeUnmount(() => {
   height: 310px;
 }
 .gallery-panel--folio .gallery-item__copy {
-  position: relative;
-  padding: 18px 0 0 52px;
+  padding: 18px 20px 0;
 }
-.gallery-panel--folio .gallery-item__copy > strong {
-  position: absolute;
-  top: 17px;
-  left: 0;
-  font-family: var(--font-display);
+.gallery-panel--folio .gallery-item__copy > span {
   font-size: var(--type-title-sm-size);
-  font-weight: var(--type-title-sm-weight);
-  line-height: var(--type-title-sm-leading);
-  letter-spacing: var(--type-title-sm-tracking);
+}
+.gallery-panel--folio .gallery-item__copy h3 {
+  font-size: var(--type-body-size);
 }
 .gallery-panel--dossier {
   grid-template-columns: 0.85fr 1.15fr;
@@ -1206,6 +1225,12 @@ onBeforeUnmount(() => {
 }
 .course-teacher__portrait img {
   max-width: 500px;
+}
+.course-teacher__portrait img.course-teacher__portrait-image--non-portrait {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  object-fit: contain;
 }
 .course-teacher__copy {
   display: flex;
@@ -1627,8 +1652,16 @@ onBeforeUnmount(() => {
 }
 .course-registration figure {
   position: relative;
-  min-height: 600px;
+  align-self: center;
+  width: 100%;
+  height: 600px;
+  max-height: 600px;
+  min-height: 0;
   margin: 0;
+  overflow: hidden;
+}
+.course-registration figure img {
+  object-fit: cover;
 }
 .course-registration .button-primary {
   margin-top: 60px;
@@ -1703,6 +1736,10 @@ onBeforeUnmount(() => {
   .course-hero__visual {
     min-height: 610px;
   }
+  .course-hero__visual--portrait {
+    height: 610px;
+    min-height: 0;
+  }
   .course-hero h1 {
     top: auto;
     right: auto;
@@ -1735,7 +1772,11 @@ onBeforeUnmount(() => {
     gap: 64px;
   }
   .course-registration figure {
-    min-height: 520px;
+    height: 520px;
+    max-height: 520px;
+  }
+  .gallery-panel--folio .gallery-item__copy {
+    padding: 18px 0px 0;
   }
 }
 
@@ -1760,6 +1801,10 @@ onBeforeUnmount(() => {
     min-width: 0;
     max-width: 100vw;
     min-height: 430px;
+  }
+  .course-hero__visual--portrait {
+    height: 430px;
+    min-height: 0;
   }
   .course-hero__visual::after {
     background: linear-gradient(0deg, rgb(57 38 24 / 70%), transparent 56%);
@@ -1852,7 +1897,7 @@ onBeforeUnmount(() => {
   }
   .gallery-panel--stages .gallery-item:nth-child(even),
   .gallery-panel--folio .gallery-item:nth-child(even) {
-    width: 88%;
+    width: 100%;
     margin: 0 0 0 auto;
   }
   .gallery-panel--weave .gallery-item {
@@ -1865,7 +1910,7 @@ onBeforeUnmount(() => {
     margin-left: auto;
   }
   .gallery-panel--weave figure {
-    width: 90%;
+    width: 100%;
     height: 330px;
   }
   .gallery-panel--folio figure {
@@ -1880,7 +1925,7 @@ onBeforeUnmount(() => {
     gap: 20px;
   }
   .gallery-panel--dossier .gallery-item figure {
-    width: 90%;
+    width: 100%;
     height: 290px;
   }
   .gallery-panel--dossier .gallery-item:nth-child(even) figure {
@@ -1968,7 +2013,8 @@ onBeforeUnmount(() => {
     font-size: var(--type-title-md-size);
   }
   .course-registration figure {
-    min-height: 430px;
+    height: 430px;
+    max-height: 430px;
   }
   .course-detail-state {
     padding-inline: var(--page-gutter-mobile);
